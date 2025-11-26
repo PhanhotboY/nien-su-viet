@@ -26,8 +26,6 @@
       "@auth/*": ["apps/auth/src/*"],
       "@phanhotboy/nsv-common": ["libs/nsv-common/src"],
       "@phanhotboy/nsv-common/*": ["libs/nsv-common/src/*"],
-      "@phanhotboy/nsv-jwt-auth": ["libs/nsv-jwt-auth/src"],
-      "@phanhotboy/nsv-jwt-auth/*": ["libs/nsv-jwt-auth/src/*"],
       "@user-prisma": ["apps/user/generated/prisma"],
       "@user-prisma/*": ["apps/user/generated/prisma"],
       "@user/*": ["apps/user/src/*"],

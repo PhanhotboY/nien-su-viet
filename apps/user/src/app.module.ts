@@ -1,11 +1,11 @@
-import { Module, Scope } from '@nestjs/common';
-import { APP_GUARD, Reflector } from '@nestjs/core';
-import { CommonModule, ConfigService } from '@phanhotboy/nsv-common';
+import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import {
-  JwtAuthGuard,
-  JwtAuthModule,
-  RbacGuard,
-} from '@phanhotboy/nsv-jwt-auth';
+  BetterAuthGuard,
+  CommonModule,
+  ConfigService,
+  RolesGuard,
+} from '@phanhotboy/nsv-common';
 
 import { UserModule } from './modules/user';
 import { PrismaModule } from './database/prisma.module';
@@ -23,32 +23,16 @@ import { configuration } from './config/configuration';
       cachePrefix: 'user-service',
     }),
     PrismaModule.forRoot(),
-    JwtAuthModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService<Config>) => {
-        const jwtPublicKey = configService.get('jwt.publicKey');
-
-        if (!jwtPublicKey) {
-          throw new Error('JWT public key is not defined');
-        }
-        return {
-          publicKey: jwtPublicKey,
-          global: true,
-        };
-      },
-    }),
     UserModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
-      scope: Scope.REQUEST,
-      useValue: new JwtAuthGuard(new Reflector()),
+      useClass: BetterAuthGuard,
     },
     {
       provide: APP_GUARD,
-      scope: Scope.REQUEST,
-      useValue: new RbacGuard(new Reflector()),
+      useClass: RolesGuard,
     },
   ],
 })

@@ -14,11 +14,12 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 
-import { buttonVariants } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 import { Menu } from 'lucide-react';
 import { ModeToggle } from './mode-toggle';
 import { LogoIcon } from './Icons';
 import Link from 'next/link';
+import { SignedIn, SignedOut, UserAvatar } from '@daveyplate/better-auth-ui';
 
 interface RouteProps {
   href: string;
@@ -50,6 +51,7 @@ const routeList: RouteProps[] = [
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
     <header className="sticky border-b-[1px] top-0 z-40 w-full bg-white dark:border-b-slate-700 dark:bg-background">
       <NavigationMenu className="mx-auto">
@@ -119,6 +121,15 @@ export const Navbar = () => {
           </nav>
 
           <div className="hidden md:flex gap-2">
+            <SignedIn>
+              <UserAvatar />
+            </SignedIn>
+
+            <SignedOut>
+              <Button asChild>
+                <Link href="/auth/sign-in">Login</Link>
+              </Button>
+            </SignedOut>
             <ModeToggle />
           </div>
         </NavigationMenuList>

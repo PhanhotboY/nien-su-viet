@@ -1,5 +1,5 @@
-import { getAuthCookie } from '@/services/cookie.server';
 import { redirect } from 'next/navigation';
+import { authClient } from '@/lib/auth-client'; // import the auth client
 
 export function generateMetadata() {
   return {
@@ -8,9 +8,9 @@ export function generateMetadata() {
 }
 
 export default async function PageManager() {
-  const auth = await getAuthCookie();
+  const { data: session, error } = await authClient.getSession();
 
-  if (!auth) {
+  if (!session) {
     redirect('/cmsdesk/login');
   }
 

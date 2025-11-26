@@ -11,117 +11,69 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_DATABASE_URL")
-}
-
-enum UserStatus {
-  ACTIVE
-  PENDING
-  DELETED
 }
 
 model User {
-  id        String      @id @db.Uuid @default(uuid())
-  username  String      @unique @db.VarChar(255)
-  email     String      @unique @db.VarChar(255)
-  password  String      @db.VarChar(255)
-  salt      String      @db.VarChar(255)
-  status    UserStatus  @default(ACTIVE)
-  roleId    String      @db.Uuid
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  role          String?
+  banned        Boolean?  @default(false)
+  banReason     String?
+  banExpires    DateTime?
+  sessions      Session[]
+  accounts      Account[]
 
-  role      Role        @relation(fields: [roleId], references: [id])
-  keyToken              KeyToken[]
-  
-  @@index([username], name: "idx_user_username")
-  @@index([email], name: "idx_user_email")
+  @@unique([email])
+  @@map("user")
 }
 
-model Resource {
-  id          String      @id @db.Uuid @default(uuid())
-  name        String     @unique @db.VarChar(255)
-  slug        String     @unique @db.VarChar(255)
-  description String?     @db.Text
-  roles       Grant[]
+model Session {
+  id             String   @id
+  expiresAt      DateTime
+  token          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  ipAddress      String?
+  userAgent      String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  impersonatedBy String?
+
+  @@unique([token])
+  @@map("session")
 }
 
-enum RoleStatus {
-  ACTIVE
-  INACTIVE
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
 }
 
-model Role {
-  id          String      @id @db.Uuid @default(uuid())
-  name        String      @unique @db.VarChar(255)
-  slug        String      @unique @db.VarChar(255)
-  status      RoleStatus  @default(ACTIVE)
-  description String?     @db.Text
-  grants      Grant[]     @relation("RoleGrants")
-  users       User[]
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
 
-  @@index([status], name: "idx_role_status")
-  @@index([slug], name: "idx_role_slug")
-}
-
-model Grant {
-  id          String      @id @db.Uuid @default(uuid())
-  roleId    String      @db.Uuid
-  resourceId String     @db.Uuid
-  role      Role        @relation("RoleGrants", fields: [roleId], references: [id], onDelete: Cascade)
-  resource  Resource    @relation(fields: [resourceId], references: [id], onDelete: Cascade)
-  action    String      @db.VarChar(20) // create:any | create:own | ...
-  attribute String      @db.VarChar(20) // * | '*, !password | ...
-
-  @@unique([roleId, resourceId, action ], name: "unique_role_resource_action")
-  @@index([roleId], name: "idx_grant_role")
-}
-
-enum OTPStatus {
-  ACTIVE
-  PENDING
-  BLOCKED
-}
-
-model OTP {
-  id        String      @id @db.Uuid @default(uuid())
-  token     String      @unique @db.VarChar(255)
-  email     String      @db.VarChar(255)
-  status    OTPStatus   @default(ACTIVE)
-  expiresAt DateTime    @default(dbgenerated("NOW() + INTERVAL '60 seconds'"))
-  createdAt DateTime    @default(now()) @db.Timestamp(6)
-  updatedAt DateTime    @updatedAt @db.Timestamp(6)
-
-  @@index([email], name: "idx_otp_email")
-  @@index([status], name: "idx_otp_status")
-  @@index([expiresAt], name: "idx_otp_expires_at")
-}
-
-enum ApiKeyPermission {
-  READ
-  WRITE
-  DELETE
-  ALL
-}
-
-model ApiKey {
-  id        String @id @db.Uuid @default(uuid())
-  key       String @unique @db.VarChar(255)
-  status    Boolean @default(true)
-  permissions ApiKeyPermission[] @default([])  
-  createdAt DateTime    @default(now()) @db.Timestamp(6)
-  updatedAt DateTime    @updatedAt @db.Timestamp(6)
-}
-
-model KeyToken {
-  id                String @id @db.Uuid @default(uuid())
-  browserId         String @db.VarChar(255)
-  refreshTokensUsed String[] @default([]) @db.Text
-  refreshToken      String @db.Text
-  userId            String @db.Uuid
-  createdAt         DateTime    @default(now()) @db.Timestamp(6)
-  updatedAt         DateTime    @updatedAt @db.Timestamp(6)
-
-  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, browserId], name: "unique_user_browser")
+  @@map("verification")
 }
