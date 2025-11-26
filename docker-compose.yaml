@@ -1,0 +1,47 @@
+services:
+  nsv-pg-auth:
+    image: postgres:alpine
+    container_name: nsv-pg-auth
+    environment:
+      POSTGRES_USER: nsv_auth_user
+      POSTGRES_PASSWORD: secure_password
+      POSTGRES_DB: nsv_auth_db
+    ports:
+      - '5432:5432'
+    volumes:
+      - nsv-pg-auth-data:/var/lib/postgresql/data
+  nsv-pg-hevent:
+    image: postgres:alpine
+    container_name: nsv-pg-hevent
+    environment:
+      POSTGRES_USER: nsv_hevent_user
+      POSTGRES_PASSWORD: secure_password
+      POSTGRES_DB: nsv_hevent_db
+    ports:
+      - '5433:5432'
+    volumes:
+      - nsv-pg-hevent-data:/var/lib/postgresql/data
+  nsv-rmq:
+    image: rabbitmq:4-management-alpine
+    container_name: nsv-rmq
+    environment:
+      RABBITMQ_DEFAULT_USER: nsv_rmq_user
+      RABBITMQ_DEFAULT_PASS: secure_password
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - nsv-rmq-data:/var/lib/rabbitmq
+  nsv-rdb:
+    image: redis:alpine
+    container_name: nsv-rdb
+    ports:
+      - '6379:6379'
+    volumes:
+      - nsv-rdb-data:/data
+
+volumes:
+  nsv-pg-auth-data:
+  nsv-pg-hevent-data:
+  nsv-rmq-data:
+  nsv-rdb-data:

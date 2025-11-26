@@ -43,15 +43,6 @@
         "tsConfigPath": "libs/nsv-common/tsconfig.lib.json"
       }
     },
-    "nsv-jwt-auth": {
-      "type": "library",
-      "root": "libs/nsv-jwt-auth",
-      "entryFile": "index",
-      "sourceRoot": "libs/nsv-jwt-auth/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/nsv-jwt-auth/tsconfig.lib.json"
-      }
-    },
     "user": {
       "type": "application",
       "root": "apps/user",

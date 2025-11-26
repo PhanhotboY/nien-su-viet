@@ -1,5 +1,4 @@
 import { RedisClientOptions } from '@keyv/redis';
-import { JwtModuleOptions } from '@nestjs/jwt';
 import { ThrottlerOptions } from '@nestjs/throttler';
 import { Options } from 'amqplib';
 

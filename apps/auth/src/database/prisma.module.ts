@@ -1,4 +1,4 @@
-import { DynamicModule, Global, Module, NestModule } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 
 // @Global() // Make PrismaService globally available

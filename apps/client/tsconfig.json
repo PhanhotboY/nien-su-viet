@@ -24,8 +24,7 @@
       "@/*": ["./src/*"],
       "@public/*": ["./public/*"],
       "@nsv-interfaces/*": ["../../libs/nsv-interfaces/*"]
-    },
-    "typeRoots": ["src/types/global.d.ts"]
+    }
   },
   "include": [
     "next-env.d.ts",
