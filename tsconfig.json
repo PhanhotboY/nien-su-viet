@@ -26,9 +26,6 @@
       "@auth/*": ["apps/auth/src/*"],
       "@phanhotboy/nsv-common": ["libs/nsv-common/src"],
       "@phanhotboy/nsv-common/*": ["libs/nsv-common/src/*"],
-      "@user-prisma": ["apps/user/generated/prisma"],
-      "@user-prisma/*": ["apps/user/generated/prisma"],
-      "@user/*": ["apps/user/src/*"],
       "@historical-event-prisma": ["apps/historical-event/generated/prisma"],
       "@historical-event-prisma/*": ["apps/historical-event/generated/prisma"],
       "@historical-event/*": ["apps/historical-event/src/*"]
