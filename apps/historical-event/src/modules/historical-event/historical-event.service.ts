@@ -130,11 +130,7 @@ export class HistoricalEventService {
     const options = {
       where: { id },
       include: {
-        author: {
-          include: {
-            avatar: true,
-          },
-        },
+        author: true,
         categories: true,
       },
     };
@@ -156,11 +152,7 @@ export class HistoricalEventService {
     const options = {
       where: { id, authorId },
       include: {
-        author: {
-          include: {
-            avatar: true,
-          },
-        },
+        author: true,
         categories: true,
       },
     } satisfies Parameters<typeof this.prisma.historicalEvent.findUnique>[0];

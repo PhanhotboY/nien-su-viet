@@ -3,7 +3,7 @@ import { UserBaseDto } from './user-base.dto';
 
 export class UserBaseResponseDto extends PickType(UserBaseDto, [
   'id',
-  'firstName',
-  'lastName',
-  'slug',
+  'name',
+  'email',
+  'image',
 ]) {}

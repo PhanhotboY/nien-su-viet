@@ -11,20 +11,19 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model User {
-  id        String      @id @db.Uuid @default(uuid())
-  firstName String      @db.VarChar(255)
-  lastName  String?     @db.VarChar(255)
-  slug      String      @unique @db.VarChar(255)
-  avatarId  String?     @db.Uuid
+  id            String    @id
+  name          String
+  email         String
+  image         String?
+  role          String?
 
-  avatar    Image?      @relation("UserAvatar", fields: [avatarId], references: [id], onDelete: SetNull)
   createdEvents         HistoricalEvent[]
   editedEvents          EventEdit[]
+
+  @@unique([email])
 }
 
 model HistoricalEvent {
@@ -41,7 +40,7 @@ model HistoricalEvent {
   name        String    @db.VarChar(255)
   content     String    @db.Text
   thumbnailId String?   @db.Uuid
-  authorId    String    @db.Uuid
+  authorId    String
   
   editors     EventEdit[]
   thumbnail   Image? @relation(fields: [thumbnailId], references: [id], onDelete: SetNull)
@@ -88,7 +87,7 @@ model EventCategories {
 model EventEdit {
   id        String    @id @db.Uuid @default(uuid())
   eventId   String    @db.Uuid
-  editorId  String    @db.Uuid
+  editorId  String   
   editedAt  DateTime  @default(now()) @db.Timestamp(6)
 
   prevContent String? @db.Text
@@ -137,6 +136,5 @@ model Image {
   description String? @db.Text
   publicUrl   String  @db.VarChar(255) // actual image url
 
-  users       User[]  @relation("UserAvatar")
   events      HistoricalEvent[]
 }

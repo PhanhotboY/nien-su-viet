@@ -7,7 +7,7 @@ import { AuthController } from './auth.controller';
 @Module({
   imports: [
     // MailModule,
-    // RmqModule.register({ name: RMQ.TOPIC_EVENTS_EXCHANGE }),
+    RmqModule.register({ name: RMQ.TOPIC_EVENTS_EXCHANGE }),
   ],
   controllers: [AuthController],
   providers: [AuthService],

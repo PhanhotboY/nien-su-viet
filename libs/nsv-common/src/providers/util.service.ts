@@ -122,6 +122,9 @@ export class UtilService {
     );
   }
 
+  /**
+   *  Only use inside request/response cycle
+   */
   async handleHashCachingQuery<T>(
     {
       cacheKey,

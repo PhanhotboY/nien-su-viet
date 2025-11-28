@@ -515,7 +515,9 @@ export function UsersTable() {
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-xs text-muted-foreground"></TableCell>
+                    <TableCell className="px-4 py-3 text-xs text-muted-foreground">
+                      {user.id}
+                    </TableCell>
                     <TableCell className="px-4 py-3 text-xs text-muted-foreground">
                       {format(user.createdAt, "MMM d, yyyy 'at' h:mm a")}
                     </TableCell>

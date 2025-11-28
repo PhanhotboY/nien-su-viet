@@ -94,14 +94,16 @@ async function createUser(
 }
 
 async function deleteUser(userId: string) {
-  const reqHeaders = await headers();
-  const { error } = await authClient.$fetch<void>(
-    `/admin/delete-user/${userId}`,
-    {
-      method: 'DELETE',
-      headers: reqHeaders,
-    },
-  );
+  const reqHeaders = new Headers(await headers());
+  // Foward headers from client with different payload
+  reqHeaders.delete('content-length');
+  reqHeaders.set('content-type', 'application/json');
+
+  const { error } = await authClient.$fetch<void>(`/admin/remove-user`, {
+    method: 'POST',
+    headers: reqHeaders,
+    body: JSON.stringify({ userId }),
+  });
 
   if (error) {
     console.log('Error deleting user: ', error);

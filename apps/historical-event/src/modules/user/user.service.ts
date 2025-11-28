@@ -1,18 +1,15 @@
 import { PrismaService } from '@historical-event/database';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { isUUID } from 'class-validator';
 
 import {
   RedisService,
   type RedisServiceType,
-  UserDeleteDto,
   RMQ,
-  USER_EVENT,
   UtilService,
   UserBaseDto,
 } from '@phanhotboy/nsv-common';
-import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -22,7 +19,6 @@ export class UserService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly util: UtilService,
-    @Inject(RMQ.TOPIC_EVENTS_EXCHANGE) private readonly rmq: ClientProxy,
     @Inject(RedisService) private readonly redisService: RedisServiceType,
   ) {
     this.cacheKey = this.util.genCacheKey(this.cachePrefix);
@@ -32,10 +28,10 @@ export class UserService {
     const newUser = await this.prisma.user.create({
       data: {
         id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        slug: user.slug || user.email.split('@')[0]!,
-        avatarId: user.avatarId,
+        email: user.email,
+        name: user.name,
+        image: user.image,
+        role: user.role,
       },
     });
 
@@ -45,11 +41,12 @@ export class UserService {
   }
 
   async handleUserRegister(data: UserBaseDto) {
-    return await this.createUser({
-      ...data,
-      slug: data.email.split('@')[0]!,
-      firstName: data.email.split('@')[0]!,
-    });
+    const user = await this.findUserById(data.id).catch(() => null);
+
+    if (user) {
+      return user;
+    }
+    return await this.createUser(data);
   }
 
   async findUserById(id: string) {
@@ -64,23 +61,33 @@ export class UserService {
         notFoundMessage: 'Người dùng không tồn tại',
       },
       () => {
-        if (isUUID(id)) {
-          return this.prisma.user.findUnique(options);
-        } else {
-          throw new NotFoundException('Người dùng không tồn tại');
-        }
+        return this.prisma.user.findUnique(options);
       },
     );
+  }
+
+  async updateUser(data: UserBaseDto) {
+    await this.findUserById(data.id); // Ensure user exists
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: data.id },
+      data: {
+        email: data.email,
+        name: data.name,
+        image: data.image,
+        role: data.role,
+      },
+    });
+
+    await this.redisService.del(this.cacheKey);
+
+    return updatedUser;
   }
 
   async deleteUser(id: string) {
     await this.findUserById(id); // Ensure user exists
 
     await this.prisma.user.delete({ where: { id } });
-    this.rmq.emit(
-      USER_EVENT.DELETED,
-      plainToInstance(UserDeleteDto, { userId: id }),
-    );
 
     await this.redisService.del(this.cacheKey);
 

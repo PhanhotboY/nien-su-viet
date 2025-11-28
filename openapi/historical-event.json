@@ -330,58 +330,6 @@
           "HistoricalEvent"
         ]
       }
-    },
-    "/users/me": {
-      "get": {
-        "operationId": "UserController_getMe",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "User"
-        ]
-      }
-    },
-    "/users": {
-      "post": {
-        "operationId": "UserController_createUser",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserBaseDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "User"
-        ]
-      }
-    },
-    "/users/{id}": {
-      "delete": {
-        "operationId": "UserController_deleteUser",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "User"
-        ]
-      }
     }
   },
   "info": {
@@ -540,25 +488,25 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           },
-          "firstName": {
+          "name": {
             "type": "string",
             "minLength": 1
           },
-          "lastName": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "image": {
             "type": "string",
             "nullable": true
-          },
-          "slug": {
-            "type": "string"
           }
         },
         "required": [
           "id",
-          "firstName",
-          "slug"
+          "name",
+          "email"
         ]
       },
       "EventCategoriesBaseDto": {
@@ -704,46 +652,36 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           },
           "email": {
             "type": "string",
             "format": "email"
           },
-          "slug": {
-            "type": "string"
-          },
-          "firstName": {
+          "name": {
             "type": "string",
             "minLength": 1
           },
-          "lastName": {
+          "image": {
             "type": "string",
             "nullable": true
           },
-          "avatarId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "type": "object"
+          "role": {
+            "type": "string"
           }
         },
         "required": [
           "id",
           "email",
-          "slug",
-          "firstName",
-          "status"
+          "name",
+          "role"
         ]
       },
       "UserDeleteDto": {
         "type": "object",
         "properties": {
           "userId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           }
         },
         "required": [
@@ -757,597 +695,12 @@
             "minItems": 1,
             "type": "array",
             "items": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             }
           }
         },
         "required": [
           "userIds"
-        ]
-      },
-      "UserQueryDto": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "type": "number",
-            "minimum": 1
-          },
-          "limit": {
-            "type": "number",
-            "minimum": 1
-          },
-          "search": {
-            "type": "string"
-          },
-          "sortBy": {
-            "type": "string"
-          },
-          "sortOrder": {
-            "type": "string",
-            "enum": [
-              "asc",
-              "desc"
-            ]
-          },
-          "status": {
-            "type": "string"
-          },
-          "sex": {
-            "type": "string"
-          },
-          "birthdateFrom": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "birthdateTo": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "createdAtFrom": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "createdAtTo": {
-            "format": "date-time",
-            "type": "string"
-          }
-        }
-      },
-      "UserFullDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string",
-            "minLength": 1
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "avatarId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "type": "object"
-          },
-          "address": {
-            "type": "string",
-            "maxLength": 512
-          },
-          "birthdate": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "msisdn": {
-            "type": "string",
-            "pattern": "/^(\\+84|0)[3|5|7|8|9][0-9]{8}$/"
-          },
-          "sex": {
-            "type": "object"
-          },
-          "createdAt": {
-            "type": "object"
-          },
-          "updatedAt": {
-            "type": "object"
-          }
-        },
-        "required": [
-          "id",
-          "email",
-          "slug",
-          "firstName",
-          "status",
-          "createdAt",
-          "updatedAt"
-        ]
-      },
-      "UserFullCreateDto": {
-        "type": "object",
-        "properties": {
-          "slug": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "firstName": {
-            "type": "string",
-            "minLength": 1
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "avatarId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "type": "object"
-          },
-          "address": {
-            "type": "string",
-            "maxLength": 512
-          },
-          "birthdate": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "msisdn": {
-            "type": "string",
-            "pattern": "/^(\\+84|0)[3|5|7|8|9][0-9]{8}$/"
-          },
-          "sex": {
-            "type": "object"
-          }
-        },
-        "required": [
-          "email",
-          "firstName",
-          "status"
-        ]
-      },
-      "UserFullUpdateDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "firstName": {
-            "type": "string",
-            "minLength": 1
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "avatarId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "status": {
-            "type": "object"
-          },
-          "address": {
-            "type": "string",
-            "maxLength": 512
-          },
-          "birthdate": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "msisdn": {
-            "type": "string",
-            "pattern": "/^(\\+84|0)[3|5|7|8|9][0-9]{8}$/"
-          },
-          "sex": {
-            "type": "object"
-          },
-          "slug": {
-            "type": "string"
-          }
-        }
-      },
-      "UserFullResponseDto": {
-        "type": "object",
-        "properties": {
-          "avatar": {
-            "type": "string",
-            "nullable": true
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string",
-            "minLength": 1
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "address": {
-            "type": "string",
-            "maxLength": 512
-          },
-          "birthdate": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "msisdn": {
-            "type": "string",
-            "pattern": "/^(\\+84|0)[3|5|7|8|9][0-9]{8}$/"
-          }
-        },
-        "required": [
-          "avatar",
-          "id",
-          "email",
-          "slug",
-          "firstName"
-        ]
-      },
-      "UserAuthDto": {
-        "type": "object",
-        "properties": {
-          "password": {
-            "type": "string",
-            "minLength": 6
-          },
-          "salt": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 100,
-            "pattern": "/^[a-zA-Z0-9_]{3,100}$/"
-          },
-          "roleId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "status": {
-            "type": "object"
-          }
-        },
-        "required": [
-          "password",
-          "salt",
-          "username",
-          "roleId",
-          "id",
-          "email",
-          "status"
-        ]
-      },
-      "UserAuthCreateDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "status": {
-            "type": "object"
-          },
-          "password": {
-            "type": "string",
-            "minLength": 6
-          },
-          "salt": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 100,
-            "pattern": "/^[a-zA-Z0-9_]{3,100}$/"
-          },
-          "roleId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "required": [
-          "email",
-          "status",
-          "password",
-          "salt",
-          "username",
-          "roleId"
-        ]
-      },
-      "UserAuthUpdateDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "status": {
-            "type": "object"
-          },
-          "password": {
-            "type": "string",
-            "minLength": 6
-          },
-          "salt": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 100,
-            "pattern": "/^[a-zA-Z0-9_]{3,100}$/"
-          },
-          "roleId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        }
-      },
-      "RoleBaseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "status": {
-            "type": "object"
-          },
-          "description": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "slug",
-          "status",
-          "description"
-        ]
-      },
-      "UserAuthWithRoleDto": {
-        "type": "object",
-        "properties": {
-          "password": {
-            "type": "string",
-            "minLength": 6
-          },
-          "salt": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 100,
-            "pattern": "/^[a-zA-Z0-9_]{3,100}$/"
-          },
-          "roleId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "status": {
-            "type": "object"
-          },
-          "role": {
-            "$ref": "#/components/schemas/RoleBaseDto"
-          }
-        },
-        "required": [
-          "password",
-          "salt",
-          "username",
-          "roleId",
-          "id",
-          "email",
-          "status",
-          "role"
-        ]
-      },
-      "RoleBriefResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "slug": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "name",
-          "slug"
-        ]
-      },
-      "UserPayloadDto": {
-        "type": "object",
-        "properties": {
-          "role": {
-            "$ref": "#/components/schemas/RoleBriefResponseDto"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          }
-        },
-        "required": [
-          "role",
-          "id",
-          "email"
-        ]
-      },
-      "TokenPairDto": {
-        "type": "object",
-        "properties": {
-          "accessToken": {
-            "type": "string"
-          },
-          "refreshToken": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "accessToken",
-          "refreshToken"
-        ]
-      },
-      "RefreshTokenResponseDto": {
-        "type": "object",
-        "properties": {
-          "user": {
-            "$ref": "#/components/schemas/UserPayloadDto"
-          },
-          "tokens": {
-            "$ref": "#/components/schemas/TokenPairDto"
-          }
-        },
-        "required": [
-          "user",
-          "tokens"
-        ]
-      },
-      "SignInDto": {
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "browserId": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "username",
-          "password",
-          "browserId"
-        ]
-      },
-      "SignUpDto": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "format": "email"
-          }
-        },
-        "required": [
-          "email"
-        ]
-      },
-      "JwtPermissionDto": {
-        "type": "object",
-        "properties": {
-          "role": {
-            "type": "string"
-          },
-          "resource": {
-            "type": "string"
-          },
-          "action": {
-            "type": "string"
-          },
-          "attribute": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "role",
-          "resource",
-          "action",
-          "attribute"
-        ]
-      },
-      "JwtPayloadDto": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string",
-            "format": "uuid",
-            "description": "Id người dùng"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "description": "Email người dùng"
-          },
-          "browserId": {
-            "type": "string",
-            "description": "Fingerprint trình duyệt"
-          },
-          "permissions": {
-            "description": "Permissions của người dùng",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/JwtPermissionDto"
-            }
-          }
-        },
-        "required": [
-          "userId",
-          "email",
-          "browserId",
-          "permissions"
         ]
       },
       "QueryImageDto": {
@@ -1860,130 +1213,6 @@
           "author",
           "categories"
         ]
-      },
-      "GrantBaseCreateDto": {
-        "type": "object",
-        "properties": {
-          "roleId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "resourceId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "action": {
-            "type": "string"
-          },
-          "attribute": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "roleId",
-          "resourceId",
-          "action"
-        ]
-      },
-      "RoleBaseCreateDto": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "object"
-          },
-          "grants": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GrantBaseCreateDto"
-            }
-          },
-          "name": {
-            "type": "string"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "status",
-          "name",
-          "slug",
-          "description"
-        ]
-      },
-      "RoleBaseUpdateDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "slug": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "status": {
-            "type": "object"
-          },
-          "grants": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GrantBaseCreateDto"
-            }
-          }
-        }
-      },
-      "GrantBaseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "roleId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "resourceId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "action": {
-            "type": "string"
-          },
-          "attribute": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "roleId",
-          "resourceId",
-          "action"
-        ]
-      },
-      "GrantBaseUpdateDto": {
-        "type": "object",
-        "properties": {
-          "roleId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "resourceId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "action": {
-            "type": "string"
-          },
-          "attribute": {
-            "type": "string"
-          }
-        }
       }
     }
   }

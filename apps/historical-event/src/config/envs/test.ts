@@ -1,6 +1,8 @@
 // export * from './development';
 export const config = {
   db: {
+    url: process.env.DATABASE_URL || '',
+    directUrl: process.env.DIRECT_DATABASE_URL || '',
     type: 'postgres',
     synchronize: false,
     logging: false,

@@ -3,17 +3,15 @@ import {
   IsString,
   IsEmail,
   IsOptional,
-  IsEnum,
   MinLength,
   IsUUID,
 } from 'class-validator';
-import { USER } from '../../constants';
 
 // Base DTO for user creation
 @Exclude()
 export class UserBaseDto {
   @Expose()
-  @IsUUID('4', { message: 'ID không hợp lệ' })
+  @IsString({ message: 'ID không hợp lệ' })
   id!: string;
 
   @Expose()
@@ -22,29 +20,19 @@ export class UserBaseDto {
   email!: string;
 
   @Expose()
-  @IsString({ message: 'Slug phải là chuỗi' })
-  slug!: string;
-
-  @Expose()
   @IsString({ message: 'Tên phải là chuỗi' })
   @MinLength(1, { message: 'Tên là bắt buộc' })
   @Transform(({ value }) => value?.trim())
-  firstName!: string;
+  name!: string;
 
   @Expose()
   @IsOptional()
-  @IsString({ message: 'Họ phải là chuỗi' })
-  @Transform(({ value }) => value?.trim() || '')
-  lastName?: string | null;
+  @IsString({ message: 'Avatar không hợp lệ' })
+  image?: string | null;
 
   @Expose()
-  @IsOptional()
-  @IsUUID('4', { message: 'Avatar không hợp lệ' })
-  avatarId?: string;
-
-  @Expose()
-  @IsEnum(Object.values(USER.STATUS), {
-    message: 'Trạng thái không hợp lệ',
+  @IsString({
+    message: 'Vai trò phải là chuỗi',
   })
-  status!: Values<typeof USER.STATUS>;
+  role!: string;
 }

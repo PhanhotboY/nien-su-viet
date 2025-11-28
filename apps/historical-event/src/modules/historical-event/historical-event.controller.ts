@@ -9,7 +9,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { HistoricalEventService } from './historical-event.service';
-import { Permissions } from '@phanhotboy/nsv-jwt-auth';
 import {
   HistoricalEventBaseCreateDto,
   HistoricalEventBaseDto,
@@ -18,8 +17,9 @@ import {
   HistoricalEventDetailResponseDto,
   HistoricalEventPreviewResponseDto,
   HistoricalEventQueryDto,
+  Permissions,
+  CurrentUser,
   Serialize,
-  User,
 } from '@phanhotboy/nsv-common';
 
 @Controller('historical-events')
@@ -29,37 +29,37 @@ export class HistoricalEventController {
   ) {}
 
   @Get()
-  @Permissions(['historical-event', 'readAny'])
+  @Permissions({ historicalEvent: ['read'] })
   @Serialize(HistoricalEventBriefResponseDto)
   getAllHistoricalEvents(@Query() query: HistoricalEventQueryDto) {
     return this.historicalEventService.getEvents(query);
   }
 
   @Post()
-  @Permissions(['historical-event', 'createAny'])
+  @Permissions({ historicalEvent: ['create'] })
   createHistoricalEvent(
     @Body() event: HistoricalEventBaseCreateDto,
-    @User('userId') authorId: string,
+    @CurrentUser('userId') authorId: string,
   ) {
     return this.historicalEventService.createEvent(authorId, event);
   }
 
   @Get(':id/preview')
-  @Permissions(['historical-event', 'readAny'])
+  @Permissions({ historicalEvent: ['read'] })
   @Serialize(HistoricalEventPreviewResponseDto)
   getHistoricalEventPreviewById(@Param('id') id: string) {
     return this.historicalEventService.getEventById(id);
   }
 
   @Get(':id')
-  @Permissions(['historical-event', 'readAny'])
+  @Permissions({ historicalEvent: ['read'] })
   @Serialize(HistoricalEventDetailResponseDto)
   getHistoricalEventById(@Param('id') id: string) {
     return this.historicalEventService.getEventById(id);
   }
 
   @Put(':id')
-  @Permissions(['historical-event', 'updateAny'])
+  @Permissions({ historicalEvent: ['update'] })
   @Serialize(HistoricalEventBaseDto)
   updateHistoricalEvent(
     @Param('id') id: string,
@@ -69,10 +69,10 @@ export class HistoricalEventController {
   }
 
   @Delete(':id')
-  @Permissions(['historical-event', 'deleteAny'])
+  @Permissions({ historicalEvent: ['delete'] })
   deleteHistoricalEvent(
     @Param('id') id: string,
-    @User('userId') userId: string,
+    @CurrentUser('userId') userId: string,
   ) {
     return this.historicalEventService.deleteEvent(id, userId);
   }
