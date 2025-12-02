@@ -1,0 +1,3 @@
+export const RMQ = {
+  TOPIC_EVENTS_EXCHANGE: 'TOPIC_EVENTS_EXCHANGE',
+};

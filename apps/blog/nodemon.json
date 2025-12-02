@@ -1,0 +1,13 @@
+{
+  "restartable": "rs",
+  "ignore": [".git"],
+  "verbose": true,
+  "events": {
+    "restart": "echo 'App restarted due to:\n'$FILENAME''"
+  },
+  "watch": ["cmd/", "configs/", "internal/", "global/", "pkg/"],
+  "ext": "go,yaml",
+  "execMap": {
+    "go": "go run cmd/server/main.go"
+  }
+}

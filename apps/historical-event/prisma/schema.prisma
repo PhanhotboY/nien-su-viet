@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  image         String?
+  role          String?
+
+  createdEvents         HistoricalEvent[]
+  editedEvents          EventEdit[]
+
+  @@unique([email])
+}
+
+model HistoricalEvent {
+  id          String  @id @db.Uuid @default(uuid())
+
+  fromYear    Int     @db.SmallInt
+  fromMonth   Int?    @db.SmallInt
+  fromDay     Int?    @db.SmallInt 
+
+  toYear      Int?    @db.SmallInt
+  toMonth     Int?    @db.SmallInt
+  toDay       Int?    @db.SmallInt
+
+  name        String    @db.VarChar(255)
+  content     String    @db.Text
+  thumbnailId String?   @db.Uuid
+  authorId    String
+  
+  editors     EventEdit[]
+  thumbnail   Image? @relation(fields: [thumbnailId], references: [id], onDelete: SetNull)
+  author      User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  categories  EventCategories[]
+  
+  createdAt   DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime    @updatedAt @db.Timestamp(6)
+
+  @@index([fromYear], name: "idx_event_from_year")
+  @@index([fromMonth], name: "idx_event_from_month")
+  @@index([fromDay], name: "idx_event_from_day")
+  @@index([toYear], name: "idx_event_to_year")
+  @@index([toMonth], name: "idx_event_to_month")
+  @@index([toDay], name: "idx_event_to_day")
+}
+
+model EventCategory {
+  id          String  @id @db.Uuid @default(uuid())
+  name        String  @unique @db.VarChar(255)
+  slug        String  @unique @db.VarChar(255) 
+  description String? @db.Text
+
+  events      EventCategories[] 
+
+  createdAt   DateTime    @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime    @updatedAt      @db.Timestamp(6)
+
+  @@index([slug], name: "idx_event_category_slug")
+}
+
+model EventCategories {
+  eventId     String  @db.Uuid
+  categoryId  String  @db.Uuid
+
+  event       HistoricalEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  category    EventCategory   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, categoryId])
+  @@index([categoryId], name: "idx_categories_by_category")
+  @@index([eventId], name: "idx_categories_by_event")
+}
+
+model EventEdit {
+  id        String    @id @db.Uuid @default(uuid())
+  eventId   String    @db.Uuid
+  editorId  String   
+  editedAt  DateTime  @default(now()) @db.Timestamp(6)
+
+  prevContent String? @db.Text
+  newContent  String? @db.Text
+  
+  prevFromYear  Int   @db.SmallInt
+  prevFromMonth Int?  @db.SmallInt
+  prevFromDay   Int?  @db.SmallInt
+  prevToYear    Int?  @db.SmallInt
+  prevToMonth   Int?  @db.SmallInt
+  prevToDay     Int?  @db.SmallInt
+  
+  newFromYear   Int?  @db.SmallInt
+  newFromMonth  Int?  @db.SmallInt
+  newFromDay    Int?  @db.SmallInt
+  newToYear     Int?  @db.SmallInt
+  newToMonth    Int?  @db.SmallInt
+  newToDay      Int?  @db.SmallInt
+
+  event     HistoricalEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  editor    User            @relation(fields: [editorId], references: [id], onDelete: Cascade)
+
+  @@index([eventId], name: "idx_edit_event")
+  @@index([editorId], name: "idx_edit_editor")
+}
+
+model EventPeriod {
+  id          String @id @db.Uuid @default(uuid())
+
+  fromYear    Int   @db.SmallInt
+  fromMonth   Int?  @db.SmallInt
+  fromDay     Int?  @db.SmallInt 
+
+  toYear      Int   @db.SmallInt
+  toMonth     Int?  @db.SmallInt
+  toDay       Int?  @db.SmallInt
+
+  name        String  @unique @db.VarChar(255)
+  slug        String  @unique @db.VarChar(255) 
+  description String? @db.Text
+}
+
+model Image {
+  id          String  @id @db.Uuid @default(uuid())
+  caption     String? @db.Text
+  description String? @db.Text
+  publicUrl   String  @db.VarChar(255) // actual image url
+
+  events      HistoricalEvent[]
+}

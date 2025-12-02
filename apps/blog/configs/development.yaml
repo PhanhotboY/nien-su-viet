@@ -1,0 +1,15 @@
+server:
+  host: localhost
+  port: 3003
+grpc:
+  host: localhost
+  port: 50051
+postgresql:
+  host: aws-1-ap-northeast-1.pooler.supabase.com
+  port: 5432
+  username: postgres.wykycfijjoxnxpqmwweq
+  password: rlqcAQA0FZnT9fWC
+  database: postgres
+security:
+  jwt:
+    secret: 6f96125a475dbdc4ba4ed2c38ebd93c89f0c633149b7d5cddb2381cbc1398541
