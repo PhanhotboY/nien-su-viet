@@ -5,19 +5,33 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY } from './roles.decorator';
+import { createAuthClient } from 'better-auth/react';
+import { adminClient } from 'better-auth/client/plugins';
+
+import { PERMISSIONS_KEY } from './permissions.decorator';
+import { ac, roles, statements } from './permissions';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
+  // Only use admin.checkRolePermission function
+  // Other functions are required to fetch data from server which is not possible here
+  private readonly authClient = createAuthClient({
+    plugins: [
+      adminClient({
+        ac,
+        roles,
+      }),
+    ],
+  });
+
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<string[]>(
-      ROLES_KEY,
-      [context.getClass(), context.getHandler()],
-    );
+    const requiredPermissions = this.reflector.getAllAndOverride<
+      typeof statements
+    >(PERMISSIONS_KEY, [context.getClass(), context.getHandler()]);
 
-    if (!requiredRoles) {
+    if (!requiredPermissions) {
       return true;
     }
 
@@ -28,9 +42,12 @@ export class RolesGuard implements CanActivate {
       throw new ForbiddenException('Please sign in before continue.');
     }
 
-    const hasRole = requiredRoles.some((role) => user.role === role);
+    const isAllowed = this.authClient.admin.checkRolePermission({
+      role: user.role,
+      permissions: requiredPermissions,
+    });
 
-    if (!hasRole) {
+    if (!isAllowed) {
       throw new ForbiddenException(
         'You do not have right to perform the action',
       );

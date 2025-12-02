@@ -2,16 +2,20 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from '@historical-event/database';
 import {
+  getExcerpt,
   RedisService,
   UtilService,
   type RedisServiceType,
 } from '@phanhotboy/nsv-common';
+import { PaginatedResponseDto } from '@phanhotboy/nsv-common/dto/response';
+import { Prisma } from '@historical-event-prisma';
 import {
   HistoricalEventQueryDto,
   HistoricalEventBriefResponseDto,
   HistoricalEventDetailResponseDto,
   HistoricalEventBaseCreateDto,
   HistoricalEventBaseUpdateDto,
+  HistoricalEventPreviewResponseDto,
 } from '@phanhotboy/nsv-common/dto/historical-event';
 
 @Injectable()
@@ -28,21 +32,20 @@ export class HistoricalEventService {
     this.cacheKey = this.util.genCacheKey(this.cachePrefix);
   }
 
-  async createEvent(
-    authorId: string,
-    payload: HistoricalEventBaseCreateDto,
-  ): Promise<HistoricalEventBriefResponseDto> {
-    const role = await this.prisma.historicalEvent.create({
+  async createEvent(authorId: string, payload: HistoricalEventBaseCreateDto) {
+    const event = await this.prisma.historicalEvent.create({
       data: { ...payload, authorId },
     });
 
     // Clear cache
     await this.redisService.del(this.cacheKey);
 
-    return role;
+    return { success: true };
   }
 
-  async getEvents(query: HistoricalEventQueryDto) {
+  async getEvents(
+    query: HistoricalEventQueryDto,
+  ): Promise<PaginatedResponseDto<HistoricalEventBriefResponseDto>> {
     const {
       page = 1,
       limit = 10,
@@ -57,15 +60,17 @@ export class HistoricalEventService {
       sortBy = 'fromYear',
     } = query;
 
-    const options: Parameters<typeof this.prisma.historicalEvent.findMany>[0] =
-      {
-        where: {},
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: {
-          [sortBy]: sortOrder,
-        },
-      };
+    const options = {
+      where: {} as Prisma.HistoricalEventWhereInput,
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: {
+        [sortBy]: sortOrder,
+      },
+      include: {
+        author: true,
+      },
+    } satisfies Parameters<typeof this.prisma.historicalEvent.findMany>[0];
 
     if (categoryIds && categoryIds.length > 0) {
       options!.where!.categories = {
@@ -130,14 +135,10 @@ export class HistoricalEventService {
     const options = {
       where: { id },
       include: {
-        author: {
-          include: {
-            avatar: true,
-          },
-        },
-        categories: true,
+        author: true,
+        categories: { include: { category: true, event: false } },
       },
-    };
+    } satisfies Parameters<typeof this.prisma.historicalEvent.findUnique>[0];
 
     return await this.util.handleHashCachingQuery(
       {
@@ -149,6 +150,36 @@ export class HistoricalEventService {
     );
   }
 
+  async getEventPreviewById(
+    id: string,
+  ): Promise<HistoricalEventPreviewResponseDto> {
+    const options = {
+      where: { id },
+      include: {
+        author: true,
+        categories: { include: { category: true, event: false } },
+      },
+    } satisfies Parameters<typeof this.prisma.historicalEvent.findUnique>[0];
+
+    return await this.util.handleHashCachingQuery(
+      {
+        cacheKey: this.cacheKey,
+        hashAttribute: options,
+        notFoundMessage: 'Sự kiện lịch sử không tồn tại',
+      },
+      async () => {
+        const event = await this.prisma.historicalEvent.findUnique(options);
+        return event
+          ? {
+              ...event,
+              excerpt: getExcerpt(event.content, 1000),
+              content: undefined, // Remove content to reduce payload
+            }
+          : null;
+      },
+    );
+  }
+
   async getAuthorEventById(
     id: string,
     authorId: string,
@@ -156,12 +187,10 @@ export class HistoricalEventService {
     const options = {
       where: { id, authorId },
       include: {
-        author: {
-          include: {
-            avatar: true,
-          },
+        author: true,
+        categories: {
+          include: { category: true, event: false },
         },
-        categories: true,
       },
     } satisfies Parameters<typeof this.prisma.historicalEvent.findUnique>[0];
 

@@ -5,12 +5,10 @@ import {
   OnModuleDestroy,
 } from '@nestjs/common';
 import {
-  createClient,
-  type RedisClientOptions,
+  type RedisClientConnectionType,
   type RedisClientType,
 } from '@keyv/redis';
-
-export const REDIS_OPTIONS = 'REDIS_OPTIONS';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 /**
  * Extended Redis service to handle hash operations with JSON serialization
@@ -21,17 +19,10 @@ export const REDIS_OPTIONS = 'REDIS_OPTIONS';
  */
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
-  private readonly redisClient: RedisClientType;
-  constructor(
-    @Inject(REDIS_OPTIONS)
-    private readonly redisOption: RedisClientOptions,
-  ) {
-    if (!this.redisOption || !this.redisOption.url) {
-      throw new Error('RedisService: Missing redis configuration');
-    }
-    this.redisClient = createClient({
-      url: this.redisOption.url,
-    });
+  private redisClient: RedisClientType;
+
+  constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {
+    this.redisClient = this.cacheManager.stores[0]?.store.client as any;
 
     return new Proxy(this, {
       get(target, prop) {
@@ -49,8 +40,9 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   }
 
   // Set hash field
-  hSet(key: string, field: string, value: any) {
-    return this.redisClient.hSet(key, field, JSON.stringify(value as any));
+  async hSet(key: string, field: string, value: any, ttl?: number) {
+    await this.redisClient.hSet(key, field, JSON.stringify(value as any)); // Default 5 minutes expiration
+    await this.redisClient.expire(key, ttl || 5 * 60);
   }
 
   /**
@@ -78,12 +70,17 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   }
 
   // Set multiple fields
-  async hMSet(key: string, data: Record<string, any>): Promise<void> {
+  async hMSet(
+    key: string,
+    data: Record<string, any>,
+    ttl?: number,
+  ): Promise<void> {
     const serialized: Record<string, string> = {};
     for (const [field, value] of Object.entries(data)) {
       serialized[field] = JSON.stringify(value);
     }
     await this.redisClient.hSet(key, serialized);
+    await this.redisClient.expire(key, ttl || 5 * 60); // Default 5 minutes expiration
   }
 
   // Delete hash field
@@ -103,17 +100,6 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     });
   }
 
-  // Set field with expiration (custom implementation)
-  async hSetWithExpiry(
-    key: string,
-    field: string,
-    value: any,
-    ttlSeconds: number,
-  ): Promise<void> {
-    await this.hSet(key, field, value);
-    await this.redisClient.expire(key, ttlSeconds);
-  }
-
   async get(key: string) {
     const value = await this.redisClient.get(key);
     if (value === 'null') return value;
@@ -121,9 +107,16 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     return value ? JSON.parse(value) : null;
   }
 
-  async set(key: string, value: any) {
+  async set(key: string, value: any, ttl?: number) {
     const serializedValue = JSON.stringify(value);
     await this.redisClient.set(key, serializedValue);
+    await this.redisClient.expire(key, ttl || 5 * 60); // Default 5 minutes expiration
+  }
+
+  async mdel(keyPattern: string): Promise<number> {
+    const keys = await this.redisClient.keys(keyPattern);
+    if (keys.length === 0) return 0;
+    return await this.redisClient.del(keys);
   }
 
   onModuleInit() {
@@ -132,7 +125,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     });
   }
   onModuleDestroy() {
-    this.redisClient.quit().then(() => {
+    this.cacheManager.disconnect().then(() => {
       console.log('Disconnected from Redis');
     });
   }

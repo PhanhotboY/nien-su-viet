@@ -61,11 +61,13 @@ async function getUsers(
   }
 
   return {
-    items: data.users,
-    total: data.total ?? data.users.length,
-    limit: query.limit,
-    page: query.page,
-    totalPages: Math.ceil(data.total / query.limit),
+    data: data.users,
+    pagination: {
+      total: data.total ?? data.users.length,
+      limit: query.limit,
+      page: query.page,
+      totalPages: Math.ceil(data.total / query.limit),
+    },
   };
 }
 
@@ -94,14 +96,16 @@ async function createUser(
 }
 
 async function deleteUser(userId: string) {
-  const reqHeaders = await headers();
-  const { error } = await authClient.$fetch<void>(
-    `/admin/delete-user/${userId}`,
-    {
-      method: 'DELETE',
-      headers: reqHeaders,
-    },
-  );
+  const reqHeaders = new Headers(await headers());
+  // Foward headers from client with different payload
+  reqHeaders.delete('content-length');
+  reqHeaders.set('content-type', 'application/json');
+
+  const { error } = await authClient.$fetch<void>(`/admin/remove-user`, {
+    method: 'POST',
+    headers: reqHeaders,
+    body: JSON.stringify({ userId }),
+  });
 
   if (error) {
     console.log('Error deleting user: ', error);
@@ -111,4 +115,32 @@ async function deleteUser(userId: string) {
   return;
 }
 
-export { getUsers, createUser, deleteUser };
+async function updateUserRole(
+  userId: string,
+  newRole: string,
+): Promise<components['schemas']['User']> {
+  const reqHeaders = new Headers(await headers());
+  // Foward headers from client with different payload
+  reqHeaders.delete('content-length');
+  reqHeaders.set('content-type', 'application/json');
+
+  const { data, error } = await authClient.$fetch<
+    components['schemas']['User']
+  >('/admin/update-user', {
+    method: 'POST',
+    headers: reqHeaders,
+    body: JSON.stringify({ userId, data: { role: newRole } }),
+  });
+
+  if (error) {
+    console.log('Error updating user role: ', error);
+    throw new ApiError(
+      error.status,
+      error.message || 'Failed to update user role',
+    );
+  }
+
+  return data;
+}
+
+export { getUsers, createUser, deleteUser, updateUserRole };

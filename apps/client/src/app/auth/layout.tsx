@@ -1,22 +1,34 @@
-import { redirect } from 'next/navigation';
-import { authClient } from '@/lib/auth-client';
-import { cookies } from 'next/headers';
+'use client';
 
-export default async function LoginLayout({
+import { authClient } from '@/lib/auth-client';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+export default function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookiesStore = await cookies();
-  const { data, error } = await authClient
-    .getSession({
-      fetchOptions: { headers: { cookie: cookiesStore.toString() } },
-    })
-    .catch((e) => ({ data: null, error: e }));
+  const queries = useSearchParams();
+  const router = useRouter();
+  const { data, error } = authClient.useSession();
 
-  if (data && !error) {
-    redirect('/admin');
+  let redirectTo = queries.get('redirectTo');
+  if (!redirectTo) {
+    switch (data?.user.role) {
+      case 'admin':
+        redirectTo = '/admin';
+        break;
+      case 'editor':
+        redirectTo = '/cmsdesk';
+        break;
+      default:
+        redirectTo = '/';
+    }
   }
 
-  return children;
+  if (data && !error) {
+    router.push(redirectTo);
+  }
+
+  return <>{children}</>;
 }

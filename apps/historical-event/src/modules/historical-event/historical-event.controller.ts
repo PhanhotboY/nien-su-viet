@@ -3,13 +3,14 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Post,
   Put,
   Query,
 } from '@nestjs/common';
+
 import { HistoricalEventService } from './historical-event.service';
-import { Permissions } from '@phanhotboy/nsv-jwt-auth';
 import {
   HistoricalEventBaseCreateDto,
   HistoricalEventBaseDto,
@@ -18,62 +19,75 @@ import {
   HistoricalEventDetailResponseDto,
   HistoricalEventPreviewResponseDto,
   HistoricalEventQueryDto,
+  Permissions,
+  CurrentUser,
   Serialize,
-  User,
+  RedisService,
+  type RedisServiceType,
+  Public,
 } from '@phanhotboy/nsv-common';
 
 @Controller('historical-events')
 export class HistoricalEventController {
+  private routePath = '/api/v1/historical-events*';
+
   constructor(
     private readonly historicalEventService: HistoricalEventService,
+    @Inject(RedisService) private readonly redis: RedisServiceType,
   ) {}
 
+  @Get(':id/preview')
+  @Public()
+  @Serialize(HistoricalEventPreviewResponseDto)
+  getHistoricalEventPreviewById(@Param('id') id: string) {
+    return this.historicalEventService.getEventPreviewById(id);
+  }
+
+  @Get(':id')
+  @Public()
+  @Serialize(HistoricalEventDetailResponseDto)
+  getHistoricalEventById(@Param('id') id: string) {
+    return this.historicalEventService.getEventById(id);
+  }
+
   @Get()
-  @Permissions(['historical-event', 'readAny'])
+  @Public()
   @Serialize(HistoricalEventBriefResponseDto)
   getAllHistoricalEvents(@Query() query: HistoricalEventQueryDto) {
     return this.historicalEventService.getEvents(query);
   }
 
   @Post()
-  @Permissions(['historical-event', 'createAny'])
-  createHistoricalEvent(
+  @Permissions({ historicalEvent: ['create'] })
+  async createHistoricalEvent(
     @Body() event: HistoricalEventBaseCreateDto,
-    @User('userId') authorId: string,
+    @CurrentUser('id') authorId: string,
   ) {
-    return this.historicalEventService.createEvent(authorId, event);
-  }
-
-  @Get(':id/preview')
-  @Permissions(['historical-event', 'readAny'])
-  @Serialize(HistoricalEventPreviewResponseDto)
-  getHistoricalEventPreviewById(@Param('id') id: string) {
-    return this.historicalEventService.getEventById(id);
-  }
-
-  @Get(':id')
-  @Permissions(['historical-event', 'readAny'])
-  @Serialize(HistoricalEventDetailResponseDto)
-  getHistoricalEventById(@Param('id') id: string) {
-    return this.historicalEventService.getEventById(id);
+    const res = await this.historicalEventService.createEvent(authorId, event);
+    await this.redis.mdel(this.routePath);
+    return res;
   }
 
   @Put(':id')
-  @Permissions(['historical-event', 'updateAny'])
+  @Permissions({ historicalEvent: ['update'] })
   @Serialize(HistoricalEventBaseDto)
-  updateHistoricalEvent(
+  async updateHistoricalEvent(
     @Param('id') id: string,
     @Body() event: HistoricalEventBaseUpdateDto,
   ) {
-    return this.historicalEventService.updateEvent(id, event);
+    const res = await this.historicalEventService.updateEvent(id, event);
+    await this.redis.mdel(this.routePath);
+    return res;
   }
 
   @Delete(':id')
-  @Permissions(['historical-event', 'deleteAny'])
-  deleteHistoricalEvent(
+  @Permissions({ historicalEvent: ['delete'] })
+  async deleteHistoricalEvent(
     @Param('id') id: string,
-    @User('userId') userId: string,
+    @CurrentUser('userId') userId: string,
   ) {
-    return this.historicalEventService.deleteEvent(id, userId);
+    const res = await this.historicalEventService.deleteEvent(id, userId);
+    await this.redis.mdel(this.routePath);
+    return res;
   }
 }

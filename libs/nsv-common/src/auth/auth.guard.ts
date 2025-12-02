@@ -11,11 +11,11 @@ import { Cookie } from 'cookiejar';
 
 import { ConfigService } from '../providers';
 import { IS_PUBLIC_KEY } from './public.decorator';
-import { components } from 'libs/nsv-interfaces/auth-service';
+import { UserBaseDto } from '../dto';
 
 interface JWTPayload extends jwt.JwtPayload {
-  user: components['schemas']['User'];
-  session: components['schemas']['Session'];
+  user: UserBaseDto;
+  session: any;
   version: string;
   updatedAt: number;
 }

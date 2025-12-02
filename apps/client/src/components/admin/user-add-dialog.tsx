@@ -15,6 +15,7 @@ import {
 
 import { Switch } from '@/components/ui/switch';
 import { createUser } from '@/services/user.service';
+import { roles } from '@/lib/permissions';
 
 interface UserAddDialogProps {
   isOpen: boolean;
@@ -32,7 +33,7 @@ export function UserAddDialog({
     name: '',
     email: '',
     password: '',
-    role: 'user' as 'user' | 'admin',
+    role: 'user' as keyof typeof roles,
     autoVerify: false,
   });
 
@@ -116,7 +117,7 @@ export function UserAddDialog({
           <Label htmlFor="role">Role</Label>
           <Select
             value={formData.role}
-            onValueChange={(value: 'user' | 'admin') =>
+            onValueChange={(value: typeof formData.role) =>
               setFormData((prev) => ({ ...prev, role: value }))
             }
           >
@@ -124,8 +125,11 @@ export function UserAddDialog({
               <SelectValue placeholder="Select role" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="user">User</SelectItem>
-              <SelectItem value="admin">Admin</SelectItem>
+              {Object.keys(roles).map((role) => (
+                <SelectItem key={role} value={role}>
+                  {role.charAt(0).toUpperCase() + role.slice(1)}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

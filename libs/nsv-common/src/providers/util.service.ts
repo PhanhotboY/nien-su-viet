@@ -4,7 +4,7 @@ import {
   MODULE_OPTIONS_TOKEN,
   OPTIONS_TYPE,
 } from '../common.module-definition';
-import { RedisService, type RedisServiceType } from './redisHash.service';
+import { RedisService, type RedisServiceType } from './redis.service';
 
 @Injectable()
 export class UtilService {
@@ -122,6 +122,9 @@ export class UtilService {
     );
   }
 
+  /**
+   *  Only use inside request/response cycle
+   */
   async handleHashCachingQuery<T>(
     {
       cacheKey,

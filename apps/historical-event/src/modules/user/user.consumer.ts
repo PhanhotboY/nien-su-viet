@@ -1,6 +1,11 @@
 import { Controller } from '@nestjs/common';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
-import { RmqService, USER_EVENT, UserBaseDto } from '@phanhotboy/nsv-common';
+import {
+  RmqService,
+  USER_EVENT,
+  UserBaseDto,
+  UserDeleteDto,
+} from '@phanhotboy/nsv-common';
 import { UserService } from './user.service';
 
 @Controller()
@@ -15,7 +20,43 @@ export class UserConsumer {
     @Payload() data: UserBaseDto,
     @Ctx() context: RmqContext,
   ) {
-    await this.userService.handleUserRegister(data);
-    return this.rmqService.ack(context);
+    await this.userService
+      .handleUserRegister(data)
+      .catch((error) => {
+        console.error('Error handling user registered event:', error);
+      })
+      .finally(() => {
+        this.rmqService.ack(context);
+      });
+  }
+
+  @EventPattern(USER_EVENT.DELETED)
+  async handleUserDeletedEvent(
+    @Payload() data: UserDeleteDto,
+    @Ctx() context: RmqContext,
+  ) {
+    await this.userService
+      .deleteUser(data.userId)
+      .catch((error) => {
+        console.error('Error handling user deleted event:', error);
+      })
+      .finally(() => {
+        return this.rmqService.ack(context);
+      });
+  }
+
+  @EventPattern(USER_EVENT.UPDATED)
+  async handleUserUpdatedEvent(
+    @Payload() data: UserBaseDto,
+    @Ctx() context: RmqContext,
+  ) {
+    await this.userService
+      .updateUser(data)
+      .catch((error) => {
+        console.error('Error handling user updated event:', error);
+      })
+      .finally(() => {
+        return this.rmqService.ack(context);
+      });
   }
 }

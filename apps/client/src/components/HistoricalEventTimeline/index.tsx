@@ -3,46 +3,35 @@
 import { useEffect, useRef, useState } from 'react';
 import { DataSet } from 'vis-data';
 import { Timeline, TimelineOptions } from 'vis-timeline';
-import 'vis-timeline/styles/vis-timeline-graph2d.css';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import './index.css';
 import { VisItem } from '@/interfaces/vis.interface';
-import { EventDetailDialog } from './EventDetailDialog';
+import { createDate } from '@/helper/date';
 import { components } from '@nsv-interfaces/historical-event';
+import { IPaginatedResponse } from '../../interfaces/response.interface';
+
+import 'vis-timeline/styles/vis-timeline-graph2d.css';
+import './index.css';
+import { useRouter } from 'next/navigation';
 
 export function HistoricalEventTimeline({
   events,
 }: {
-  events: components['schemas']['HistoricalEventDetailResponseDto'][];
+  events: IPaginatedResponse<
+    components['schemas']['HistoricalEventBriefResponseDto']
+  >;
 }) {
   const timelineRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const [timeline, setTimeline] = useState<Timeline | null>(null);
-  const [selectedItem, setSelectedItem] = useState<VisItem | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     if (!timelineRef.current) return;
 
-    // Helper function to create date from parts
-    const createDate = (year: number, month?: number, day?: number) => {
-      // Handle BCE dates (negative years)
-      const isBCE = year < 0;
-      const absYear = Math.abs(year);
-
-      if (isBCE) {
-        // For BCE, create date and adjust
-        const date = new Date(0, (month || 1) - 1, day || 1);
-        date.setFullYear(-absYear);
-        return date;
-      }
-
-      return new Date(absYear, (month || 1) - 1, day || 1);
-    };
-
     const items = new DataSet<VisItem>(
-      events.map((event) => {
+      events.data.map((event) => {
         const start = createDate(
           event.fromYear,
           event.fromMonth!,
@@ -54,14 +43,14 @@ export function HistoricalEventTimeline({
 
         return {
           id: event.id,
-          content: event.content,
+          content: '',
           start,
           end,
           title: event.name, // Tooltip preview
           type: end ? ('range' as const) : ('point' as const), // Range for events with duration
-          className: event.categories
-            .map((c: any) => c.category.slug)
-            .join(' '),
+          // className: event.
+          //   .map((c: any) => c.category.slug)
+          //   .join(' '),
         };
       }),
     );
@@ -141,8 +130,7 @@ export function HistoricalEventTimeline({
       if (properties.items.length > 0) {
         const itemId = properties.items[0];
         const item = items.get(itemId) as any as VisItem;
-        setSelectedItem(item);
-        setDialogOpen(true);
+        router.push(`/timeline/preview?eventId=${itemId}`);
       }
     });
 
@@ -244,13 +232,6 @@ export function HistoricalEventTimeline({
         <div className="p-6">
           <div ref={timelineRef} className="timeline-container" />
         </div>
-
-        {/* React Dialog with shadcn components */}
-        <EventDetailDialog
-          item={selectedItem}
-          open={dialogOpen}
-          onOpenChange={setDialogOpen}
-        />
       </CardContent>
     </Card>
   );

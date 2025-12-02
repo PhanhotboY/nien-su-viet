@@ -1,6 +1,8 @@
 // export * from './development';
 export const config = {
   db: {
+    url: process.env.DATABASE_URL || '',
+    directUrl: process.env.DIRECT_DATABASE_URL || '',
     type: 'postgres',
     synchronize: false,
     logging: false,
@@ -20,6 +22,7 @@ export const config = {
   rabbitmq: process.env.RABBITMQ_URL,
   redis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379',
+    ttl: 60 * 5, // 5 minutes
   },
   throttlers: [
     {

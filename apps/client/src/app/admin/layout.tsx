@@ -9,6 +9,21 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const reqHeaders = await headers();
+  const { data } = await authClient.getSession({
+    fetchOptions: { headers: reqHeaders },
+  });
+
+  if (data?.user.role !== 'admin') {
+    switch (data?.user.role) {
+      case 'editor':
+        redirect('/cmsdesk');
+      case 'user':
+      default:
+        redirect('/');
+    }
+  }
+
   return (
     <DashboardLayout>
       <RedirectToSignIn />

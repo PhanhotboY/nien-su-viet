@@ -61,7 +61,7 @@ export function UserActions({ user, onActionComplete }: UserActionsProps) {
             <Shield className="mr-2 h-4 w-4" />
             <span>Update Role</span>
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
+          {/* <DropdownMenuSeparator />
           {user.banned ? (
             <DropdownMenuItem
               className="text-xs"
@@ -84,7 +84,7 @@ export function UserActions({ user, onActionComplete }: UserActionsProps) {
               <Ban className="mr-2 h-4 w-4" />
               <span>Ban User</span>
             </DropdownMenuItem>
-          )}
+          )} */}
           <DropdownMenuItem
             className="text-xs"
             onClick={() => {
@@ -95,7 +95,7 @@ export function UserActions({ user, onActionComplete }: UserActionsProps) {
             <Trash2 className="mr-2 h-4 w-4" />
             <span>Delete User</span>
           </DropdownMenuItem>
-          <DropdownMenuItem
+          {/* <DropdownMenuItem
             className="text-xs"
             onClick={() => {
               setDropdownOpen(false);
@@ -104,7 +104,7 @@ export function UserActions({ user, onActionComplete }: UserActionsProps) {
           >
             <LogOut className="mr-2 h-4 w-4" />
             <span>Revoke All Sessions</span>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
 
