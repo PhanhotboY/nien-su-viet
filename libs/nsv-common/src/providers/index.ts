@@ -1,3 +1,3 @@
 export * from './config.service';
 export * from './util.service';
-export * from './redisHash.service';
+export * from './redis.service';

@@ -6,4 +6,5 @@ export interface CommonOptionDto {
   rabbitmqConfigKey: string;
   cachePrefix: string;
   useInterceptors?: boolean;
+  useCache?: boolean;
 }

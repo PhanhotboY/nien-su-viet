@@ -10,6 +10,7 @@ import {
   Shield,
   User,
   UserPlus,
+  Pen,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import useSWR from 'swr';
@@ -54,20 +55,8 @@ import { IPaginatedResponse } from '@/interfaces/response.interface';
 import { components } from '@nsv-interfaces/auth-service';
 import { UserAvatar } from '@daveyplate/better-auth-ui';
 import { Button } from '../ui/button';
-
-// Fetcher function for SWR
-const fetcher = async (url: string) => {
-  const res = await fetch(url, {
-    credentials: 'include',
-  });
-  const resData = await res.json();
-
-  if (!res.ok) {
-    throw new Error(resData.message || 'Failed to fetch data');
-  }
-
-  return resData;
-};
+import { roles } from '@/lib/permissions';
+import { swrFetcher } from '@/helper/swrFetcher';
 
 // Helper function to render account icons
 const getAccountIcon = (account: string) => {
@@ -126,7 +115,7 @@ export function UsersTable() {
 
   const { data, error, mutate, isLoading } = useSWR<
     IPaginatedResponse<components['schemas']['User']>
-  >(swrKey, fetcher, {
+  >(swrKey, swrFetcher, {
     revalidateOnFocus: false,
     dedupingInterval: 2000,
   });
@@ -167,8 +156,10 @@ export function UsersTable() {
                 <Users className="w-4 h-4" />
               ) : role === 'admin' ? (
                 <Shield className="w-4 h-4" />
+              ) : role === 'editor' ? (
+                <Pen className="w-4 h-4" />
               ) : (
-                <User className="w-4 h-4" />
+                <Users className="w-4 h-4" />
               )}
               {role === 'all'
                 ? 'All Roles'
@@ -182,18 +173,20 @@ export function UsersTable() {
                 All Roles
               </span>
             </SelectItem>
-            <SelectItem value="admin">
-              <span className="flex items-center gap-2">
-                <Shield className="w-4 h-4" />
-                Admin
-              </span>
-            </SelectItem>
-            <SelectItem value="user">
-              <span className="flex items-center gap-2">
-                <User className="w-4 h-4" />
-                User
-              </span>
-            </SelectItem>
+            {Object.keys(roles).map((roleKey) => (
+              <SelectItem key={roleKey} value={roleKey}>
+                <span className="flex items-center gap-2">
+                  {roleKey === 'admin' ? (
+                    <Shield className="w-4 h-4" />
+                  ) : roleKey === 'editor' ? (
+                    <Pen className="w-4 h-4" />
+                  ) : (
+                    <Users className="w-4 h-4" />
+                  )}
+                  {roleKey.charAt(0).toUpperCase() + roleKey.slice(1)}
+                </span>
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -279,7 +272,10 @@ export function UsersTable() {
       </div>
     );
 
-  const { items: users, total, totalPages } = data;
+  const {
+    data: users,
+    pagination: { total, totalPages },
+  } = data;
 
   // Pagination logic for shadcn/ui Pagination
   const renderPagination = () => {
@@ -515,9 +511,7 @@ export function UsersTable() {
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-xs text-muted-foreground">
-                      {user.id}
-                    </TableCell>
+                    <TableCell className="px-4 py-3 text-xs text-muted-foreground"></TableCell>
                     <TableCell className="px-4 py-3 text-xs text-muted-foreground">
                       {format(user.createdAt, "MMM d, yyyy 'at' h:mm a")}
                     </TableCell>

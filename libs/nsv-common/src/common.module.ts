@@ -22,8 +22,9 @@ import {
   OPTIONS_TYPE,
 } from './common.module-definition';
 import { BetterAuthGuard, RolesGuard } from './auth';
+import { createKeyv, RedisClientOptions } from '@keyv/redis';
 
-const { REDIS_OPTIONS, ...prvds } = providers;
+const { ...prvds } = providers;
 const services = Object.values(prvds);
 
 @Global()
@@ -40,10 +41,17 @@ export class CommonModule extends ConfigurableModuleClass {
           cache: true,
         }),
         CacheModule.registerAsync({
-          useFactory: async (redisService: providers.RedisServiceType) => ({
-            store: [redisService],
+          useFactory: async (config: providers.ConfigService) => ({
+            stores: [
+              createKeyv({
+                url: config.get('REDIS_URL'),
+              } as RedisClientOptions),
+            ],
+            ttl: options.useCache ? 60 * 5 * 1000 : 0, // 5 minutes in seconds for NestJS
+            max: 100, // Maximum number of items in cache
           }),
-          inject: [providers.RedisService],
+          isGlobal: true,
+          inject: [providers.ConfigService],
         }),
         ThrottlerModule.forRootAsync({
           useFactory: (config: providers.ConfigService) => ({
@@ -58,12 +66,6 @@ export class CommonModule extends ConfigurableModuleClass {
         {
           provide: APP_INTERCEPTOR,
           useClass: CacheInterceptor,
-        },
-        {
-          provide: REDIS_OPTIONS,
-          useFactory: (config: providers.ConfigService) =>
-            config.get(options.redisConfigKey),
-          inject: [providers.ConfigService],
         },
         { provide: APP_FILTER, useClass: HttpExceptionsFilter },
         ...(options.useInterceptors

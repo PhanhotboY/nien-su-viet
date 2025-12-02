@@ -7,6 +7,7 @@ import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import { authClient, signInWithGoogle } from '@/lib/auth-client';
+import { CLIENT_HOST } from '@/lib/config';
 
 export function Providers({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -23,6 +24,7 @@ export function Providers({ children }: { children: ReactNode }) {
         authClient={authClient}
         navigate={router.push}
         replace={router.replace}
+        baseURL={CLIENT_HOST}
         onSessionChange={() => {
           // Clear router cache (protected routes)
           router.refresh();
@@ -30,13 +32,6 @@ export function Providers({ children }: { children: ReactNode }) {
         Link={Link}
         social={{
           providers: ['google'],
-          async signIn(params) {
-            switch (params.provider) {
-              case 'google':
-                await signInWithGoogle();
-                break;
-            }
-          },
         }}
       >
         {children}

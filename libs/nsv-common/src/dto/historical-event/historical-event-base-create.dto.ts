@@ -12,5 +12,5 @@ export class HistoricalEventBaseCreateDto extends OmitType(
   @Expose()
   @IsOptional()
   @IsUUID('4', { message: 'ID tác giả không hợp lệ' })
-  authorId!: HistoricalEventBaseDto['authorId'];
+  authorId?: HistoricalEventBaseDto['authorId'];
 }

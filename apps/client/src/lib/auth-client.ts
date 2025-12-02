@@ -1,15 +1,12 @@
 import { createAuthClient } from 'better-auth/react';
-import { DEFAULT_LOGIN_REDIRECT } from './config';
+import { AUTH_BASE_URL, DEFAULT_LOGIN_REDIRECT } from './config';
 import { adminClient } from 'better-auth/client/plugins';
-
-const baseURL =
-  process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
-  'http://localhost:4000/api/v1/auth';
+import { ac, roles } from './permissions';
 
 export const authClient = createAuthClient({
   /** The base URL of the server (optional if you're using the same domain) */
-  baseURL,
-  plugins: [adminClient()],
+  baseURL: AUTH_BASE_URL + '/auth',
+  plugins: [adminClient({ ac, roles })],
 });
 
 export const signInWithGoogle = async () => {

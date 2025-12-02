@@ -14,6 +14,8 @@ import { UserModule } from './modules/user';
       redisConfigKey: 'redis',
       throttlerConfigKey: 'throttlers',
       global: true,
+      useInterceptors: true,
+      useCache: true,
     }),
     PrismaModule.forRoot(),
     HistoricalEventModule,

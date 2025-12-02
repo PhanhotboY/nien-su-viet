@@ -1,10 +1,6 @@
-import { APIError, betterAuth } from 'better-auth';
+import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import {
-  admin as adminPlugin,
-  createAuthMiddleware,
-  openAPI,
-} from 'better-auth/plugins';
+import { admin as adminPlugin, openAPI } from 'better-auth/plugins';
 import { ClientProxy } from '@nestjs/microservices';
 
 import { type Config } from '../config';
@@ -57,36 +53,29 @@ export function createBetterAuthInstance(
       }),
       openAPI(),
     ],
-    hooks: {
-      after: createAuthMiddleware(async (ctx) => {
-        const isAPIError = ctx.context.returned instanceof APIError;
-        if (isAPIError) return;
-
-        const returned = ctx.context.returned || ({} as any);
-        const user = plainToInstance(UserBaseDto, returned.user);
-
-        switch (ctx.path) {
-          case '/sign-up/email':
-          case '/admin/create-user':
-            if (!user) return;
-            rmq.emit(USER_EVENT.REGISTERED, user);
-            break;
-
-          case '/admin/update-user':
-            if (!user) return;
-            rmq.emit(USER_EVENT.UPDATED, user);
-            break;
-
-          case '/admin/remove-user':
-            const isSuccess = (ctx.context.returned as any)?.success === true;
-            const userId = ctx.body?.userId;
-            if (!isSuccess || !userId) return;
-            rmq.emit(USER_EVENT.DELETED, {
-              userId: ctx.body?.userId,
-            } as UserDeleteDto);
-            break;
-        }
-      }),
+    databaseHooks: {
+      user: {
+        create: {
+          after: async (user) => {
+            const userDto = plainToInstance(UserBaseDto, user);
+            rmq.emit(USER_EVENT.REGISTERED, userDto);
+          },
+        },
+        update: {
+          after: async (user) => {
+            const userDto = plainToInstance(UserBaseDto, user);
+            rmq.emit(USER_EVENT.UPDATED, userDto);
+          },
+        },
+        delete: {
+          after: async (user) => {
+            const userDto = plainToInstance(UserDeleteDto, {
+              userId: user.id,
+            });
+            rmq.emit(USER_EVENT.DELETED, userDto);
+          },
+        },
+      },
     },
     socialProviders: {
       google: {

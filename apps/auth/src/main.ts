@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { middleware } from './app.middleware';
 import { RmqService } from '@phanhotboy/nsv-common';
-import { initSwagger } from '@phanhotboy/nsv-common/swagger';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { AuthService } from './auth';
 
@@ -13,12 +12,12 @@ async function bootstrap() {
   app.connectMicroservice(rmqService.getOptions('auth_queue'));
 
   middleware(app);
-  // initSwagger(app, 'Auth Service', true);
+
+  // Generate Better Auth OpenAPI schema (contains all auth routes)
   const document = await auth.api.generateOpenAPISchema();
 
   // Save OpenAPI JSON into monorepo
   if (existsSync('openapi') === false) {
-    // Create the directory if it does not exist
     mkdirSync('openapi');
   }
   writeFileSync(`openapi/auth-service.json`, JSON.stringify(document, null, 2));

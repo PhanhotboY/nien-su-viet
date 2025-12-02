@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-// import { updateUserRole } from "@/utils/auth";
 import { Label } from '@/components/ui/label';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 import {
@@ -13,6 +12,8 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { components } from '@nsv-interfaces/auth-service';
+import { roles } from '@/lib/permissions';
+import { updateUserRole } from '@/services/user.service';
 
 interface UserRoleDialogProps {
   user: components['schemas']['User'];
@@ -20,10 +21,10 @@ interface UserRoleDialogProps {
   onClose: () => void;
 }
 
-const ROLE_OPTIONS = [
-  { label: 'User', value: 'user' },
-  { label: 'Admin', value: 'admin' },
-];
+const ROLE_OPTIONS = Object.keys(roles).map((role) => ({
+  value: role,
+  label: role.charAt(0).toUpperCase() + role.slice(1),
+}));
 
 export function UserRoleDialog({ user, isOpen, onClose }: UserRoleDialogProps) {
   const [selectedRole, setSelectedRole] = useState(user.role || 'user');
@@ -32,7 +33,7 @@ export function UserRoleDialog({ user, isOpen, onClose }: UserRoleDialogProps) {
   const handleUpdateRole = async () => {
     try {
       setIsLoading(true);
-      // await updateUserRole(user.id, selectedRole);
+      await updateUserRole(user.id!, selectedRole);
       toast.success(`User role updated to ${selectedRole}`);
       onClose();
     } catch (error) {
