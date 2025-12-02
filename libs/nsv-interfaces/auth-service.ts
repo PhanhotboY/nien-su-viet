@@ -1557,7 +1557,7 @@ export interface paths {
         get?: never;
         put?: never;
         /** @description Update a user's details */
-        post: operations["updateUser"];
+        post: operations["adminUpdateUser"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1591,7 +1591,7 @@ export interface paths {
         get?: never;
         put?: never;
         /** @description List user sessions */
-        post: operations["listUserSessions"];
+        post: operations["adminListUserSessions"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4004,7 +4004,7 @@ export interface operations {
             };
         };
     };
-    updateUser: {
+    adminUpdateUser: {
         parameters: {
             query?: never;
             header?: never;
@@ -4203,7 +4203,7 @@ export interface operations {
             };
         };
     };
-    listUserSessions: {
+    adminListUserSessions: {
         parameters: {
             query?: never;
             header?: never;

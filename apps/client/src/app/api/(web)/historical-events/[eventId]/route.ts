@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import { getEvent } from '@/services/historical-event.service';
 
-export async function GET({
-  params,
-}: {
-  params: Promise<{ eventId: string }>;
-}) {
+export async function GET(
+  request: Request,
+  {
+    params,
+  }: {
+    params: Promise<{ eventId: string }>;
+  },
+) {
   try {
     const { eventId } = await params;
     const res = await getEvent(eventId);

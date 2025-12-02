@@ -73,6 +73,21 @@ export interface components {
             email: string;
             image?: string | null;
         };
+        HistoricalEventPreviewResponseDto: {
+            categories: Record<string, never>[];
+            excerpt: string;
+            thumbnail?: components["schemas"]["ImageBriefResponseDto"] | null;
+            author: components["schemas"]["UserBaseResponseDto"];
+            /** Format: uuid */
+            id: string;
+            name: string;
+            fromDay?: number | null;
+            fromMonth?: number | null;
+            fromYear: number;
+            toDay?: number | null;
+            toMonth?: number | null;
+            toYear?: number | null;
+        };
         HistoricalEventDetailResponseDto: {
             content: string;
             /** Format: uuid */
@@ -101,19 +116,6 @@ export interface components {
             toMonth?: number | null;
             toYear?: number | null;
             content: string;
-        };
-        HistoricalEventBriefResponseDto: {
-            thumbnail?: components["schemas"]["ImageBriefResponseDto"] | null;
-            author: components["schemas"]["UserBaseResponseDto"];
-            /** Format: uuid */
-            id: string;
-            name: string;
-            fromDay?: number | null;
-            fromMonth?: number | null;
-            fromYear: number;
-            toDay?: number | null;
-            toMonth?: number | null;
-            toYear?: number | null;
         };
         HistoricalEventBaseUpdateDto: {
             name?: string;
@@ -280,7 +282,7 @@ export interface components {
         HistoricalEventBulkDeleteDto: {
             eventIds: string[];
         };
-        HistoricalEventPreviewResponseDto: {
+        HistoricalEventBriefResponseDto: {
             thumbnail?: components["schemas"]["ImageBriefResponseDto"] | null;
             author: components["schemas"]["UserBaseResponseDto"];
             /** Format: uuid */
@@ -292,8 +294,6 @@ export interface components {
             toDay?: number | null;
             toMonth?: number | null;
             toYear?: number | null;
-            categories: Record<string, never>[];
-            excerpt: string;
         };
         PaginationMetaDto: {
             total: number;
@@ -330,7 +330,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["HistoricalEventPreviewResponseDto"];
                 };
             };
         };
@@ -453,9 +453,7 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["HistoricalEventBriefResponseDto"];
-                };
+                content?: never;
             };
         };
     };

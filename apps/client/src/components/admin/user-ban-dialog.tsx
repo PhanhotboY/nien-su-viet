@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { components } from '@nsv-interfaces/auth-service';
+import type { components } from '@nsv-interfaces/auth-service';
 
 interface UserBanDialogProps {
   user: components['schemas']['User'];

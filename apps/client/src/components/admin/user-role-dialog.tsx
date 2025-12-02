@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { components } from '@nsv-interfaces/auth-service';
+import type { components } from '@nsv-interfaces/auth-service';
 import { roles } from '@/lib/permissions';
 import { updateUserRole } from '@/services/user.service';
 

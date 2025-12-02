@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
 import { toast } from 'sonner';
-import { components } from '@nsv-interfaces/auth-service';
+import type { components } from '@nsv-interfaces/auth-service';
 import { deleteUser } from '@/services/user.service';
 
 interface UserDeleteDialogProps {
