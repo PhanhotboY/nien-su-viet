@@ -68,6 +68,8 @@ async function getUsers(
       page: query.page,
       totalPages: Math.ceil(data.total / query.limit),
     },
+    statusCode: 200,
+    timestamp: new Date().toISOString(),
   };
 }
 

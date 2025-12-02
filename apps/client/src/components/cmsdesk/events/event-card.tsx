@@ -46,7 +46,19 @@ export function EventCard({ event, onDelete }: EventCardProps) {
 
         <div className="mb-3 flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
-          <span>{formatHistoricalEventDate(event)}</span>
+          <span>
+            {formatHistoricalEventDate(
+              event.fromYear,
+              event.fromMonth,
+              event.fromDay,
+            )}
+            {' - '}
+            {formatHistoricalEventDate(
+              event.toYear,
+              event.toMonth,
+              event.toDay,
+            )}
+          </span>
         </div>
 
         {/* <p className="mb-3 line-clamp-3 text-sm text-muted-foreground">

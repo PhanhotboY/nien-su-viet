@@ -52,7 +52,7 @@ import {
 } from '@/components/ui/pagination';
 import { UserAddDialog } from './user-add-dialog';
 import { IPaginatedResponse } from '@/interfaces/response.interface';
-import { components } from '@nsv-interfaces/auth-service';
+import type { components } from '@nsv-interfaces/auth-service';
 import { UserAvatar } from '@daveyplate/better-auth-ui';
 import { Button } from '../ui/button';
 import { roles } from '@/lib/permissions';

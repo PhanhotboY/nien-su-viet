@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 // import { unbanUser } from "@/utils/auth";
 import { ConfirmationDialog } from '@/components/ui/confirmation-dialog';
-import { components } from '@nsv-interfaces/auth-service';
+import type { components } from '@nsv-interfaces/auth-service';
 
 interface UserUnbanDialogProps {
   user: components['schemas']['User'];

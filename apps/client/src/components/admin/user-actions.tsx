@@ -16,7 +16,7 @@ import { UserUnbanDialog } from './user-unban-dialog';
 import { UserDeleteDialog } from './user-delete-dialog';
 import { UserRevokeSessionsDialog } from './user-revoke-sessions-dialog';
 import { UserRoleDialog } from './user-role-dialog';
-import { components } from '@nsv-interfaces/auth-service';
+import type { components } from '@nsv-interfaces/auth-service';
 
 interface UserActionsProps {
   user: components['schemas']['User'];
