@@ -40,10 +40,10 @@ export function createBetterAuthInstance(
       },
     },
     advanced: {
-      crossSubDomainCookies: {
-        enabled: true,
-      },
-      useSecureCookies: true, // Force secure cookies in production
+      // crossSubDomainCookies: {
+      //   enabled: true,
+      // },
+      // useSecureCookies: true, // Force secure cookies in production
       cookies: {
         session_data: {
           attributes: {
