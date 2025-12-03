@@ -1,45 +1,49 @@
+'use client';
+
 import { authClient } from '@/lib/auth-client';
 import { AuthView } from '@daveyplate/better-auth-ui';
-import { authViewPaths } from '@daveyplate/better-auth-ui/server';
-import { headers } from 'next/headers';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { redirect, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return Object.values(authViewPaths).map((path) => ({ path }));
-}
-
-export default async function AuthPage({
+export default function AuthPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ path: string }>;
-  searchParams: Promise<{ redirectTo?: string }>;
 }) {
-  const { path } = await params;
-  const reqHeaders = await headers();
-  const { data, error } = await authClient.getSession({
-    fetchOptions: { headers: { Cookie: reqHeaders.get('cookie') || '' } },
-  });
+  const searchParams = useSearchParams();
+  const { data: session, isPending } = authClient.useSession();
+  const [path, setPath] = useState<string>('');
 
-  let { redirectTo } = await searchParams;
-  if (!redirectTo) {
-    switch (data?.user.role) {
-      case 'admin':
-        redirectTo = '/admin';
-        break;
-      case 'editor':
-        redirectTo = '/cmsdesk';
-        break;
-      default:
-        redirectTo = '/';
+  useEffect(() => {
+    params.then((p) => setPath(p.path));
+  }, [params]);
+
+  useEffect(() => {
+    if (!isPending && session) {
+      let redirectTo = searchParams.get('redirectTo');
+      if (!redirectTo) {
+        switch (session.user.role) {
+          case 'admin':
+            redirectTo = '/admin';
+            break;
+          case 'editor':
+            redirectTo = '/cmsdesk';
+            break;
+          default:
+            redirectTo = '/';
+        }
+      }
+      redirect(redirectTo);
     }
-  }
+  }, [session, isPending, searchParams]);
 
-  if (data && !error) {
-    redirect(redirectTo);
+  if (!path) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
+    );
   }
 
   return (
