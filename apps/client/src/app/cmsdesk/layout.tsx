@@ -10,7 +10,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   const reqHeaders = await headers();
-  console.log(reqHeaders);
+  console.log(new Headers(reqHeaders));
   const { data } = await authClient.getSession({
     fetchOptions: { headers: { Cookie: reqHeaders.get('cookie') || '' } },
   });
