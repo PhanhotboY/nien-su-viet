@@ -40,23 +40,8 @@ export function createBetterAuthInstance(
       },
     },
     advanced: {
-      // crossSubDomainCookies: {
-      //   enabled: true,
-      // },
-      // useSecureCookies: true, // Force secure cookies in production
-      cookies: {
-        session_data: {
-          attributes: {
-            sameSite: 'none', // Required for cross-origin
-            secure: true, // Required when sameSite is 'none'
-          },
-        },
-        session_token: {
-          attributes: {
-            sameSite: 'none', // Required for cross-origin
-            secure: true, // Required when sameSite is 'none'
-          },
-        },
+      crossSubDomainCookies: {
+        enabled: true,
       },
     },
     plugins: [
