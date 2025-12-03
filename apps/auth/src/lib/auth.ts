@@ -38,11 +38,16 @@ export function createBetterAuthInstance(
         maxAge: 60 * 15, // 15 minutes
         strategy: 'jwt',
       },
+      cookieOptions: {
+        sameSite: 'none', // Required for cross-origin
+        secure: true, // Required when sameSite is 'none'
+      },
     },
     advanced: {
       crossSubDomainCookies: {
         enabled: true,
       },
+      useSecureCookies: true, // Force secure cookies in production
     },
     plugins: [
       adminPlugin({
