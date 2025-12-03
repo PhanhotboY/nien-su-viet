@@ -1,6 +1,6 @@
 'use server';
 
-import { cookies as cookieStore } from 'next/headers';
+import { cookies } from 'next/headers';
 import { parseCookies } from 'better-call';
 import { AUTH_BASE_URL } from '@/lib/config';
 
@@ -19,33 +19,19 @@ export const retryFetcher = async <T = any>(
     page: number;
   };
 }> => {
-  const headers = new Headers(options?.headers || {});
-  const store = await cookieStore();
-  const cookies = parseCookies(headers.get('Cookie') || '');
-  const sessionData = cookies.get('better-auth.session_data');
-  const sessionToken = cookies.get('better-auth.session_token');
+  const store = await cookies();
+  const sessionData = store.get('better-auth.session_data');
+  const sessionToken = store.get('better-auth.session_token');
 
   // Check if user is authenticated but JWT is expired
   // If user is not authenticated yet, just continue fetching and throw error if any
   if (sessionToken && !sessionData) {
     // Refresh session data with sesion token
     const res = await fetch(AUTH_BASE_URL + '/auth/get-session', {
-      headers,
+      headers: { Cookie: store.toString() },
     });
 
     const newCookies = parseCookies(res.headers.get('set-cookie') || '');
-    // Update new JWT in request headers
-    cookies.set(
-      'better-auth.session_data',
-      newCookies.get('better-auth.session_data') || '',
-    );
-    headers.set(
-      'Cookie',
-      Array.from(cookies.entries())
-        .flatMap(([k, v]) => `${k}=${v}`)
-        .join('; '),
-    );
-    // Set back new JWT to browser cookies store
     store.set(
       'better-auth.session_data',
       newCookies.get('better-auth.session_data') || '',
@@ -59,7 +45,7 @@ export const retryFetcher = async <T = any>(
       ...(options?.body instanceof FormData
         ? {}
         : { 'Content-Type': 'application/json' }),
-      ...Object.fromEntries(headers.entries()),
+      Cookie: store.toString(),
       ...options?.headers,
     },
   }).catch((error) => {
