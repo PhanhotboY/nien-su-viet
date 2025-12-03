@@ -11,7 +11,7 @@ export default async function AdminLayout({
 }>) {
   const reqHeaders = await headers();
   const { data } = await authClient.getSession({
-    fetchOptions: { headers: reqHeaders },
+    fetchOptions: { headers: { Cookie: reqHeaders.get('cookie') || '' } },
   });
 
   if (data?.user.role !== 'admin') {

@@ -11,8 +11,9 @@ export default async function AdminLayout({
 }>) {
   const reqHeaders = await headers();
   const { data } = await authClient.getSession({
-    fetchOptions: { headers: reqHeaders },
+    fetchOptions: { headers: { Cookie: reqHeaders.get('cookie') || '' } },
   });
+  console.log('session data: ', data);
 
   if (!['admin', 'editor'].includes(data?.user.role!)) {
     redirect('/');

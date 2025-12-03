@@ -21,7 +21,7 @@ export default async function AuthPage({
   const { path } = await params;
   const reqHeaders = await headers();
   const { data, error } = await authClient.getSession({
-    fetchOptions: { headers: reqHeaders },
+    fetchOptions: { headers: { Cookie: reqHeaders.get('cookie') || '' } },
   });
 
   let { redirectTo } = await searchParams;
