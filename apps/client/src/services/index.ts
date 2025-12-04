@@ -21,6 +21,7 @@ export const retryFetcher = async <T = any>(
 }> => {
   const reqHeaders = new Headers(await headers());
   reqHeaders.delete('content-length'); // UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
+  reqHeaders.delete('content-type');
   const store = await cookies();
   const sessionDataCookieKey = `${AUTH_COOKIE_PREFIX}.session_data`;
   const sessionData = store.get(sessionDataCookieKey);
