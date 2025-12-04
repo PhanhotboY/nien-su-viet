@@ -20,6 +20,7 @@ export const retryFetcher = async <T = any>(
   };
 }> => {
   const reqHeaders = new Headers(await headers());
+  reqHeaders.delete('content-length'); // UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
   const store = await cookies();
   const sessionData = store.get('better-auth.session_data');
   const sessionToken = store.get('better-auth.session_token');
