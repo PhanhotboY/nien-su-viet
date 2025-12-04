@@ -40,7 +40,7 @@ export function createBetterAuthInstance(
       },
     },
     advanced: {
-      cookiePrefix: 'nsv-auth',
+      cookiePrefix: config.get('betterAuth.cookiePrefix'),
       crossSubDomainCookies: {
         enabled: true,
         domain: config.get('betterAuth.cookieDomain'),

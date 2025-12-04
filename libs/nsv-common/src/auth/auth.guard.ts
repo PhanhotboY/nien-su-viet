@@ -43,7 +43,9 @@ export class BetterAuthGuard implements CanActivate {
     try {
       // Extract JWT token from Authorization header or cookie
       const cookies = this.parseCookies(request.headers.cookie || '');
-      const token = cookies.get('better-auth.session_data');
+      const token = cookies.get(
+        `${this.configService.get('AUTH_COOKIE_PREFIX')}.session_data`,
+      );
 
       if (!token) {
         throw new UnauthorizedException('No authentication token found');
