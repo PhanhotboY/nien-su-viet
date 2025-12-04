@@ -1,42 +1,39 @@
-'use client';
+import Link from 'next/link';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { AuthView } from '@daveyplate/better-auth-ui';
 
 import { authClient } from '@/lib/auth-client';
-import { AuthView } from '@daveyplate/better-auth-ui';
-import Link from 'next/link';
-import { redirect, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
-export default function AuthPage({
+export default async function AuthPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ path: string }>;
+  searchParams: Promise<{ redirectTo?: string }>;
 }) {
-  const searchParams = useSearchParams();
-  const { data: session, isPending } = authClient.useSession();
-  const [path, setPath] = useState<string>('');
+  const { path } = await params;
+  const { data, error } = await authClient.getSession({
+    fetchOptions: { headers: { Cookie: (await cookies()).toString() } },
+  });
 
-  useEffect(() => {
-    params.then((p) => setPath(p.path));
-  }, [params]);
-
-  useEffect(() => {
-    if (!isPending && session) {
-      let redirectTo = searchParams.get('redirectTo');
-      if (!redirectTo) {
-        switch (session.user.role) {
-          case 'admin':
-            redirectTo = '/admin';
-            break;
-          case 'editor':
-            redirectTo = '/cmsdesk';
-            break;
-          default:
-            redirectTo = '/';
-        }
-      }
-      redirect(redirectTo);
+  let { redirectTo } = await searchParams;
+  if (!redirectTo) {
+    switch (data?.user.role) {
+      case 'admin':
+        redirectTo = '/admin';
+        break;
+      case 'editor':
+        redirectTo = '/cmsdesk';
+        break;
+      default:
+        redirectTo = '/';
     }
-  }, [session, isPending, searchParams]);
+  }
+
+  if (data && !error) {
+    redirect(redirectTo);
+  }
 
   if (!path) {
     return (

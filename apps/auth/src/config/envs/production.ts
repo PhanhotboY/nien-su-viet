@@ -36,6 +36,7 @@ export const config = {
   serverUrl: process.env.SERVER_URL || 'http://localhost:3001',
   betterAuth: {
     secret: process.env.BETTER_AUTH_SECRET || '',
+    cookieDomain: process.env.COOKIE_DOMAIN || 'localhost',
   },
   jwt: {
     privateKey: process.env.JWT_PRIVATE_KEY || '',
