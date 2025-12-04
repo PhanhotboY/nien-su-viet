@@ -4,7 +4,7 @@ import { IPaginatedResponse } from '@/interfaces/response.interface';
 import { authClient } from '@/lib/auth-client';
 import type { components, operations } from '@nsv-interfaces/auth-service';
 import { ApiError } from 'next/dist/server/api-utils';
-import { cookies, headers } from 'next/headers';
+import { headers } from 'next/headers';
 
 async function getUsers(
   options: Record<string, string>,
@@ -48,6 +48,7 @@ async function getUsers(
     query.searchValue = options.name;
   }
 
+  const reqHeaders = await headers();
   // Get users from Better Auth
   const { data, error } = await authClient.$fetch<{
     users: components['schemas']['User'][];
@@ -55,7 +56,7 @@ async function getUsers(
   }>('/admin/list-users', {
     method: 'GET',
     query,
-    headers: { Cookie: (await cookies()).toString() },
+    headers: reqHeaders,
   });
 
   if (error) {
@@ -79,14 +80,16 @@ async function getUsers(
 async function createUser(
   userData: operations['createUser']['requestBody']['content']['application/json'],
 ) {
+  const reqHeaders = new Headers(await headers());
+  // Foward headers from client with different payload
+  reqHeaders.delete('content-length');
+  reqHeaders.set('content-type', 'application/json');
+
   const { data, error } = await authClient.$fetch<
     components['schemas']['User']
   >('/admin/create-user', {
     method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      Cookie: (await cookies()).toString(),
-    },
+    headers: reqHeaders,
     body: JSON.stringify(userData),
   });
 
@@ -99,12 +102,14 @@ async function createUser(
 }
 
 async function deleteUser(userId: string) {
+  const reqHeaders = new Headers(await headers());
+  // Foward headers from client with different payload
+  reqHeaders.delete('content-length');
+  reqHeaders.set('content-type', 'application/json');
+
   const { error } = await authClient.$fetch<void>(`/admin/remove-user`, {
     method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      Cookie: (await cookies()).toString(),
-    },
+    headers: reqHeaders,
     body: JSON.stringify({ userId }),
   });
 
@@ -120,14 +125,16 @@ async function updateUserRole(
   userId: string,
   newRole: string,
 ): Promise<components['schemas']['User']> {
+  const reqHeaders = new Headers(await headers());
+  // Foward headers from client with different payload
+  reqHeaders.delete('content-length');
+  reqHeaders.set('content-type', 'application/json');
+
   const { data, error } = await authClient.$fetch<
     components['schemas']['User']
   >('/admin/update-user', {
     method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      Cookie: (await cookies()).toString(),
-    },
+    headers: reqHeaders,
     body: JSON.stringify({ userId, data: { role: newRole } }),
   });
 

@@ -1,6 +1,6 @@
 'use server';
 
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { parseCookies } from 'better-call';
 import { AUTH_BASE_URL } from '@/lib/config';
 
@@ -19,6 +19,7 @@ export const retryFetcher = async <T = any>(
     page: number;
   };
 }> => {
+  const reqHeaders = new Headers(await headers());
   const store = await cookies();
   const sessionData = store.get('better-auth.session_data');
   const sessionToken = store.get('better-auth.session_token');
@@ -36,16 +37,17 @@ export const retryFetcher = async <T = any>(
       'better-auth.session_data',
       newCookies.get('better-auth.session_data') || '',
     );
+    reqHeaders.set('Cookie', store.toString());
   }
 
   const response = await fetch(url, {
     method: 'GET',
     ...options,
     headers: {
+      ...Object.fromEntries(reqHeaders.entries()),
       ...(options?.body instanceof FormData
         ? {}
         : { 'Content-Type': 'application/json' }),
-      Cookie: store.toString(),
       ...options?.headers,
     },
   }).catch((error) => {
