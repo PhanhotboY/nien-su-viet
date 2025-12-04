@@ -37,6 +37,7 @@ export const config = {
   betterAuth: {
     secret: process.env.BETTER_AUTH_SECRET || '',
     cookieDomain: process.env.COOKIE_DOMAIN || 'localhost',
+    cookiePrefix: process.env.AUTH_COOKIE_PREFIX || 'nsv-auth',
   },
   jwt: {
     privateKey: process.env.JWT_PRIVATE_KEY || '',

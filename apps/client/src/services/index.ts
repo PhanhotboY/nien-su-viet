@@ -2,7 +2,7 @@
 
 import { cookies, headers } from 'next/headers';
 import { parseCookies } from 'better-call';
-import { AUTH_BASE_URL } from '@/lib/config';
+import { AUTH_BASE_URL, AUTH_COOKIE_PREFIX } from '@/lib/config';
 
 export const retryFetcher = async <T = any>(
   url: string,
@@ -22,8 +22,9 @@ export const retryFetcher = async <T = any>(
   const reqHeaders = new Headers(await headers());
   reqHeaders.delete('content-length'); // UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
   const store = await cookies();
-  const sessionData = store.get('better-auth.session_data');
-  const sessionToken = store.get('better-auth.session_token');
+  const sessionDataCookieKey = `${AUTH_COOKIE_PREFIX}.session_data`;
+  const sessionData = store.get(sessionDataCookieKey);
+  const sessionToken = store.get(`${AUTH_COOKIE_PREFIX}.session_token`);
 
   // Check if user is authenticated but JWT is expired
   // If user is not authenticated yet, just continue fetching and throw error if any
@@ -34,10 +35,7 @@ export const retryFetcher = async <T = any>(
     });
 
     const newCookies = parseCookies(res.headers.get('set-cookie') || '');
-    store.set(
-      'better-auth.session_data',
-      newCookies.get('better-auth.session_data') || '',
-    );
+    store.set(sessionDataCookieKey, newCookies.get(sessionDataCookieKey) || '');
     reqHeaders.set('Cookie', store.toString());
   }
 
