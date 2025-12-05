@@ -1,0 +1,40 @@
+name: Deploy Historical Event Service
+
+on:
+  push:
+    branches: ['master']
+    paths:
+      - 'apps/historical-event/**'
+      - 'libs/**'
+      - '.github/workflows/historical-event-service.yml'
+      - 'package.json'
+    paths-ignore:
+      - 'docs/**'
+      - 'apps/client/**'
+  pull_request:
+    branches: ['master']
+    paths:
+      - 'apps/historical-event/**'
+      - 'libs/**'
+      - '.github/workflows/historical-event-service.yml'
+      - 'package.json'
+    paths-ignore:
+      - 'docs/**'
+      - 'apps/client/**'
+
+jobs:
+  deploy-historical-event-service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to DigitalOcean Droplet
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DOCEAN_NSV_SSH_HOST }}
+          username: ${{ secrets.DOCEAN_NSV_SSH_USER }}
+          key: ${{ secrets.DOCEAN_NSV_SSH_SECRET }}
+          script: |
+            cd ~/workdir/nien-su-viet
+            git pull origin master
+            bun install
+            bun run build historical-event
+            pm2 reload historical-event-service || pm2 start ecosystem.config.js --only historical-event-service
