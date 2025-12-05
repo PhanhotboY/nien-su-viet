@@ -32,4 +32,4 @@ jobs:
             bun install
             bun run build historical-event
             source ~/.bashrc
-            pm2 reload historical-event-service || pm2 start ecosystem.config.js --only historical-event-service
+            /root/.nvm/versions/node/v24.11.1/bin/pm2 reload historical-event-service || /root/.nvm/versions/node/v24.11.1/bin/pm2 start ecosystem.config.js --only historical-event-service
