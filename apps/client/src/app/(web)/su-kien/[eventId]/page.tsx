@@ -34,7 +34,7 @@ export default async function EventDetailPage({
   );
 
   return (
-    <div className="bg-gradient-to-b from-amber-50 via-red-50 to-yellow-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950">
+    <Card className="border-none py-0">
       {/* Header with Vietnamese pattern */}
       <div className="relative bg-gradient-to-r from-red-700 via-yellow-600 to-red-700 dark:from-red-900 dark:via-yellow-900 dark:to-red-900">
         <div className="absolute inset-0 opacity-10">
@@ -46,7 +46,7 @@ export default async function EventDetailPage({
           />
         </div>
         <div className="container text-center px-4 py-16 relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-lg">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 drop-shadow-lg">
             {event.name}
           </h1>
         </div>
@@ -70,22 +70,20 @@ export default async function EventDetailPage({
         {/* Info Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {/* Date Card */}
-          <Card className="border-2 border-red-200 dark:border-red-900 bg-white/80 dark:bg-gray-900/80 backdrop-blur">
+          <Card className="border-2 border-red-200 dark:border-red-900 backdrop-blur">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
                 <div className="p-3 bg-gradient-to-br from-red-500 to-yellow-500 rounded-lg">
                   <Calendar className="h-6 w-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                    Thời gian
-                  </h3>
+                  <h3 className="font-semibold mb-2">Thời gian</h3>
                   <div className="space-y-1">
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                    <p className="text-sm ">
                       <span className="font-medium">Bắt đầu:</span> {startDate}
                     </p>
                     {endDate && (
-                      <p className="text-sm text-gray-700 dark:text-gray-300">
+                      <p className="text-sm">
                         <span className="font-medium">Kết thúc:</span> {endDate}
                       </p>
                     )}
@@ -97,19 +95,15 @@ export default async function EventDetailPage({
 
           {/* Author Card */}
           {event.author && (
-            <Card className="border-2 border-amber-200 dark:border-amber-900 bg-white/80 dark:bg-gray-900/80 backdrop-blur">
+            <Card className="border-2 border-amber-200 dark:border-amber-900 backdrop-blur">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-lg">
                     <User className="h-6 w-6 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                      Tác giả
-                    </h3>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">
-                      {event.author.name}
-                    </p>
+                    <h3 className="font-semibold mb-2">Tác giả</h3>
+                    <p className="text-sm">{event.author.name}</p>
                   </div>
                 </div>
               </CardContent>
@@ -151,9 +145,7 @@ export default async function EventDetailPage({
           <CardContent className="p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="h-1 w-12 bg-gradient-to-r from-red-500 to-yellow-500 rounded-full" />
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                Nội dung chi tiết
-              </h2>
+              <h2 className="text-2xl font-bold">Nội dung chi tiết</h2>
               <div className="h-1 flex-1 bg-gradient-to-r from-yellow-500 to-red-500 rounded-full" />
             </div>
 
@@ -164,7 +156,7 @@ export default async function EventDetailPage({
                 <TextRenderer content={event.content} />
               </div>
             ) : (
-              <p className="text-gray-500 dark:text-gray-400 italic text-center py-8">
+              <p className="italic text-center py-8">
                 Nội dung đang được cập nhật...
               </p>
             )}
@@ -175,13 +167,13 @@ export default async function EventDetailPage({
         <div className="mt-8 text-center">
           <Link
             href="/timeline"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
           >
             <Clock className="h-4 w-4" />
             Quay lại dòng thời gian
           </Link>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

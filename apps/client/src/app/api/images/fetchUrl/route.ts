@@ -1,0 +1,34 @@
+// import * as cheerio from 'cheerio';
+// import { NextRequest, NextResponse } from 'next/server';
+
+// export const GET = async (request: NextRequest) => {
+//   const user = await isAuthenticated(request);
+//   const body = await request.json();
+
+//   try {
+//     const res = await fetch(body.url);
+
+//     const blob = await res.blob();
+//     const file = new File([blob], body.url.split('/').at(-1), {
+//       type: blob.type,
+//     });
+//     const formData = new FormData();
+//     formData.append('image', file);
+//     const image = await createImage(formData, user!);
+
+//     return Response.json({
+//       image,
+//       success: 1,
+//       file: {
+//         url: image[0].img_url,
+//       },
+//       toast: { message: 'Upload ảnh thành công!', type: 'success' },
+//     });
+//   } catch (error: any) {
+//     console.error(error);
+//     return Response.json({
+//       success: 0,
+//       toast: { message: error.message, type: 'error' },
+//     });
+//   }
+// };

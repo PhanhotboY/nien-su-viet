@@ -29,7 +29,7 @@ export default function TextRenderer({
 
   return (
     <section
-      className="text-renderer"
+      className="typography max-w-full"
       style={
         truncate
           ? {

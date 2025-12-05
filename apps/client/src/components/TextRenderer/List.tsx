@@ -1,19 +1,29 @@
+import { Checkbox } from '../ui/checkbox';
+
 export default function List({
   data,
 }: {
   data: {
     items: { content: string }[];
-    meta: { counterType: '' | 'numeric' };
-    style: 'ordered' | 'unordered';
+    meta: { counterType: '' | 'numeric'; checked?: boolean };
+    style: 'ordered' | 'unordered' | 'checklist';
   };
 }) {
+  const Wrapper = data.style === 'ordered' ? 'ol' : 'ul';
   return (
-    <ul className={data.style === 'ordered' ? 'list-decimal' : 'list-disc'}>
+    <Wrapper className={data.style === 'checklist' ? 'list-none' : ''}>
       {data.items.map((item, index) => (
-        <li className="ml-8" key={index}>
-          {item.content}
+        <li key={index}>
+          {data.style === 'checklist' ? (
+            <>
+              <input type="checkbox" checked={data.meta.checked} disabled />
+              <p>{item.content}</p>
+            </>
+          ) : (
+            item.content
+          )}
         </li>
       ))}
-    </ul>
+    </Wrapper>
   );
 }

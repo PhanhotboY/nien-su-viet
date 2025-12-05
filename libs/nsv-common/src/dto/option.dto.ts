@@ -5,6 +5,6 @@ export interface CommonOptionDto {
   redisConfigKey: string;
   rabbitmqConfigKey: string;
   cachePrefix: string;
-  useInterceptors?: boolean;
-  useCache?: boolean;
+  useSerializeInterceptors?: boolean;
+  useCacheInterceptor?: boolean;
 }

@@ -23,14 +23,15 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Loader2, Calendar } from 'lucide-react';
 import { components } from '@nsv-interfaces/historical-event';
 import TextEditor from '@/components/TextEditor';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 interface EventFormProps {
   initialData?: components['schemas']['HistoricalEventBaseCreateDto'];
   categories: components['schemas']['EventCategoryBaseDto'][];
   onSubmit: (
     data: components['schemas']['HistoricalEventBaseCreateDto'],
-  ) => Promise<void>;
-  isSubmitting?: boolean;
+  ) => Promise<any>;
   submitLabel?: string;
 }
 
@@ -38,7 +39,6 @@ export function EventForm({
   initialData,
   categories,
   onSubmit,
-  isSubmitting = false,
   submitLabel = 'Create Event',
 }: EventFormProps) {
   const [formData, setFormData] = useState<
@@ -54,17 +54,27 @@ export function EventForm({
     toDay: initialData?.toDay || null,
     thumbnailId: initialData?.thumbnailId,
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   // const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
   //   new Set(initialData?.categoryIds || []),
   // );
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setIsSubmitting(true);
     e.preventDefault();
-    await onSubmit({
-      ...formData,
-      // categoryIds: Array.from(selectedCategories),
-    });
+
+    try {
+      await onSubmit(formData);
+      toast.success('Event updated successfully!');
+      router.push('/cmsdesk/historical-events');
+    } catch (error) {
+      toast.error('Failed to update event');
+      console.error(error);
+    }
+
+    setIsSubmitting(false);
   };
 
   // const handleCategoryToggle = (categoryId: string) => {

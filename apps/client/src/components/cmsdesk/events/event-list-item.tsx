@@ -5,6 +5,7 @@ import { Calendar, User, Edit, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { components } from '@nsv-interfaces/historical-event';
+import { formatHistoricalEventDate } from '@/helper/date';
 
 type IHistoricalEvent =
   components['schemas']['HistoricalEventBriefResponseDto'];
@@ -14,14 +15,6 @@ interface EventListItemProps {
 }
 
 export function EventListItem({ event, onDelete }: EventListItemProps) {
-  const formatDate = (event: IHistoricalEvent) => {
-    const from = `${event.fromDay || ''}${event.fromDay ? '/' : ''}${event.fromMonth || ''}${event.fromMonth ? '/' : ''}${event.fromYear}`;
-    const to = event.toYear
-      ? ` - ${event.toDay || ''}${event.toDay ? '/' : ''}${event.toMonth || ''}${event.toMonth ? '/' : ''}${event.toYear}`
-      : '';
-    return from + to;
-  };
-
   return (
     <div className="group flex gap-4 rounded-lg border bg-card p-4 transition-all hover:shadow-md">
       <div className="relative h-24 w-32 flex-shrink-0 overflow-hidden rounded-md bg-muted">
@@ -48,7 +41,19 @@ export function EventListItem({ event, onDelete }: EventListItemProps) {
           <div className="mb-2 flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <Calendar className="h-4 w-4" />
-              <span>{formatDate(event)}</span>
+              <span>
+                {formatHistoricalEventDate(
+                  event.fromYear,
+                  event.fromMonth,
+                  event.fromDay,
+                )}
+                {' - '}
+                {formatHistoricalEventDate(
+                  event.toYear,
+                  event.toMonth,
+                  event.toDay,
+                )}
+              </span>
             </div>
             {/* <div className="flex items-center gap-1.5">
               <User className="h-4 w-4" />
