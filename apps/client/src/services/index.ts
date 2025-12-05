@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies, headers } from 'next/headers';
-import { parseCookies } from 'better-call';
+import { parse } from 'set-cookie-parser';
 import { AUTH_BASE_URL, AUTH_COOKIE_PREFIX } from '@/lib/config';
 
 export const retryFetcher = async <T = any>(
@@ -35,8 +35,11 @@ export const retryFetcher = async <T = any>(
       headers: { Cookie: store.toString() },
     });
 
-    const newCookies = parseCookies(res.headers.get('set-cookie') || '');
-    store.set(sessionDataCookieKey, newCookies.get(sessionDataCookieKey) || '');
+    const newCookies = parse(res.headers.get('set-cookie') || '', {
+      map: true,
+    });
+    const { name, value, ...options } = newCookies[sessionDataCookieKey];
+    store.set(sessionDataCookieKey, value, options as any);
     reqHeaders.set('Cookie', store.toString());
   }
 
@@ -89,6 +92,7 @@ export const retryFetcher = async <T = any>(
       url,
       response.status,
     );
+    throw new Error(data.message || 'Lỗi hệ thống');
   }
   return data;
 };

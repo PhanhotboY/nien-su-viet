@@ -30,7 +30,7 @@ export function EventDetailDialog({
     IApiResponse<components['schemas']['HistoricalEventPreviewResponseDto']>
   >(`/api/historical-events/${eventId}/preview`, swrFetcher);
 
-  if (error || !data) {
+  if (error) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent>
@@ -43,11 +43,11 @@ export function EventDetailDialog({
     );
   }
 
-  const { data: eventData } = data;
+  const { data: eventData } = data || {};
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
-        {isLoading ? (
+        {!eventData || isLoading ? (
           <>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2" asChild>

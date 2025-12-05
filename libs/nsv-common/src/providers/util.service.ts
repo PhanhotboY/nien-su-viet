@@ -148,7 +148,12 @@ export class UtilService {
 
     data = await fetcher();
 
-    await this.redisService.hSet(cacheKey, JSON.stringify(hashAttribute), data);
+    await this.redisService.hSet(
+      cacheKey,
+      JSON.stringify(hashAttribute),
+      data,
+      0,
+    );
     if (!data) {
       throw new NotFoundException(notFoundMessage);
     }

@@ -1,9 +1,8 @@
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { AuthView } from '@daveyplate/better-auth-ui';
 
-import { authClient } from '@/lib/auth-client';
+import { getAuthSession } from '@/helper/auth.helper';
 
 export default async function AuthPage({
   params,
@@ -13,13 +12,11 @@ export default async function AuthPage({
   searchParams: Promise<{ redirectTo?: string }>;
 }) {
   const { path } = await params;
-  const { data, error } = await authClient.getSession({
-    fetchOptions: { headers: { Cookie: (await cookies()).toString() } },
-  });
+  const { user, error } = await getAuthSession();
 
   let { redirectTo } = await searchParams;
   if (!redirectTo) {
-    switch (data?.user.role) {
+    switch (user?.role) {
       case 'admin':
         redirectTo = '/admin';
         break;
@@ -31,7 +28,7 @@ export default async function AuthPage({
     }
   }
 
-  if (data && !error) {
+  if (user && !error) {
     redirect(redirectTo);
   }
 

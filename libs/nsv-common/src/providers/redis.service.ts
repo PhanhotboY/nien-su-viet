@@ -4,10 +4,7 @@ import {
   OnModuleInit,
   OnModuleDestroy,
 } from '@nestjs/common';
-import {
-  type RedisClientConnectionType,
-  type RedisClientType,
-} from '@keyv/redis';
+import { type RedisClientType } from '@keyv/redis';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 /**
@@ -40,9 +37,9 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   }
 
   // Set hash field
-  async hSet(key: string, field: string, value: any, ttl?: number) {
+  async hSet(key: string, field: string, value: any, ttl = 5 * 60) {
     await this.redisClient.hSet(key, field, JSON.stringify(value as any)); // Default 5 minutes expiration
-    await this.redisClient.expire(key, ttl || 5 * 60);
+    await this.expire(key, ttl);
   }
 
   /**
@@ -73,14 +70,14 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   async hMSet(
     key: string,
     data: Record<string, any>,
-    ttl?: number,
+    ttl = 5 * 60,
   ): Promise<void> {
     const serialized: Record<string, string> = {};
     for (const [field, value] of Object.entries(data)) {
       serialized[field] = JSON.stringify(value);
     }
     await this.redisClient.hSet(key, serialized);
-    await this.redisClient.expire(key, ttl || 5 * 60); // Default 5 minutes expiration
+    await this.expire(key, ttl); // Default 5 minutes expiration
   }
 
   // Delete hash field
@@ -107,16 +104,25 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     return value ? JSON.parse(value) : null;
   }
 
-  async set(key: string, value: any, ttl?: number) {
+  async set(key: string, value: any, ttl = 5 * 60) {
     const serializedValue = JSON.stringify(value);
     await this.redisClient.set(key, serializedValue);
-    await this.redisClient.expire(key, ttl || 5 * 60); // Default 5 minutes expiration
+    await this.expire(key, ttl); // Default 5 minutes expiration
   }
 
   async mdel(keyPattern: string): Promise<number> {
     const keys = await this.redisClient.keys(keyPattern);
     if (keys.length === 0) return 0;
     return await this.redisClient.del(keys);
+  }
+
+  async expire(
+    key: string,
+    ttl: number,
+    mode?: 'NX' | 'XX' | 'GT' | 'LT' | undefined,
+  ): Promise<number> {
+    if (ttl <= 0) return 0;
+    return await this.redisClient.expire(key, ttl, mode);
   }
 
   onModuleInit() {

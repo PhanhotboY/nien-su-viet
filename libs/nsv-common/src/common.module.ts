@@ -47,7 +47,7 @@ export class CommonModule extends ConfigurableModuleClass {
                 url: config.get('REDIS_URL'),
               } as RedisClientOptions),
             ],
-            ttl: options.useCache ? 60 * 5 * 1000 : 0, // 5 minutes in seconds for NestJS
+            ttl: 60 * 5 * 1000, // 5 minutes in seconds for NestJS
             max: 100, // Maximum number of items in cache
           }),
           isGlobal: true,
@@ -63,12 +63,16 @@ export class CommonModule extends ConfigurableModuleClass {
       providers: [
         { provide: MODULE_OPTIONS_TOKEN, useValue: options },
         ...services,
-        {
-          provide: APP_INTERCEPTOR,
-          useClass: CacheInterceptor,
-        },
+        ...(options.useCacheInterceptor
+          ? [
+              {
+                provide: APP_INTERCEPTOR,
+                useClass: CacheInterceptor,
+              },
+            ]
+          : []),
         { provide: APP_FILTER, useClass: HttpExceptionsFilter },
-        ...(options.useInterceptors
+        ...(options.useSerializeInterceptors
           ? [
               {
                 provide: APP_INTERCEPTOR,

@@ -15,3 +15,15 @@ export const signInWithGoogle = async () => {
     callbackURL: DEFAULT_LOGIN_REDIRECT,
   });
 };
+
+export const isAdmin = (role: string | null | undefined) => {
+  return role === 'admin';
+};
+
+export const isEditor = (role: string | null | undefined) => {
+  return ['editor', 'admin'].includes(role || '');
+};
+
+export const isUser = (role: string | null | undefined) => {
+  return ['user', 'editor', 'admin'].includes(role || '');
+};

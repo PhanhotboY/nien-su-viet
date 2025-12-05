@@ -1,20 +1,18 @@
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { RedirectToSignIn } from '@daveyplate/better-auth-ui';
 
 import DashboardLayout from '@/components/cmsdesk/dashboard-layout';
-import { authClient } from '@/lib/auth-client';
+import { isEditor } from '@/lib/auth-client';
+import { getAuthSession } from '@/helper/auth.helper';
 
 export default async function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { data } = await authClient.getSession({
-    fetchOptions: { headers: { Cookie: (await cookies()).toString() } },
-  });
+  const { user } = await getAuthSession();
 
-  if (!['admin', 'editor'].includes(data?.user.role!)) {
+  if (user && !isEditor(user.role)) {
     redirect('/');
   }
 

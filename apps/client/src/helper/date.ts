@@ -1,5 +1,3 @@
-import { components } from '@nsv-interfaces/historical-event';
-
 // Helper function to create date from parts
 const createDate = (
   year: number,
