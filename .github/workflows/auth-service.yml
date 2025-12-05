@@ -32,4 +32,4 @@ jobs:
             bun install
             bun run build auth
             source ~/.bashrc
-            pm2 reload auth-service || pm2 start ecosystem.config.js --only auth-service
+            /root/.nvm/versions/node/v24.11.1/bin/pm2 reload auth-service || /root/.nvm/versions/node/v24.11.1/bin/pm2 start ecosystem.config.js --only auth-service
