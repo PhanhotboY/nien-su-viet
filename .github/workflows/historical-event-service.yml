@@ -8,9 +8,6 @@ on:
       - 'libs/**'
       - '.github/workflows/historical-event-service.yml'
       - 'package.json'
-    paths-ignore:
-      - 'docs/**'
-      - 'apps/client/**'
   pull_request:
     branches: ['master']
     paths:
@@ -18,9 +15,6 @@ on:
       - 'libs/**'
       - '.github/workflows/historical-event-service.yml'
       - 'package.json'
-    paths-ignore:
-      - 'docs/**'
-      - 'apps/client/**'
 
 jobs:
   deploy-historical-event-service:
