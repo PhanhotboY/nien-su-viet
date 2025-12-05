@@ -27,9 +27,9 @@ jobs:
           username: ${{ secrets.DOCEAN_NSV_SSH_USER }}
           key: ${{ secrets.DOCEAN_NSV_SSH_SECRET }}
           script: |
+            source ~/.bashrc
             cd ~/workdir/nien-su-viet
             git pull origin master
             bun install
             bun run build historical-event
-            source ~/.bashrc
-            /root/.nvm/versions/node/v24.11.1/bin/pm2 reload historical-event-service || /root/.nvm/versions/node/v24.11.1/bin/pm2 start ecosystem.config.js --only historical-event-service
+            pm2 reload historical-event-service || pm2 start ecosystem.config.js --only historical-event-service
