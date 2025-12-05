@@ -27,7 +27,8 @@ jobs:
           username: ${{ secrets.DOCEAN_NSV_SSH_USER }}
           key: ${{ secrets.DOCEAN_NSV_SSH_SECRET }}
           script: |
-            source ~/.bashrc
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             cd ~/workdir/nien-su-viet
             git pull origin master
             bun install
