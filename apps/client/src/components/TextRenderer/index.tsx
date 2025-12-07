@@ -8,6 +8,9 @@ import Image from './Image';
 import List from './List';
 import LinkTool from './LinkTool';
 import { useEffect } from 'react';
+import Quote from './Quote';
+import Delimiter from './Delimiter';
+import Table from './Table';
 
 export default function TextRenderer({
   content,
@@ -58,12 +61,11 @@ const components = {
   image: Image,
   list: List,
   linkTool: LinkTool,
-  // quote: Quote,
+  quote: Quote,
   // code: Code,
-  // delimiter: Delimiter,
-  // table: Table,
+  delimiter: Delimiter,
+  table: Table,
   // warning: Warning,
-  // checklist: Checklist,
   // raw: Raw,
   // embed: Embed,
 };

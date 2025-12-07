@@ -1,11 +1,15 @@
-import { Checkbox } from '../ui/checkbox';
+type ListItem = {
+  content: string;
+  meta: { checked?: boolean };
+  items?: ListItem[];
+};
 
 export default function List({
   data,
 }: {
   data: {
-    items: { content: string }[];
-    meta: { counterType: '' | 'numeric'; checked?: boolean };
+    items: ListItem[];
+    meta: { counterType?: '' | 'numeric' };
     style: 'ordered' | 'unordered' | 'checklist';
   };
 }) {
@@ -16,11 +20,15 @@ export default function List({
         <li key={index}>
           {data.style === 'checklist' ? (
             <>
-              <input type="checkbox" checked={data.meta.checked} disabled />
+              <input type="checkbox" checked={item.meta.checked} disabled />
               <p>{item.content}</p>
             </>
           ) : (
             item.content
+          )}
+
+          {item.items && (
+            <List data={{ items: item.items, meta: {}, style: data.style }} />
           )}
         </li>
       ))}

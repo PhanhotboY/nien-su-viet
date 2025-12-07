@@ -2,13 +2,6 @@
   font-size: 1.125rem;
   color: var(--card-foreground);
 
-  blockquote {
-    background: oklch(from var(--muted) l c h / 0.1);
-    border-radius: 8px;
-    margin-block: 1rem;
-    padding: 8px;
-  }
-
   a[href] {
     color: var(--secondary);
   }
