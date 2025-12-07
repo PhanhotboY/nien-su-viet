@@ -20,7 +20,7 @@ interface EventCardProps {
 
 export function EventCard({ event, onDelete }: EventCardProps) {
   return (
-    <Card className="group overflow-hidden transition-all hover:shadow-lg pt-0">
+    <Card className="group overflow-hidden transition-all hover:shadow-lg p-0 gap-2">
       <CardHeader className="p-0">
         <div className="relative aspect-video w-full overflow-hidden bg-muted">
           {event.thumbnail?.publicUrl ? (
@@ -81,7 +81,7 @@ export function EventCard({ event, onDelete }: EventCardProps) {
         )} */}
       </CardContent>
 
-      <CardFooter className="flex items-center justify-between border-t px-4">
+      <CardFooter className="flex items-center justify-between border-t px-4 !py-2">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <User className="h-4 w-4" />
           <span className="line-clamp-1">

@@ -153,31 +153,12 @@ export class HistoricalEventService {
   async getEventPreviewById(
     id: string,
   ): Promise<HistoricalEventPreviewResponseDto> {
-    const options = {
-      where: { id },
-      include: {
-        author: true,
-        categories: { include: { category: true, event: false } },
-      },
-    } satisfies Parameters<typeof this.prisma.historicalEvent.findUnique>[0];
+    const event = await this.getEventById(id);
 
-    return await this.util.handleHashCachingQuery(
-      {
-        cacheKey: this.cacheKey,
-        hashAttribute: options,
-        notFoundMessage: 'Sự kiện lịch sử không tồn tại',
-      },
-      async () => {
-        const event = await this.prisma.historicalEvent.findUnique(options);
-        return event
-          ? {
-              ...event,
-              excerpt: getExcerpt(event.content, 1000),
-              content: undefined, // Remove content to reduce payload
-            }
-          : null;
-      },
-    );
+    return {
+      ...event,
+      excerpt: getExcerpt(event.content, 1000),
+    };
   }
 
   async getAuthorEventById(
