@@ -29,7 +29,7 @@ import { LogoIcon } from './Icons';
 import Link from 'next/link';
 import { SignedIn, SignedOut, UserAvatar } from '@daveyplate/better-auth-ui';
 import { useRouter } from 'next/navigation';
-import { authClient } from '@/lib/auth-client';
+import { authClient, isAdmin, isEditor } from '@/lib/auth-client';
 
 interface RouteProps {
   href: string;
@@ -166,12 +166,24 @@ export const Navbar = () => {
                       Account
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/cmsdesk" className="cursor-pointer">
-                      <LayoutDashboard className="mr-2 h-4 w-4" />
-                      Dashboard
-                    </Link>
-                  </DropdownMenuItem>
+
+                  {isEditor(session?.user.role) && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/cmsdesk" className="cursor-pointer">
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        CMS Desk
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+
+                  {isAdmin(session?.user.role) && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin" className="cursor-pointer">
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        Admin Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={handleSignOut}

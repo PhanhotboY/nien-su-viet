@@ -7,6 +7,14 @@
     max-width: none;
   }
 
+  .tc-table--heading .tc-row:first-child {
+    z-index: 0;
+  }
+
+  .ce-block__content:has(.tc-popover.tc-popover--opened) {
+    z-index: 1;
+  }
+
   h1 {
     font-weight: 900;
     font-size: 1.75rem;
