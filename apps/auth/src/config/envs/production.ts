@@ -39,13 +39,6 @@ export const config = {
     cookieDomain: process.env.COOKIE_DOMAIN || 'localhost',
     cookiePrefix: process.env.AUTH_COOKIE_PREFIX || 'nsv-auth',
   },
-  jwt: {
-    privateKey: process.env.JWT_PRIVATE_KEY || '',
-    publicKey: process.env.JWT_PUBLIC_KEY || '',
-    signOptions: {
-      expiresIn: (process.env.JWT_EXPIRES_IN || '1h') as StringValue,
-    },
-  },
   rabbitmq: process.env.RABBITMQ_URL,
   redis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379',
