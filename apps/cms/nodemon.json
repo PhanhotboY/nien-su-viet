@@ -1,0 +1,14 @@
+{
+  "ignore": [".git"],
+  "verbose": true,
+  "events": {
+    "restart": "echo 'App restarted due to:\n'$FILENAME''"
+  },
+  "watch": ["cmd/", "configs/", "internal/", "global/", "pkg/"],
+  "ext": "go,yaml",
+  "execMap": {
+    "go": "make generate && go run"
+  },
+  "delay": "500",
+  "signal": "SIGTERM"
+}

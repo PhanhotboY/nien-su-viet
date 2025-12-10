@@ -1,0 +1,16 @@
+server:
+  host: localhost
+  port: 8080
+  env: development
+postgresql:
+  host: localhost
+  port: 5432
+  username: username
+  password: password
+  database: postgres
+rmq:
+  dsn: amqp://nsv_rmq_user:secure_password@localhost:5672/
+  queue_name: cms_service
+security:
+  jwt:
+    secret: 6f96125...
