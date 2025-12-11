@@ -4,7 +4,7 @@ APP_ENV ?= development
 generate:
 	go generate ./...
 
-dev: generate
+dev: 
 	nodemon --config ./nodemon.json cmd/$(APP_NAME)/main.go
 
 clean:

@@ -2,12 +2,22 @@ package service
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/controller/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/model/entity"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/repository"
 )
 
 type appService struct {
 	appRepo repository.AppRepository
+}
+
+// UpdateAppInfo implements AppService.
+func (a *appService) UpdateAppInfo(ctx *gin.Context, app *dto.AppUpdateDto) (*struct{ Success bool }, error) {
+	err := a.appRepo.UpdateApp(ctx, app.MapToEntity())
+	if err != nil {
+		return nil, err
+	}
+	return &struct{ Success bool }{Success: true}, nil
 }
 
 // GetAppInfo implements AppService.

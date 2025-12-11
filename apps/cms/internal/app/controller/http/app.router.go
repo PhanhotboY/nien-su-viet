@@ -9,4 +9,5 @@ func RegisterAppRoutes(rg *gin.RouterGroup, handler *AppHandler) {
 	app := rg.Group("/app")
 	// app.Use(middleware.AuthGuardMiddlewareWithHMAC())
 	app.GET("/", response.Wrap(handler.GetAppInfo))
+	app.PUT("/", response.Wrap(handler.UpdateAppInfo))
 }

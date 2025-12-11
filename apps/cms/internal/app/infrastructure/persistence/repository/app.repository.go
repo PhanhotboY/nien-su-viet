@@ -15,7 +15,11 @@ type appRepository struct {
 
 // UpdateApp implements repository.AppRepository.
 func (ar *appRepository) UpdateApp(ctx *gin.Context, app *entity.App) error {
-	result := ar.db.Model(&entity.App{}).Where("app_id = ?", app.AppId).Updates(app)
+	foundApp, err := ar.GetAppInfo(ctx)
+	if err != nil {
+		return err
+	}
+	result := ar.db.Model(&entity.App{}).Where("id = ?", foundApp.AppId).Updates(app)
 	if result.Error != nil {
 		log.Printf("Error updating app: %v", result.Error)
 		return result.Error
