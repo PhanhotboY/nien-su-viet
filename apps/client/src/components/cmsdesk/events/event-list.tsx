@@ -72,7 +72,7 @@ export default function EventList({
     eventName: '',
   });
 
-  const itemsPerPage = viewMode === 'grid' ? 12 : 10;
+  const itemsPerPage = viewMode === 'grid' ? 15 : 20;
 
   // Debounce search
   useEffect(() => {
@@ -90,7 +90,7 @@ export default function EventList({
     if (debouncedSearch) params.set('search', debouncedSearch);
     if (selectedCategory !== 'all') params.set('category', selectedCategory);
     if (sortBy !== 'createdAt') params.set('sortBy', sortBy);
-    if (sortDirection !== 'desc') params.set('sortDirection', sortDirection);
+    if (sortDirection !== 'desc') params.set('sortOrder', sortDirection);
     if (currentPage !== 1) params.set('page', String(currentPage));
 
     router.replace(`?${params.toString()}`);
@@ -108,11 +108,11 @@ export default function EventList({
   const swrKey = useMemo(() => {
     const params = new URLSearchParams();
     params.set('limit', String(itemsPerPage));
-    params.set('offset', String((currentPage - 1) * itemsPerPage));
+    params.set('page', String(currentPage));
     if (debouncedSearch) params.set('search', debouncedSearch);
     if (selectedCategory !== 'all') params.set('categoryId', selectedCategory);
     params.set('sortBy', sortBy);
-    params.set('sortDirection', sortDirection);
+    params.set('sortOrder', sortDirection);
 
     return `/api/historical-events?${params.toString()}`;
   }, [

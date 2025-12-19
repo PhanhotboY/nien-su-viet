@@ -165,9 +165,10 @@ export function EventForm({
                   type="number"
                   placeholder="YYYY"
                   value={formData.fromYear}
-                  onChange={(e) =>
-                    updateField('fromYear', parseInt(e.target.value) || 0)
-                  }
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    updateField('fromYear', value as any);
+                  }}
                   required
                 />
               </div>
@@ -186,6 +187,7 @@ export function EventForm({
                       <SelectValue placeholder="Select month" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="0">Không chọn</SelectItem>
                       {months.map((month, index) => (
                         <SelectItem key={index} value={(index + 1).toString()}>
                           {month}
@@ -195,7 +197,7 @@ export function EventForm({
                   </Select>
                 </div>
               )}
-              {!!formData.fromMonth && (
+              {!!(formData.fromYear && formData.fromMonth) && (
                 <div className="space-y-2">
                   <Label htmlFor="fromDay" className="text-sm font-normal">
                     Day
@@ -238,12 +240,9 @@ export function EventForm({
                     type="number"
                     placeholder="YYYY"
                     value={formData.toYear || ''}
-                    onChange={(e) =>
-                      updateField(
-                        'toYear',
-                        e.target.value ? parseInt(e.target.value) : null,
-                      )
-                    }
+                    onChange={(e) => {
+                      updateField('toYear', e.target.value as any);
+                    }}
                   />
                 </div>
               )}
@@ -262,6 +261,7 @@ export function EventForm({
                       <SelectValue placeholder="Select month" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="0">Không chọn</SelectItem>
                       {months.map((month, index) => (
                         <SelectItem key={index} value={(index + 1).toString()}>
                           {month}
@@ -271,7 +271,7 @@ export function EventForm({
                   </Select>
                 </div>
               )}
-              {!!formData.toMonth && (
+              {!!(formData.toYear && formData.toMonth) && (
                 <div className="space-y-2">
                   <Label htmlFor="toDay" className="text-sm font-normal">
                     Day
