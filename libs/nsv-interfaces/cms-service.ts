@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/app": {
+    "/api/v1/app": {
         parameters: {
             query?: never;
             header?: never;
@@ -13,29 +13,14 @@ export interface paths {
         };
         /**
          * Get app info
-         * @description Get website information (create if not exist)
+         * @description Retrieve application information including title, description, logo, social links, and contact details
          */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["app_controller_http.AppInfoResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
+        get: operations["get-app-info"];
+        /**
+         * Update app info
+         * @description Update application information
+         */
+        put: operations["update-app-info"];
         post?: never;
         delete?: never;
         options?: never;
@@ -43,7 +28,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/ping/100": {
+    "/api/v1/ping/100": {
         parameters: {
             query?: never;
             header?: never;
@@ -51,68 +36,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * ping 100 response without response wrapper
-         * @description do ping manual response
+         * Ping endpoint
+         * @description Returns pong to check if the service is running
          */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["initialize.StringAPIResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/ping/200": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * ping 200 response with response wrapper
-         * @description do ping wrapped response
-         */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description OK */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["initialize.StringAPIResponse"];
-                    };
-                };
-            };
-        };
+        get: operations["get-ping-100"];
         put?: never;
         post?: never;
         delete?: never;
@@ -125,48 +52,272 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        "app_controller_http.AppInfoResponse": {
-            code?: number;
-            /** @description data return null not show */
-            data?: components["schemas"]["github_com_phanhotboy_nien-su-viet_apps_cms_internal_app_domain_model_entity.App"];
-            /** @description Error return null not show */
+        APIResponseAppData: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/APIResponseAppData.json
+             */
+            readonly $schema?: string;
+            /**
+             * Format: int64
+             * @description HTTP status code
+             * @example 200
+             */
+            code: number;
+            /** @description Response data */
+            data: components["schemas"]["AppData"];
+            /** @description Response error */
             error?: unknown;
-            message?: string;
+            /**
+             * @description Response message
+             * @example success
+             */
+            message: string;
         };
-        "github_com_phanhotboy_nien-su-viet_apps_cms_internal_app_domain_model_entity.Address": {
+        APIResponseOperationResult: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/APIResponseOperationResult.json
+             */
+            readonly $schema?: string;
+            /**
+             * Format: int64
+             * @description HTTP status code
+             * @example 200
+             */
+            code: number;
+            /** @description Response data */
+            data: components["schemas"]["OperationResult"];
+            /** @description Response error */
+            error?: unknown;
+            /**
+             * @description Response message
+             * @example success
+             */
+            message: string;
+        };
+        Address: {
+            /**
+             * @description District name
+             * @example District 1
+             */
             district?: string;
+            /**
+             * @description Province name
+             * @example Ho Chi Minh City
+             */
             province?: string;
+            /**
+             * @description Street address
+             * @example 123 Nguyen Hue Blvd
+             */
             street?: string;
         };
-        "github_com_phanhotboy_nien-su-viet_apps_cms_internal_app_domain_model_entity.App": {
-            address?: components["schemas"]["github_com_phanhotboy_nien-su-viet_apps_cms_internal_app_domain_model_entity.Address"];
-            appId?: number;
-            bodyScripts?: string;
-            createdAt?: string;
+        AppData: {
+            /** @description Physical address of the website owner */
+            address?: components["schemas"]["Address"];
+            /**
+             * @description Scripts to be included before the closing body tag
+             * @example <script>console.log('body');</script>
+             */
+            body_scripts?: string;
+            /**
+             * @description Website description
+             * @example Vietnam history timeline website
+             */
             description?: string;
+            /**
+             * @description Contact email address
+             * @example contact@example.com
+             */
             email?: string;
-            headScripts?: string;
+            /**
+             * @description Scripts to be included in the head section
+             * @example <script>console.log('head');</script>
+             */
+            head_scripts?: string;
+            /**
+             * @description URL of the website logo
+             * @example https://example.com/logo.png
+             */
             logo?: string;
+            /**
+             * @description Map location URL
+             * @example https://maps.google.com/?q=location
+             */
             map?: string;
+            /**
+             * @description Contact phone number (E.164 format)
+             * @example +84987654321
+             */
             msisdn?: string;
-            social?: components["schemas"]["github_com_phanhotboy_nien-su-viet_apps_cms_internal_app_domain_model_entity.SocialLinks"];
-            taxCode?: string;
+            /** @description Social media links */
+            social?: components["schemas"]["SocialLinks"];
+            /**
+             * @description Tax code of the website owner
+             * @example 0123456789
+             */
+            tax_code?: string;
+            /**
+             * @description Website title
+             * @example Nien Su Viet
+             */
             title?: string;
-            updatedAt?: string;
         };
-        "github_com_phanhotboy_nien-su-viet_apps_cms_internal_app_domain_model_entity.SocialLinks": {
-            facebook?: string;
-            tiktok?: string;
-            youtube?: string;
-            zalo?: string;
+        AppUpdateReq: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/AppUpdateReq.json
+             */
+            readonly $schema?: string;
+            /** @description Physical address of the website owner */
+            address?: components["schemas"]["Address"];
+            /**
+             * @description Scripts to be included before the closing body tag
+             * @example <script>console.log('body');</script>
+             */
+            body_scripts?: string;
+            /**
+             * @description Website description
+             * @example Vietnam history timeline website
+             */
+            description?: string;
+            /**
+             * @description Contact email address
+             * @example contact@example.com
+             */
+            email?: string;
+            /**
+             * @description Scripts to be included in the head section
+             * @example <script>console.log('head');</script>
+             */
+            head_scripts?: string;
+            /**
+             * @description URL of the website logo
+             * @example https://example.com/logo.png
+             */
+            logo?: string;
+            /**
+             * @description Map location URL
+             * @example https://maps.google.com/?q=location
+             */
+            map?: string;
+            /**
+             * @description Contact phone number (E.164 format)
+             * @example +84987654321
+             */
+            msisdn?: string;
+            /** @description Social media links */
+            social?: components["schemas"]["SocialLinks"];
+            /**
+             * @description Tax code of the website owner
+             * @example 0123456789
+             */
+            tax_code?: string;
+            /**
+             * @description Website title
+             * @example Nien Su Viet
+             */
+            title?: string;
         };
-        "initialize.StringAPIResponse": {
-            code?: number;
-            /** @description data return null not show */
-            data?: string;
-            /** @description Error return null not show */
-            error?: unknown;
+        ErrorDetail: {
+            /** @description Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id' */
+            location?: string;
+            /** @description Error message text */
             message?: string;
+            /** @description The value at the given location */
+            value?: unknown;
+        };
+        ErrorModel: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/ErrorModel.json
+             */
+            readonly $schema?: string;
+            /**
+             * @description A human-readable explanation specific to this occurrence of the problem.
+             * @example Property foo is required but is missing.
+             */
+            detail?: string;
+            /** @description Optional list of individual error details */
+            errors?: components["schemas"]["ErrorDetail"][] | null;
+            /**
+             * Format: uri
+             * @description A URI reference that identifies the specific occurrence of the problem.
+             * @example https://example.com/error-log/abc123
+             */
+            instance?: string;
+            /**
+             * Format: int64
+             * @description HTTP status code
+             * @example 400
+             */
+            status?: number;
+            /**
+             * @description A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
+             * @example Bad Request
+             */
+            title?: string;
+            /**
+             * Format: uri
+             * @description A URI reference to human-readable documentation for the error.
+             * @default about:blank
+             * @example https://example.com/errors/example
+             */
+            type: string;
+        };
+        OperationResult: {
+            success: boolean;
+        };
+        PingOutputBody: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/PingOutputBody.json
+             */
+            readonly $schema?: string;
+            /**
+             * Format: int64
+             * @description HTTP status code
+             * @example 200
+             */
+            code: number;
+            /**
+             * @description Response data
+             * @example pong
+             */
+            data: string;
+            /**
+             * @description Response message
+             * @example success
+             */
+            message: string;
+        };
+        SocialLinks: {
+            /**
+             * @description Facebook page URL
+             * @example https://facebook.com/example
+             */
+            facebook?: string;
+            /**
+             * @description TikTok profile URL
+             * @example https://tiktok.com/@example
+             */
+            tiktok?: string;
+            /**
+             * @description YouTube channel URL
+             * @example https://youtube.com/@example
+             */
+            youtube?: string;
+            /**
+             * @description Zalo profile URL
+             * @example https://zalo.me/example
+             */
+            zalo?: string;
         };
     };
     responses: never;
@@ -176,4 +327,96 @@ export interface components {
     pathItems: never;
 }
 export type $defs = Record<string, never>;
-export type operations = Record<string, never>;
+export interface operations {
+    "get-app-info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response with app information */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseAppData"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "update-app-info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppUpdateReq"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseOperationResult"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+    "get-ping-100": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PingOutputBody"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ErrorModel"];
+                };
+            };
+        };
+    };
+}
