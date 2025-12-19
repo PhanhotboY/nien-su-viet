@@ -13,18 +13,6 @@ import (
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/initialize"
 )
 
-//go:generate swag init --parseDependency --parseInternal --dir ../../cmd/server,../../internal,../../pkg --output ../../docs
-//go:generate cp ../../docs/swagger.json ../../../../swagger/cms-service.json
-
-//	@title			Nien Su Viet CMS Service API
-//	@version		1.0
-//	@description	This is the API documentation for the Nien Su Viet CMS Service.
-
-//	@contact.name	API Support
-//	@contact.url	https://niensuviet.phannd.me
-//	@contact.email	support@phannd.me
-
-// @BasePath	/api/v1
 func main() {
 	r, port := initialize.Run()
 

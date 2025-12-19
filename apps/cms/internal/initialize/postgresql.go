@@ -6,12 +6,16 @@ import (
 	"os"
 	"time"
 
-	"github.com/phanhotboy/nien-su-viet/apps/cms/global"
-	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/model/entity"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+
+	"github.com/phanhotboy/nien-su-viet/apps/cms/global"
+	appEntity "github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/model/entity"
+	footerNavItemEntity "github.com/phanhotboy/nien-su-viet/apps/cms/internal/footerNavItem/domain/model/entity"
+	headerNavItemEntity "github.com/phanhotboy/nien-su-viet/apps/cms/internal/headerNavItem/domain/model/entity"
+	mediaEntity "github.com/phanhotboy/nien-su-viet/apps/cms/internal/media/domain/model/entity"
 )
 
 func InitPostgreSQL() (*gorm.DB, error) {
@@ -49,7 +53,9 @@ func InitPostgreSQL() (*gorm.DB, error) {
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
 	// Auto migrate tables
-	if err := global.PostgresDB.AutoMigrate(&entity.App{}); err != nil {
+	if err := global.PostgresDB.AutoMigrate(
+		&appEntity.App{}, &mediaEntity.Media{}, &headerNavItemEntity.HeaderNavItem{}, &footerNavItemEntity.FooterNavItem{},
+	); err != nil {
 		return nil, fmt.Errorf("failed to auto migrate: %w", err)
 	}
 

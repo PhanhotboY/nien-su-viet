@@ -1,6 +1,9 @@
 package response
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 // APIError represents a structured error for API responses
 type APIError struct {
@@ -29,13 +32,13 @@ func NewAPIError(statusCode int, message string, err interface{}) *APIError {
 }
 
 func NewBadRequestError(message string, err interface{}) *APIError {
-	return NewAPIError(400, message, err)
+	return NewAPIError(http.StatusBadRequest, message, err)
 }
 
 func NewNotFoundError(message string, err interface{}) *APIError {
-	return NewAPIError(404, message, err)
+	return NewAPIError(http.StatusNotFound, message, err)
 }
 
 func NewInternalServerError(message string, err interface{}) *APIError {
-	return NewAPIError(500, message, err)
+	return NewAPIError(http.StatusInternalServerError, message, err)
 }

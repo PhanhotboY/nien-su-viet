@@ -2,9 +2,9 @@ package entity
 
 import (
 	"database/sql/driver"
-	"encoding/json"
-	"errors"
 	"time"
+
+	"github.com/phanhotboy/nien-su-viet/apps/cms/global/util"
 )
 
 // App defines the app entity
@@ -25,28 +25,6 @@ type App struct {
 	UpdatedAt   time.Time    `gorm:"column:updated_at;autoUpdateTime" json:"updated_at"`          // Last update timestamp
 }
 
-// jsonbValue is a generic helper for JSONB Value method
-func jsonbValue(v interface{}) (driver.Value, error) {
-	if v == nil {
-		return nil, nil
-	}
-	return json.Marshal(v)
-}
-
-// jsonbScan is a generic helper for JSONB Scan method
-func jsonbScan[T any](dest *T, value interface{}) error {
-	if value == nil {
-		return nil
-	}
-
-	b, ok := value.([]byte)
-	if !ok {
-		return errors.New("type assertion to []byte failed")
-	}
-
-	return json.Unmarshal(b, dest)
-}
-
 type SocialLinks struct {
 	Facebook *string `json:"facebook,omitempty"` // Facebook page URL
 	Youtube  *string `json:"youtube,omitempty"`  // YouTube channel URL
@@ -58,11 +36,11 @@ func (links *SocialLinks) Value() (driver.Value, error) {
 	if links == nil {
 		return nil, nil
 	}
-	return jsonbValue(*links)
+	return util.JsonbValue(*links)
 }
 
 func (links *SocialLinks) Scan(value interface{}) error {
-	return jsonbScan(links, value)
+	return util.JsonbScan(links, value)
 }
 
 type Address struct {
@@ -75,11 +53,11 @@ func (addr *Address) Value() (driver.Value, error) {
 	if addr == nil {
 		return nil, nil
 	}
-	return jsonbValue(*addr)
+	return util.JsonbValue(*addr)
 }
 
 func (addr *Address) Scan(value interface{}) error {
-	return jsonbScan(addr, value)
+	return util.JsonbScan(addr, value)
 }
 
 // GORM override table name

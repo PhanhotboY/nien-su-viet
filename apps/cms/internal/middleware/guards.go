@@ -2,92 +2,94 @@ package middleware
 
 import (
 	"bytes"
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex" // or base64
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/gin-gonic/gin"
-	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
 const SHARED_SECRET_KEY = "your-very-secret-and-long-key" // !!! in env
 const requestValidityDuration = 200 * time.Second
 
 // AuthGuardMiddlewareWithHMAC by HMAC
-func AuthGuardMiddlewareWithHMAC() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		clientSign := ctx.GetHeader("X-Sign")
-		requestTimeStr := ctx.GetHeader("X-Request-Time")
+func AuthGuardMiddlewareWithHMAC() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			clientSign := r.Header.Get("X-Sign")
+			requestTimeStr := r.Header.Get("X-Request-Time")
 
-		if clientSign == "" || requestTimeStr == "" {
-			log.Println("HMAC Auth: Missing X-Sign or X-Request-Time header")
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, response.NewAPIError(http.StatusUnauthorized, "Unauthorized", "Missing required signature headers"))
-			return
-		}
-
-		// 1. Kiểm tra Timestamp
-		requestTime, err := strconv.ParseInt(requestTimeStr, 10, 64)
-		if err != nil {
-			log.Println("HMAC Auth: Invalid request time format")
-			ctx.AbortWithStatusJSON(http.StatusBadRequest, response.NewAPIError(http.StatusBadRequest, "Invalid request", "Invalid request time format"))
-			return
-		}
-
-		now := time.Now().Unix()
-		if now-requestTime > int64(requestValidityDuration.Seconds()) || now-requestTime < -5 { // Chấp nhận trễ 5s
-			log.Printf("HMAC Auth: Request timestamp out of bounds. Now: %d, ReqTime: %d\n", now, requestTime)
-			ctx.AbortWithStatusJSON(http.StatusBadRequest, response.NewAPIError(http.StatusBadRequest, "Invalid request", "Request timestamp out of bounds"))
-			return
-		}
-
-		// 2. Tái tạo String-to-Sign
-		// Đọc body (nếu có) và chuẩn bị để đọc lại
-		var bodyBytes []byte
-		if ctx.Request.Body != nil {
-			bodyBytes, err = io.ReadAll(ctx.Request.Body)
-			if err != nil {
-				log.Println("HMAC Auth: Error reading request body:", err)
-				ctx.AbortWithStatusJSON(http.StatusInternalServerError, response.NewAPIError(http.StatusInternalServerError, "Server Error", "Could not read request body"))
+			if clientSign == "" || requestTimeStr == "" {
+				log.Println("HMAC Auth: Missing X-Sign or X-Request-Time header")
+				writeErrorResponse(w, http.StatusUnauthorized, "Unauthorized", "Missing required signature headers")
 				return
 			}
-			// Tạo lại body để handler sau có thể đọc
-			ctx.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
-		}
 
-		stringToSign := buildStringToSign(ctx, requestTimeStr, bodyBytes)
-		log.Printf("HMAC Auth: Server StringToSign: [%s]\n", strings.ReplaceAll(stringToSign, "\n", "\\n"))
+			// 1. Kiểm tra Timestamp
+			requestTime, err := strconv.ParseInt(requestTimeStr, 10, 64)
+			if err != nil {
+				log.Println("HMAC Auth: Invalid request time format")
+				writeErrorResponse(w, http.StatusBadRequest, "Invalid request", "Invalid request time format")
+				return
+			}
 
-		// 3. Tính toán HMAC phía server
-		serverSign := calculateHMAC(stringToSign, SHARED_SECRET_KEY)
-		log.Printf("HMAC Auth: ClientSign: %s, ServerSign: %s\n", clientSign, serverSign)
+			now := time.Now().Unix()
+			if now-requestTime > int64(requestValidityDuration.Seconds()) || now-requestTime < -5 { // Chấp nhận trễ 5s
+				log.Printf("HMAC Auth: Request timestamp out of bounds. Now: %d, ReqTime: %d\n", now, requestTime)
+				writeErrorResponse(w, http.StatusBadRequest, "Invalid request", "Request timestamp out of bounds")
+				return
+			}
 
-		// 4. So sánh chữ ký
-		// Sử dụng hmac.Equal để so sánh an toàn, chống timing attacks
-		if !hmac.Equal([]byte(clientSign), []byte(serverSign)) {
-			log.Println("HMAC Auth: Invalid signature")
-			ctx.AbortWithStatusJSON(http.StatusUnauthorized, response.NewAPIError(http.StatusUnauthorized, "Unauthorized", "Invalid signature"))
-			return
-		}
+			// 2. Tái tạo String-to-Sign
+			// Đọc body (nếu có) và chuẩn bị để đọc lại
+			var bodyBytes []byte
+			if r.Body != nil {
+				bodyBytes, err = io.ReadAll(r.Body)
+				if err != nil {
+					log.Println("HMAC Auth: Error reading request body:", err)
+					writeErrorResponse(w, http.StatusInternalServerError, "Server Error", "Could not read request body")
+					return
+				}
+				// Tạo lại body để handler sau có thể đọc
+				r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+			}
 
-		log.Println("HMAC Auth: Signature verified successfully")
-		ctx.Next()
+			stringToSign := buildStringToSign(r, requestTimeStr, bodyBytes)
+			log.Printf("HMAC Auth: Server StringToSign: [%s]\n", strings.ReplaceAll(stringToSign, "\n", "\\n"))
+
+			// 3. Tính toán HMAC phía server
+			serverSign := calculateHMAC(stringToSign, SHARED_SECRET_KEY)
+			log.Printf("HMAC Auth: ClientSign: %s, ServerSign: %s\n", clientSign, serverSign)
+
+			// 4. So sánh chữ ký
+			// Sử dụng hmac.Equal để so sánh an toàn, chống timing attacks
+			if !hmac.Equal([]byte(clientSign), []byte(serverSign)) {
+				log.Println("HMAC Auth: Invalid signature")
+				writeErrorResponse(w, http.StatusUnauthorized, "Unauthorized", "Invalid signature")
+				return
+			}
+
+			log.Println("HMAC Auth: Signature verified successfully")
+			next.ServeHTTP(w, r)
+		})
 	}
 }
 
-func buildStringToSign(ctx *gin.Context, requestTimeStr string, bodyBytes []byte) string {
-	method := ctx.Request.Method
-	path := ctx.Request.URL.Path // Chỉ path, không có query string
+func buildStringToSign(r *http.Request, requestTimeStr string, bodyBytes []byte) string {
+	method := r.Method
+	path := r.URL.Path // Chỉ path, không có query string
 
 	// Sắp xếp query parameters
-	queryParams := ctx.Request.URL.Query()
+	queryParams := r.URL.Query()
 	var sortedQueryKeys []string
 	for k := range queryParams {
 		sortedQueryKeys = append(sortedQueryKeys, k)
@@ -96,11 +98,8 @@ func buildStringToSign(ctx *gin.Context, requestTimeStr string, bodyBytes []byte
 
 	var canonicalQueryParts []string
 	for _, k := range sortedQueryKeys {
-		// Gin's queryParams[k] is a []string, handle multiple values if necessary
-		// For simplicity, we'll take the first one or join them if you expect multiple
-		// For this example, let's assume single values for simplicity or take first
 		if len(queryParams[k]) > 0 {
-			canonicalQueryParts = append(canonicalQueryParts, fmt.Sprintf("%s=%s", k, queryParams[k][0]))
+			canonicalQueryParts = append(canonicalQueryParts, fmt.Sprintf("%s=%s", k, url.QueryEscape(queryParams[k][0])))
 		}
 	}
 	canonicalQueryString := strings.Join(canonicalQueryParts, "&")
@@ -136,4 +135,35 @@ func calculateHMAC(data string, secret string) string {
 	mac := hmac.New(sha256.New, []byte(secret))
 	mac.Write([]byte(data))
 	return hex.EncodeToString(mac.Sum(nil)) // Hoặc base64.StdEncoding.EncodeToString
+}
+
+// Context helpers for storing request-scoped data
+type contextKeyType string
+
+const bodyBytesKey contextKeyType = "bodyBytes"
+
+// WithBodyBytes stores the request body bytes in context
+func WithBodyBytes(ctx context.Context, bodyBytes []byte) context.Context {
+	return context.WithValue(ctx, bodyBytesKey, bodyBytes)
+}
+
+// GetBodyBytes retrieves the request body bytes from context
+func GetBodyBytes(ctx context.Context) []byte {
+	if val := ctx.Value(bodyBytesKey); val != nil {
+		if bytes, ok := val.([]byte); ok {
+			return bytes
+		}
+	}
+	return nil
+}
+
+// writeErrorResponse writes a JSON error response
+func writeErrorResponse(w http.ResponseWriter, code int, message string, err interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"code":    code,
+		"message": message,
+		"error":   err,
+	})
 }
