@@ -1,3 +1,0 @@
-package initialize
-
-func InitAuth() {}

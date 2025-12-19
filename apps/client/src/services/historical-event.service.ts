@@ -9,12 +9,12 @@ const HISTORICAL_EVENT_API_URL =
   process.env.HISTORICAL_EVENT_SERVICE_URL || 'http://localhost:3002/api/v1';
 
 export async function getEvents(
-  query?: URLSearchParams,
+  query?: Record<string, string> | string,
 ): Promise<
   IPaginatedResponse<components['schemas']['HistoricalEventBriefResponseDto']>
 > {
   const response = (await retryFetcher(
-    `${HISTORICAL_EVENT_API_URL}/historical-events?${query?.toString() || ''}`,
+    `${HISTORICAL_EVENT_API_URL}/historical-events?${new URLSearchParams(query).toString()}`,
   )) as IPaginatedResponse<
     components['schemas']['HistoricalEventBriefResponseDto']
   >;

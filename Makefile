@@ -19,10 +19,20 @@ gen-types: clean-types $(TS_OUTPUTS)
 # Rule: convert one .json → one .ts
 $(OUTPUT_DIR)/%.ts: $(OPENAPI_DIR)/%.json
 	@echo "Generating types for $< → $@"
+	@openapi-down-convert --input $< --output $@
 	@npx openapi-typescript $< -o $@
 
 # Clean generated files
 clean-types:
 	@rm -f $(OUTPUT_DIR)/*.ts
+
+swagger2openapi:
+	@echo "Converting swagger to openapi"
+	@mkdir -p $(OPENAPI_DIR)
+	@for file in $(wildcard swagger/*.json); do \
+		base=$$(basename $$file .json); \
+		echo "Processing $$file → $(OPENAPI_DIR)/$$base.json"; \
+		swagger2openapi --outfile $(OPENAPI_DIR)/$$base.json $$file; \
+	done
 
 .PHONY: gen-types clean-types

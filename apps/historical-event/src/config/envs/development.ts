@@ -19,9 +19,6 @@ export const config = {
     //   },
     //   autoLoadEntities: true,
   },
-  jwt: {
-    publicKey: process.env.JWT_PUBLIC_KEY || '',
-  },
   rabbitmq: process.env.RABBITMQ_URL as Options.Connect,
   redis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379',

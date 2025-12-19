@@ -15,20 +15,22 @@ import { IPaginatedResponse } from '../../interfaces/response.interface';
 import 'vis-timeline/styles/vis-timeline-graph2d.css';
 import './index.css';
 import { useRouter } from 'next/navigation';
+import { getEvents } from '@/services/historical-event.service';
 
-export function HistoricalEventTimeline({
-  events,
-}: {
-  events: IPaginatedResponse<
+export function HistoricalEventTimeline() {
+  const [events, setEvents] = useState<IPaginatedResponse<
     components['schemas']['HistoricalEventBriefResponseDto']
-  >;
-}) {
+  > | null>(null);
+
+  useEffect(() => {
+    getEvents({ limit: '1000' }).then(setEvents);
+  }, []);
   const timelineRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [timeline, setTimeline] = useState<Timeline | null>(null);
 
   useEffect(() => {
-    if (!timelineRef.current) return;
+    if (!timelineRef.current || !events) return;
 
     const items = new DataSet<VisItem>(
       events.data.map((event) => {
@@ -55,13 +57,18 @@ export function HistoricalEventTimeline({
       }),
     );
 
+    const initStartDate = new Date();
+    const initEndDate = new Date();
+    initStartDate.setFullYear(initStartDate.getFullYear() - 80);
+    initEndDate.setFullYear(initStartDate.getFullYear() + 100);
+
     const options: TimelineOptions = {
       stack: true,
       editable: false,
       selectable: true,
       showCurrentTime: false,
-      start: new Date(-500, 0, 1),
-      end: new Date(1000, 11, 31),
+      start: initStartDate,
+      end: initEndDate,
       format: {
         minorLabels: (date: any, scale, step) => {
           switch (scale) {
@@ -139,7 +146,7 @@ export function HistoricalEventTimeline({
     return () => {
       newTimeline.destroy();
     };
-  }, []);
+  }, [events, router]);
 
   const handleZoomIn = () => {
     if (timeline) {
@@ -169,15 +176,38 @@ export function HistoricalEventTimeline({
     }
   };
 
-  const handleToday = () => {
+  const handleZoomDate = (
+    date: Date = new Date(),
+    zoomUnit: 'day' | 'month' | 'year' = 'day',
+    zoomSpan: number = 15,
+  ) => {
+    console.log('zomming timeline', timeline);
     if (timeline) {
-      const currentDate = new Date(2025, 2, 12);
-      const start = new Date(currentDate);
-      start.setDate(start.getDate() - 15);
-      const end = new Date(currentDate);
-      end.setDate(end.getDate() + 15);
+      const start = new Date(date);
+      const end = new Date(date);
+
+      switch (zoomUnit) {
+        case 'day':
+          start.setDate(start.getDate() - zoomSpan);
+          end.setDate(end.getDate() + zoomSpan);
+          break;
+        case 'month':
+          start.setMonth(start.getMonth() - zoomSpan);
+          end.setMonth(end.getMonth() + zoomSpan);
+          break;
+        case 'year':
+        default:
+          start.setFullYear(start.getFullYear() - zoomSpan);
+          end.setFullYear(end.getFullYear() + zoomSpan);
+          break;
+      }
+
       timeline.setWindow(start, end);
     }
+  };
+
+  const handleToday = () => {
+    handleZoomDate(new Date(), 'day', 15);
   };
 
   return (
