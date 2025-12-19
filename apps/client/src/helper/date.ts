@@ -23,11 +23,13 @@ const formatHistoricalEventDate = (
   month?: number | null,
   day?: number | null,
 ) => {
+  const hasDay = !!(year && month && day);
+  const hasMonth = !!(year && month);
   const dateStr = year
-    ? `${day || ''}${day ? '/' : ''}${month || ''}${month ? '/' : ''}${year}`
+    ? `${hasDay ? `${day}/` : ''}${hasMonth ? `${month}/` : ''}${Math.abs(year)}`
     : '';
 
-  return year && year < 0 ? `${Math.abs(year)} TCN` : dateStr;
+  return year && year < 0 ? `${dateStr} TCN` : dateStr;
 };
 
 export { formatHistoricalEventDate, createDate };
