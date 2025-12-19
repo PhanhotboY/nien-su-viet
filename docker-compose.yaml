@@ -21,6 +21,17 @@ services:
       - '5433:5432'
     volumes:
       - nsv-pg-hevent-data:/var/lib/postgresql/data
+  nsv-pg-cms:
+    image: postgres:alpine
+    container_name: nsv-pg-cms
+    environment:
+      POSTGRES_USER: nsv_cms_user
+      POSTGRES_PASSWORD: secure_password
+      POSTGRES_DB: nsv_cms_db
+    ports:
+      - '5434:5432'
+    volumes:
+      - nsv-pg-cms-data:/var/lib/postgresql/data
   nsv-rmq:
     image: rabbitmq:4-management-alpine
     container_name: nsv-rmq
@@ -43,5 +54,6 @@ services:
 volumes:
   nsv-pg-auth-data:
   nsv-pg-hevent-data:
+  nsv-pg-cms-data:
   nsv-rmq-data:
   nsv-rdb-data:

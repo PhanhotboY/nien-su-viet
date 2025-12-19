@@ -1,8 +1,6 @@
 import { RedisClientOptions } from '@keyv/redis';
-import { JwtModuleOptions } from '@nestjs/jwt';
 import { ThrottlerOptions } from '@nestjs/throttler';
 import { Options } from 'amqplib';
-import { StringValue } from 'ms';
 
 export const config = {
   db: {
@@ -30,13 +28,6 @@ export const config = {
     cookieDomain: process.env.COOKIE_DOMAIN || 'localhost',
     cookiePrefix: process.env.AUTH_COOKIE_PREFIX || 'nsv-auth',
   },
-  jwt: {
-    privateKey: process.env.JWT_PRIVATE_KEY || '',
-    publicKey: process.env.JWT_PUBLIC_KEY || '',
-    signOptions: {
-      expiresIn: (process.env.JWT_EXPIRES_IN || '1h') as StringValue,
-    },
-  } as JwtModuleOptions,
   rabbitmq: process.env.RABBITMQ_URL as Options.Connect,
   redis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379',

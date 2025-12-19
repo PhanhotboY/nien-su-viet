@@ -1557,7 +1557,7 @@ export interface paths {
         get?: never;
         put?: never;
         /** @description Update a user's details */
-        post: operations["adminUpdateUser"];
+        post: operations["updateUser"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1591,7 +1591,7 @@ export interface paths {
         get?: never;
         put?: never;
         /** @description List user sessions */
-        post: operations["adminListUserSessions"];
+        post: operations["listUserSessions"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2501,7 +2501,7 @@ export interface operations {
                         redirect: false;
                         /** @description Session token */
                         token: string;
-                        url?: null | null;
+                        url?: string | null;
                         user: components["schemas"]["User"];
                     };
                 };
@@ -4004,7 +4004,7 @@ export interface operations {
             };
         };
     };
-    adminUpdateUser: {
+    updateUser: {
         parameters: {
             query?: never;
             header?: never;
@@ -4203,7 +4203,7 @@ export interface operations {
             };
         };
     };
-    adminListUserSessions: {
+    listUserSessions: {
         parameters: {
             query?: never;
             header?: never;
