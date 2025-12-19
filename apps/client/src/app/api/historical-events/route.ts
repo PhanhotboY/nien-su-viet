@@ -4,7 +4,7 @@ import { getEvents } from '@/services/historical-event.service';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.nextUrl);
-    const res = await getEvents(searchParams);
+    const res = await getEvents(searchParams.toString());
 
     return NextResponse.json(res);
   } catch (error: any) {
