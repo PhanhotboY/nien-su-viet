@@ -16,6 +16,15 @@ import (
 
 	appController "github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/controller/http"
 	appInit "github.com/phanhotboy/nien-su-viet/apps/cms/internal/initialize/app"
+
+	mediaInit "github.com/phanhotboy/nien-su-viet/apps/cms/internal/initialize/media"
+	mediaController "github.com/phanhotboy/nien-su-viet/apps/cms/internal/media/controller/http"
+
+	headerNavItemController "github.com/phanhotboy/nien-su-viet/apps/cms/internal/headerNavItem/controller/http"
+	headerNavItemInit "github.com/phanhotboy/nien-su-viet/apps/cms/internal/initialize/headerNavItem"
+
+	footerNavItemController "github.com/phanhotboy/nien-su-viet/apps/cms/internal/footerNavItem/controller/http"
+	footerNavItemInit "github.com/phanhotboy/nien-su-viet/apps/cms/internal/initialize/footerNavItem"
 )
 
 // PingOutput is the response for ping endpoints
@@ -66,12 +75,6 @@ func InitRouter(db *gorm.DB, isLogger string) http.Handler {
 
 	r.Get("/docs", docHandler)
 
-	// Initialize handlers
-	appHandler := appInit.InitApp(db)
-	// mediaHandler := mediaInit.InitMedia(db)
-	// headerNavItemHandler := headerNavItemInit.InitHeaderNavItem(db)
-	// footerNavItemHandler := footerNavItemInit.InitFooterNavItem(db)
-
 	// Create API v1 group
 	grp := huma.NewGroup(api, "/api/v1")
 
@@ -86,11 +89,17 @@ func InitRouter(db *gorm.DB, isLogger string) http.Handler {
 		DefaultStatus: http.StatusOK,
 	}, Ping100Handler)
 
+	// Initialize handlers
+	appHandler := appInit.InitApp(db)
+	mediaHandler := mediaInit.InitMedia(db)
+	headerNavItemHandler := headerNavItemInit.InitHeaderNavItem(db)
+	footerNavItemHandler := footerNavItemInit.InitFooterNavItem(db)
+
 	// Register module routes
 	appController.RegisterAppRoutes(grp, appHandler)
-	// mediaController.RegisterMediaRoutes(grp, mediaHandler)
-	// headerNavItemController.RegisterHeaderNavItemHandlers(grp, headerNavItemHandler)
-	// footerNavItemController.RegisterFooterNavItemRoutes(grp, footerNavItemHandler)
+	mediaController.RegisterMediaRoutes(grp, mediaHandler)
+	headerNavItemController.RegisterHeaderNavItemHandlers(grp, headerNavItemHandler)
+	footerNavItemController.RegisterFooterNavItemRoutes(grp, footerNavItemHandler)
 
 	ExportOpenAPI(api)
 

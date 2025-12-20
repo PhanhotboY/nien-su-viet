@@ -2,6 +2,7 @@ package entity
 
 import (
 	"database/sql/driver"
+	"fmt"
 	"time"
 )
 
@@ -26,8 +27,19 @@ const (
 )
 
 func (l *LinkType) Scan(value interface{}) error {
-	*l = LinkType(value.([]byte))
-	return nil
+	if value == nil {
+		return nil
+	}
+	switch v := value.(type) {
+	case []byte:
+		*l = LinkType(string(v))
+		return nil
+	case string:
+		*l = LinkType(v)
+		return nil
+	default:
+		return fmt.Errorf("unsupported Scan type for LinkType: %T", value)
+	}
 }
 
 func (l LinkType) Value() (driver.Value, error) {

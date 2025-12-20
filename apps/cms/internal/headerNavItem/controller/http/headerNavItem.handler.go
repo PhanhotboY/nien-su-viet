@@ -5,6 +5,8 @@ import (
 
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/headerNavItem/application/service"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/headerNavItem/controller/dto"
+	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/request"
+	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
 type HeaderNavItemHandler struct {
@@ -15,47 +17,13 @@ func NewHeaderNavItemHandler(sv service.HeaderNavItemService) *HeaderNavItemHand
 	return &HeaderNavItemHandler{service: sv}
 }
 
-// GetHeaderNavItemsInput represents the input for getting header nav items
-type GetHeaderNavItemsInput struct{}
-
-// GetHeaderNavItemsOutput represents the output for getting header nav items
-type GetHeaderNavItemsOutput struct {
-	Body dto.HeaderNavItemListResponse
-}
-
-// CreateHeaderNavItemInput represents the input for creating a header nav item
-type CreateHeaderNavItemInput struct {
-	Body dto.HeaderNavItemCreateReq
-}
-
-// CreateHeaderNavItemOutput represents the output for creating a header nav item
-type CreateHeaderNavItemOutput struct {
-	Body dto.OperationResponse
-}
-
-// UpdateHeaderNavItemInput represents the input for updating a header nav item
-type UpdateHeaderNavItemInput struct {
-	ID   string `path:"id" maxLength:"100" example:"item_123" doc:"Header nav item ID"`
-	Body dto.HeaderNavItemUpdateReq
-}
-
-// UpdateHeaderNavItemOutput represents the output for updating a header nav item
-type UpdateHeaderNavItemOutput struct {
-	Body dto.OperationResponse
-}
-
-// DeleteHeaderNavItemInput represents the input for deleting a header nav item
-type DeleteHeaderNavItemInput struct {
+// PathIDInput represents input with a path parameter ID
+type PathIDInput struct {
 	ID string `path:"id" maxLength:"100" example:"item_123" doc:"Header nav item ID"`
 }
 
-// DeleteHeaderNavItemOutput represents the output for deleting a header nav item
-type DeleteHeaderNavItemOutput struct {
-	Body dto.OperationResponse
-}
-
 // GetHeaderNavItems retrieves all header navigation items
-func (h *HeaderNavItemHandler) GetHeaderNavItems(ctx context.Context, input *GetHeaderNavItemsInput) (*GetHeaderNavItemsOutput, error) {
+func (h *HeaderNavItemHandler) GetHeaderNavItems(ctx context.Context, input *struct{}) (*response.APIBodyResponse[[]dto.HeaderNavItemData], error) {
 	items, err := h.service.GetHeaderNavItems(ctx)
 	if err != nil {
 		return nil, err
@@ -69,65 +37,38 @@ func (h *HeaderNavItemHandler) GetHeaderNavItems(ctx context.Context, input *Get
 		}
 	}
 
-	return &GetHeaderNavItemsOutput{
-		Body: dto.HeaderNavItemListResponse{
-			Code:    200,
-			Message: "success",
-			Data:    itemData,
-		},
-	}, nil
+	return response.SuccessResponse(200, itemData), nil
 }
 
 // CreateHeaderNavItem creates a new header navigation item
-func (h *HeaderNavItemHandler) CreateHeaderNavItem(ctx context.Context, input *CreateHeaderNavItemInput) (*CreateHeaderNavItemOutput, error) {
-	result, err := h.service.CreateHeaderNavItem(ctx, &input.Body)
+func (h *HeaderNavItemHandler) CreateHeaderNavItem(ctx context.Context, input *request.APIBodyRequest[dto.HeaderNavItemCreateReq]) (*response.APIBodyResponse[response.OperationResult], error) {
+	err := h.service.CreateHeaderNavItem(ctx, &input.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return &CreateHeaderNavItemOutput{
-		Body: dto.OperationResponse{
-			Code:    200,
-			Message: "success",
-			Data: dto.OperationResult{
-				Success: result.Success,
-			},
-		},
-	}, nil
+	return response.OperationSuccessResponse(201), nil
 }
 
 // UpdateHeaderNavItem updates an existing header navigation item
-func (h *HeaderNavItemHandler) UpdateHeaderNavItem(ctx context.Context, input *UpdateHeaderNavItemInput) (*UpdateHeaderNavItemOutput, error) {
-	result, err := h.service.UpdateHeaderNavItem(ctx, input.ID, &input.Body)
+func (h *HeaderNavItemHandler) UpdateHeaderNavItem(ctx context.Context, input *struct {
+	PathIDInput
+	request.APIBodyRequest[dto.HeaderNavItemUpdateReq]
+}) (*response.APIBodyResponse[response.OperationResult], error) {
+	err := h.service.UpdateHeaderNavItem(ctx, input.ID, &input.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return &UpdateHeaderNavItemOutput{
-		Body: dto.OperationResponse{
-			Code:    200,
-			Message: "success",
-			Data: dto.OperationResult{
-				Success: result.Success,
-			},
-		},
-	}, nil
+	return response.OperationSuccessResponse(200), nil
 }
 
 // DeleteHeaderNavItem deletes a header navigation item
-func (h *HeaderNavItemHandler) DeleteHeaderNavItem(ctx context.Context, input *DeleteHeaderNavItemInput) (*DeleteHeaderNavItemOutput, error) {
-	result, err := h.service.DeleteHeaderNavItem(ctx, input.ID)
+func (h *HeaderNavItemHandler) DeleteHeaderNavItem(ctx context.Context, input *PathIDInput) (*response.APIBodyResponse[response.OperationResult], error) {
+	err := h.service.DeleteHeaderNavItem(ctx, input.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return &DeleteHeaderNavItemOutput{
-		Body: dto.OperationResponse{
-			Code:    200,
-			Message: "success",
-			Data: dto.OperationResult{
-				Success: result.Success,
-			},
-		},
-	}, nil
+	return response.OperationSuccessResponse(200), nil
 }

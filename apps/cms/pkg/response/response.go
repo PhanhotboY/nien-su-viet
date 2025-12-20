@@ -22,11 +22,6 @@ type OperationResult struct {
 	Success bool `json:"success"` // Indicates if the operation was successful
 }
 
-// API response for operations that return success status
-type APIOperationResponse struct {
-	APIBodyResponse[OperationResult]
-}
-
 func SuccessResponse[T any](code int, data T) *APIBodyResponse[T] {
 	return &APIBodyResponse[T]{
 		Status: code,
@@ -36,6 +31,10 @@ func SuccessResponse[T any](code int, data T) *APIBodyResponse[T] {
 			Data:    data,
 		},
 	}
+}
+
+func OperationSuccessResponse(code int) *APIBodyResponse[OperationResult] {
+	return SuccessResponse(code, OperationResult{Success: true})
 }
 
 func ErrorResponse[T any](code int, message string, err interface{}) *APIBodyResponse[T] {

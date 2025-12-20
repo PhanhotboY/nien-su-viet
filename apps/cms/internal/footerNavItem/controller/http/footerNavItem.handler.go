@@ -5,6 +5,8 @@ import (
 
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/footerNavItem/application/service"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/footerNavItem/controller/dto"
+	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/request"
+	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
 type FooterNavItemHandler struct {
@@ -15,47 +17,13 @@ func NewFooterNavItemHandler(sv service.FooterNavItemService) *FooterNavItemHand
 	return &FooterNavItemHandler{service: sv}
 }
 
-// GetFooterNavItemsInput represents the input for getting footer nav items
-type GetFooterNavItemsInput struct{}
-
-// GetFooterNavItemsOutput represents the output for getting footer nav items
-type GetFooterNavItemsOutput struct {
-	Body dto.FooterNavItemListResponse
-}
-
-// CreateFooterNavItemInput represents the input for creating a footer nav item
-type CreateFooterNavItemInput struct {
-	Body dto.FooterNavItemCreateReq
-}
-
-// CreateFooterNavItemOutput represents the output for creating a footer nav item
-type CreateFooterNavItemOutput struct {
-	Body dto.OperationResponse
-}
-
-// UpdateFooterNavItemInput represents the input for updating a footer nav item
-type UpdateFooterNavItemInput struct {
-	ID   string `path:"id" maxLength:"100" example:"item_123" doc:"Footer nav item ID"`
-	Body dto.FooterNavItemUpdateReq
-}
-
-// UpdateFooterNavItemOutput represents the output for updating a footer nav item
-type UpdateFooterNavItemOutput struct {
-	Body dto.OperationResponse
-}
-
-// DeleteFooterNavItemInput represents the input for deleting a footer nav item
-type DeleteFooterNavItemInput struct {
+// PathIDInput represents input with a path parameter ID
+type PathIDInput struct {
 	ID string `path:"id" maxLength:"100" example:"item_123" doc:"Footer nav item ID"`
 }
 
-// DeleteFooterNavItemOutput represents the output for deleting a footer nav item
-type DeleteFooterNavItemOutput struct {
-	Body dto.OperationResponse
-}
-
 // GetFooterNavItems retrieves all footer navigation items
-func (h *FooterNavItemHandler) GetFooterNavItems(ctx context.Context, input *GetFooterNavItemsInput) (*GetFooterNavItemsOutput, error) {
+func (h *FooterNavItemHandler) GetFooterNavItems(ctx context.Context, input *struct{}) (*response.APIBodyResponse[[]dto.FooterNavItemData], error) {
 	items, err := h.service.GetFooterNavItems(ctx)
 	if err != nil {
 		return nil, err
@@ -69,65 +37,38 @@ func (h *FooterNavItemHandler) GetFooterNavItems(ctx context.Context, input *Get
 		}
 	}
 
-	return &GetFooterNavItemsOutput{
-		Body: dto.FooterNavItemListResponse{
-			Code:    200,
-			Message: "success",
-			Data:    itemData,
-		},
-	}, nil
+	return response.SuccessResponse(200, itemData), nil
 }
 
 // CreateFooterNavItem creates a new footer navigation item
-func (h *FooterNavItemHandler) CreateFooterNavItem(ctx context.Context, input *CreateFooterNavItemInput) (*CreateFooterNavItemOutput, error) {
-	result, err := h.service.CreateFooterNavItem(ctx, &input.Body)
+func (h *FooterNavItemHandler) CreateFooterNavItem(ctx context.Context, input *request.APIBodyRequest[dto.FooterNavItemCreateReq]) (*response.APIBodyResponse[response.OperationResult], error) {
+	err := h.service.CreateFooterNavItem(ctx, &input.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return &CreateFooterNavItemOutput{
-		Body: dto.OperationResponse{
-			Code:    200,
-			Message: "success",
-			Data: dto.OperationResult{
-				Success: result.Success,
-			},
-		},
-	}, nil
+	return response.OperationSuccessResponse(201), nil
 }
 
 // UpdateFooterNavItem updates an existing footer navigation item
-func (h *FooterNavItemHandler) UpdateFooterNavItem(ctx context.Context, input *UpdateFooterNavItemInput) (*UpdateFooterNavItemOutput, error) {
-	result, err := h.service.UpdateFooterNavItem(ctx, input.ID, &input.Body)
+func (h *FooterNavItemHandler) UpdateFooterNavItem(ctx context.Context, input *struct {
+	PathIDInput
+	request.APIBodyRequest[dto.FooterNavItemUpdateReq]
+}) (*response.APIBodyResponse[response.OperationResult], error) {
+	err := h.service.UpdateFooterNavItem(ctx, input.ID, &input.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return &UpdateFooterNavItemOutput{
-		Body: dto.OperationResponse{
-			Code:    200,
-			Message: "success",
-			Data: dto.OperationResult{
-				Success: result.Success,
-			},
-		},
-	}, nil
+	return response.OperationSuccessResponse(200), nil
 }
 
 // DeleteFooterNavItem deletes a footer navigation item
-func (h *FooterNavItemHandler) DeleteFooterNavItem(ctx context.Context, input *DeleteFooterNavItemInput) (*DeleteFooterNavItemOutput, error) {
-	result, err := h.service.DeleteFooterNavItem(ctx, input.ID)
+func (h *FooterNavItemHandler) DeleteFooterNavItem(ctx context.Context, input *PathIDInput) (*response.APIBodyResponse[response.OperationResult], error) {
+	err := h.service.DeleteFooterNavItem(ctx, input.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return &DeleteFooterNavItemOutput{
-		Body: dto.OperationResponse{
-			Code:    200,
-			Message: "success",
-			Data: dto.OperationResult{
-				Success: result.Success,
-			},
-		},
-	}, nil
+	return response.OperationSuccessResponse(200), nil
 }

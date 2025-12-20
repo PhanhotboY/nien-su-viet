@@ -6,7 +6,6 @@ import (
 
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/footerNavItem/controller/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/footerNavItem/domain/repository"
-	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
 type footerNavItemService struct {
@@ -33,25 +32,25 @@ func (s *footerNavItemService) GetFooterNavItems(ctx context.Context) ([]*dto.Fo
 }
 
 // CreateFooterNavItem creates a footer nav item
-func (s *footerNavItemService) CreateFooterNavItem(ctx context.Context, item *dto.FooterNavItemCreateReq) (*response.OperationResult, error) {
+func (s *footerNavItemService) CreateFooterNavItem(ctx context.Context, item *dto.FooterNavItemCreateReq) error {
 	if err := s.repo.CreateNavItem(ctx, item.MapToEntity()); err != nil {
-		return nil, fmt.Errorf("failed to create footer nav item: %w", err)
+		return fmt.Errorf("failed to create footer nav item: %w", err)
 	}
-	return &response.OperationResult{Success: true}, nil
+	return nil
 }
 
 // UpdateFooterNavItem updates a footer nav item
-func (s *footerNavItemService) UpdateFooterNavItem(ctx context.Context, id string, item *dto.FooterNavItemUpdateReq) (*response.OperationResult, error) {
+func (s *footerNavItemService) UpdateFooterNavItem(ctx context.Context, id string, item *dto.FooterNavItemUpdateReq) error {
 	if err := s.repo.UpdateNavItem(ctx, id, item.MapToEntity()); err != nil {
-		return nil, fmt.Errorf("failed to update footer nav item: %w", err)
+		return fmt.Errorf("failed to update footer nav item: %w", err)
 	}
-	return &response.OperationResult{Success: true}, nil
+	return nil
 }
 
 // DeleteFooterNavItem deletes a footer nav item
-func (s *footerNavItemService) DeleteFooterNavItem(ctx context.Context, id string) (*response.OperationResult, error) {
+func (s *footerNavItemService) DeleteFooterNavItem(ctx context.Context, id string) error {
 	if err := s.repo.DeleteNavItem(ctx, id); err != nil {
-		return nil, fmt.Errorf("failed to delete footer nav item: %w", err)
+		return fmt.Errorf("failed to delete footer nav item: %w", err)
 	}
-	return &response.OperationResult{Success: true}, nil
+	return nil
 }

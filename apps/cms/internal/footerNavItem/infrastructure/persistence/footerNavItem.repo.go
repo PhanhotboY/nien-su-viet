@@ -3,7 +3,6 @@ package persistence
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/footerNavItem/domain/model/entity"
@@ -16,10 +15,8 @@ type footerNavItemRepository struct {
 }
 
 func (r *footerNavItemRepository) GetNavItems(ctx context.Context) ([]*entity.FooterNavItem, error) {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-	defer cancel()
 	var items []*entity.FooterNavItem
-	res := r.db.WithContext(ctx).Model(&entity.FooterNavItem{}).Order("created_at ASC").Find(&items)
+	res := r.db.WithContext(ctx).Model(&entity.FooterNavItem{}).Find(&items)
 	if res.Error != nil {
 		return nil, fmt.Errorf("failed to get footer nav items: %w", res.Error)
 	}

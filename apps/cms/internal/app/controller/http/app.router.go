@@ -7,8 +7,8 @@ import (
 	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
-func RegisterAppRoutes(grp *huma.Group, handler *AppHandler) {
-	app := huma.NewGroup(grp, "/app")
+func RegisterAppRoutes(api huma.API, handler *AppHandler) {
+	app := huma.NewGroup(api, "/app")
 	// GET /api/v1/app - Get app information
 	huma.Register(app, huma.Operation{
 		OperationID:   "get-app-info",

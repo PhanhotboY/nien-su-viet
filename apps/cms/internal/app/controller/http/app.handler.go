@@ -5,6 +5,7 @@ import (
 
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/application/service"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/controller/dto"
+	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/request"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
@@ -16,21 +17,8 @@ func NewAppHandler(sv service.AppService) *AppHandler {
 	return &AppHandler{service: sv}
 }
 
-// GetAppInfoInput represents the input for getting app info
-type GetAppInfoInput struct{}
-
-// UpdateAppInfoInput represents the input for updating app info
-type UpdateAppInfoInput struct {
-	Body dto.AppUpdateReq
-}
-
-// UpdateAppInfoOutput represents the output for updating app info
-type UpdateAppInfoOutput struct {
-	Body response.APIOperationResponse
-}
-
 // GetAppInfo retrieves app information
-func (h *AppHandler) GetAppInfo(ctx context.Context, input *GetAppInfoInput) (*response.APIBodyResponse[dto.AppData], error) {
+func (h *AppHandler) GetAppInfo(ctx context.Context, input *struct{}) (*response.APIBodyResponse[dto.AppData], error) {
 	result, err := h.service.GetAppInfo(ctx)
 	if err != nil {
 		return nil, err
@@ -43,7 +31,7 @@ func (h *AppHandler) GetAppInfo(ctx context.Context, input *GetAppInfoInput) (*r
 }
 
 // UpdateAppInfo updates app information
-func (h *AppHandler) UpdateAppInfo(ctx context.Context, input *UpdateAppInfoInput) (*response.APIBodyResponse[response.OperationResult], error) {
+func (h *AppHandler) UpdateAppInfo(ctx context.Context, input *request.APIBodyRequest[dto.AppUpdateReq]) (*response.APIBodyResponse[response.OperationResult], error) {
 	err := h.service.UpdateAppInfo(ctx, &input.Body)
 	if err != nil {
 		return nil, err

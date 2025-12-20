@@ -6,12 +6,12 @@ import (
 
 // HeaderNavItemData represents a footer/header navigation item in API responses
 type HeaderNavItemData struct {
-	Id         string   `json:"id" example:"home"`                      // Unique identifier (slug or UUID)
-	Order      int      `json:"order" example:"1"`                      // Display order (ascending)
-	LinkNewTab *bool    `json:"link_new_tab,omitempty" example:"false"` // Whether to open link in new tab
-	LinkUrl    string   `json:"link_url" example:"/"`                   // URL of the link (internal path or external URL)
-	LinkLabel  string   `json:"link_label" example:"Home"`              // Display label for the link
-	LinkType   LinkType `json:"link_type" example:"internal"`           // Type of link (internal or external)
+	Id         string   `json:"id" example:"06c1d747-acd7-43b9-b197-e2ccf72b8579"` // Unique identifier (slug or UUID)
+	Order      int      `json:"order" example:"1"`                                 // Display order (ascending)
+	LinkNewTab *bool    `json:"link_new_tab,omitempty" example:"false"`            // Whether to open link in new tab
+	LinkUrl    string   `json:"link_url" example:"/"`                              // URL of the link (internal path or external URL)
+	LinkLabel  string   `json:"link_label" example:"Home"`                         // Display label for the link
+	LinkType   LinkType `json:"link_type" example:"internal"`                      // Type of link (internal or external)
 }
 
 func (dto *HeaderNavItemData) FromEntity(entity *entity.HeaderNavItem) {

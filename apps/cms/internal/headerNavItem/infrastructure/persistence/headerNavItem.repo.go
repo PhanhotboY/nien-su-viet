@@ -43,7 +43,6 @@ func (h *headerNavItemRepository) GetNavItems(ctx context.Context) ([]*entity.He
 	// Apply a short timeout to avoid hanging requests
 	// ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	// defer cancel()
-
 	var navItems []*entity.HeaderNavItem
 	result := h.db.WithContext(ctx).Model(&entity.HeaderNavItem{}).Find(&navItems)
 	if result.Error != nil {

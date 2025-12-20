@@ -5,7 +5,7 @@ import (
 )
 
 type FooterNavItemData struct {
-	Id         string   `json:"id" example:"contact"`
+	Id         string   `json:"id" example:"d54934ae-0756-4da0-a8e2-e2f2dccb2904"`
 	Order      int      `json:"order" example:"1"`
 	LinkNewTab *bool    `json:"link_new_tab,omitempty" example:"false"`
 	LinkUrl    string   `json:"link_url" example:"/contact"`
@@ -52,7 +52,6 @@ type OperationResponse struct {
 }
 
 type FooterNavItemCreateReq struct {
-	Id         string   `json:"id" binding:"required,min=1,max=64" example:"contact"`
 	Order      int      `json:"order" binding:"required,min=0,max=1000" example:"1"`
 	LinkNewTab *bool    `json:"link_new_tab,omitempty" binding:"omitempty" example:"false"`
 	LinkUrl    string   `json:"link_url" binding:"required,min=1,max=2048" example:"/contact"`
@@ -72,7 +71,6 @@ func (dto *FooterNavItemCreateReq) MapToEntity() *entity.FooterNavItem {
 		return nil
 	}
 	return &entity.FooterNavItem{
-		Id:         dto.Id,
 		Order:      dto.Order,
 		LinkNewTab: dto.LinkNewTab,
 		LinkUrl:    dto.LinkUrl,
@@ -82,7 +80,6 @@ func (dto *FooterNavItemCreateReq) MapToEntity() *entity.FooterNavItem {
 }
 
 type FooterNavItemUpdateReq struct {
-	Id         string   `json:"id" binding:"required,min=1,max=64" example:"contact"`
 	Order      int      `json:"order" binding:"required,min=0,max=1000" example:"1"`
 	LinkNewTab *bool    `json:"link_new_tab,omitempty" binding:"omitempty" example:"false"`
 	LinkUrl    string   `json:"link_url" binding:"required,min=1,max=2048" example:"/contact"`
@@ -95,7 +92,6 @@ func (dto *FooterNavItemUpdateReq) MapToEntity() *entity.FooterNavItem {
 		return nil
 	}
 	return &entity.FooterNavItem{
-		Id:         dto.Id,
 		Order:      dto.Order,
 		LinkNewTab: dto.LinkNewTab,
 		LinkUrl:    dto.LinkUrl,
