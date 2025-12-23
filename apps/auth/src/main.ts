@@ -15,6 +15,13 @@ async function bootstrap() {
 
   // Generate Better Auth OpenAPI schema (contains all auth routes)
   const document = await auth.api.generateOpenAPISchema();
+  for (const path in document.paths) {
+    for (const method in document.paths[path]) {
+      const op = document.paths[path][method];
+      // rename operationId
+      op.operationId = `${method}_${path.replace(/\W+/g, '_')}`;
+    }
+  }
 
   // Save OpenAPI JSON into monorepo
   if (existsSync('openapi') === false) {

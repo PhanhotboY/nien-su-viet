@@ -35,6 +35,10 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# IDE - Zed
+.zed/*
+!.zed/settings.json
+
 # dotenv environment variable files
 .env
 .env.development.local
@@ -56,5 +60,4 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 /apps/*/prisma/migrations
-openapi
-swagger
+libs/nsv-interfaces

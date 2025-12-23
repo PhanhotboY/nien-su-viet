@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "rm -rf .next && next build",
+    "build": "(cd ../../ && make gen-types) && rm -rf .next && next build",
     "start": "next start",
     "lint": "eslint",
     "shadcn:add": "bunx --bun shadcn@latest add"
@@ -50,7 +50,7 @@
     "date-fns": "^4.1.0",
     "editorjs-text-alignment-blocktune": "^1.0.3",
     "lucide-react": "^0.554.0",
-    "next": "16.0.7",
+    "next": "16.0.10",
     "next-themes": "^0.4.6",
     "react": "19.2.1",
     "react-dom": "19.2.1",

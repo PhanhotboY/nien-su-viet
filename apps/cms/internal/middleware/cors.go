@@ -1,20 +1,27 @@
 package middleware
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+)
 
-func CORS(ctx *gin.Context) {
-	method := ctx.Request.Method
+func CORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
+		if origin == "" {
+			origin = "*"
+		}
 
-	// set response header
-	ctx.Header("Access-Control-Allow-Origin", ctx.Request.Header.Get("Origin"))
-	ctx.Header("Access-Control-Allow-Credentials", "true")
-	ctx.Header("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
-	ctx.Header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
+		// set response header
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+		w.Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
 
-	if method == "OPTIONS" || method == "HEAD" {
-		ctx.AbortWithStatus(204)
-		return
-	}
+		if r.Method == "OPTIONS" || r.Method == "HEAD" {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
 
-	ctx.Next()
+		next.ServeHTTP(w, r)
+	})
 }

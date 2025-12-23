@@ -1,11 +1,12 @@
 package initialize
 
 import (
-	"github.com/gin-gonic/gin"
+	"net/http"
+
 	"github.com/phanhotboy/nien-su-viet/apps/cms/global"
 )
 
-func Run() (*gin.Engine, int) {
+func Run() (http.Handler, int) {
 	LoadConfig()
 
 	db, err := InitPostgreSQL()

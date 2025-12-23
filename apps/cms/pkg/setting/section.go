@@ -27,7 +27,6 @@ type RmqConfig struct {
 }
 
 type Security struct {
-	Jwt struct {
-		Secret string `mapstructure:"secret"`
-	} `mapstructure:"jwt"`
+	AuthCookiePrefix string `mapstructure:"auth_cookie_prefix"`
+	BetterAuthSecret string `mapstructure:"better_auth_secret"`
 }

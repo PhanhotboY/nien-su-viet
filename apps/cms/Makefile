@@ -2,9 +2,9 @@ APP_NAME = server
 APP_ENV ?= development
 
 generate:
-	go generate ./...
+	go run cmd/gen-openapi/main.go
 
-dev: 
+dev:
 	nodemon --config ./nodemon.json cmd/$(APP_NAME)/main.go
 
 clean:
@@ -35,4 +35,4 @@ clean-types:
 	@rm -f $(OUTPUT_DIR)/*.go
 
 
-.PHONY: dev clean build run 
+.PHONY: dev clean build run

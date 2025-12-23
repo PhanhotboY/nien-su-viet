@@ -24,7 +24,6 @@ export default function Paragraph({
   tunes?: { textAlign: { alignment: string } };
 }) {
   const decodedText = decodeHtmlEntities(data.text);
-  console.log(decodedText);
 
   return (
     <p

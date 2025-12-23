@@ -8,6 +8,7 @@ import type { ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import { authClient, signInWithGoogle } from '@/lib/auth-client';
 import { CLIENT_HOST } from '@/lib/config';
+import { authLocalization } from '@/localization/vi/auth-localization';
 
 export function Providers({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -33,6 +34,7 @@ export function Providers({ children }: { children: ReactNode }) {
         social={{
           providers: ['google'],
         }}
+        localization={authLocalization}
       >
         {children}
 

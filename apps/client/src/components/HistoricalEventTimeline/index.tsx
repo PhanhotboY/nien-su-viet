@@ -16,11 +16,13 @@ import 'vis-timeline/styles/vis-timeline-graph2d.css';
 import './index.css';
 import { useRouter } from 'next/navigation';
 import { getEvents } from '@/services/historical-event.service';
+import { EventDetailDialog } from './EventDetailDialog';
 
 export function HistoricalEventTimeline() {
   const [events, setEvents] = useState<IPaginatedResponse<
     components['schemas']['HistoricalEventBriefResponseDto']
   > | null>(null);
+  const [previewItemId, setPreviewItemId] = useState<string | null>(null);
 
   useEffect(() => {
     getEvents({ limit: '1000' }).then(setEvents);
@@ -59,8 +61,8 @@ export function HistoricalEventTimeline() {
 
     const initStartDate = new Date();
     const initEndDate = new Date();
-    initStartDate.setFullYear(initStartDate.getFullYear() - 80);
-    initEndDate.setFullYear(initStartDate.getFullYear() + 100);
+    initStartDate.setFullYear(initStartDate.getFullYear() - 450);
+    initEndDate.setFullYear(initEndDate.getFullYear() + 50);
 
     const options: TimelineOptions = {
       stack: true,
@@ -69,6 +71,7 @@ export function HistoricalEventTimeline() {
       showCurrentTime: false,
       start: initStartDate,
       end: initEndDate,
+      minHeight: '70vh',
       format: {
         minorLabels: (date: any, scale, step) => {
           switch (scale) {
@@ -136,8 +139,7 @@ export function HistoricalEventTimeline() {
     newTimeline.on('select', (properties) => {
       if (properties.items.length > 0) {
         const itemId = properties.items[0];
-        const item = items.get(itemId) as any as VisItem;
-        router.push(`/timeline/preview?eventId=${itemId}`);
+        setPreviewItemId(itemId);
       }
     });
 
@@ -181,7 +183,6 @@ export function HistoricalEventTimeline() {
     zoomUnit: 'day' | 'month' | 'year' = 'day',
     zoomSpan: number = 15,
   ) => {
-    console.log('zomming timeline', timeline);
     if (timeline) {
       const start = new Date(date);
       const end = new Date(date);
@@ -210,58 +211,70 @@ export function HistoricalEventTimeline() {
     handleZoomDate(new Date(), 'day', 15);
   };
 
+  function FunctionalButtons() {
+    return (
+      <div className="p-4 border-b flex gap-2">
+        <Button variant="outline" size="icon" onClick={handleZoomIn}>
+          <ZoomIn className="h-4 w-4" />
+        </Button>
+        <Button variant="outline" size="icon" onClick={handleZoomOut}>
+          <ZoomOut className="h-4 w-4" />
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => {
+            if (timeline) {
+              const window = timeline.getWindow();
+              const interval = window.end.getTime() - window.start.getTime();
+              const distance = interval * 0.2;
+              const newStart = new Date(window.start.getTime() - distance);
+              const newEnd = new Date(window.end.getTime() - distance);
+              timeline.setWindow(newStart, newEnd);
+            }
+          }}
+          title="Move Left"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+        <Button variant="outline" onClick={handleToday} className="text-xs">
+          Today
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => {
+            if (timeline) {
+              const window = timeline.getWindow();
+              const interval = window.end.getTime() - window.start.getTime();
+              const distance = interval * 0.2;
+              const newStart = new Date(window.start.getTime() + distance);
+              const newEnd = new Date(window.end.getTime() + distance);
+              timeline.setWindow(newStart, newEnd);
+            }
+          }}
+          title="Move Right"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <Card className="py-0">
       <CardContent className="p-0">
-        <div className="p-4 border-b flex gap-2">
-          <Button variant="outline" size="icon" onClick={handleZoomIn}>
-            <ZoomIn className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="icon" onClick={handleZoomOut}>
-            <ZoomOut className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              if (timeline) {
-                const window = timeline.getWindow();
-                const interval = window.end.getTime() - window.start.getTime();
-                const distance = interval * 0.2;
-                const newStart = new Date(window.start.getTime() - distance);
-                const newEnd = new Date(window.end.getTime() - distance);
-                timeline.setWindow(newStart, newEnd);
-              }
-            }}
-            title="Move Left"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" onClick={handleToday} className="text-xs">
-            Today
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              if (timeline) {
-                const window = timeline.getWindow();
-                const interval = window.end.getTime() - window.start.getTime();
-                const distance = interval * 0.2;
-                const newStart = new Date(window.start.getTime() + distance);
-                const newEnd = new Date(window.end.getTime() + distance);
-                timeline.setWindow(newStart, newEnd);
-              }
-            }}
-            title="Move Right"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
+        <FunctionalButtons />
 
         <div className="p-6">
           <div ref={timelineRef} className="timeline-container" />
         </div>
+
+        <EventDetailDialog
+          eventId={previewItemId}
+          open={!!previewItemId}
+          onOpenChange={() => setPreviewItemId(null)}
+        />
       </CardContent>
     </Card>
   );

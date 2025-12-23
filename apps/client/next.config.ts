@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  images: {
+    dangerouslyAllowLocalIP: process.env.NODE_ENV === 'development',
+    remotePatterns: [
+      {
+        hostname: 'localhost',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

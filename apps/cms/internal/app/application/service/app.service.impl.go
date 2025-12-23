@@ -1,7 +1,10 @@
 package service
 
 import (
-	"github.com/gin-gonic/gin"
+	"context"
+	"fmt"
+	"strconv"
+
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/controller/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/model/entity"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/repository"
@@ -11,17 +14,26 @@ type appService struct {
 	appRepo repository.AppRepository
 }
 
-// UpdateAppInfo implements AppService.
-func (a *appService) UpdateAppInfo(ctx *gin.Context, app *dto.AppUpdateDto) (*struct{ Success bool }, error) {
-	err := a.appRepo.UpdateApp(ctx, app.MapToEntity())
-	if err != nil {
-		return nil, err
-	}
-	return &struct{ Success bool }{Success: true}, nil
+func NewAppService(repo repository.AppRepository) AppService {
+	return &appService{appRepo: repo}
 }
 
-// GetAppInfo implements AppService.
-func (a *appService) GetAppInfo(ctx *gin.Context) (*entity.App, error) {
+func (a *appService) UpdateAppInfo(ctx context.Context, app *dto.AppUpdateReq) error {
+	foundApp, err := a.appRepo.GetAppInfo(ctx)
+	if err != nil {
+		return err
+	}
+	if foundApp == nil {
+		return fmt.Errorf("App info not found")
+	}
+	err = a.appRepo.UpdateApp(ctx, strconv.Itoa(int(foundApp.AppId)), app.MapToEntity())
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (a *appService) GetAppInfo(ctx context.Context) (*entity.App, error) {
 	app, err := a.appRepo.GetAppInfo(ctx)
 	if app != nil {
 		return app, nil
@@ -35,12 +47,8 @@ func (a *appService) GetAppInfo(ctx *gin.Context) (*entity.App, error) {
 		if err != nil {
 			return nil, err
 		}
-		// Retrieve the newly created app info
 		return a.appRepo.GetAppInfo(ctx)
 	}
-	return nil, err
-}
 
-func NewAppService(appRepo repository.AppRepository) AppService {
-	return &appService{appRepo}
+	return nil, err
 }
