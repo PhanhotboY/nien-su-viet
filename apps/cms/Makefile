@@ -2,7 +2,7 @@ APP_NAME = server
 APP_ENV ?= development
 
 generate:
-	go generate ./...
+	go run cmd/gen-openapi/main.go
 
 dev:
 	nodemon --config ./nodemon.json cmd/$(APP_NAME)/main.go

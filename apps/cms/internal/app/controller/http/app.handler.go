@@ -18,7 +18,7 @@ func NewAppHandler(sv service.AppService) *AppHandler {
 }
 
 // GetAppInfo retrieves app information
-func (h *AppHandler) GetAppInfo(ctx context.Context, input *struct{}) (*response.APIBodyResponse[dto.AppData], error) {
+func (h *AppHandler) GetAppInfo(ctx context.Context, input *struct{}) (*GetAppRes, error) {
 	result, err := h.service.GetAppInfo(ctx)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (h *AppHandler) GetAppInfo(ctx context.Context, input *struct{}) (*response
 }
 
 // UpdateAppInfo updates app information
-func (h *AppHandler) UpdateAppInfo(ctx context.Context, input *request.APIBodyRequest[dto.AppUpdateReq]) (*response.APIBodyResponse[response.OperationResult], error) {
+func (h *AppHandler) UpdateAppInfo(ctx context.Context, input *UpdateAppBodyReq) (*UpdateAppRes, error) {
 	err := h.service.UpdateAppInfo(ctx, &input.Body)
 	if err != nil {
 		return nil, err
@@ -41,3 +41,9 @@ func (h *AppHandler) UpdateAppInfo(ctx context.Context, input *request.APIBodyRe
 		Success: true,
 	}), nil
 }
+
+type GetAppQueryReq struct{}
+type GetAppRes = response.APIBodyResponse[dto.AppData]
+
+type UpdateAppBodyReq = request.APIBodyRequest[dto.AppUpdateReq]
+type UpdateAppRes = response.APIBodyResponse[response.OperationResult]

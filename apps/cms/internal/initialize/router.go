@@ -13,6 +13,7 @@ import (
 
 	"github.com/phanhotboy/nien-su-viet/apps/cms/global"
 	customMiddleware "github.com/phanhotboy/nien-su-viet/apps/cms/internal/middleware"
+	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 
 	appController "github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/controller/http"
 	appInit "github.com/phanhotboy/nien-su-viet/apps/cms/internal/initialize/app"
@@ -57,6 +58,8 @@ func InitRouter(db *gorm.DB, isLogger string) http.Handler {
 	r.Use(middleware.RedirectSlashes)
 	r.Use(customMiddleware.CORS)
 	r.Use(customMiddleware.ValidatorMiddleware())
+
+	huma.NewError = response.SerializeError
 
 	// Create Huma API configuration
 	config := huma.DefaultConfig("Nien Su Viet CMS Service API", "1.0.0")

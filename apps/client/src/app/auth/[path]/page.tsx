@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { AuthView } from '@daveyplate/better-auth-ui';
 
 import { getAuthSession } from '@/helper/auth.helper';
+import { authLocalization } from '@/localization/vi/auth-localization';
 
 export default async function AuthPage({
   params,
@@ -46,13 +47,13 @@ export default async function AuthPage({
 
       {!['callback', 'sign-out'].includes(path) && (
         <p className="w-3xs text-center text-muted-foreground text-xs">
-          By continuing, you agree to our{' '}
+          {authLocalization.BY_CONTINUING_YOU_AGREE}{' '}
           <Link
             className="text-warning underline"
             href="/terms"
             target="_blank"
           >
-            Terms of Service
+            {authLocalization.TERMS_OF_SERVICE}
           </Link>{' '}
           and{' '}
           <Link
@@ -60,7 +61,7 @@ export default async function AuthPage({
             href="/privacy"
             target="_blank"
           >
-            Privacy Policy
+            {authLocalization.PRIVACY_POLICY}
           </Link>
           .
         </p>

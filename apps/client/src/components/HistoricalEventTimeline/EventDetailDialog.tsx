@@ -15,6 +15,7 @@ import { IApiResponse } from '../../interfaces/response.interface';
 import TextRenderer from '../TextRenderer';
 import Link from 'next/link';
 import { Button } from '../ui/button';
+import { useEffect } from 'react';
 
 // Custom React component for item details
 export function EventDetailDialog({
@@ -22,13 +23,17 @@ export function EventDetailDialog({
   open,
   onOpenChange,
 }: {
-  eventId: string;
+  eventId: string | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  useEffect(() => {
+    mutate();
+  }, [eventId, open]);
+
   const { data, error, isLoading, mutate } = useSWR<
     IApiResponse<components['schemas']['HistoricalEventPreviewResponseDto']>
-  >(`/api/historical-events/${eventId}/preview`, swrFetcher);
+  >(eventId ? `/api/historical-events/${eventId}/preview` : null, swrFetcher);
 
   if (error) {
     return (

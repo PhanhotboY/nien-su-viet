@@ -2,15 +2,15 @@ package response
 
 import (
 	"context"
-	"net/http"
+	"time"
 )
 
 // StandardRes response format
 type APIResponse[T any] struct {
-	Code    int         `json:"code" example:"200" doc:"HTTP status code"`        // HTTP status code
-	Message string      `json:"message" example:"success" doc:"Response message"` // Message
-	Data    T           `json:"data" doc:"Response data"`                         // data return null not show
-	Error   interface{} `json:"error,omitempty" doc:"Response error"`             // Error return null not show
+	Code      int    `json:"statusCode" example:"200" doc:"HTTP status code"`                        // HTTP status code
+	Message   string `json:"message" example:"success" doc:"Response message"`                       // Message
+	Data      T      `json:"data" doc:"Response data"`                                               // data return null not show
+	Timestamp int64  `json:"timestamp" example:"1625247600" doc:"Response timestamp in Unix format"` // Response timestamp
 }
 
 type APIBodyResponse[T any] struct {
@@ -43,7 +43,6 @@ func ErrorResponse[T any](code int, message string, err interface{}) *APIBodyRes
 		Body: APIResponse[T]{
 			Code:    code,
 			Message: message,
-			Error:   err,
 		},
 	}
 }
@@ -54,13 +53,10 @@ func Wrap[T any, R any](handler HandlerFunc[T, R]) func(context.Context, *T) (*A
 	return func(ctx context.Context, input *T) (*APIBodyResponse[R], error) {
 		res, err := handler(ctx, input)
 		if err != nil {
-			if apiErr, ok := err.(*APIError); ok {
-				return ErrorResponse[R](apiErr.Code, apiErr.Message, apiErr.Err), nil
-			} else {
-				return ErrorResponse[R](http.StatusInternalServerError, "Internal Server Error", err), nil
-			}
+			return nil, err
 		}
 
+		res.Body.Timestamp = time.Now().Unix()
 		return res, nil
 	}
 }

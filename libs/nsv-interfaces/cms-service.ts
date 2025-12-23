@@ -28,6 +28,126 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/footer-nav-items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get footer nav items
+         * @description Retrieve all footer navigation items ordered by display order
+         */
+        get: operations["get-footer-nav-items"];
+        put?: never;
+        /**
+         * Create footer nav item
+         * @description Create a new footer navigation item
+         */
+        post: operations["create-footer-nav-item"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/footer-nav-items/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Update footer nav item
+         * @description Update an existing footer navigation item
+         */
+        put: operations["update-footer-nav-item"];
+        post?: never;
+        /**
+         * Delete footer nav item
+         * @description Delete a footer navigation item
+         */
+        delete: operations["delete-footer-nav-item"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/header-nav-items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get header nav items
+         * @description Retrieve all header navigation items ordered by display order
+         */
+        get: operations["get-header-nav-items"];
+        put?: never;
+        /**
+         * Create header nav item
+         * @description Create a new header navigation item
+         */
+        post: operations["create-header-nav-item"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/header-nav-items/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Update header nav item
+         * @description Update an existing header navigation item
+         */
+        put: operations["update-header-nav-item"];
+        post?: never;
+        /**
+         * Delete header nav item
+         * @description Delete a header navigation item
+         */
+        delete: operations["delete-header-nav-item"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get media list
+         * @description Retrieve all media items ordered by creation time (desc)
+         */
+        get: operations["get-media-list"];
+        put?: never;
+        /**
+         * Upload media
+         * @description Upload a new media file (max 10MB)
+         */
+        post: operations["upload-media"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/ping/100": {
         parameters: {
             query?: never;
@@ -59,21 +179,106 @@ export interface components {
              * @example http://localhost:8084/schemas/APIResponseAppData.json
              */
             readonly $schema?: string;
-            /**
-             * Format: int64
-             * @description HTTP status code
-             * @example 200
-             */
-            code: number;
             /** @description Response data */
             data: components["schemas"]["AppData"];
-            /** @description Response error */
-            error?: unknown;
             /**
              * @description Response message
              * @example success
              */
             message: string;
+            /**
+             * Format: int64
+             * @description HTTP status code
+             * @example 200
+             */
+            statusCode: number;
+            /**
+             * Format: int64
+             * @description Response timestamp in Unix format
+             * @example 1625247600
+             */
+            timestamp: number;
+        };
+        APIResponseListFooterNavItemData: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/APIResponseListFooterNavItemData.json
+             */
+            readonly $schema?: string;
+            /** @description Response data */
+            data: components["schemas"]["FooterNavItemData"][] | null;
+            /**
+             * @description Response message
+             * @example success
+             */
+            message: string;
+            /**
+             * Format: int64
+             * @description HTTP status code
+             * @example 200
+             */
+            statusCode: number;
+            /**
+             * Format: int64
+             * @description Response timestamp in Unix format
+             * @example 1625247600
+             */
+            timestamp: number;
+        };
+        APIResponseListHeaderNavItemData: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/APIResponseListHeaderNavItemData.json
+             */
+            readonly $schema?: string;
+            /** @description Response data */
+            data: components["schemas"]["HeaderNavItemData"][] | null;
+            /**
+             * @description Response message
+             * @example success
+             */
+            message: string;
+            /**
+             * Format: int64
+             * @description HTTP status code
+             * @example 200
+             */
+            statusCode: number;
+            /**
+             * Format: int64
+             * @description Response timestamp in Unix format
+             * @example 1625247600
+             */
+            timestamp: number;
+        };
+        APIResponseListMediaRes: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/APIResponseListMediaRes.json
+             */
+            readonly $schema?: string;
+            /** @description Response data */
+            data: components["schemas"]["MediaRes"][] | null;
+            /**
+             * @description Response message
+             * @example success
+             */
+            message: string;
+            /**
+             * Format: int64
+             * @description HTTP status code
+             * @example 200
+             */
+            statusCode: number;
+            /**
+             * Format: int64
+             * @description Response timestamp in Unix format
+             * @example 1625247600
+             */
+            timestamp: number;
         };
         APIResponseOperationResult: {
             /**
@@ -82,21 +287,25 @@ export interface components {
              * @example http://localhost:8084/schemas/APIResponseOperationResult.json
              */
             readonly $schema?: string;
-            /**
-             * Format: int64
-             * @description HTTP status code
-             * @example 200
-             */
-            code: number;
             /** @description Response data */
             data: components["schemas"]["OperationResult"];
-            /** @description Response error */
-            error?: unknown;
             /**
              * @description Response message
              * @example success
              */
             message: string;
+            /**
+             * Format: int64
+             * @description HTTP status code
+             * @example 200
+             */
+            statusCode: number;
+            /**
+             * Format: int64
+             * @description Response timestamp in Unix format
+             * @example 1625247600
+             */
+            timestamp: number;
         };
         Address: {
             /**
@@ -223,52 +432,225 @@ export interface components {
              */
             title?: string;
         };
-        ErrorDetail: {
-            /** @description Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id' */
-            location?: string;
-            /** @description Error message text */
-            message?: string;
-            /** @description The value at the given location */
-            value?: unknown;
-        };
-        ErrorModel: {
+        ErrorResponse: {
             /**
              * Format: uri
              * @description A URL to the JSON Schema for this object.
-             * @example http://localhost:8084/schemas/ErrorModel.json
+             * @example http://localhost:8084/schemas/ErrorResponse.json
              */
             readonly $schema?: string;
             /**
-             * @description A human-readable explanation specific to this occurrence of the problem.
-             * @example Property foo is required but is missing.
+             * @description Error message
+             * @example Internal Server Error
              */
-            detail?: string;
-            /** @description Optional list of individual error details */
-            errors?: components["schemas"]["ErrorDetail"][] | null;
-            /**
-             * Format: uri
-             * @description A URI reference that identifies the specific occurrence of the problem.
-             * @example https://example.com/error-log/abc123
-             */
-            instance?: string;
+            message: string;
             /**
              * Format: int64
              * @description HTTP status code
-             * @example 400
+             * @example 500
              */
-            status?: number;
+            statusCode: number;
             /**
-             * @description A short, human-readable summary of the problem type. This value should not change between occurrences of the error.
-             * @example Bad Request
+             * Format: int64
+             * @description Response timestamp in Unix format
+             * @example 1625247600
              */
-            title?: string;
+            timestamp: number;
+        };
+        FooterNavItemCreateReq: {
             /**
              * Format: uri
-             * @description A URI reference to human-readable documentation for the error.
-             * @default about:blank
-             * @example https://example.com/errors/example
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/FooterNavItemCreateReq.json
              */
-            type: string;
+            readonly $schema?: string;
+            /** @example Contact */
+            link_label: string;
+            /** @example false */
+            link_new_tab?: boolean;
+            /** @example internal */
+            link_type: string;
+            /** @example /contact */
+            link_url: string;
+            /**
+             * Format: int64
+             * @example 1
+             */
+            order: number;
+        };
+        FooterNavItemData: {
+            /** @example d54934ae-0756-4da0-a8e2-e2f2dccb2904 */
+            id: string;
+            /** @example Contact */
+            link_label: string;
+            /** @example false */
+            link_new_tab?: boolean;
+            /** @example internal */
+            link_type: string;
+            /** @example /contact */
+            link_url: string;
+            /**
+             * Format: int64
+             * @example 1
+             */
+            order: number;
+        };
+        FooterNavItemUpdateReq: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/FooterNavItemUpdateReq.json
+             */
+            readonly $schema?: string;
+            /** @example Contact */
+            link_label: string;
+            /** @example false */
+            link_new_tab?: boolean;
+            /** @example internal */
+            link_type: string;
+            /** @example /contact */
+            link_url: string;
+            /**
+             * Format: int64
+             * @example 1
+             */
+            order: number;
+        };
+        HeaderNavItemCreateReq: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/HeaderNavItemCreateReq.json
+             */
+            readonly $schema?: string;
+            /** @example Home */
+            link_label: string;
+            /** @example false */
+            link_new_tab?: boolean;
+            /** @example internal */
+            link_type: string;
+            /** @example / */
+            link_url: string;
+            /**
+             * Format: int64
+             * @example 1
+             */
+            order: number;
+        };
+        HeaderNavItemData: {
+            /** @example 06c1d747-acd7-43b9-b197-e2ccf72b8579 */
+            id: string;
+            /** @example Home */
+            link_label: string;
+            /** @example false */
+            link_new_tab?: boolean;
+            /** @example internal */
+            link_type: string;
+            /** @example / */
+            link_url: string;
+            /**
+             * Format: int64
+             * @example 1
+             */
+            order: number;
+        };
+        HeaderNavItemUpdateReq: {
+            /**
+             * Format: uri
+             * @description A URL to the JSON Schema for this object.
+             * @example http://localhost:8084/schemas/HeaderNavItemUpdateReq.json
+             */
+            readonly $schema?: string;
+            /** @example Home */
+            link_label: string;
+            /** @example false */
+            link_new_tab?: boolean;
+            /** @example internal */
+            link_type: string;
+            /** @example / */
+            link_url: string;
+            /**
+             * Format: int64
+             * @example 1
+             */
+            order: number;
+        };
+        MediaRes: {
+            /** @example An example image */
+            alt?: string;
+            /** @example Photo caption */
+            caption?: string;
+            /**
+             * Format: date-time
+             * @example 2024-01-01T12:00:00Z
+             */
+            created_at: string;
+            /** @example image.jpg */
+            file_name: string;
+            /**
+             * Format: int64
+             * @example 204800
+             */
+            file_size: number;
+            /**
+             * Format: double
+             * @example 0.5
+             */
+            focal_x?: number;
+            /**
+             * Format: double
+             * @example 0.5
+             */
+            focal_y?: number;
+            /** @example folder_1 */
+            folder_id?: string;
+            /**
+             * Format: int64
+             * @example 1080
+             */
+            height?: number;
+            /** @example media_123 */
+            id: string;
+            /** @example image/jpeg */
+            mime_type: string;
+            sizes?: components["schemas"]["MediaSize"][] | null;
+            /** @example https://cdn.example.com/thumb.jpg */
+            thumbnail_url?: string;
+            /**
+             * Format: date-time
+             * @example 2024-01-02T12:00:00Z
+             */
+            updated_at: string;
+            /** @example https://cdn.example.com/image.jpg */
+            url: string;
+            /**
+             * Format: int64
+             * @example 1920
+             */
+            width?: number;
+        };
+        MediaSize: {
+            /**
+             * Format: int64
+             * @example 10240
+             */
+            file_size: number;
+            /**
+             * Format: int64
+             * @example 180
+             */
+            height: number;
+            /** @example image/jpeg */
+            mime_type: string;
+            /** @example https://cdn.example.com/image-thumb.jpg */
+            url: string;
+            /** @example thumbnail */
+            variant: string;
+            /**
+             * Format: int64
+             * @example 320
+             */
+            width: number;
         };
         OperationResult: {
             success: boolean;
@@ -352,7 +734,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };
@@ -385,7 +767,337 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "get-footer-nav-items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response with footer navigation items */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseListFooterNavItemData"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "create-footer-nav-item": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FooterNavItemCreateReq"];
+            };
+        };
+        responses: {
+            /** @description Footer navigation item created successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseOperationResult"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "update-footer-nav-item": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Footer nav item ID
+                 * @example item_123
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FooterNavItemUpdateReq"];
+            };
+        };
+        responses: {
+            /** @description Footer navigation item updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseOperationResult"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "delete-footer-nav-item": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Footer nav item ID
+                 * @example item_123
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Footer navigation item deleted successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseOperationResult"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "get-header-nav-items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response with header navigation items */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseListHeaderNavItemData"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "create-header-nav-item": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HeaderNavItemCreateReq"];
+            };
+        };
+        responses: {
+            /** @description Header navigation item created successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseOperationResult"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "update-header-nav-item": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Header nav item ID
+                 * @example item_123
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HeaderNavItemUpdateReq"];
+            };
+        };
+        responses: {
+            /** @description Header navigation item updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseOperationResult"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "delete-header-nav-item": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /**
+                 * @description Header nav item ID
+                 * @example item_123
+                 */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Header navigation item deleted successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseOperationResult"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "get-media-list": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseListMediaRes"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    "upload-media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["APIResponseOperationResult"];
+                };
+            };
+            /** @description Error */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };
@@ -414,7 +1126,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/problem+json": components["schemas"]["ErrorModel"];
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };

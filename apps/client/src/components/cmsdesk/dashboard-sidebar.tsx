@@ -9,6 +9,8 @@ import {
   LogOut,
   GalleryVerticalEnd,
   ChartGantt,
+  PanelTop,
+  Route,
 } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 
@@ -29,6 +31,16 @@ const sidebarNavItems = [
     href: '/cmsdesk/historical-events',
     icon: ChartGantt,
     label: 'Historical Events',
+  },
+  {
+    href: '/cmsdesk/website',
+    icon: PanelTop,
+    label: 'Website',
+  },
+  {
+    href: '/cmsdesk/nav-menus',
+    icon: Route,
+    label: 'Nav Menus',
   },
 ];
 

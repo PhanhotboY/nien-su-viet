@@ -2,12 +2,12 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/controller/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/model/entity"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/repository"
-	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
 type appService struct {
@@ -24,7 +24,7 @@ func (a *appService) UpdateAppInfo(ctx context.Context, app *dto.AppUpdateReq) e
 		return err
 	}
 	if foundApp == nil {
-		return response.NewNotFoundError("App not found", nil)
+		return fmt.Errorf("App info not found")
 	}
 	err = a.appRepo.UpdateApp(ctx, strconv.Itoa(int(foundApp.AppId)), app.MapToEntity())
 	if err != nil {
