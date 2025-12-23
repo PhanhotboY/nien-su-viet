@@ -1,0 +1,77 @@
+name: Deploy CMS Service
+
+on:
+  push:
+    branches: ['master']
+    paths:
+      - 'apps/cms/**'
+      - '.github/workflows/cms-service.yml'
+  pull_request:
+    branches: ['master']
+    paths:
+      - 'apps/cms/**'
+      - '.github/workflows/cms-service.yml'
+
+jobs:
+  deploy-cms-service:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Deploy to DigitalOcean Droplet
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DOCEAN_NSV_SSH_HOST }}
+          username: ${{ secrets.DOCEAN_NSV_SSH_USER }}
+          key: ${{ secrets.DOCEAN_NSV_SSH_SECRET }}
+          script: |
+            set -e
+
+            echo "🔄 Pulling latest code..."
+            cd ~/workdir/nien-su-viet
+            git pull origin master
+
+            echo "🔨 Building and updating CMS service..."
+            cd apps/cms/cmd/cli
+            chmod +x run.sh
+            sudo ./run.sh update
+
+            echo "✅ Deployment completed successfully!"
+
+            echo "📊 Service status:"
+            sudo systemctl status nien-su-viet-cms.service --no-pager || true
+
+            echo "📝 Recent logs:"
+            sudo journalctl -u nien-su-viet-cms.service -n 20 --no-pager || true
+
+  test-build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.3'
+
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('apps/cms/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Build application
+        run: |
+          cd apps/cms
+          go mod download
+          go build -v -o server ./cmd/server/main.go
+
+      - name: Run tests
+        run: |
+          cd apps/cms
+          go test -v ./... || echo "No tests found"

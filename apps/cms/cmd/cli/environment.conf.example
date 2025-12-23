@@ -1,0 +1,52 @@
+[Service]
+# Application Environment Variables
+# Copy this file to /etc/systemd/system/nien-su-viet-cms.service.d/override.conf
+# and update the values according to your environment
+
+# Application Mode
+Environment="GIN_MODE=release"
+Environment="APP_ENV=production"
+
+# Server Configuration
+Environment="PORT=8080"
+Environment="HOST=0.0.0.0"
+
+# Database Configuration
+Environment="DB_HOST=localhost"
+Environment="DB_PORT=5432"
+Environment="DB_NAME=nien_su_viet"
+Environment="DB_USER=your_db_user"
+Environment="DB_PASSWORD=your_db_password"
+Environment="DB_SSLMODE=require"
+
+# RabbitMQ Configuration
+Environment="RABBITMQ_HOST=localhost"
+Environment="RABBITMQ_PORT=5672"
+Environment="RABBITMQ_USER=your_rabbitmq_user"
+Environment="RABBITMQ_PASSWORD=your_rabbitmq_password"
+Environment="RABBITMQ_VHOST=/"
+
+# Redis Configuration (if used)
+Environment="REDIS_HOST=localhost"
+Environment="REDIS_PORT=6379"
+Environment="REDIS_PASSWORD=your_redis_password"
+Environment="REDIS_DB=0"
+
+# JWT/Auth Configuration
+Environment="JWT_SECRET=your_jwt_secret_key_here"
+Environment="JWT_EXPIRATION=86400"
+
+# CORS Configuration
+Environment="CORS_ORIGINS=https://yourdomain.com"
+
+# Logging
+Environment="LOG_LEVEL=info"
+Environment="LOG_FORMAT=json"
+
+# Other Configuration
+Environment="MAX_UPLOAD_SIZE=10485760"
+Environment="RATE_LIMIT=100"
+
+# After editing, reload systemd and restart the service:
+# sudo systemctl daemon-reload
+# sudo systemctl restart nien-su-viet-cms.service
