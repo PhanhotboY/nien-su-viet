@@ -2,43 +2,76 @@ package dto
 
 import (
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/model/entity"
-	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
-type AppEntity = entity.App // AppEntity is an alias for entity.App for documentation purposes
-// API response wrapper for App information
-type AppInfoResponse struct {
-	response.APIResponse[AppEntity]
+type AppData struct {
+	Title       string       `json:"title,omitempty" binding:"omitempty,min=1,max=255" example:"Nien Su Viet" doc:"Website title"`                                                                 // Website title
+	Description *string      `json:"description,omitempty" binding:"omitempty,max=1000" example:"Vietnam history timeline website" doc:"Website description"`                                      // Website description
+	Logo        *string      `json:"logo,omitempty" binding:"omitempty,url" example:"https://example.com/logo.png" doc:"URL of the website logo"`                                                  // URL of the website logo
+	Social      *SocialLinks `json:"social,omitempty" binding:"omitempty" doc:"Social media links"`                                                                                                // Social media links
+	TaxCode     *string      `json:"tax_code,omitempty" binding:"omitempty,max=50" example:"0123456789" doc:"Tax code of the website owner"`                                                       // Tax code of the website owner
+	Address     *Address     `json:"address,omitempty" binding:"omitempty" doc:"Physical address of the website owner"`                                                                            // Physical address of the website owner
+	Msisdn      *string      `json:"msisdn,omitempty" binding:"omitempty,e164" example:"+84987654321" doc:"Contact phone number (E.164 format)"`                                                   // Contact phone number (E.164 format)
+	Email       *string      `json:"email,omitempty" binding:"omitempty,email" example:"contact@example.com" doc:"Contact email address"`                                                          // Contact email address
+	Map         *string      `json:"map,omitempty" binding:"omitempty,url" example:"https://maps.google.com/?q=location" doc:"Map location URL"`                                                   // Map location URL
+	HeadScripts *string      `json:"head_scripts,omitempty" binding:"omitempty,max=5000" example:"<script>console.log('head');</script>" doc:"Scripts to be included in the head section"`         // Scripts to be included in the head section
+	BodyScripts *string      `json:"body_scripts,omitempty" binding:"omitempty,max=5000" example:"<script>console.log('body');</script>" doc:"Scripts to be included before the closing body tag"` // Scripts to be included before the closing body tag
 }
 
-type AppUpdateDto struct {
-	Title       string       `json:"title,omitempty" binding:"omitempty,min=1,max=255" example:"Nien Su Viet"`                            // Website title
-	Description *string      `json:"description,omitempty" binding:"omitempty,max=1000" example:"Vietnam history timeline website"`       // Website description
-	Logo        *string      `json:"logo,omitempty" binding:"omitempty,url" example:"https://example.com/logo.png"`                       // URL of the website logo
-	Social      *SocialLinks `json:"social,omitempty" binding:"omitempty"`                                                                // Social media links
-	TaxCode     *string      `json:"tax_code,omitempty" binding:"omitempty,max=50" example:"0123456789"`                                  // Tax code of the website owner
-	Address     *Address     `json:"address,omitempty" binding:"omitempty"`                                                               // Physical address of the website owner
-	Msisdn      *string      `json:"msisdn,omitempty" binding:"omitempty,e164" example:"+84987654321"`                                    // Contact phone number (E.164 format)
-	Email       *string      `json:"email,omitempty" binding:"omitempty,email" example:"contact@example.com"`                             // Contact email address
-	Map         *string      `json:"map,omitempty" binding:"omitempty,url" example:"https://maps.google.com/?q=location"`                 // Map location URL
-	HeadScripts *string      `json:"head_scripts,omitempty" binding:"omitempty,max=5000" example:"<script>console.log('head');</script>"` // Scripts to be included in the head section
-	BodyScripts *string      `json:"body_scripts,omitempty" binding:"omitempty,max=5000" example:"<script>console.log('body');</script>"` // Scripts to be included before the closing body tag
+func (dto *AppData) FromEntity(entity *entity.App) {
+	if dto == nil || entity == nil {
+		return
+	}
+	dto.Title = entity.Title
+	dto.Description = entity.Description
+	dto.Logo = entity.Logo
+	dto.Social = &SocialLinks{
+		Facebook: entity.Social.Facebook,
+		Youtube:  entity.Social.Youtube,
+		Tiktok:   entity.Social.Tiktok,
+		Zalo:     entity.Social.Zalo,
+	}
+	dto.TaxCode = entity.TaxCode
+	dto.Address = &Address{
+		Province: entity.Address.Province,
+		District: entity.Address.District,
+		Street:   entity.Address.Street,
+	}
+	dto.Msisdn = entity.Msisdn
+	dto.Email = entity.Email
+	dto.Map = entity.Map
+	dto.HeadScripts = entity.HeadScripts
+	dto.BodyScripts = entity.BodyScripts
+}
+
+type AppUpdateReq struct {
+	Title       string       `json:"title,omitempty" binding:"omitempty,min=1,max=255" example:"Nien Su Viet" doc:"Website title"`                                                                 // Website title
+	Description *string      `json:"description,omitempty" binding:"omitempty,max=1000" example:"Vietnam history timeline website" doc:"Website description"`                                      // Website description
+	Logo        *string      `json:"logo,omitempty" binding:"omitempty,url" example:"https://example.com/logo.png" doc:"URL of the website logo"`                                                  // URL of the website logo
+	Social      *SocialLinks `json:"social,omitempty" binding:"omitempty" doc:"Social media links"`                                                                                                // Social media links
+	TaxCode     *string      `json:"tax_code,omitempty" binding:"omitempty,max=50" example:"0123456789" doc:"Tax code of the website owner"`                                                       // Tax code of the website owner
+	Address     *Address     `json:"address,omitempty" binding:"omitempty" doc:"Physical address of the website owner"`                                                                            // Physical address of the website owner
+	Msisdn      *string      `json:"msisdn,omitempty" binding:"omitempty,e164" example:"+84987654321" doc:"Contact phone number (E.164 format)"`                                                   // Contact phone number (E.164 format)
+	Email       *string      `json:"email,omitempty" binding:"omitempty,email" example:"contact@example.com" doc:"Contact email address"`                                                          // Contact email address
+	Map         *string      `json:"map,omitempty" binding:"omitempty,url" example:"https://maps.google.com/?q=location" doc:"Map location URL"`                                                   // Map location URL
+	HeadScripts *string      `json:"head_scripts,omitempty" binding:"omitempty,max=5000" example:"<script>console.log('head');</script>" doc:"Scripts to be included in the head section"`         // Scripts to be included in the head section
+	BodyScripts *string      `json:"body_scripts,omitempty" binding:"omitempty,max=5000" example:"<script>console.log('body');</script>" doc:"Scripts to be included before the closing body tag"` // Scripts to be included before the closing body tag
 }
 
 type SocialLinks struct {
-	Facebook *string `json:"facebook,omitempty" binding:"omitempty,url" example:"https://facebook.com/example"` // Facebook page URL
-	Youtube  *string `json:"youtube,omitempty" binding:"omitempty,url" example:"https://youtube.com/@example"`  // YouTube channel URL
-	Tiktok   *string `json:"tiktok,omitempty" binding:"omitempty,url" example:"https://tiktok.com/@example"`    // TikTok profile URL
-	Zalo     *string `json:"zalo,omitempty" binding:"omitempty,url" example:"https://zalo.me/example"`          // Zalo profile URL
+	Facebook *string `json:"facebook,omitempty" binding:"omitempty,url" example:"https://facebook.com/example" doc:"Facebook page URL"`
+	Youtube  *string `json:"youtube,omitempty" binding:"omitempty,url" example:"https://youtube.com/@example" doc:"YouTube channel URL"`
+	Tiktok   *string `json:"tiktok,omitempty" binding:"omitempty,url" example:"https://tiktok.com/@example" doc:"TikTok profile URL"`
+	Zalo     *string `json:"zalo,omitempty" binding:"omitempty,url" example:"https://zalo.me/example" doc:"Zalo profile URL"`
 }
 
 type Address struct {
-	Province *string `json:"province,omitempty" binding:"omitempty,max=100" example:"Ho Chi Minh City"`  // Province name
-	District *string `json:"district,omitempty" binding:"omitempty,max=100" example:"District 1"`        // District name
-	Street   *string `json:"street,omitempty" binding:"omitempty,max=255" example:"123 Nguyen Hue Blvd"` // Street address
+	Province *string `json:"province,omitempty" binding:"omitempty,max=100" example:"Ho Chi Minh City" doc:"Province name"`
+	District *string `json:"district,omitempty" binding:"omitempty,max=100" example:"District 1" doc:"District name"`
+	Street   *string `json:"street,omitempty" binding:"omitempty,max=255" example:"123 Nguyen Hue Blvd" doc:"Street address"`
 }
 
-func (dto *AppUpdateDto) MapToEntity() *entity.App {
+func (dto *AppUpdateReq) MapToEntity() *entity.App {
 	if dto == nil {
 		return nil
 	}

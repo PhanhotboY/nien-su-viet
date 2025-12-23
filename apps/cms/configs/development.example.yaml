@@ -12,5 +12,5 @@ rmq:
   dsn: amqp://nsv_rmq_user:secure_password@localhost:5672/
   queue_name: cms_service
 security:
-  jwt:
-    secret: 6f96125...
+  auth_cookie_prefix: nsv-auth
+  better_auth_secret: ZaijXVU...

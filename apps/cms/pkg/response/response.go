@@ -1,57 +1,62 @@
 package response
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"context"
+	"time"
 )
 
 // StandardRes response format
 type APIResponse[T any] struct {
-	Code    int         `json:"code"`            // HTTP status code
-	Message string      `json:"message"`         // Message
-	Data    T           `json:"data,omitempty"`  // data return null not show
-	Error   interface{} `json:"error,omitempty"` // Error return null not show
+	Code      int    `json:"statusCode" example:"200" doc:"HTTP status code"`                        // HTTP status code
+	Message   string `json:"message" example:"success" doc:"Response message"`                       // Message
+	Data      T      `json:"data" doc:"Response data"`                                               // data return null not show
+	Timestamp int64  `json:"timestamp" example:"1625247600" doc:"Response timestamp in Unix format"` // Response timestamp
+}
+
+type APIBodyResponse[T any] struct {
+	Status int `json:"-" doc:"HTTP status code"` // HTTP status code
+	Body   APIResponse[T]
 }
 
 type OperationResult struct {
 	Success bool `json:"success"` // Indicates if the operation was successful
 }
 
-// API response for operations that return success status
-type APIOperationResponse struct {
-	APIResponse[OperationResult]
+func SuccessResponse[T any](code int, data T) *APIBodyResponse[T] {
+	return &APIBodyResponse[T]{
+		Status: code,
+		Body: APIResponse[T]{
+			Code:    code,
+			Message: "success",
+			Data:    data,
+		},
+	}
 }
 
-func SuccessResponse[T any](c *gin.Context, data T) {
-	c.JSON(200, APIResponse[T]{
-		Code:    200,
-		Message: "success",
-		Data:    data,
-	})
+func OperationSuccessResponse(code int) *APIBodyResponse[OperationResult] {
+	return SuccessResponse(code, OperationResult{Success: true})
 }
 
-func ErrorResponse(c *gin.Context, code int, message string, err interface{}) {
-	c.JSON(code, APIResponse[any]{
-		Code:    code,
-		Message: message,
-		Error:   err,
-	})
+func ErrorResponse[T any](code int, message string, err interface{}) *APIBodyResponse[T] {
+	return &APIBodyResponse[T]{
+		Status: code,
+		Body: APIResponse[T]{
+			Code:    code,
+			Message: message,
+		},
+	}
 }
 
-type HandlerFunc[T any] func(ctx *gin.Context) (res T, err error)
+type HandlerFunc[T any, R any] func(context.Context, *T) (*APIBodyResponse[R], error)
 
-func Wrap[T any](handler HandlerFunc[T]) func(c *gin.Context) {
-	return func(ctx *gin.Context) {
-		res, err := handler(ctx)
+func Wrap[T any, R any](handler HandlerFunc[T, R]) func(context.Context, *T) (*APIBodyResponse[R], error) {
+	return func(ctx context.Context, input *T) (*APIBodyResponse[R], error) {
+		res, err := handler(ctx, input)
 		if err != nil {
-			if apiErr, ok := err.(*APIError); ok {
-				ErrorResponse(ctx, apiErr.Code, apiErr.Message, apiErr.Err)
-			} else {
-				ErrorResponse(ctx, http.StatusInternalServerError, "Internal Server Error", err)
-			}
-			return
+			return nil, err
 		}
-		SuccessResponse(ctx, res)
+
+		res.Body.Timestamp = time.Now().Unix()
+		return res, nil
 	}
 }

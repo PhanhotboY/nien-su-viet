@@ -78,7 +78,7 @@ async function getUsers(
 }
 
 async function createUser(
-  userData: operations['createUser']['requestBody']['content']['application/json'],
+  userData: operations['post__admin_create_user']['requestBody']['content']['application/json'],
 ) {
   const reqHeaders = new Headers(await headers());
   // Foward headers from client with different payload

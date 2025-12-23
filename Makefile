@@ -19,8 +19,8 @@ gen-types: clean-types $(TS_OUTPUTS)
 # Rule: convert one .json → one .ts
 $(OUTPUT_DIR)/%.ts: $(OPENAPI_DIR)/%.json
 	@echo "Generating types for $< → $@"
-	@openapi-down-convert --input $< --output $@
-	@npx openapi-typescript $< -o $@
+	# @bunx @aopture/openapi-down-convert --input $< --output $@
+	@bunx -y openapi-typescript $< -o $@
 
 # Clean generated files
 clean-types:

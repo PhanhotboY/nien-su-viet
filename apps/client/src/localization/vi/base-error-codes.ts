@@ -1,0 +1,27 @@
+export const BASE_ERROR_CODES = {
+    USER_NOT_FOUND: "Không tìm thấy người dùng",
+    FAILED_TO_CREATE_USER: "Không thể tạo người dùng",
+    FAILED_TO_CREATE_SESSION: "Không thể tạo phiên",
+    FAILED_TO_UPDATE_USER: "Không thể cập nhật người dùng",
+    FAILED_TO_GET_SESSION: "Không thể lấy phiên",
+    INVALID_PASSWORD: "Mật khẩu không hợp lệ",
+    INVALID_EMAIL: "Email không hợp lệ",
+    INVALID_EMAIL_OR_PASSWORD: "Email hoặc mật khẩu không hợp lệ",
+    SOCIAL_ACCOUNT_ALREADY_LINKED: "Tài khoản mạng xã hội đã được liên kết",
+    PROVIDER_NOT_FOUND: "Không tìm thấy nhà cung cấp",
+    INVALID_TOKEN: "Token không hợp lệ",
+    ID_TOKEN_NOT_SUPPORTED: "id_token không được hỗ trợ",
+    FAILED_TO_GET_USER_INFO: "Không thể lấy thông tin người dùng",
+    USER_EMAIL_NOT_FOUND: "Không tìm thấy email người dùng",
+    EMAIL_NOT_VERIFIED: "Email chưa được xác minh",
+    PASSWORD_TOO_SHORT: "Mật khẩu quá ngắn",
+    PASSWORD_TOO_LONG: "Mật khẩu quá dài",
+    USER_ALREADY_EXISTS: "Người dùng đã tồn tại",
+    EMAIL_CAN_NOT_BE_UPDATED: "Email không thể được cập nhật",
+    CREDENTIAL_ACCOUNT_NOT_FOUND: "Không tìm thấy tài khoản thông tin đăng nhập",
+    SESSION_EXPIRED: "Phiên đã hết hạn. Xác thực lại để thực hiện hành động này.",
+    FAILED_TO_UNLINK_LAST_ACCOUNT: "Bạn không thể hủy liên kết tài khoản cuối cùng của mình",
+    ACCOUNT_NOT_FOUND: "Không tìm thấy tài khoản",
+    USER_ALREADY_HAS_PASSWORD:
+        "Người dùng đã có mật khẩu. Cung cấp mật khẩu đó để xóa tài khoản."
+}

@@ -1,17 +1,36 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
+	"context"
+	"net/http"
+
 	"github.com/go-playground/validator"
 )
 
-func ValidatorMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		validate := validator.New()
+type contextKey string
 
-		// set the middleware
-		c.Set("validation", validate) // context
+const validatorKey contextKey = "validator"
 
-		c.Next()
+func ValidatorMiddleware() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			validate := validator.New()
+
+			// set the middleware in context
+			ctx := context.WithValue(r.Context(), validatorKey, validate)
+			r = r.WithContext(ctx)
+
+			next.ServeHTTP(w, r)
+		})
 	}
+}
+
+// GetValidator retrieves the validator from the request context
+func GetValidator(r *http.Request) *validator.Validate {
+	if val := r.Context().Value(validatorKey); val != nil {
+		if v, ok := val.(*validator.Validate); ok {
+			return v
+		}
+	}
+	return nil
 }

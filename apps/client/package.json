@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "rm -rf .next && next build",
+    "build": "(cd ../../ && make gen-types) && rm -rf .next && next build",
     "start": "next start",
     "lint": "eslint",
     "shadcn:add": "bunx --bun shadcn@latest add"

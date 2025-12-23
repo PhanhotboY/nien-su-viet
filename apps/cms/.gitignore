@@ -1,5 +1,7 @@
 configs/*.local.yaml
 bin
 docs
+uploads
+pkg/generated
 
 __debug*
