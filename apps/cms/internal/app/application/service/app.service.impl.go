@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/controller/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/model/entity"
@@ -39,7 +40,7 @@ func (a *appService) GetAppInfo(ctx context.Context) (*entity.App, error) {
 		return app, nil
 	}
 
-	if err != nil && err.Error() == "record not found" {
+	if err != nil && strings.Contains(err.Error(), "not found") {
 		// Create default app info
 		err = a.appRepo.CreateApp(ctx, &entity.App{
 			Title: "Nien Su Viet",
@@ -47,7 +48,10 @@ func (a *appService) GetAppInfo(ctx context.Context) (*entity.App, error) {
 		if err != nil {
 			return nil, err
 		}
-		return a.appRepo.GetAppInfo(ctx)
+		app, err = a.appRepo.GetAppInfo(ctx)
+		if app != nil {
+			return app, nil
+		}
 	}
 
 	return nil, err

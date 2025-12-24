@@ -7,7 +7,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/APIResponseAppData.json"
+              "https://cms-service.phannd.me:8084/schemas/APIResponseAppData.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -55,7 +55,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/APIResponseListFooterNavItemData.json"
+              "https://cms-service.phannd.me:8084/schemas/APIResponseListFooterNavItemData.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -109,7 +109,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/APIResponseListHeaderNavItemData.json"
+              "https://cms-service.phannd.me:8084/schemas/APIResponseListHeaderNavItemData.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -163,7 +163,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/APIResponseListMediaRes.json"
+              "https://cms-service.phannd.me:8084/schemas/APIResponseListMediaRes.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -217,7 +217,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/APIResponseOperationResult.json"
+              "https://cms-service.phannd.me:8084/schemas/APIResponseOperationResult.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -369,7 +369,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/AppUpdateReq.json"
+              "https://cms-service.phannd.me:8084/schemas/AppUpdateReq.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -455,7 +455,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/ErrorResponse.json"
+              "https://cms-service.phannd.me:8084/schemas/ErrorResponse.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -498,7 +498,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/FooterNavItemCreateReq.json"
+              "https://cms-service.phannd.me:8084/schemas/FooterNavItemCreateReq.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -600,7 +600,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/FooterNavItemUpdateReq.json"
+              "https://cms-service.phannd.me:8084/schemas/FooterNavItemUpdateReq.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -652,7 +652,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/HeaderNavItemCreateReq.json"
+              "https://cms-service.phannd.me:8084/schemas/HeaderNavItemCreateReq.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -754,7 +754,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/HeaderNavItemUpdateReq.json"
+              "https://cms-service.phannd.me:8084/schemas/HeaderNavItemUpdateReq.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -992,7 +992,7 @@
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "http://localhost:8084/schemas/PingOutputBody.json"
+              "https://cms-service.phannd.me:8084/schemas/PingOutputBody.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -1602,7 +1602,7 @@
   "servers": [
     {
       "description": "Local development server",
-      "url": "http://localhost:8084"
+      "url": "https://cms-service.phannd.me:8084"
     }
   ]
 }

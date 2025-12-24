@@ -22,21 +22,27 @@ func (dto *AppData) FromEntity(entity *entity.App) {
 	if dto == nil || entity == nil {
 		return
 	}
+
+	social := &SocialLinks{}
+	if entity.Social != nil {
+		social.Facebook = entity.Social.Facebook
+		social.Youtube = entity.Social.Youtube
+		social.Tiktok = entity.Social.Tiktok
+		social.Zalo = entity.Social.Zalo
+	}
+	address := &Address{}
+	if entity.Address != nil {
+		address.Province = entity.Address.Province
+		address.District = entity.Address.District
+		address.Street = entity.Address.Street
+	}
+
 	dto.Title = entity.Title
 	dto.Description = entity.Description
 	dto.Logo = entity.Logo
-	dto.Social = &SocialLinks{
-		Facebook: entity.Social.Facebook,
-		Youtube:  entity.Social.Youtube,
-		Tiktok:   entity.Social.Tiktok,
-		Zalo:     entity.Social.Zalo,
-	}
+	dto.Social = social
 	dto.TaxCode = entity.TaxCode
-	dto.Address = &Address{
-		Province: entity.Address.Province,
-		District: entity.Address.District,
-		Street:   entity.Address.Street,
-	}
+	dto.Address = address
 	dto.Msisdn = entity.Msisdn
 	dto.Email = entity.Email
 	dto.Map = entity.Map

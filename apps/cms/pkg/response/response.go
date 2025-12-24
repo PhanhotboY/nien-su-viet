@@ -3,6 +3,8 @@ package response
 import (
 	"context"
 	"time"
+
+	"github.com/danielgtaylor/huma/v2"
 )
 
 // StandardRes response format
@@ -37,14 +39,8 @@ func OperationSuccessResponse(code int) *APIBodyResponse[OperationResult] {
 	return SuccessResponse(code, OperationResult{Success: true})
 }
 
-func ErrorResponse[T any](code int, message string, err interface{}) *APIBodyResponse[T] {
-	return &APIBodyResponse[T]{
-		Status: code,
-		Body: APIResponse[T]{
-			Code:    code,
-			Message: message,
-		},
-	}
+func NewError(code int, message string) huma.StatusError {
+	return huma.NewError(code, message)
 }
 
 type HandlerFunc[T any, R any] func(context.Context, *T) (*APIBodyResponse[R], error)
@@ -53,7 +49,10 @@ func Wrap[T any, R any](handler HandlerFunc[T, R]) func(context.Context, *T) (*A
 	return func(ctx context.Context, input *T) (*APIBodyResponse[R], error) {
 		res, err := handler(ctx, input)
 		if err != nil {
-			return nil, err
+			if _, ok := err.(huma.StatusError); ok {
+				return nil, err
+			}
+			return nil, huma.NewError(500, "Internal server error: "+err.Error())
 		}
 
 		res.Body.Timestamp = time.Now().Unix()

@@ -52,8 +52,8 @@ func InitRouter(db *gorm.DB, isLogger string) http.Handler {
 
 	// Middlewares
 	if isLogger == "debug" {
-		r.Use(middleware.Logger)
 	}
+	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RedirectSlashes)
 	r.Use(customMiddleware.CORS)
@@ -70,7 +70,7 @@ func InitRouter(db *gorm.DB, isLogger string) http.Handler {
 		Email: "support@phannd.me",
 	}
 	config.Servers = []*huma.Server{
-		{URL: "http://localhost:" + strconv.Itoa(global.Config.Server.Port), Description: "Local development server"},
+		{URL: global.Config.Server.Host + ":" + strconv.Itoa(global.Config.Server.Port), Description: "Local development server"},
 	}
 
 	// Create Huma API with Chi adapter

@@ -7,6 +7,12 @@ migrate-%:
 setup-%:
 	bun --cwd apps/$* setup/index.ts
 
+dbuild-%:
+	docker build -f local/$*-service/Dockerfile -t phanhotboy/nsv-$*-service:v1 .
+
+dpush-%:
+	docker push phanhotboy/nsv-$*-service:v1
+
 OPENAPI_DIR = openapi
 OUTPUT_DIR = libs/nsv-interfaces
 

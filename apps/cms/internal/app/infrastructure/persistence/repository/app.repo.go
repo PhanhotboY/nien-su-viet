@@ -28,7 +28,7 @@ func (ar *appRepository) UpdateApp(ctx context.Context, appId string, app *entit
 
 func (ar *appRepository) GetAppInfo(ctx context.Context) (*entity.App, error) {
 	var app entity.App
-	result := ar.db.WithContext(ctx).Model(&entity.App{}).First(&app)
+	result := ar.db.WithContext(ctx).Model(&entity.App{}).Last(&app)
 	if result.Error != nil {
 		return nil, fmt.Errorf("failed to fetch app info: %w", result.Error)
 	}
