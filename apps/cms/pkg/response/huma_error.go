@@ -1,6 +1,7 @@
 package response
 
 import (
+	"strings"
 	"time"
 
 	"github.com/danielgtaylor/huma/v2"
@@ -27,7 +28,7 @@ func SerializeError(status int, message string, errs ...error) huma.StatusError 
 	}
 	return &errorResponse{
 		Code:      status,
-		Message:   message,
+		Message:   message + ": " + strings.Trim(strings.Join(details, "; "), " "),
 		Timestamp: time.Now().Unix(),
 	}
 }

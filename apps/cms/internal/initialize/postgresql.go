@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"gorm.io/driver/postgres"
@@ -33,7 +34,10 @@ func InitPostgreSQL() (*gorm.DB, error) {
 	)
 
 	var err error
-	global.PostgresDB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+	global.PostgresDB, err = gorm.Open(postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
+	}), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 		},
@@ -51,12 +55,21 @@ func InitPostgreSQL() (*gorm.DB, error) {
 	sqlDB.SetMaxIdleConns(10)
 	sqlDB.SetMaxOpenConns(100)
 	sqlDB.SetConnMaxLifetime(time.Hour)
+	sqlDB.SetConnMaxIdleTime(10 * time.Minute)
 
-	// Auto migrate tables
+	// Safe auto migration - will only modify schema if needed
 	if err := global.PostgresDB.AutoMigrate(
-		&appEntity.App{}, &mediaEntity.Media{}, &headerNavItemEntity.HeaderNavItem{}, &footerNavItemEntity.FooterNavItem{},
+		&appEntity.App{}, &mediaEntity.Media{},
+		&headerNavItemEntity.HeaderNavItem{}, &footerNavItemEntity.FooterNavItem{},
 	); err != nil {
-		return nil, fmt.Errorf("failed to auto migrate: %w", err)
+		// Check if error is about existing relations
+		if strings.Contains(err.Error(), "already exists") {
+			fmt.Println("Database tables already exist, skipping migration")
+		} else {
+			return nil, fmt.Errorf("failed to auto migrate: %w", err)
+		}
+	} else {
+		fmt.Println("Database migrations completed successfully!")
 	}
 
 	fmt.Println("Database connection established successfully!")

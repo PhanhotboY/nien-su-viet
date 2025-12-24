@@ -1,0 +1,36 @@
+services:
+  nsv-rmq:
+    image: rabbitmq:4-management-alpine
+    container_name: nsv-rmq
+    environment:
+      RABBITMQ_DEFAULT_USER: nsv_rmq_user
+      RABBITMQ_DEFAULT_PASS: /run/secrets/rmq-password
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - nsv-rmq-data:/var/lib/rabbitmq
+  nsv-rdb:
+    image: redis:alpine
+    container_name: nsv-rdb
+    ports:
+      - '6379:6379'
+    volumes:
+      - nsv-rdb-data:/data
+  auth-service:
+    # image: phanhotboy/nsv-auth-service:v1
+    depends_on:
+      - nsv-rmq
+      - nsv-rdb
+    build:
+      context: ..
+      dockerfile: ./local/auth-service/Dockerfile
+    container_name: nsv-auth-service
+    env_file:
+      - ./auth-service/.env.local
+    ports:
+      - '8001:8001'
+
+volumes:
+  nsv-rmq-data:
+  nsv-rdb-data:
