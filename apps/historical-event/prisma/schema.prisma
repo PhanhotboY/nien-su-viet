@@ -14,41 +14,48 @@ datasource db {
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String
-  image         String?
-  role          String?
+  id    String  @id
+  name  String
+  email String
+  image String?
+  role  String?
 
-  createdEvents         HistoricalEvent[]
-  editedEvents          EventEdit[]
+  createdEvents HistoricalEvent[]
+  editedEvents  EventEdit[]
 
   @@unique([email])
 }
 
+enum EVENT_DATE_TYPE {
+  EXACT
+  APPROXIMATE
+}
+
 model HistoricalEvent {
-  id          String  @id @db.Uuid @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
 
-  fromYear    Int     @db.SmallInt
-  fromMonth   Int?    @db.SmallInt
-  fromDay     Int?    @db.SmallInt 
+  fromDateType EVENT_DATE_TYPE @default(EXACT)
+  fromYear     Int             @db.SmallInt
+  fromMonth    Int?            @db.SmallInt
+  fromDay      Int?            @db.SmallInt
 
-  toYear      Int?    @db.SmallInt
-  toMonth     Int?    @db.SmallInt
-  toDay       Int?    @db.SmallInt
+  toDateType EVENT_DATE_TYPE @default(EXACT)
+  toYear     Int?            @db.SmallInt
+  toMonth    Int?            @db.SmallInt
+  toDay      Int?            @db.SmallInt
 
-  name        String    @db.VarChar(255)
-  content     String    @db.Text
-  thumbnailId String?   @db.Uuid
+  name        String  @db.VarChar(255)
+  content     String  @db.Text
+  thumbnailId String? @db.Uuid
   authorId    String
-  
-  editors     EventEdit[]
-  thumbnail   Image? @relation(fields: [thumbnailId], references: [id], onDelete: SetNull)
-  author      User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  categories  EventCategories[]
-  
-  createdAt   DateTime    @default(now()) @db.Timestamp(6)
-  updatedAt   DateTime    @updatedAt @db.Timestamp(6)
+
+  editors    EventEdit[]
+  thumbnail  Image?            @relation(fields: [thumbnailId], references: [id], onDelete: SetNull)
+  author     User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  categories EventCategories[]
+
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
 
   @@index([fromYear], name: "idx_event_from_year")
   @@index([fromMonth], name: "idx_event_from_month")
@@ -59,25 +66,25 @@ model HistoricalEvent {
 }
 
 model EventCategory {
-  id          String  @id @db.Uuid @default(uuid())
+  id          String  @id @default(uuid()) @db.Uuid
   name        String  @unique @db.VarChar(255)
-  slug        String  @unique @db.VarChar(255) 
+  slug        String  @unique @db.VarChar(255)
   description String? @db.Text
 
-  events      EventCategories[] 
+  events EventCategories[]
 
-  createdAt   DateTime    @default(now()) @db.Timestamp(6)
-  updatedAt   DateTime    @updatedAt      @db.Timestamp(6)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
 
   @@index([slug], name: "idx_event_category_slug")
 }
 
 model EventCategories {
-  eventId     String  @db.Uuid
-  categoryId  String  @db.Uuid
+  eventId    String @db.Uuid
+  categoryId String @db.Uuid
 
-  event       HistoricalEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  category    EventCategory   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  event    HistoricalEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  category EventCategory   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@id([eventId, categoryId])
   @@index([categoryId], name: "idx_categories_by_category")
@@ -85,56 +92,56 @@ model EventCategories {
 }
 
 model EventEdit {
-  id        String    @id @db.Uuid @default(uuid())
-  eventId   String    @db.Uuid
-  editorId  String   
-  editedAt  DateTime  @default(now()) @db.Timestamp(6)
+  id       String   @id @default(uuid()) @db.Uuid
+  eventId  String   @db.Uuid
+  editorId String
+  editedAt DateTime @default(now()) @db.Timestamp(6)
 
   prevContent String? @db.Text
   newContent  String? @db.Text
-  
-  prevFromYear  Int   @db.SmallInt
-  prevFromMonth Int?  @db.SmallInt
-  prevFromDay   Int?  @db.SmallInt
-  prevToYear    Int?  @db.SmallInt
-  prevToMonth   Int?  @db.SmallInt
-  prevToDay     Int?  @db.SmallInt
-  
-  newFromYear   Int?  @db.SmallInt
-  newFromMonth  Int?  @db.SmallInt
-  newFromDay    Int?  @db.SmallInt
-  newToYear     Int?  @db.SmallInt
-  newToMonth    Int?  @db.SmallInt
-  newToDay      Int?  @db.SmallInt
 
-  event     HistoricalEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  editor    User            @relation(fields: [editorId], references: [id], onDelete: Cascade)
+  prevFromYear  Int  @db.SmallInt
+  prevFromMonth Int? @db.SmallInt
+  prevFromDay   Int? @db.SmallInt
+  prevToYear    Int? @db.SmallInt
+  prevToMonth   Int? @db.SmallInt
+  prevToDay     Int? @db.SmallInt
+
+  newFromYear  Int? @db.SmallInt
+  newFromMonth Int? @db.SmallInt
+  newFromDay   Int? @db.SmallInt
+  newToYear    Int? @db.SmallInt
+  newToMonth   Int? @db.SmallInt
+  newToDay     Int? @db.SmallInt
+
+  event  HistoricalEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  editor User            @relation(fields: [editorId], references: [id], onDelete: Cascade)
 
   @@index([eventId], name: "idx_edit_event")
   @@index([editorId], name: "idx_edit_editor")
 }
 
 model EventPeriod {
-  id          String @id @db.Uuid @default(uuid())
+  id String @id @default(uuid()) @db.Uuid
 
-  fromYear    Int   @db.SmallInt
-  fromMonth   Int?  @db.SmallInt
-  fromDay     Int?  @db.SmallInt 
+  fromYear  Int  @db.SmallInt
+  fromMonth Int? @db.SmallInt
+  fromDay   Int? @db.SmallInt
 
-  toYear      Int   @db.SmallInt
-  toMonth     Int?  @db.SmallInt
-  toDay       Int?  @db.SmallInt
+  toYear  Int  @db.SmallInt
+  toMonth Int? @db.SmallInt
+  toDay   Int? @db.SmallInt
 
   name        String  @unique @db.VarChar(255)
-  slug        String  @unique @db.VarChar(255) 
+  slug        String  @unique @db.VarChar(255)
   description String? @db.Text
 }
 
 model Image {
-  id          String  @id @db.Uuid @default(uuid())
+  id          String  @id @default(uuid()) @db.Uuid
   caption     String? @db.Text
   description String? @db.Text
   publicUrl   String  @db.VarChar(255) // actual image url
 
-  events      HistoricalEvent[]
+  events HistoricalEvent[]
 }

@@ -418,6 +418,13 @@
             "type": "string",
             "minLength": 1
           },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
           "fromDay": {
             "type": "number",
             "nullable": true,
@@ -432,6 +439,13 @@
           },
           "fromYear": {
             "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
           },
           "toDay": {
             "type": "number",
@@ -456,7 +470,9 @@
           "author",
           "id",
           "name",
-          "fromYear"
+          "fromDateType",
+          "fromYear",
+          "toDateType"
         ]
       },
       "HistoricalEventDetailResponseDto": {
@@ -473,6 +489,13 @@
             "type": "string",
             "minLength": 1
           },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
           "fromDay": {
             "type": "number",
             "nullable": true,
@@ -487,6 +510,13 @@
           },
           "fromYear": {
             "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
           },
           "toDay": {
             "type": "number",
@@ -526,7 +556,9 @@
           "content",
           "id",
           "name",
+          "fromDateType",
           "fromYear",
+          "toDateType",
           "author",
           "categories"
         ]
@@ -546,6 +578,13 @@
             "type": "string",
             "format": "uuid"
           },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
           "fromDay": {
             "type": "number",
             "nullable": true,
@@ -560,6 +599,13 @@
           },
           "fromYear": {
             "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
           },
           "toDay": {
             "type": "number",
@@ -584,7 +630,9 @@
         },
         "required": [
           "name",
+          "fromDateType",
           "fromYear",
+          "toDateType",
           "content"
         ]
       },
@@ -598,6 +646,13 @@
           "thumbnailId": {
             "type": "string",
             "format": "uuid"
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
           },
           "fromDay": {
             "type": "number",
@@ -613,6 +668,13 @@
           },
           "fromYear": {
             "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
           },
           "toDay": {
             "type": "number",
@@ -984,6 +1046,13 @@
             "type": "string",
             "format": "uuid"
           },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
           "fromDay": {
             "type": "number",
             "nullable": true,
@@ -998,6 +1067,13 @@
           },
           "fromYear": {
             "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
           },
           "toDay": {
             "type": "number",
@@ -1033,7 +1109,9 @@
         "required": [
           "id",
           "name",
+          "fromDateType",
           "fromYear",
+          "toDateType",
           "content",
           "authorId",
           "createdAt",
@@ -1160,6 +1238,13 @@
             "type": "string",
             "minLength": 1
           },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
           "fromDay": {
             "type": "number",
             "nullable": true,
@@ -1174,6 +1259,13 @@
           },
           "fromYear": {
             "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
           },
           "toDay": {
             "type": "number",
@@ -1196,7 +1288,9 @@
           "author",
           "id",
           "name",
-          "fromYear"
+          "fromDateType",
+          "fromYear",
+          "toDateType"
         ]
       },
       "PaginationMetaDto": {

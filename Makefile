@@ -4,6 +4,9 @@ exec-%:
 migrate-%:
 	bun --cwd apps/$* prisma migrate dev
 
+generate-%:
+		bun --cwd apps/$* prisma generate
+
 setup-%:
 	bun --cwd apps/$* setup/index.ts
 

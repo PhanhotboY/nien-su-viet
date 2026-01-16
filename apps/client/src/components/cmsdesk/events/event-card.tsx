@@ -48,12 +48,14 @@ export function EventCard({ event, onDelete }: EventCardProps) {
           <Calendar className="h-4 w-4" />
           <span>
             {formatHistoricalEventDate(
+              event.fromDateType,
               event.fromYear,
               event.fromMonth,
               event.fromDay,
             )}
             {' - '}
             {formatHistoricalEventDate(
+              event.toDateType,
               event.toYear,
               event.toMonth,
               event.toDay,

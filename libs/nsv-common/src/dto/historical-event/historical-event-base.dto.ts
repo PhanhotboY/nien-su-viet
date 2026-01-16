@@ -1,3 +1,4 @@
+import { HISTORICAL_EVENT } from '@phanhotboy/nsv-common/constants';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import {
   IsString,
@@ -8,6 +9,8 @@ import {
   Min,
   Max,
   MinLength,
+  IsEnum,
+  IsIn,
 } from 'class-validator';
 
 // DTO for creating historical event
@@ -30,6 +33,13 @@ export class HistoricalEventBaseDto {
   thumbnailId?: string;
 
   @Expose()
+  @IsString({ message: 'Loại ngày bắt đầu không hợp lệ.' })
+  @IsIn(Object.values(HISTORICAL_EVENT.EVENT_DATE_TYPE), {
+    message: 'Loại ngày bắt đầu không hợp lệ.',
+  })
+  fromDateType!: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>;
+
+  @Expose()
   @IsOptional()
   @IsInt({ message: 'Ngày bắt đầu không hợp lệ' })
   @Min(1, { message: 'Ngày bắt đầu không hợp lệ' })
@@ -49,6 +59,13 @@ export class HistoricalEventBaseDto {
   @IsInt({ message: 'Năm bắt đầu không hợp lệ' })
   @Transform(({ value }) => parseInt(value, 10) || value)
   fromYear!: number;
+
+  @Expose()
+  @IsString({ message: 'Loại ngày kết thúc không hợp lệ.' })
+  @IsIn(Object.values(HISTORICAL_EVENT.EVENT_DATE_TYPE), {
+    message: 'Loại ngày kết thúc không hợp lệ.',
+  })
+  toDateType!: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>;
 
   @Expose()
   @IsOptional()
