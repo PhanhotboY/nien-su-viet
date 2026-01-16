@@ -23,11 +23,13 @@ export default async function EventDetailPage({
   const event = response.data;
 
   const startDate = formatHistoricalEventDate(
+    event.fromDateType,
     event.fromYear,
     event.fromMonth,
     event.fromDay,
   );
   const endDate = formatHistoricalEventDate(
+    event.toDateType,
     event.toYear,
     event.toMonth,
     event.toDay,

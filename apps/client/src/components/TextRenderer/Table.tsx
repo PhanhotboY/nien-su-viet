@@ -1,18 +1,31 @@
-export default function Table({ data }: { data: any }) {
-  console.log(data);
+import { decodeHtmlEntities } from '@/helper/renderer.helper';
+
+export default function Table({
+  data,
+}: {
+  data: {
+    content: string[][];
+    withHeadings: boolean;
+    stretched: boolean;
+  };
+}) {
   return (
-    <table>
+    <table className="table-auto">
       <tbody>
-        {data.content.map((row: any, rowIndex: number) => (
-          <tr key={rowIndex}>
-            {row.map((cell: any, cellIndex: number) => (
-              <td
-                key={cellIndex}
-                style={{ width: `${100 / data.content[0].length}%` }}
-              >
-                {cell}
-              </td>
-            ))}
+        {data.content.map((row, rowIndex: number) => (
+          <tr
+            key={rowIndex}
+            className={data.withHeadings && rowIndex === 0 ? 'font-bold' : ''}
+          >
+            {row.map((cell, cellIndex: number) => {
+              const content = decodeHtmlEntities(cell);
+              return (
+                <td
+                  key={cellIndex}
+                  dangerouslySetInnerHTML={{ __html: content }}
+                ></td>
+              );
+            })}
           </tr>
         ))}
       </tbody>

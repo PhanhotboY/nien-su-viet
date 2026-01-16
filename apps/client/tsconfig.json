@@ -17,14 +17,14 @@
     "experimentalDecorators": true,
     "plugins": [
       {
-        "name": "next"
-      }
+        "name": "next",
+      },
     ],
     "paths": {
       "@/*": ["./src/*"],
       "@public/*": ["./public/*"],
-      "@nsv-interfaces/*": ["../../libs/nsv-interfaces/*"]
-    }
+      "@nsv-interfaces/*": ["../../libs/nsv-interfaces/*"],
+    },
   },
   "include": [
     "next-env.d.ts",
@@ -32,7 +32,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
   ],
-  "exclude": ["node_modules", "../../libs/nsv-interfaces/*"]
+  "exclude": ["node_modules", "../../libs/nsv-interfaces/*"],
 }

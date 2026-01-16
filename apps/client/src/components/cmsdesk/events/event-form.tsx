@@ -23,6 +23,7 @@ import { components } from '@nsv-interfaces/historical-event';
 import TextEditor from '@/components/TextEditor';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { HISTORICAL_EVENT } from '@/constants/historical-event.constant';
 
 interface EventFormProps {
   initialData?: components['schemas']['HistoricalEventBaseCreateDto'];
@@ -51,6 +52,10 @@ export function EventForm({
     toMonth: initialData?.toMonth || null,
     toDay: initialData?.toDay || null,
     thumbnailId: initialData?.thumbnailId,
+    fromDateType:
+      initialData?.fromDateType || HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT,
+    toDateType:
+      initialData?.toDateType || HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -155,7 +160,43 @@ export function EventForm({
           {/* Start Date */}
           <div className="space-y-3">
             <Label className="text-base font-semibold">Start Date *</Label>
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-4">
+              <div className="space-y-2">
+                <Label htmlFor="fromDateType" className="text-sm font-normal">
+                  Date Type <span className="text-red">*</span>
+                </Label>
+                <Select
+                  value={formData.fromDateType}
+                  onValueChange={(value) =>
+                    updateField(
+                      'fromDateType',
+                      value === HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT
+                        ? HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT
+                        : HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE,
+                    )
+                  }
+                >
+                  <SelectTrigger className="w-full" id="fromDateType">
+                    <SelectValue placeholder="Select date type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(HISTORICAL_EVENT.EVENT_DATE_TYPE).map(
+                      (type, index) => (
+                        <SelectItem
+                          key={index}
+                          value={type.toString()}
+                          defaultValue={formData.fromDateType}
+                        >
+                          {type === HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT
+                            ? 'Cụ thể'
+                            : 'Xấp xỉ'}
+                        </SelectItem>
+                      ),
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="fromYear" className="text-sm font-normal">
                   Year *
@@ -172,52 +213,50 @@ export function EventForm({
                   required
                 />
               </div>
-              {!!formData.fromYear && (
-                <div className="space-y-2">
-                  <Label htmlFor="fromMonth" className="text-sm font-normal">
-                    Month
-                  </Label>
-                  <Select
-                    value={formData.fromMonth?.toString() || ''}
-                    onValueChange={(value) =>
-                      updateField('fromMonth', value ? parseInt(value) : null)
-                    }
-                  >
-                    <SelectTrigger className="w-full" id="fromMonth">
-                      <SelectValue placeholder="Select month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0">Không chọn</SelectItem>
-                      {months.map((month, index) => (
-                        <SelectItem key={index} value={(index + 1).toString()}>
-                          {month}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-              {!!(formData.fromYear && formData.fromMonth) && (
-                <div className="space-y-2">
-                  <Label htmlFor="fromDay" className="text-sm font-normal">
-                    Day
-                  </Label>
-                  <Input
-                    id="fromDay"
-                    type="number"
-                    min="1"
-                    max="31"
-                    placeholder="DD"
-                    value={formData.fromDay || ''}
-                    onChange={(e) =>
-                      updateField(
-                        'fromDay',
-                        e.target.value ? parseInt(e.target.value) : null,
-                      )
-                    }
-                  />
-                </div>
-              )}
+
+              <div className="space-y-2">
+                <Label htmlFor="fromMonth" className="text-sm font-normal">
+                  Month
+                </Label>
+                <Select
+                  value={formData.fromMonth?.toString() || ''}
+                  onValueChange={(value) =>
+                    updateField('fromMonth', value ? parseInt(value) : null)
+                  }
+                >
+                  <SelectTrigger className="w-full" id="fromMonth">
+                    <SelectValue placeholder="Select month" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">Không chọn</SelectItem>
+                    {months.map((month, index) => (
+                      <SelectItem key={index} value={(index + 1).toString()}>
+                        {month}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="fromDay" className="text-sm font-normal">
+                  Day
+                </Label>
+                <Input
+                  id="fromDay"
+                  type="number"
+                  min="1"
+                  max="31"
+                  placeholder="DD"
+                  value={formData.fromDay || ''}
+                  onChange={(e) =>
+                    updateField(
+                      'fromDay',
+                      e.target.value ? parseInt(e.target.value) : null,
+                    )
+                  }
+                />
+              </div>
             </div>
           </div>
 
@@ -229,69 +268,103 @@ export function EventForm({
             <p className="text-sm text-muted-foreground">
               Leave empty for single-day events
             </p>
-            <div className="grid gap-4 sm:grid-cols-3">
-              {!!formData.fromYear && (
-                <div className="space-y-2">
-                  <Label htmlFor="toYear" className="text-sm font-normal">
-                    Year
-                  </Label>
-                  <Input
-                    id="toYear"
-                    type="number"
-                    placeholder="YYYY"
-                    value={formData.toYear || ''}
-                    onChange={(e) => {
-                      updateField('toYear', e.target.value as any);
-                    }}
-                  />
-                </div>
-              )}
-              {!!formData.toYear && (
-                <div className="space-y-2">
-                  <Label htmlFor="toMonth" className="text-sm font-normal">
-                    Month
-                  </Label>
-                  <Select
-                    value={formData.toMonth?.toString() || ''}
-                    onValueChange={(value) =>
-                      updateField('toMonth', value ? parseInt(value) : null)
-                    }
-                  >
-                    <SelectTrigger id="toMonth" className="w-full">
-                      <SelectValue placeholder="Select month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0">Không chọn</SelectItem>
-                      {months.map((month, index) => (
-                        <SelectItem key={index} value={(index + 1).toString()}>
-                          {month}
+
+            <div className="grid gap-4 sm:grid-cols-4">
+              <div className="space-y-2">
+                <Label htmlFor="toDateType" className="text-sm font-normal">
+                  Date Type <span className="text-red">*</span>
+                </Label>
+
+                <Select
+                  value={formData.toDateType}
+                  onValueChange={(value) =>
+                    updateField(
+                      'toDateType',
+                      value === HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT
+                        ? HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT
+                        : HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE,
+                    )
+                  }
+                >
+                  <SelectTrigger id="toDateType" className="w-full">
+                    <SelectValue placeholder="Select date type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(HISTORICAL_EVENT.EVENT_DATE_TYPE).map(
+                      (type, index) => (
+                        <SelectItem
+                          key={index}
+                          value={type}
+                          defaultValue={formData.toDateType}
+                        >
+                          {type === HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT
+                            ? 'Cụ thể'
+                            : 'Xấp xỉ'}
                         </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-              {!!(formData.toYear && formData.toMonth) && (
-                <div className="space-y-2">
-                  <Label htmlFor="toDay" className="text-sm font-normal">
-                    Day
-                  </Label>
-                  <Input
-                    id="toDay"
-                    type="number"
-                    min="1"
-                    max="31"
-                    placeholder="DD"
-                    value={formData.toDay || ''}
-                    onChange={(e) =>
-                      updateField(
-                        'toDay',
-                        e.target.value ? parseInt(e.target.value) : null,
-                      )
-                    }
-                  />
-                </div>
-              )}
+                      ),
+                    )}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="toYear" className="text-sm font-normal">
+                  Year
+                </Label>
+                <Input
+                  id="toYear"
+                  type="number"
+                  placeholder="YYYY"
+                  value={formData.toYear || ''}
+                  onChange={(e) => {
+                    updateField('toYear', e.target.value as any);
+                  }}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="toMonth" className="text-sm font-normal">
+                  Month
+                </Label>
+                <Select
+                  value={formData.toMonth?.toString() || ''}
+                  onValueChange={(value) =>
+                    updateField('toMonth', value ? parseInt(value) : null)
+                  }
+                >
+                  <SelectTrigger id="toMonth" className="w-full">
+                    <SelectValue placeholder="Select month" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">Không chọn</SelectItem>
+                    {months.map((month, index) => (
+                      <SelectItem key={index} value={(index + 1).toString()}>
+                        {month}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="toDay" className="text-sm font-normal">
+                  Day
+                </Label>
+                <Input
+                  id="toDay"
+                  type="number"
+                  min="1"
+                  max="31"
+                  placeholder="DD"
+                  value={formData.toDay || ''}
+                  onChange={(e) =>
+                    updateField(
+                      'toDay',
+                      e.target.value ? parseInt(e.target.value) : null,
+                    )
+                  }
+                />
+              </div>
             </div>
           </div>
         </CardContent>

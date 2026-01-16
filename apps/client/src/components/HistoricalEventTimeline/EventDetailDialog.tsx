@@ -51,7 +51,7 @@ export function EventDetailDialog({
   const { data: eventData } = data || {};
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-h-[80vh] overflow-y-auto">
         {!eventData || isLoading ? (
           <>
             <DialogHeader>
@@ -78,12 +78,14 @@ export function EventDetailDialog({
               </DialogTitle>
               <DialogDescription>
                 {formatHistoricalEventDate(
+                  eventData.fromDateType,
                   eventData.fromYear,
                   eventData.fromMonth,
                   eventData.fromDay,
                 )}
                 {' - '}
                 {formatHistoricalEventDate(
+                  eventData.toDateType,
                   eventData.toYear,
                   eventData.toMonth,
                   eventData.toDay,

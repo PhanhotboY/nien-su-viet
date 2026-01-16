@@ -13,9 +13,11 @@ export class HistoricalEventBriefResponseDto extends PickType(
   [
     'id',
     'name',
+    'fromDateType',
     'fromDay',
     'fromMonth',
     'fromYear',
+    'toDateType',
     'toDay',
     'toMonth',
     'toYear',

@@ -1,3 +1,5 @@
+import { decodeHtmlEntities } from '@/helper/renderer.helper';
+
 type ListItem = {
   content: string;
   meta: { checked?: boolean };
@@ -14,24 +16,24 @@ export default function List({
   };
 }) {
   const Wrapper = data.style === 'ordered' ? 'ol' : 'ul';
+
   return (
     <Wrapper className={data.style === 'checklist' ? 'list-none' : ''}>
-      {data.items.map((item, index) => (
-        <li key={index}>
-          {data.style === 'checklist' ? (
-            <>
+      {data.items.map((item, index) => {
+        const content = decodeHtmlEntities(item.content);
+        return (
+          <li key={index}>
+            {data.style === 'checklist' && (
               <input type="checkbox" checked={item.meta.checked} disabled />
-              <p>{item.content}</p>
-            </>
-          ) : (
-            item.content
-          )}
+            )}
+            <p dangerouslySetInnerHTML={{ __html: content }}></p>
 
-          {item.items && (
-            <List data={{ items: item.items, meta: {}, style: data.style }} />
-          )}
-        </li>
-      ))}
+            {item.items && (
+              <List data={{ items: item.items, meta: {}, style: data.style }} />
+            )}
+          </li>
+        );
+      })}
     </Wrapper>
   );
 }

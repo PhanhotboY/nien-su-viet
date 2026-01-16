@@ -1,3 +1,5 @@
+import { HISTORICAL_EVENT } from '@/constants/historical-event.constant';
+
 // Helper function to create date from parts
 const createDate = (
   year: number,
@@ -19,6 +21,7 @@ const createDate = (
 };
 
 const formatHistoricalEventDate = (
+  dateType: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>,
   year?: number | null,
   month?: number | null,
   day?: number | null,
@@ -29,7 +32,10 @@ const formatHistoricalEventDate = (
     ? `${hasDay ? `${day}/` : ''}${hasMonth ? `${month}/` : ''}${Math.abs(year)}`
     : '';
 
-  return year && year < 0 ? `${dateStr} TCN` : dateStr;
+  const prefix =
+    dateType === HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE ? 'Khoảng ' : '';
+
+  return prefix + (year && year < 0 ? `${dateStr} TCN` : dateStr);
 };
 
 export { formatHistoricalEventDate, createDate };
