@@ -61,11 +61,12 @@ export class HistoricalEventBaseDto {
   fromYear!: number;
 
   @Expose()
+  @IsOptional()
   @IsString({ message: 'Loại ngày kết thúc không hợp lệ.' })
   @IsIn(Object.values(HISTORICAL_EVENT.EVENT_DATE_TYPE), {
     message: 'Loại ngày kết thúc không hợp lệ.',
   })
-  toDateType!: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>;
+  toDateType?: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>;
 
   @Expose()
   @IsOptional()
