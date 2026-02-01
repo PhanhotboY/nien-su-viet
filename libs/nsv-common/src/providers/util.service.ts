@@ -152,7 +152,7 @@ export class UtilService {
       cacheKey,
       JSON.stringify(hashAttribute),
       data,
-      0,
+      30 * 60, // longer caching time than gateway to protect database
     );
     if (!data) {
       throw new NotFoundException(notFoundMessage);

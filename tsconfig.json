@@ -24,11 +24,14 @@
       "@auth-prisma": ["apps/auth/generated/prisma"],
       "@auth-prisma/*": ["apps/auth/generated/prisma/*"],
       "@auth/*": ["apps/auth/src/*"],
-      "@phanhotboy/nsv-common": ["libs/nsv-common/src"],
-      "@phanhotboy/nsv-common/*": ["libs/nsv-common/src/*"],
       "@historical-event-prisma": ["apps/historical-event/generated/prisma"],
       "@historical-event-prisma/*": ["apps/historical-event/generated/prisma"],
-      "@historical-event/*": ["apps/historical-event/src/*"]
-    }
-  }
+      "@historical-event/*": ["apps/historical-event/src/*"],
+      "@gateway/*": ["apps/gateway/src/*"],
+      "@phanhotboy/constants": ["libs/constants"],
+      "@phanhotboy/constants/*": ["libs/constants/*"],
+      "@phanhotboy/nsv-common": ["libs/nsv-common/src"],
+      "@phanhotboy/nsv-common/*": ["libs/nsv-common/src/*"],
+    },
+  },
 }

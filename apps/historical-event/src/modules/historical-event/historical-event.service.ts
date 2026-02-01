@@ -16,7 +16,7 @@ import {
   HistoricalEventBaseCreateDto,
   HistoricalEventBaseUpdateDto,
   HistoricalEventPreviewResponseDto,
-} from '@phanhotboy/nsv-common/dto/historical-event';
+} from './dto';
 
 @Injectable()
 export class HistoricalEventService {

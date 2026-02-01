@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { middleware } from './app.middleware';
 import { RmqService } from '@phanhotboy/nsv-common';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { AuthService } from './auth';
@@ -10,8 +9,6 @@ async function bootstrap() {
   const rmqService = app.get(RmqService);
   const auth = app.get(AuthService);
   app.connectMicroservice(rmqService.getOptions('auth_queue'));
-
-  middleware(app);
 
   // Generate Better Auth OpenAPI schema (contains all auth routes)
   const document = await auth.api.generateOpenAPISchema();

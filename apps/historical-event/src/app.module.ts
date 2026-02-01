@@ -10,12 +10,7 @@ import { UserModule } from './modules/user';
     CommonModule.forRoot({
       cachePrefix: 'historical-event-service',
       configuration,
-      rabbitmqConfigKey: 'rabbitmq',
-      redisConfigKey: 'redis',
-      throttlerConfigKey: 'throttlers',
       global: true,
-      useSerializeInterceptors: true,
-      useCacheInterceptor: true,
     }),
     PrismaModule.forRoot(),
     HistoricalEventModule,

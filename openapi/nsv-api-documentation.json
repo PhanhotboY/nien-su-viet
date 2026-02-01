@@ -1,0 +1,1189 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/auth/{splat}": {
+      "get": {
+        "operationId": "AuthController_forwardAuthHandler_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      },
+      "post": {
+        "operationId": "AuthController_forwardAuthHandler_post",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      },
+      "put": {
+        "operationId": "AuthController_forwardAuthHandler_put",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      },
+      "delete": {
+        "operationId": "AuthController_forwardAuthHandler_delete",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      },
+      "patch": {
+        "operationId": "AuthController_forwardAuthHandler_patch",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      },
+      "options": {
+        "operationId": "AuthController_forwardAuthHandler_options",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      },
+      "head": {
+        "operationId": "AuthController_forwardAuthHandler_head",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      },
+      "search": {
+        "operationId": "AuthController_forwardAuthHandler_search",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/historical-events/{id}/preview": {
+      "get": {
+        "operationId": "HistoricalEventController_getHistoricalEventPreviewById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoricalEventPreviewResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "HistoricalEvent"
+        ]
+      }
+    },
+    "/api/v1/historical-events/{id}": {
+      "get": {
+        "operationId": "HistoricalEventController_getHistoricalEventById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoricalEventDetailResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "HistoricalEvent"
+        ]
+      },
+      "put": {
+        "operationId": "HistoricalEventController_updateHistoricalEvent",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HistoricalEventBaseUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "HistoricalEvent"
+        ]
+      },
+      "delete": {
+        "operationId": "HistoricalEventController_deleteHistoricalEvent",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "HistoricalEvent"
+        ]
+      }
+    },
+    "/api/v1/historical-events": {
+      "get": {
+        "operationId": "HistoricalEventController_getAllHistoricalEvents",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "authorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryIds",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "fromYear",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "fromMonth",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 12,
+              "type": "number"
+            }
+          },
+          {
+            "name": "fromDay",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 31,
+              "type": "number"
+            }
+          },
+          {
+            "name": "toYear",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "toMonth",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 12,
+              "type": "number"
+            }
+          },
+          {
+            "name": "toDay",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 31,
+              "type": "number"
+            }
+          },
+          {
+            "name": "searchYear",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "createdAtFrom",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "createdAtTo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAtFrom",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAtTo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "HistoricalEvent"
+        ]
+      },
+      "post": {
+        "operationId": "HistoricalEventController_createHistoricalEvent",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HistoricalEventBaseCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "HistoricalEvent"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "NSV - NSV API Documentation API",
+    "description": "The NSV API Documentation API description",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "ImageBriefResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "publicUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "redirectLink": {
+            "type": "string",
+            "format": "uri"
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "required": [
+          "publicUrl"
+        ]
+      },
+      "UserBaseResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email"
+        ]
+      },
+      "HistoricalEventPreviewResponseDto": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "excerpt": {
+            "type": "string"
+          },
+          "thumbnail": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ImageBriefResponseDto"
+              }
+            ]
+          },
+          "author": {
+            "$ref": "#/components/schemas/UserBaseResponseDto"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "fromDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "fromMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "fromYear": {
+            "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "toMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "toYear": {
+            "type": "number",
+            "nullable": true
+          }
+        },
+        "required": [
+          "categories",
+          "excerpt",
+          "author",
+          "id",
+          "name",
+          "fromDateType",
+          "fromYear",
+          "toDateType"
+        ]
+      },
+      "HistoricalEventDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "fromDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "fromMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "fromYear": {
+            "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "toMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "toYear": {
+            "type": "number",
+            "nullable": true
+          },
+          "thumbnail": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ImageBriefResponseDto"
+              }
+            ]
+          },
+          "author": {
+            "$ref": "#/components/schemas/UserBaseResponseDto"
+          },
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "content",
+          "id",
+          "name",
+          "fromDateType",
+          "fromYear",
+          "toDateType",
+          "author",
+          "categories"
+        ]
+      },
+      "HistoricalEventBaseCreateDto": {
+        "type": "object",
+        "properties": {
+          "authorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "thumbnailId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "fromDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "fromMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "fromYear": {
+            "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "toMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "toYear": {
+            "type": "number",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "name",
+          "fromDateType",
+          "fromYear",
+          "toDateType",
+          "content"
+        ]
+      },
+      "HistoricalEventBaseUpdateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "thumbnailId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "fromDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "fromMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "fromYear": {
+            "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "toMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "toYear": {
+            "type": "number",
+            "nullable": true
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authorId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "UserDeleteDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "userId"
+        ]
+      },
+      "UserBulkDeleteDto": {
+        "type": "object",
+        "properties": {
+          "userIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "userIds"
+        ]
+      },
+      "UserBaseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "image": {
+            "type": "string",
+            "nullable": true
+          },
+          "role": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "name",
+          "role"
+        ]
+      },
+      "QueryImageDto": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "number",
+            "minimum": 1
+          },
+          "limit": {
+            "type": "number",
+            "minimum": 1
+          },
+          "search": {
+            "type": "string"
+          },
+          "sortBy": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "uploaderId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAtFrom": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "createdAtTo": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAtFrom": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "updatedAtTo": {
+            "format": "date-time",
+            "type": "string"
+          }
+        }
+      },
+      "BulkDeleteImageDto": {
+        "type": "object",
+        "properties": {
+          "imageIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        "required": [
+          "imageIds"
+        ]
+      },
+      "ImageBaseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "publicUrl": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "publicUrl"
+        ]
+      },
+      "ImageFullDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "publicUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "redirectLink": {
+            "type": "string",
+            "format": "uri"
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "uploaderId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "publicUrl",
+          "name",
+          "uploaderId"
+        ]
+      },
+      "ImageFullCreateDto": {
+        "type": "object",
+        "properties": {
+          "caption": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "publicUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "redirectLink": {
+            "type": "string",
+            "format": "uri"
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "uploaderId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "publicUrl",
+          "name",
+          "uploaderId"
+        ]
+      },
+      "ImageFullUpdateDto": {
+        "type": "object",
+        "properties": {
+          "caption": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "publicUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "redirectLink": {
+            "type": "string",
+            "format": "uri"
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "uploaderId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "EventCategoryBriefResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug"
+        ]
+      },
+      "EventCategoryResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "slug": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug"
+        ]
+      },
+      "EventCategoryBaseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "slug": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "object"
+          },
+          "updatedAt": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PaginationMetaDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "totalPages",
+          "page",
+          "limit"
+        ]
+      },
+      "PaginatedResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationMetaDto"
+          }
+        },
+        "required": [
+          "data",
+          "pagination"
+        ]
+      }
+    }
+  }
+}

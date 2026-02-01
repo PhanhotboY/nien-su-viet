@@ -1,5 +1,4 @@
 import { RedisClientOptions } from '@keyv/redis';
-import { ThrottlerOptions } from '@nestjs/throttler';
 import { Options } from 'amqplib';
 
 export const config = {
@@ -32,14 +31,6 @@ export const config = {
   redis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379',
   } as RedisClientOptions,
-  throttlers: [
-    {
-      // default, 5 requests per 1 milisecond. For testing only
-      name: 'default',
-      ttl: 1,
-      limit: 5,
-    },
-  ] as ThrottlerOptions[],
   mail: {
     host: process.env.SMTP_HOST || 'smtp.example.com',
     port: Number(process.env.SMTP_PORT) || 587,

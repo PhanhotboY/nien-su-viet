@@ -32,11 +32,16 @@ export class HttpExceptionsFilter implements ExceptionFilter {
       }
     }
 
+    let message: string = err.message?.toString() || '';
+    if (err.message.includes('ThrottlerException')) {
+      message = message.replace('ThrottlerException: ', '');
+    }
+
     return response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: req.url,
-      message: err.message || null,
+      message,
     });
   }
 
