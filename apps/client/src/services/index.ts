@@ -2,7 +2,8 @@
 
 import { cookies, headers } from 'next/headers';
 import { parse } from 'set-cookie-parser';
-import { AUTH_BASE_URL, AUTH_COOKIE_PREFIX } from '@/lib/config';
+import { AUTH_COOKIE_PREFIX } from '@/lib/config';
+import { CONFIG } from '../config';
 
 export const retryFetcher = async <T = any>(
   url: string,
@@ -32,7 +33,7 @@ export const retryFetcher = async <T = any>(
   // If user is not authenticated yet, just continue fetching and throw error if any
   if (sessionToken && !sessionData) {
     // Refresh session data with sesion token
-    const res = await fetch(AUTH_BASE_URL + '/auth/get-session', {
+    const res = await fetch(CONFIG.apiEndpoint + '/auth/get-session', {
       headers: { Cookie: store.toString() },
     });
 
@@ -50,7 +51,7 @@ export const retryFetcher = async <T = any>(
     }
   }
 
-  const response = await fetch(url, {
+  const response = await fetch(CONFIG.apiEndpoint + url, {
     method: 'GET',
     ...options,
     headers: {

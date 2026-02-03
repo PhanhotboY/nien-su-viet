@@ -18,11 +18,20 @@ const eventStatements = {
   eventEdit: crudActions,
 };
 
+const cmsStatements = {
+  app: crudActions,
+  media: crudActions,
+  footerNavItem: crudActions,
+  headerNavItem: crudActions,
+  ping: crudActions,
+};
+
 const statements = {
   // convert readonly arrays to mutable arrays
   user: [...defaultStatements.user],
   session: [...defaultStatements.session],
   ...eventStatements,
+  ...cmsStatements,
 };
 
 /**
@@ -34,12 +43,15 @@ const ac = createAccessControl(statements);
 
 const admin = ac.newRole({
   ...eventStatements,
+  ...cmsStatements,
   ...(adminAc.statements as any),
 });
 
 const editor = ac.newRole({
   ...eventStatements,
   eventEdit: ['create', 'read', 'update'],
+  ...cmsStatements,
+  ping: [],
   ...(userAc.statements as any),
 });
 
@@ -47,6 +59,10 @@ const user = ac.newRole({
   historicalEvent: ['read'],
   eventCategory: ['read'],
   eventEdit: ['read'],
+  app: ['read'],
+  media: ['read'],
+  footerNavItem: ['read'],
+  headerNavItem: ['read'],
   ...userAc.statements,
 } as unknown as any);
 
