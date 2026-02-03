@@ -1,10 +1,11 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import _ from 'lodash';
 import {
   MODULE_OPTIONS_TOKEN,
   OPTIONS_TYPE,
 } from '../common.module-definition';
 import { RedisService, type RedisServiceType } from './redis.service';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class UtilService {
@@ -142,7 +143,11 @@ export class UtilService {
       JSON.stringify(hashAttribute),
     );
     if (data) {
-      if (data === 'null') throw new NotFoundException(notFoundMessage);
+      if (data === 'null')
+        throw new RpcException({
+          statusCode: 404,
+          message: notFoundMessage,
+        });
       return data;
     }
 
@@ -152,10 +157,13 @@ export class UtilService {
       cacheKey,
       JSON.stringify(hashAttribute),
       data,
-      0,
+      30 * 60, // longer caching time than gateway to protect database
     );
     if (!data) {
-      throw new NotFoundException(notFoundMessage);
+      throw new RpcException({
+        statusCode: 404,
+        message: notFoundMessage,
+      });
     }
 
     return data;

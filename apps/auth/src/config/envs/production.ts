@@ -1,4 +1,3 @@
-import { StringValue } from 'ms';
 export const config = {
   db: {
     url: process.env.DATABASE_URL || '',
@@ -43,13 +42,6 @@ export const config = {
   redis: {
     url: process.env.REDIS_URL || 'redis://localhost:6379',
   },
-  throttlers: [
-    {
-      name: 'default',
-      ttl: 60000,
-      limit: 100,
-    },
-  ],
   mail: {
     host: process.env.SMTP_HOST || 'smtp.example.com',
     port: Number(process.env.SMTP_PORT) || 587,

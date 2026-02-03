@@ -24,14 +24,14 @@ func InitRabbitMQ() *amqp.Connection {
 	}
 
 	q, err := ch.QueueDeclare(
-		"app_queue", // name
+		"cms_queue", // name
 		true,        // durable
 		false,       // delete when unused
 		false,       // exclusive
 		false,       // no-wait
 		nil,         // arguments
 	)
-	ch.QueueBind(q.Name, "user.#", "events", false, nil)
+	ch.QueueBind(q.Name, "user.#", "events", false, nil) // listen to user events
 	failOnError(err, "Failed to declare a queue")
 	global.Amqp.Channel = ch
 	global.Amqp.Connection = conn

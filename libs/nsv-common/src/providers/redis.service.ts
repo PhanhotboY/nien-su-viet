@@ -125,13 +125,13 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
     return await this.redisClient.expire(key, ttl, mode);
   }
 
-  onModuleInit() {
-    this.redisClient.connect().then(() => {
+  async onModuleInit() {
+    await this.redisClient.connect().then(() => {
       console.log('Connected to Redis');
     });
   }
-  onModuleDestroy() {
-    this.cacheManager.disconnect().then(() => {
+  async onModuleDestroy() {
+    await this.cacheManager.disconnect().then(() => {
       console.log('Disconnected from Redis');
     });
   }

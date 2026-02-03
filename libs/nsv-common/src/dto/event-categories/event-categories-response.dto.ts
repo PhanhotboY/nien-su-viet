@@ -1,6 +1,6 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { EventCategoryBriefResponseDto } from '../event-category';
-import { HistoricalEventBriefResponseDto } from '../historical-event';
+// import { HistoricalEventBriefResponseDto } from '../historical-event';
 
 @Exclude()
 export class EventCategoriesBriefResponseDto {
@@ -14,7 +14,7 @@ export class EventCategoriesBriefResponseDto {
   @Type(() => EventCategoryBriefResponseDto)
   category!: EventCategoryBriefResponseDto;
 
-  @Expose()
-  @Type(() => HistoricalEventBriefResponseDto)
-  event!: HistoricalEventBriefResponseDto;
+  // @Expose()
+  // @Type(() => HistoricalEventBriefResponseDto)
+  // event!: HistoricalEventBriefResponseDto;
 }

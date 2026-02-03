@@ -6,10 +6,9 @@ import { isUUID } from 'class-validator';
 import {
   RedisService,
   type RedisServiceType,
-  RMQ,
   UtilService,
-  UserBaseDto,
 } from '@phanhotboy/nsv-common';
+import { UserBaseDto } from './dto';
 
 @Injectable()
 export class UserService {
