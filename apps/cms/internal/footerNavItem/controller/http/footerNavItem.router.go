@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/middleware"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
@@ -35,9 +34,9 @@ func RegisterFooterNavItemRoutes(api huma.API, handler *FooterNavItemHandler) {
 		Summary:     "Create footer nav item",
 		Description: "Create a new footer navigation item",
 		Tags:        []string{"footer-nav-items"},
-		Middlewares: huma.Middlewares{
-			middleware.Authentication(api),
-		},
+		// Middlewares: huma.Middlewares{
+		// 	middleware.Authentication(api),
+		// },
 		DefaultStatus: http.StatusCreated,
 		Responses: map[string]*huma.Response{
 			"201": {
@@ -54,9 +53,9 @@ func RegisterFooterNavItemRoutes(api huma.API, handler *FooterNavItemHandler) {
 		Summary:     "Update footer nav item",
 		Description: "Update an existing footer navigation item",
 		Tags:        []string{"footer-nav-items"},
-		Middlewares: huma.Middlewares{
-			middleware.Authentication(api),
-		},
+		// Middlewares: huma.Middlewares{
+		// 	middleware.Authentication(api),
+		// },
 		DefaultStatus: http.StatusOK,
 		Responses: map[string]*huma.Response{
 			"200": {
@@ -73,9 +72,9 @@ func RegisterFooterNavItemRoutes(api huma.API, handler *FooterNavItemHandler) {
 		Summary:     "Delete footer nav item",
 		Description: "Delete a footer navigation item",
 		Tags:        []string{"footer-nav-items"},
-		Middlewares: huma.Middlewares{
-			middleware.Authentication(api),
-		},
+		// Middlewares: huma.Middlewares{
+		// 	middleware.Authentication(api),
+		// },
 		DefaultStatus: http.StatusOK,
 		Responses: map[string]*huma.Response{
 			"200": {
