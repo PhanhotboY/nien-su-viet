@@ -1,4 +1,4 @@
-import { HISTORICAL_EVENT } from '@phanhotboy/nsv-common/constants';
+import { HISTORICAL_EVENT } from '@phanhotboy/constants';
 import { Exclude, Expose, Transform } from 'class-transformer';
 import {
   IsString,

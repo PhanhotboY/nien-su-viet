@@ -4,7 +4,7 @@ import { middleware } from './gateway.middleware';
 import { initSwagger } from '@phanhotboy/nsv-common/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(GatewayModule);
+  const app = await NestFactory.create(GatewayModule, { bodyParser: false });
 
   middleware(app);
 

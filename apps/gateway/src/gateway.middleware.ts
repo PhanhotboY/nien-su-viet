@@ -3,9 +3,20 @@ import compression from 'compression';
 // import session from 'express-session';
 import helmet from 'helmet';
 import { doubleCsrf } from 'csrf-csrf';
+import { json } from 'body-parser';
+import { NextFunction, Request, Response } from 'express';
 
 export function middleware(app: INestApplication): INestApplication {
   const isProduction = process.env.NODE_ENV === 'production';
+
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    // Skip JSON body parsing for raw body required routes
+    if (['/api/v1/auth'].some((path) => req.path.startsWith(path))) {
+      next();
+    } else {
+      json()(req, res, next);
+    }
+  });
 
   app.use(compression());
   // app.use(

@@ -3,7 +3,6 @@ package initialize
 import (
 	"context"
 	"net/http"
-	"strconv"
 
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humachi"
@@ -70,7 +69,7 @@ func InitRouter(db *gorm.DB, isLogger string) http.Handler {
 		Email: "support@phannd.me",
 	}
 	config.Servers = []*huma.Server{
-		{URL: global.Config.Server.Host + ":" + strconv.Itoa(global.Config.Server.Port), Description: "Local development server"},
+		{URL: global.Config.Server.Host + ":" + global.Config.Server.Port, Description: "Local development server"},
 	}
 
 	// Create Huma API with Chi adapter

@@ -1,4 +1,6 @@
 configs/*.local.yaml
+configs/.env
+!configs/.env.example
 bin
 docs
 uploads

@@ -3,16 +3,16 @@ import type { Request, Response } from 'express';
 import { toNodeHandler } from 'better-auth/node';
 
 import { AuthService } from './auth.service';
-import { Public } from '@phanhotboy/nsv-common';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
-  @Public() // Better-Auth is secured by default
   @All('*splat')
   async andleAuthRequests(@Req() req: Request, @Res() res: Response) {
+    console.log('handle auth request');
     const handler = toNodeHandler(this.authService.instance);
     await handler(req, res);
+    return;
   }
 }

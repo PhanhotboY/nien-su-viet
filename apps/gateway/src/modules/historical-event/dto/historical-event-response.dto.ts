@@ -2,7 +2,7 @@ import { Exclude, Expose, Type } from 'class-transformer';
 import { OmitType, PickType } from '@nestjs/swagger';
 import { HistoricalEventBaseDto } from './historical-event-base.dto';
 import { ImageBriefResponseDto } from '@phanhotboy/nsv-common';
-import { UserBaseResponseDto } from '@phanhotboy/nsv-common';
+import { UserBaseResponseDto } from '@gateway/modules/auth/dto';
 import { EventCategoriesBriefResponseDto } from '@phanhotboy/nsv-common/dto/event-categories';
 import { IsString } from 'class-validator';
 

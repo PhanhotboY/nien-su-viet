@@ -9,6 +9,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 
 import { HistoricalEventService } from './historical-event.service';
 import {
@@ -21,16 +22,13 @@ import {
   HistoricalEventQueryDto,
 } from './dto';
 import {
-  Permissions,
-  CurrentUser,
-  Serialize,
-  Public,
   RedisService,
   type RedisServiceType,
   ConfigService,
+  Serialize,
 } from '@phanhotboy/nsv-common';
-import { ThrottleMap } from '@gateway/common/decorators';
 import { RATE_LIMIT } from '@gateway/config';
+import { Public, Permissions, CurrentUser } from '@gateway/common/decorators';
 
 @Controller('historical-events')
 export class HistoricalEventController {
@@ -64,7 +62,7 @@ export class HistoricalEventController {
   }
 
   @Post()
-  @ThrottleMap(RATE_LIMIT.INTERNAL)
+  @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ historicalEvent: ['create'] })
   async createHistoricalEvent(
     @Body() event: HistoricalEventBaseCreateDto,
@@ -75,7 +73,7 @@ export class HistoricalEventController {
   }
 
   @Put(':id')
-  @ThrottleMap(RATE_LIMIT.INTERNAL)
+  @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ historicalEvent: ['update'] })
   @Serialize(HistoricalEventBaseDto)
   async updateHistoricalEvent(
@@ -86,12 +84,12 @@ export class HistoricalEventController {
   }
 
   @Delete(':id')
-  @ThrottleMap(RATE_LIMIT.INTERNAL)
+  @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ historicalEvent: ['delete'] })
   async deleteHistoricalEvent(
     @Param('id') id: string,
-    @CurrentUser('userId') userId: string,
+    @CurrentUser('id') authorId: string,
   ) {
-    return this.historicalEventService.deleteEvent(id, userId);
+    return this.historicalEventService.deleteEvent(id, authorId);
   }
 }

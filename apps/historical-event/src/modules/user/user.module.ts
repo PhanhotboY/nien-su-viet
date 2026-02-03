@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserConsumer } from './user.consumer';
-import { RMQ, RmqModule } from '@phanhotboy/nsv-common';
+import { RmqModule } from '@phanhotboy/nsv-common';
+import { RMQ } from '@phanhotboy/constants';
 
 @Module({
   imports: [RmqModule.register({ name: RMQ.TOPIC_EVENTS_EXCHANGE })],

@@ -1,4 +1,4 @@
-import { HISTORICAL_EVENT } from 'libs/nsv-common/src/constants/historical-event.constant';
+import { HISTORICAL_EVENT } from 'libs/constants';
 import { HistoricalEventBaseCreateDto } from '../src/modules/historical-event/dto';
 
 export const mockEvents: HistoricalEventBaseCreateDto[] = [

@@ -4,3 +4,6 @@ export * from './http.constant';
 export * from './rmq.constant';
 export * from './role.constant';
 export * from './historical-event.constant';
+export * from './historical-event.message-pattern';
+export * from './tcp-service.constant';
+export * from './user.event.constant';

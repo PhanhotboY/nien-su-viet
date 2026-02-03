@@ -1,8 +1,10 @@
-import { Module } from '@nestjs/common';
+import * as express from 'express';
+import { NestModule, Module, MiddlewareConsumer } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MailModule, MailService } from '@auth/mail';
-import { RmqModule, RMQ } from '@phanhotboy/nsv-common';
+import { RmqModule } from '@phanhotboy/nsv-common';
 import { AuthController } from './auth.controller';
+import { RMQ } from '@phanhotboy/constants';
 
 @Module({
   imports: [

@@ -9,9 +9,10 @@ import { Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { Cookie } from 'cookiejar';
 
-import { ConfigService } from '../providers';
-import { IS_PUBLIC_KEY } from './public.decorator';
-import { UserBaseDto } from '../dto';
+import { ConfigService } from '@phanhotboy/nsv-common';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { UserBaseDto } from '@gateway/modules/auth/dto';
+import { Config } from '@gateway/config';
 
 interface JWTPayload extends jwt.JwtPayload {
   user: UserBaseDto;
@@ -20,11 +21,20 @@ interface JWTPayload extends jwt.JwtPayload {
   updatedAt: number;
 }
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserBaseDto;
+      session?: any;
+    }
+  }
+}
+
 @Injectable()
 export class BetterAuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private configService: ConfigService,
+    private configService: ConfigService<Config>,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -44,14 +54,14 @@ export class BetterAuthGuard implements CanActivate {
       // Extract JWT token from Authorization header or cookie
       const cookies = this.parseCookies(request.headers.cookie || '');
       const token = cookies.get(
-        `${this.configService.get('AUTH_COOKIE_PREFIX')}.session_data`,
+        `${this.configService.get('betterAuth.cookiePrefix')}.session_data`,
       );
 
       if (!token) {
         throw new UnauthorizedException('No authentication token found');
       }
 
-      const secret = this.configService.get('BETTER_AUTH_SECRET');
+      const secret = this.configService.get('betterAuth.secret');
       if (!secret) {
         throw new Error('JWT secret not configured');
       }

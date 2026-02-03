@@ -9,7 +9,7 @@ import { loggerOptions } from './config';
 
 @Module({
   imports: [
-    LoggerModule.forRoot(loggerOptions  ),
+    LoggerModule.forRoot(loggerOptions),
     CommonModule.forRoot({
       configuration,
       cachePrefix: 'auth-service',

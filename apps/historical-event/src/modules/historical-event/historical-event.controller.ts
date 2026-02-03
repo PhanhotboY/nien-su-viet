@@ -1,5 +1,5 @@
 import { Controller, Logger } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { MessagePattern, Payload, Transport } from '@nestjs/microservices';
 
 import { HistoricalEventService } from './historical-event.service';
 import {
@@ -7,7 +7,6 @@ import {
   HistoricalEventBaseUpdateDto,
   HistoricalEventQueryDto,
 } from './dto';
-import { Permissions, CurrentUser, Public } from '@phanhotboy/nsv-common';
 import { HISTORICAL_EVENT_MESSAGE_PATTERN } from '@phanhotboy/constants/historical-event.message-pattern';
 
 @Controller('historical-events')
@@ -19,51 +18,47 @@ export class HistoricalEventController {
   ) {}
 
   @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_EVENT_PREVIEW_BY_ID)
-  @Public()
   getHistoricalEventPreviewById(@Payload('id') id: string) {
     this.logger.log(`Getting historical event preview by id: ${id}`);
     return this.historicalEventService.getEventPreviewById(id);
   }
 
   @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_EVENT_BY_ID)
-  @Public()
   getHistoricalEventById(@Payload('id') id: string) {
     return this.historicalEventService.getEventById(id);
   }
 
   @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_ALL_EVENTS)
-  @Public()
-  getAllHistoricalEvents(query: HistoricalEventQueryDto) {
-    this.logger.log(
-      `Getting all historical events with query: ${JSON.stringify(query)}`,
-    );
+  getAllHistoricalEvents(@Payload('query') query: HistoricalEventQueryDto) {
     return this.historicalEventService.getEvents(query);
   }
 
   @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.CREATE_EVENT)
-  @Permissions({ historicalEvent: ['create'] })
   async createHistoricalEvent(
-    event: HistoricalEventBaseCreateDto,
-    @CurrentUser('id') authorId: string,
+    @Payload('id') authorId: string,
+    @Payload('payload') event: HistoricalEventBaseCreateDto,
   ) {
     return this.historicalEventService.createEvent(authorId, event);
   }
 
-  @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.UPDATE_EVENT)
-  @Permissions({ historicalEvent: ['update'] })
+  @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.UPDATE_EVENT, {
+    transport: Transport.TCP,
+  })
   async updateHistoricalEvent(
     @Payload('id') id: string,
-    @Payload() event: HistoricalEventBaseUpdateDto,
+    @Payload('payload') event: HistoricalEventBaseUpdateDto,
   ) {
     return this.historicalEventService.updateEvent(id, event);
   }
 
-  @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.DELETE_EVENT)
-  @Permissions({ historicalEvent: ['delete'] })
+  @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.DELETE_EVENT, {
+    transport: Transport.TCP,
+  })
   async deleteHistoricalEvent(
     @Payload('id') id: string,
-    @CurrentUser('userId') userId: string,
+    @Payload('authorId') authorId: string,
   ) {
-    return this.historicalEventService.deleteEvent(id, userId);
+    this.logger.log(`Deleting historical event with id: ${id}`);
+    await this.historicalEventService.deleteEvent(id, authorId);
   }
 }

@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { statements } from './permissions';
+import { statements } from '@phanhotboy/nsv-common/lib';
 
 export const PERMISSIONS_KEY = 'permissions';
 

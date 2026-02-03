@@ -4,6 +4,8 @@ import { configuration } from './config';
 import { HistoricalEventModule } from './modules/historical-event/historical-event.module';
 import { PrismaModule } from './database';
 import { UserModule } from './modules/user';
+import { APP_FILTER } from '@nestjs/core';
+import { MicroserviceExceptionFilter } from '@phanhotboy/nsv-common/filters/rpc-exception.filter';
 
 @Module({
   imports: [
@@ -16,6 +18,5 @@ import { UserModule } from './modules/user';
     HistoricalEventModule,
     UserModule,
   ],
-  providers: [],
 })
 export class AppModule {}

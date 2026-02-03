@@ -17,7 +17,7 @@ import { PaginatedResponseDto } from '@phanhotboy/nsv-common';
 
 @Injectable()
 export class HistoricalEventService {
-  private readonly serviceName: 'Historical Event Service';
+  private readonly serviceName = 'Historical Event Service';
 
   constructor(
     @Inject(TCP_SERVICE.HISTORICAL_EVENT.NAME)
@@ -50,7 +50,7 @@ export class HistoricalEventService {
       () =>
         firstValueFrom(
           this.heventClient
-            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_ALL_EVENTS, query)
+            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_ALL_EVENTS, { query })
             .pipe(
               timeout(10000),
               catchError((error) => throwError(() => error)),
@@ -66,7 +66,7 @@ export class HistoricalEventService {
       () =>
         firstValueFrom(
           this.heventClient
-            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_EVENT_BY_ID, id)
+            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_EVENT_BY_ID, { id })
             .pipe(
               timeout(10000),
               catchError((error) => throwError(() => error)),
@@ -84,7 +84,9 @@ export class HistoricalEventService {
       () =>
         firstValueFrom(
           this.heventClient
-            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_EVENT_PREVIEW_BY_ID, id)
+            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_EVENT_PREVIEW_BY_ID, {
+              id,
+            })
             .pipe(
               timeout(10000),
               catchError((error) => throwError(() => error)),
@@ -114,12 +116,15 @@ export class HistoricalEventService {
     );
   }
 
-  async deleteEvent(id: string, userId: string) {
+  async deleteEvent(id: string, authorId: string) {
     return MicroserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.heventClient
-            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.DELETE_EVENT, { id, userId })
+            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.DELETE_EVENT, {
+              id,
+              authorId,
+            })
             .pipe(
               timeout(10000),
               catchError((error) => throwError(() => error)),

@@ -8,8 +8,8 @@ import { Reflector } from '@nestjs/core';
 import { createAuthClient } from 'better-auth/react';
 import { adminClient } from 'better-auth/client/plugins';
 
-import { PERMISSIONS_KEY } from './permissions.decorator';
-import { ac, roles, statements } from './permissions';
+import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
+import { ac, roles, statements } from '@phanhotboy/nsv-common/lib';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
