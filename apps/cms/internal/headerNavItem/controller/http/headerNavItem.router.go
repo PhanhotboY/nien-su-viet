@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/middleware"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
@@ -35,9 +34,9 @@ func RegisterHeaderNavItemHandlers(api huma.API, handler *HeaderNavItemHandler) 
 		Summary:     "Create header nav item",
 		Description: "Create a new header navigation item",
 		Tags:        []string{"header-nav-items"},
-		Middlewares: huma.Middlewares{
-			middleware.Authentication(api),
-		},
+		// Middlewares: huma.Middlewares{
+		// 	middleware.Authentication(api),
+		// },
 		DefaultStatus: http.StatusCreated,
 		Responses: map[string]*huma.Response{
 			"201": {
@@ -55,9 +54,9 @@ func RegisterHeaderNavItemHandlers(api huma.API, handler *HeaderNavItemHandler) 
 		Description:   "Update an existing header navigation item",
 		Tags:          []string{"header-nav-items"},
 		DefaultStatus: http.StatusOK,
-		Middlewares: huma.Middlewares{
-			middleware.Authentication(api),
-		},
+		// Middlewares: huma.Middlewares{
+		// 	middleware.Authentication(api),
+		// },
 		Responses: map[string]*huma.Response{
 			"200": {
 				Description: "Header navigation item updated successfully",
@@ -74,9 +73,9 @@ func RegisterHeaderNavItemHandlers(api huma.API, handler *HeaderNavItemHandler) 
 		Description:   "Delete a header navigation item",
 		Tags:          []string{"header-nav-items"},
 		DefaultStatus: http.StatusOK,
-		Middlewares: huma.Middlewares{
-			middleware.Authentication(api),
-		},
+		// Middlewares: huma.Middlewares{
+		// 	middleware.Authentication(api),
+		// },
 		Responses: map[string]*huma.Response{
 			"200": {
 				Description: "Header navigation item deleted successfully",
