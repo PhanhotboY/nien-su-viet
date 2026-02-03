@@ -1,48 +1,27 @@
-FROM node:24-alpine AS base
+# ---------- Builder ----------
+FROM node:24-slim AS builder
 
-# Install bun for build
-RUN npm install -g bun
+WORKDIR /app
 
-# Copy dependency files
-COPY package.json bun.lock ./
+COPY package*.json ./
+RUN npm ci --legacy-peer-deps
 
-# Builder stage - build the application
-FROM base AS builder
-
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
-
-WORKDIR /usr/src/app
-
-# Install all dependencies (including dev) for build
-RUN bun install
-
-# Copy source code
 COPY . .
+RUN npm run build historical-event
 
-# Build the application
-RUN /bin/sh -c bun run build historical-event
 
-# Final production stage - minimal image
-FROM base AS production
+# ---------- Production ----------
+FROM node:24-slim AS production
 
-ARG PORT
-ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+WORKDIR /app
 
-WORKDIR /usr/src/app
+ENV NODE_ENV=production
 
-# Install only PM2
-RUN npm install -g pm2
-RUN bun i --production
-RUN npm rm -g bun
+COPY package*.json ./
+RUN npm ci --omit=dev --legacy-peer-deps && npm cache clean --force
 
-# Copy only necessary files from previous stages
-COPY --from=builder /usr/src/app/dist ./dist
-COPY ecosystem.config.js package.json ./
+COPY --from=builder /app/dist ./dist
 
-# Expose port (adjust if needed)
-EXPOSE ${PORT}
+EXPOSE 8082
 
-# Use pm2-runtime for Docker (runs in foreground)
-CMD ["sh", "-c", "pm2-runtime start ecosystem.config.js --only historical-event-service"]
+CMD ["node", "dist/apps/historical-event/main.js"]

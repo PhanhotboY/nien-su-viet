@@ -1,0 +1,47 @@
+services:
+  nsv-auth-service:
+    image: phanhotboy/nsv-auth-service:v1
+    container_name: nsv-auth-service
+    ports:
+      - '8081:8081'
+    volumes:
+      - nsv-auth-data:/data
+    env_file:
+      - ./auth-service/.env
+  nsv-hevent-service:
+    image: phanhotboy/nsv-historical-event-service:v1
+    container_name: nsv-hevent-service
+    ports:
+      - '8082:8082'
+    volumes:
+      - nsv-hevent-data:/data
+    env_file:
+      - ./historical-event-service/.env
+  nsv-cms-service:
+    image: phanhotboy/nsv-cms-service:v1
+    container_name: nsv-cms-service
+    ports:
+      - '8084:8084'
+    volumes:
+      - nsv-cms-data:/data
+    env_file:
+      - ./cms-service/.env
+  nsv-gateway-service:
+    image: phanhotboy/nsv-gateway-service:v1
+    container_name: nsv-gateway-service
+    ports:
+      - '8080:8080'
+    volumes:
+      - nsv-gateway-data:/data
+    env_file:
+      - ./gateway-service/.env
+    environment:
+      - AUTH_SERVICE_ENDPOINT=http://nsv-auth-service:8081
+      - CMS_SERVICE_ENDPOINT=http://nsv-cms-service:8084
+      - HISTORICAL_EVENT_SERVICE_HOST=nsv-hevent-service
+
+volumes:
+  nsv-auth-data:
+  nsv-hevent-data:
+  nsv-cms-data:
+  nsv-gateway-data:
