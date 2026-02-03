@@ -1,4 +1,5 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 
 import { PrismaService } from '@historical-event/database';
 import {
@@ -16,7 +17,7 @@ import {
   HistoricalEventBaseCreateDto,
   HistoricalEventBaseUpdateDto,
   HistoricalEventPreviewResponseDto,
-} from '@phanhotboy/nsv-common/dto/historical-event';
+} from './dto';
 
 @Injectable()
 export class HistoricalEventService {
@@ -207,7 +208,10 @@ export class HistoricalEventService {
   async deleteEvent(id: string, userId: string) {
     const event = await this.getAuthorEventById(id, userId);
     if (!event) {
-      throw new NotFoundException('Sự kiện lịch sử không tồn tại');
+      throw new RpcException({
+        message: 'Sự kiện lịch sử không tồn tại',
+        statusCode: 404,
+      });
     }
 
     await this.prisma.historicalEvent.delete({ where: { id } });

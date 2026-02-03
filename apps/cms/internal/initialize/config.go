@@ -2,32 +2,50 @@ package initialize
 
 import (
 	"fmt"
-	"os"
+	"log"
+	"strings"
 
+	"github.com/fsnotify/fsnotify"
+	"github.com/go-viper/mapstructure/v2"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/global"
 	"github.com/spf13/viper"
+	"github.com/subosito/gotenv"
 )
 
 func LoadConfig() {
-	env := os.Getenv("APP_ENV")
-	if env == "" {
-		env = "development"
-	}
+	_ = gotenv.Load(".env")
 
-	viper.AddConfigPath("./configs")
-	viper.SetConfigName(env + ".local")
-	viper.SetConfigType("yaml")
+	viper.SetEnvPrefix("cms")
+	viper.SetConfigName(".env")
+	viper.SetConfigType("env")
+	viper.AddConfigPath(".")
+
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			panic(fmt.Errorf("config file not found: %w", err))
+			log.Fatalf("config file not found: %s", err)
 		}
-		panic(fmt.Errorf("error reading config file: %w", err))
+		log.Fatalf("error reading config file: %s", err)
 	}
 
-	if err := viper.Unmarshal(&global.Config); err != nil {
-		panic(fmt.Errorf("unable to decode config into struct: %w", err))
+	// Watch for configuration changes and reload
+	viper.OnConfigChange(func(e fsnotify.Event) {
+		fmt.Println("Config file changed:", e.Name)
+	})
+	viper.WatchConfig()
+
+	// Bind environment variables to nested configuration keys
+	for _, key := range viper.AllKeys() {
+		viper.BindEnv(strings.Join(strings.Split(key, "_")[1:], "."))
+	}
+
+	if err := viper.Unmarshal(&global.Config, func(dc *mapstructure.DecoderConfig) {
+		dc.WeaklyTypedInput = true
+	}); err != nil {
+		log.Fatalf("unable to decode config into struct: %s", err)
 	} else {
-		fmt.Printf("Configuration loaded for %s environment\n", env)
+		fmt.Printf("Configuration loaded for %s environment\n", viper.Get("server.env"))
 	}
 }

@@ -1,12 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
-import {
-  RmqService,
-  USER_EVENT,
-  UserBaseDto,
-  UserDeleteDto,
-} from '@phanhotboy/nsv-common';
+import { RmqService } from '@phanhotboy/nsv-common';
 import { UserService } from './user.service';
+import { USER_EVENT } from '@phanhotboy/constants';
+import { UserBaseDto, UserDeleteDto } from './dto';
 
 @Controller()
 export class UserConsumer {

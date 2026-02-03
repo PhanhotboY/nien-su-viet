@@ -4,15 +4,12 @@ import { admin as adminPlugin, openAPI } from 'better-auth/plugins';
 import { ClientProxy } from '@nestjs/microservices';
 
 import { type Config } from '../config';
-import {
-  ConfigService,
-  USER_EVENT,
-  UserBaseDto,
-  UserDeleteDto,
-} from '@phanhotboy/nsv-common';
-import { ac, roles } from '@phanhotboy/nsv-common/auth';
+import { UserBaseDto, UserDeleteDto } from '@auth/auth/dto';
+import { ac, roles } from '@phanhotboy/nsv-common/lib';
 import { PrismaService } from '@auth/database';
 import { plainToInstance } from 'class-transformer';
+import { ConfigService } from '@phanhotboy/nsv-common';
+import { USER_EVENT } from '@phanhotboy/constants/user.event.constant';
 
 export function createBetterAuthInstance(
   config: ConfigService<Config>,

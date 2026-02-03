@@ -1,11 +1,12 @@
 import { createAuthClient } from 'better-auth/react';
-import { AUTH_BASE_URL, DEFAULT_LOGIN_REDIRECT } from './config';
+import { DEFAULT_LOGIN_REDIRECT } from './config';
 import { adminClient } from 'better-auth/client/plugins';
 import { ac, roles } from './permissions';
+import { CONFIG } from '@/config';
 
 export const authClient = createAuthClient({
   /** The base URL of the server (optional if you're using the same domain) */
-  baseURL: AUTH_BASE_URL + '/auth',
+  baseURL: CONFIG.apiEndpoint + '/auth',
   plugins: [adminClient({ ac, roles })],
 });
 

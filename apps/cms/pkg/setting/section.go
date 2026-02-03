@@ -2,20 +2,20 @@ package setting
 
 type Config struct {
 	Server     ServerConfig     `mapstructure:"server"`
-	Postgresql PostgresqlConfig `mapstructure:"postgresql"`
+	Postgresql PostgresqlConfig `mapstructure:"db"`
 	Rmq        RmqConfig        `mapstructure:"rmq"`
-	Security   Security         `mapstructure:"security"`
+	Security   Security         `mapstructure:"auth"`
 }
 
 type ServerConfig struct {
 	Host string `mapstructure:"host"`
-	Port int    `mapstructure:"port"`
+	Port string `mapstructure:"port"`
 	Env  string `mapstructure:"env"`
 }
 
 type PostgresqlConfig struct {
 	Host     string `mapstructure:"host"`
-	Port     int    `mapstructure:"port"`
+	Port     string `mapstructure:"port"`
 	Username string `mapstructure:"username"`
 	Password string `mapstructure:"password"`
 	Database string `mapstructure:"database"`
@@ -23,10 +23,10 @@ type PostgresqlConfig struct {
 
 type RmqConfig struct {
 	Dsn       string `mapstructure:"dsn"`
-	QueueName string `mapstructure:"queue_name"`
+	QueueName string `mapstructure:"queue.name"`
 }
 
 type Security struct {
-	AuthCookiePrefix string `mapstructure:"auth_cookie_prefix"`
-	BetterAuthSecret string `mapstructure:"better_auth_secret"`
+	AuthCookiePrefix string `mapstructure:"cookie.prefix"`
+	BetterAuthSecret string `mapstructure:"secret"`
 }

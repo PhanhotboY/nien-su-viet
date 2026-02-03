@@ -4,23 +4,19 @@ import { configuration } from './config';
 import { HistoricalEventModule } from './modules/historical-event/historical-event.module';
 import { PrismaModule } from './database';
 import { UserModule } from './modules/user';
+import { APP_FILTER } from '@nestjs/core';
+import { MicroserviceExceptionFilter } from '@phanhotboy/nsv-common/filters/rpc-exception.filter';
 
 @Module({
   imports: [
     CommonModule.forRoot({
       cachePrefix: 'historical-event-service',
       configuration,
-      rabbitmqConfigKey: 'rabbitmq',
-      redisConfigKey: 'redis',
-      throttlerConfigKey: 'throttlers',
       global: true,
-      useSerializeInterceptors: true,
-      useCacheInterceptor: true,
     }),
     PrismaModule.forRoot(),
     HistoricalEventModule,
     UserModule,
   ],
-  providers: [],
 })
 export class AppModule {}

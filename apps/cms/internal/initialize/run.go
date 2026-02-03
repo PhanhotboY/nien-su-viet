@@ -1,13 +1,15 @@
 package initialize
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/phanhotboy/nien-su-viet/apps/cms/global"
 )
 
-func Run() (http.Handler, int) {
+func Run() (http.Handler, string) {
 	LoadConfig()
+	fmt.Print(global.Config)
 
 	db, err := InitPostgreSQL()
 	if err != nil {

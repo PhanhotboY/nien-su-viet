@@ -14,7 +14,7 @@
     "plugins": ["@nestjs/swagger"]
   },
   "monorepo": true,
-  "root": "apps/auth",
+  "root": "apps",
   "projects": {
     "auth": {
       "type": "application",
@@ -23,6 +23,15 @@
       "entryFile": "main",
       "compilerOptions": {
         "tsConfigPath": "apps/auth/tsconfig.app.json"
+      }
+    },
+    "gateway": {
+      "type": "application",
+      "root": "apps/gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/gateway/tsconfig.app.json"
       }
     },
     "historical-event": {

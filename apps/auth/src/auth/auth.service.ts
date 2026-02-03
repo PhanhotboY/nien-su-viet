@@ -1,10 +1,11 @@
 import { ClientProxy } from '@nestjs/microservices';
 import { Inject, Injectable } from '@nestjs/common';
 
-import { ConfigService, RMQ } from '@phanhotboy/nsv-common';
+import { ConfigService } from '@phanhotboy/nsv-common';
 import { createBetterAuthInstance } from '@auth/lib/auth';
 import { PrismaService } from '@auth/database';
 import { Config } from '@auth/config';
+import { RMQ } from '@phanhotboy/constants';
 
 @Injectable()
 export class AuthService {

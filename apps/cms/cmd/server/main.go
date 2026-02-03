@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"os/signal"
-	"strconv"
 	"syscall"
 	"time"
 
@@ -21,7 +20,7 @@ func main() {
 	defer stop()
 
 	srv := &http.Server{
-		Addr:              ":" + strconv.Itoa(port),
+		Addr:              ":" + port,
 		Handler:           r,
 		ReadHeaderTimeout: 5 * time.Second,
 	}
