@@ -35,7 +35,7 @@ export class HistoricalEventController {
 
   @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.CREATE_EVENT)
   async createHistoricalEvent(
-    @Payload('id') authorId: string,
+    @Payload('authorId') authorId: string,
     @Payload('payload') event: HistoricalEventBaseCreateDto,
   ) {
     return this.historicalEventService.createEvent(authorId, event);

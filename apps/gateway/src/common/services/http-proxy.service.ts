@@ -15,6 +15,7 @@ export class HttpProxyService {
         method: req.method,
         url: req.originalUrl,
         headers: { ...req.headers, host: undefined },
+        data: req.body,
         validateStatus: () => true, // propagate non-2xx as well
       }),
     );

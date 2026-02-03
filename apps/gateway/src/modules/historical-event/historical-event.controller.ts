@@ -32,7 +32,7 @@ import { Public, Permissions, CurrentUser } from '@gateway/common/decorators';
 
 @Controller('historical-events')
 export class HistoricalEventController {
-  private readonly routePath: 'api/v1/historical-events';
+  private readonly routePath = 'api/v1/historical-events';
 
   constructor(
     private readonly historicalEventService: HistoricalEventService,

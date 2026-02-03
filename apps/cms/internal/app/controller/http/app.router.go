@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/middleware"
 	"github.com/phanhotboy/nien-su-viet/apps/cms/pkg/response"
 )
 
@@ -35,8 +34,8 @@ func RegisterAppRoutes(api huma.API, handler *AppHandler) {
 		Description:   "Update application information",
 		Tags:          []string{"app"},
 		DefaultStatus: http.StatusOK,
-		Middlewares: huma.Middlewares{
-			middleware.Authentication(api),
-		},
+		// Middlewares: huma.Middlewares{
+		// 	middleware.Authentication(api),
+		// },
 	}, response.Wrap(handler.UpdateAppInfo))
 }

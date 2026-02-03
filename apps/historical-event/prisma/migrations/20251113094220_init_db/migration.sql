@@ -1,10 +1,16 @@
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "public";
+
+-- CreateEnum
+CREATE TYPE "EVENT_DATE_TYPE" AS ENUM ('EXACT', 'APPROXIMATE');
+
 -- CreateTable
 CREATE TABLE "User" (
-    "id" UUID NOT NULL,
-    "firstName" VARCHAR(255) NOT NULL,
-    "lastName" VARCHAR(255),
-    "slug" VARCHAR(255) NOT NULL,
-    "avatarId" UUID,
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "image" TEXT,
+    "name" TEXT NOT NULL,
+    "role" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -21,9 +27,11 @@ CREATE TABLE "HistoricalEvent" (
     "name" VARCHAR(255) NOT NULL,
     "content" TEXT NOT NULL,
     "thumbnailId" UUID,
-    "authorId" UUID NOT NULL,
+    "authorId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(6) NOT NULL,
+    "fromDateType" "EVENT_DATE_TYPE" NOT NULL DEFAULT 'EXACT',
+    "toDateType" "EVENT_DATE_TYPE" NOT NULL DEFAULT 'EXACT',
 
     CONSTRAINT "HistoricalEvent_pkey" PRIMARY KEY ("id")
 );
@@ -52,10 +60,10 @@ CREATE TABLE "EventCategories" (
 CREATE TABLE "EventEdit" (
     "id" UUID NOT NULL,
     "eventId" UUID NOT NULL,
-    "editorId" UUID NOT NULL,
+    "editorId" TEXT NOT NULL,
     "editedAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "prevContent" TEXT NOT NULL,
-    "newContent" TEXT NOT NULL,
+    "prevContent" TEXT,
+    "newContent" TEXT,
     "prevFromYear" SMALLINT NOT NULL,
     "prevFromMonth" SMALLINT,
     "prevFromDay" SMALLINT,
@@ -93,12 +101,13 @@ CREATE TABLE "Image" (
     "id" UUID NOT NULL,
     "caption" TEXT,
     "publicUrl" VARCHAR(255) NOT NULL,
+    "description" TEXT,
 
     CONSTRAINT "Image_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_slug_key" ON "User"("slug");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE INDEX "idx_event_from_year" ON "HistoricalEvent"("fromYear");
@@ -146,22 +155,20 @@ CREATE UNIQUE INDEX "EventPeriod_name_key" ON "EventPeriod"("name");
 CREATE UNIQUE INDEX "EventPeriod_slug_key" ON "EventPeriod"("slug");
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES "Image"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "HistoricalEvent" ADD CONSTRAINT "HistoricalEvent_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "HistoricalEvent" ADD CONSTRAINT "HistoricalEvent_thumbnailId_fkey" FOREIGN KEY ("thumbnailId") REFERENCES "Image"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "HistoricalEvent" ADD CONSTRAINT "HistoricalEvent_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "EventCategories" ADD CONSTRAINT "EventCategories_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "EventCategory"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "EventCategories" ADD CONSTRAINT "EventCategories_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "HistoricalEvent"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "EventCategories" ADD CONSTRAINT "EventCategories_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "EventCategory"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "EventEdit" ADD CONSTRAINT "EventEdit_editorId_fkey" FOREIGN KEY ("editorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "EventEdit" ADD CONSTRAINT "EventEdit_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "HistoricalEvent"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- AddForeignKey
-ALTER TABLE "EventEdit" ADD CONSTRAINT "EventEdit_editorId_fkey" FOREIGN KEY ("editorId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

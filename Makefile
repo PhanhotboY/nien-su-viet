@@ -11,7 +11,7 @@ setup-%:
 	bun --cwd apps/$* setup/index.ts
 
 dbuild-%:
-	docker build -f local/$*-service/Dockerfile -t phanhotboy/nsv-$*-service:v1 .
+	docker build -f local/$*-service/Dockerfile .
 
 dpush-%:
 	docker push phanhotboy/nsv-$*-service:v1
