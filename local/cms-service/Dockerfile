@@ -1,7 +1,7 @@
 FROM golang:alpine AS builder
 
 # Set working directory
-WORKDIR /app
+WORKDIR /app/
 COPY apps/cms/ .
 
 # Build the Go application
@@ -15,7 +15,6 @@ WORKDIR /app
 ENV APP_ENV=production
 
 COPY --from=builder /app/bin/cms-service ./cms-service
-COPY apps/cms/configs/production.local.yaml ./configs/production.local.yaml
 
 EXPOSE 8084
 

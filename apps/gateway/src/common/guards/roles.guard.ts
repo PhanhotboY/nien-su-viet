@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { createAuthClient } from 'better-auth/react';
+import { createAuthClient } from 'better-auth/client';
 import { adminClient } from 'better-auth/client/plugins';
 
 import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';

@@ -14,6 +14,7 @@ async function bootstrap() {
   app.connectMicroservice<TcpOptions>({
     transport: Transport.TCP,
     options: {
+      host: '0.0.0.0',
       port: tcpPort,
     },
   });
