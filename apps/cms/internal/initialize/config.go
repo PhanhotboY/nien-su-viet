@@ -3,6 +3,7 @@ package initialize
 import (
 	"fmt"
 	"log"
+	"os"
 	"strings"
 
 	"github.com/fsnotify/fsnotify"
@@ -25,9 +26,11 @@ func LoadConfig() {
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			log.Fatalf("config file not found: %s", err)
+			log.Printf("config file not found: %s", err)
+			log.Println("proceeding with environment variables only")
+		} else {
+			log.Fatalf("error reading config file: %s", err)
 		}
-		log.Fatalf("error reading config file: %s", err)
 	}
 
 	// Watch for configuration changes and reload
@@ -36,9 +39,12 @@ func LoadConfig() {
 	})
 	viper.WatchConfig()
 
-	// Bind environment variables to nested configuration keys
-	for _, key := range viper.AllKeys() {
-		viper.BindEnv(strings.Join(strings.Split(key, "_")[1:], "."))
+	for _, key := range os.Environ() {
+		key = strings.SplitN(key, "=", 2)[0]
+		if key, ok := strings.CutPrefix(key, "CMS_"); ok {
+			key = strings.ToLower(strings.ReplaceAll(key, "_", "."))
+			viper.BindEnv(key)
+		}
 	}
 
 	if err := viper.Unmarshal(&global.Config, func(dc *mapstructure.DecoderConfig) {

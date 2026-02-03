@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm ci --legacy-peer-deps
 
 COPY . .
-RUN npm run build auth
+RUN npm run build gateway
 
 
 # ---------- Production ----------
@@ -22,6 +22,6 @@ RUN npm ci --omit=dev --legacy-peer-deps && npm cache clean --force
 
 COPY --from=builder /app/dist ./dist
 
-EXPOSE 8081
+EXPOSE 8080
 
-CMD ["node", "dist/apps/auth/main.js"]
+CMD ["node", "dist/apps/gateway/main.js"]

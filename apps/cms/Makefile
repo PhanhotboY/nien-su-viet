@@ -1,5 +1,5 @@
 APP_NAME = server
-APP_ENV ?= development
+CMS_SERVER_ENV ?= development
 
 generate:
 	go run cmd/gen-openapi/main.go
@@ -14,7 +14,7 @@ build: clean
 	go build -o bin/$(APP_NAME) cmd/$(APP_NAME)/main.go
 
 run: build
-	APP_ENV=production ./bin/$(APP_NAME)
+	CMS_SERVER_ENV=production ./bin/$(APP_NAME)
 
 OPENAPI_DIR = ../../openapi
 OUTPUT_DIR = pkg/generated
