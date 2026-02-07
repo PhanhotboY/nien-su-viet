@@ -251,6 +251,9 @@ export class PostService {
       if (!data.summary && data.content) {
         data.summary = getExcerpt(data.content, 200);
       }
+      if (data.authorId) {
+        delete data.authorId;
+      }
 
       const post = await this.prisma.post.create({
         data: {
