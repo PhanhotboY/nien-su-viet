@@ -62,7 +62,7 @@ export const Navbar = ({
   return (
     <header className="sticky border-b top-0 z-40 w-full bg-white dark:border-b-slate-700 dark:bg-background">
       <NavigationMenu className="mx-auto">
-        <NavigationMenuList className="container h-14 px-4 w-screen flex justify-between">
+        <NavigationMenuList className="container h-14 px-4 w-screen flex justify-start">
           <NavigationMenuItem className="font-bold flex">
             <Link
               rel="noreferrer noopener"
@@ -85,7 +85,7 @@ export const Navbar = ({
           </NavigationMenuItem>
 
           {/* mobile */}
-          <span className="flex md:hidden">
+          <span className="flex md:hidden ml-auto">
             <ModeToggle />
 
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -115,7 +115,7 @@ export const Navbar = ({
                     {appTitle}
                   </SheetTitle>
                 </SheetHeader>
-                <nav className="flex flex-col justify-center items-center gap-2 mt-4">
+                <nav className="flex flex-col justify-center items-center gap-2">
                   {navItems
                     ?.sort((a, b) => a.order - b.order)
                     .map((item, i) => (
@@ -132,7 +132,7 @@ export const Navbar = ({
           </span>
 
           {/* desktop */}
-          <nav className="hidden md:flex gap-2">
+          <nav className="hidden md:flex gap-2 ml-20">
             {navItems
               ?.sort((a, b) => a.order - b.order)
               .map((item, i) => (
@@ -146,7 +146,7 @@ export const Navbar = ({
               ))}
           </nav>
 
-          <div className="hidden md:flex gap-2">
+          <div className="hidden md:flex gap-2 ml-auto">
             <SignedIn>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

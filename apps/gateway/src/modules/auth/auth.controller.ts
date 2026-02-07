@@ -18,6 +18,7 @@ export class AuthController {
     this.authServiceProxy = createProxyMiddleware({
       target: this.config.get('authServiceEndpoint'),
       changeOrigin: true, // for vhosted sites
+      timeout: 5000,
     });
   }
 

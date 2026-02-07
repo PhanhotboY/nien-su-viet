@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
 	"github.com/go-playground/validator"
@@ -27,6 +28,7 @@ func ValidatorMiddleware() func(http.Handler) http.Handler {
 
 // GetValidator retrieves the validator from the request context
 func GetValidator(r *http.Request) *validator.Validate {
+	fmt.Printf("Retrieving validator from context: %v\n", r.Context().Value(validatorKey))
 	if val := r.Context().Value(validatorKey); val != nil {
 		if v, ok := val.(*validator.Validate); ok {
 			return v

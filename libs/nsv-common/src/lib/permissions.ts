@@ -24,6 +24,7 @@ const cmsStatements = {
   footerNavItem: crudActions,
   headerNavItem: crudActions,
   ping: crudActions,
+  post: crudActions,
 };
 
 const statements = {
@@ -63,6 +64,7 @@ const user = ac.newRole({
   media: ['read'],
   footerNavItem: ['read'],
   headerNavItem: ['read'],
+  blog: ['read'],
   ...userAc.statements,
 } as unknown as any);
 

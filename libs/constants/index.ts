@@ -5,5 +5,6 @@ export * from './rmq.constant';
 export * from './role.constant';
 export * from './historical-event.constant';
 export * from './historical-event.message-pattern';
+export * from './post.message-pattern';
 export * from './tcp-service.constant';
 export * from './user.event.constant';

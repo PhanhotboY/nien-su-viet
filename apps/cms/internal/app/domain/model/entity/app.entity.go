@@ -9,7 +9,7 @@ import (
 
 // App defines the app entity
 type App struct {
-	AppId       int64        `gorm:"column:id;primaryKey;autoIncrement" json:"id"`                // Primary key
+	AppId       string       `gorm:"column:id;primaryKey;default:gen_random_uuid()" json:"id"`    // Primary key
 	Title       string       `gorm:"column:title;not null" json:"title"`                          // Website title
 	Description *string      `gorm:"column:description" json:"description,omitempty"`             // Website description
 	Logo        *string      `gorm:"column:logo" json:"logo,omitempty"`                           // URL of the website logo

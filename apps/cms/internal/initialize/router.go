@@ -17,8 +17,8 @@ import (
 	appController "github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/controller/http"
 	appInit "github.com/phanhotboy/nien-su-viet/apps/cms/internal/initialize/app"
 
-	mediaInit "github.com/phanhotboy/nien-su-viet/apps/cms/internal/initialize/media"
-	mediaController "github.com/phanhotboy/nien-su-viet/apps/cms/internal/media/controller/http"
+	postInit "github.com/phanhotboy/nien-su-viet/apps/cms/internal/initialize/post"
+	postController "github.com/phanhotboy/nien-su-viet/apps/cms/internal/post/controller/http"
 
 	headerNavItemController "github.com/phanhotboy/nien-su-viet/apps/cms/internal/headerNavItem/controller/http"
 	headerNavItemInit "github.com/phanhotboy/nien-su-viet/apps/cms/internal/initialize/headerNavItem"
@@ -93,13 +93,13 @@ func InitRouter(db *gorm.DB, isLogger string) http.Handler {
 
 	// Initialize handlers
 	appHandler := appInit.InitApp(db)
-	mediaHandler := mediaInit.InitMedia(db)
+	postHandler := postInit.InitPost(db)
 	headerNavItemHandler := headerNavItemInit.InitHeaderNavItem(db)
 	footerNavItemHandler := footerNavItemInit.InitFooterNavItem(db)
 
 	// Register module routes
 	appController.RegisterAppRoutes(grp, appHandler)
-	mediaController.RegisterMediaRoutes(grp, mediaHandler)
+	postController.RegisterPostRoutes(grp, postHandler)
 	headerNavItemController.RegisterHeaderNavItemHandlers(grp, headerNavItemHandler)
 	footerNavItemController.RegisterFooterNavItemRoutes(grp, footerNavItemHandler)
 

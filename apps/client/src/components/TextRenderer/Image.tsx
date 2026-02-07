@@ -8,8 +8,15 @@ export default function Image({
   tunes: { caption: boolean };
 }) {
   return (
-    <div>
-      <NextImage src={data.file.url} alt={data.caption} loading="lazy" />
-    </div>
+    <figure>
+      <NextImage
+        src={data.file.url}
+        alt={data.caption}
+        loading="lazy"
+        width={1200}
+        height={800}
+      />
+      <figcaption>{data.caption}</figcaption>
+    </figure>
   );
 }

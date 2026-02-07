@@ -232,6 +232,18 @@ export class MicroserviceErrorHandler {
       '',
     );
 
+    // Remove ip addresses
+    message = message.replaceAll(
+      /^((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]):([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/gm,
+      '',
+    );
+
+    // Remove url
+    message = message.replaceAll(
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/gm,
+      '',
+    );
+
     return message;
   }
 

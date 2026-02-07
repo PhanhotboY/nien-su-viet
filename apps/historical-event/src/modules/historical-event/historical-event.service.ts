@@ -18,6 +18,7 @@ import {
   HistoricalEventBaseUpdateDto,
   HistoricalEventPreviewResponseDto,
 } from './dto';
+import { UserService } from '../user';
 
 @Injectable()
 export class HistoricalEventService {
@@ -29,11 +30,13 @@ export class HistoricalEventService {
     private readonly util: UtilService,
     @Inject(RedisService)
     private readonly redisService: RedisServiceType,
+    private readonly userService: UserService,
   ) {
     this.cacheKey = this.util.genCacheKey(this.cachePrefix);
   }
 
   async createEvent(authorId: string, payload: HistoricalEventBaseCreateDto) {
+    await this.userService.findUserById(authorId);
     const event = await this.prisma.historicalEvent.create({
       data: { ...payload, authorId },
     });

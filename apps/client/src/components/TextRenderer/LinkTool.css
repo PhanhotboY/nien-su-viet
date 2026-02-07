@@ -1,0 +1,12 @@
+.typography {
+  .link-tool {
+    .link-tool__content {
+      background-color: var(--card);
+      color: var(--card-foreground) !important;
+    }
+
+    .link-tool__anchor {
+      color: oklch(from var(--card-foreground) l c h / 0.75) !important;
+    }
+  }
+}

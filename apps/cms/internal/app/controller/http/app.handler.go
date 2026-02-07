@@ -32,14 +32,12 @@ func (h *AppHandler) GetAppInfo(ctx context.Context, input *struct{}) (*GetAppRe
 
 // UpdateAppInfo updates app information
 func (h *AppHandler) UpdateAppInfo(ctx context.Context, input *UpdateAppBodyReq) (*UpdateAppRes, error) {
-	err := h.service.UpdateAppInfo(ctx, &input.Body)
+	id, err := h.service.UpdateAppInfo(ctx, &input.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return response.SuccessResponse(201, response.OperationResult{
-		Success: true,
-	}), nil
+	return response.OperationSuccessResponse(201, id), nil
 }
 
 type GetAppQueryReq struct{}

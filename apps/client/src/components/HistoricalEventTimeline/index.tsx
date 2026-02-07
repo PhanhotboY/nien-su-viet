@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { VisItem } from '@/interfaces/vis.interface';
 import { createDate } from '@/helper/date';
-import { components } from '@nsv-interfaces/historical-event';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { IPaginatedResponse } from '../../interfaces/response.interface';
 
 import 'vis-timeline/styles/vis-timeline-graph2d.css';
@@ -20,12 +20,13 @@ import { EventDetailDialog } from './EventDetailDialog';
 
 export function HistoricalEventTimeline() {
   const [events, setEvents] = useState<IPaginatedResponse<
-    components['schemas']['HistoricalEventBriefResponseDto']
+    components['schemas']['HistoricalEventPreviewResponseDto']
   > | null>(null);
   const [previewItemId, setPreviewItemId] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    getEvents({ limit: '1000' }).then(setEvents);
+    getEvents({ limit: '1000' }).then(setEvents).catch(setError);
   }, []);
   const timelineRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -266,9 +267,15 @@ export function HistoricalEventTimeline() {
       <CardContent className="p-0">
         <FunctionalButtons />
 
-        <div className="p-6">
-          <div ref={timelineRef} className="timeline-container" />
-        </div>
+        {!error ? (
+          <div className="p-6">
+            <div ref={timelineRef} className="timeline-container" />
+          </div>
+        ) : (
+          <div className="p-6 text-red-600 font-semibold">
+            Lỗi khi tải dữ liệu lịch sử: {error?.message}
+          </div>
+        )}
 
         <EventDetailDialog
           eventId={previewItemId}

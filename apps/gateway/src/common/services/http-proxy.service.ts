@@ -1,4 +1,4 @@
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, throwError } from 'rxjs';
 import { Request } from 'express';
 import { HttpService } from '@nestjs/axios';
 import { HttpException, Injectable } from '@nestjs/common';
@@ -25,6 +25,6 @@ export class HttpProxyService {
     }
 
     // Let Nest handle the response so CacheInterceptor can cache it
-    return upstream.data?.data || upstream.data;
+    return upstream.data;
   }
 }

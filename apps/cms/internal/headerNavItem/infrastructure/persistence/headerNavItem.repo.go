@@ -15,17 +15,18 @@ type headerNavItemRepository struct {
 }
 
 // DeleteNavItem implements repository.HeaderNavItemRepository.
-func (h *headerNavItemRepository) DeleteNavItem(ctx context.Context, id string) error {
-	return h.db.WithContext(ctx).Where("id = ?", id).Delete(&entity.HeaderNavItem{}).Error
+func (h *headerNavItemRepository) DeleteNavItem(ctx context.Context, id string) (string, error) {
+	err := h.db.WithContext(ctx).Where("id = ?", id).Delete(&entity.HeaderNavItem{}).Error
+	return id, err
 }
 
 // CreateNavItems implements repository.HeaderNavItemRepository.
-func (h *headerNavItemRepository) CreateNavItem(ctx context.Context, navItem *entity.HeaderNavItem) error {
+func (h *headerNavItemRepository) CreateNavItem(ctx context.Context, navItem *entity.HeaderNavItem) (string, error) {
 	if navItem.Id == "" {
 		navItem.Id = uuid.New().String()
 	}
-	return h.db.WithContext(ctx).Model(&entity.HeaderNavItem{}).Create(navItem).Error
-
+	err := h.db.WithContext(ctx).Model(&entity.HeaderNavItem{}).Create(navItem).Error
+	return navItem.Id, err
 }
 
 // FindNavItemById implements repository.HeaderNavItemRepository.
@@ -52,9 +53,9 @@ func (h *headerNavItemRepository) GetNavItems(ctx context.Context) ([]*entity.He
 }
 
 // UpdateNavItems implements repository.HeaderNavItemRepository.
-func (h *headerNavItemRepository) UpdateNavItem(ctx context.Context, id string, navItem *entity.HeaderNavItem) error {
-	return h.db.WithContext(ctx).Model(&entity.HeaderNavItem{}).Where("id = ?", id).Updates(navItem).Error
-
+func (h *headerNavItemRepository) UpdateNavItem(ctx context.Context, id string, navItem *entity.HeaderNavItem) (string, error) {
+	err := h.db.WithContext(ctx).Model(&entity.HeaderNavItem{}).Where("id = ?", id).Updates(navItem).Error
+	return id, err
 }
 
 func NewHeaderNavItemRepository(db *gorm.DB) repository.HeaderNavItemRepository {

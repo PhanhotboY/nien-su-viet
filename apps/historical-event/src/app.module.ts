@@ -4,6 +4,7 @@ import { configuration } from './config';
 import { HistoricalEventModule } from './modules/historical-event/historical-event.module';
 import { PrismaModule } from './database';
 import { UserModule } from './modules/user';
+import { PostModule } from './modules/post';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UserModule } from './modules/user';
     PrismaModule.forRoot(),
     HistoricalEventModule,
     UserModule,
+    PostModule,
   ],
 })
 export class AppModule {}
