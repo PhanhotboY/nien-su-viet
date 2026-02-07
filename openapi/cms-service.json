@@ -24,6 +24,10 @@
             ],
             "type": "string"
           },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination",
+            "description": "Pagination info,omitempty"
+          },
           "statusCode": {
             "description": "HTTP status code",
             "examples": [
@@ -77,6 +81,10 @@
               "success"
             ],
             "type": "string"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination",
+            "description": "Pagination info,omitempty"
           },
           "statusCode": {
             "description": "HTTP status code",
@@ -132,6 +140,10 @@
             ],
             "type": "string"
           },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination",
+            "description": "Pagination info,omitempty"
+          },
           "statusCode": {
             "description": "HTTP status code",
             "examples": [
@@ -157,13 +169,13 @@
         ],
         "type": "object"
       },
-      "APIResponseListMediaRes": {
+      "APIResponseListPostBrief": {
         "additionalProperties": false,
         "properties": {
           "$schema": {
             "description": "A URL to the JSON Schema for this object.",
             "examples": [
-              "localhost:8084/schemas/APIResponseListMediaRes.json"
+              "localhost:8084/schemas/APIResponseListPostBrief.json"
             ],
             "format": "uri",
             "readOnly": true,
@@ -172,7 +184,7 @@
           "data": {
             "description": "Response data",
             "items": {
-              "$ref": "#/components/schemas/MediaRes"
+              "$ref": "#/components/schemas/PostBrief"
             },
             "type": [
               "array",
@@ -185,6 +197,10 @@
               "success"
             ],
             "type": "string"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination",
+            "description": "Pagination info,omitempty"
           },
           "statusCode": {
             "description": "HTTP status code",
@@ -233,6 +249,62 @@
               "success"
             ],
             "type": "string"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination",
+            "description": "Pagination info,omitempty"
+          },
+          "statusCode": {
+            "description": "HTTP status code",
+            "examples": [
+              200
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "timestamp": {
+            "description": "Response timestamp in Unix format",
+            "examples": [
+              1625247600
+            ],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message",
+          "data",
+          "timestamp"
+        ],
+        "type": "object"
+      },
+      "APIResponsePostDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "localhost:8084/schemas/APIResponsePostDetail.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PostDetail",
+            "description": "Response data"
+          },
+          "message": {
+            "description": "Response message",
+            "examples": [
+              "success"
+            ],
+            "type": "string"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination",
+            "description": "Pagination info,omitempty"
           },
           "statusCode": {
             "description": "HTTP status code",
@@ -800,189 +872,64 @@
         ],
         "type": "object"
       },
-      "MediaRes": {
-        "additionalProperties": false,
-        "properties": {
-          "alt": {
-            "examples": [
-              "An example image"
-            ],
-            "type": "string"
-          },
-          "caption": {
-            "examples": [
-              "Photo caption"
-            ],
-            "type": "string"
-          },
-          "created_at": {
-            "examples": [
-              "2024-01-01T12:00:00Z"
-            ],
-            "format": "date-time",
-            "type": "string"
-          },
-          "file_name": {
-            "examples": [
-              "image.jpg"
-            ],
-            "type": "string"
-          },
-          "file_size": {
-            "examples": [
-              204800
-            ],
-            "format": "int64",
-            "type": "integer"
-          },
-          "focal_x": {
-            "examples": [
-              0.5
-            ],
-            "format": "double",
-            "type": "number"
-          },
-          "focal_y": {
-            "examples": [
-              0.5
-            ],
-            "format": "double",
-            "type": "number"
-          },
-          "folder_id": {
-            "examples": [
-              "folder_1"
-            ],
-            "type": "string"
-          },
-          "height": {
-            "examples": [
-              1080
-            ],
-            "format": "int64",
-            "type": "integer"
-          },
-          "id": {
-            "examples": [
-              "media_123"
-            ],
-            "type": "string"
-          },
-          "mime_type": {
-            "examples": [
-              "image/jpeg"
-            ],
-            "type": "string"
-          },
-          "sizes": {
-            "items": {
-              "$ref": "#/components/schemas/MediaSize"
-            },
-            "type": [
-              "array",
-              "null"
-            ]
-          },
-          "thumbnail_url": {
-            "examples": [
-              "https://cdn.example.com/thumb.jpg"
-            ],
-            "type": "string"
-          },
-          "updated_at": {
-            "examples": [
-              "2024-01-02T12:00:00Z"
-            ],
-            "format": "date-time",
-            "type": "string"
-          },
-          "url": {
-            "examples": [
-              "https://cdn.example.com/image.jpg"
-            ],
-            "type": "string"
-          },
-          "width": {
-            "examples": [
-              1920
-            ],
-            "format": "int64",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "id",
-          "url",
-          "file_name",
-          "file_size",
-          "mime_type",
-          "created_at",
-          "updated_at"
-        ],
-        "type": "object"
-      },
-      "MediaSize": {
-        "additionalProperties": false,
-        "properties": {
-          "file_size": {
-            "examples": [
-              10240
-            ],
-            "format": "int64",
-            "type": "integer"
-          },
-          "height": {
-            "examples": [
-              180
-            ],
-            "format": "int64",
-            "type": "integer"
-          },
-          "mime_type": {
-            "examples": [
-              "image/jpeg"
-            ],
-            "type": "string"
-          },
-          "url": {
-            "examples": [
-              "https://cdn.example.com/image-thumb.jpg"
-            ],
-            "type": "string"
-          },
-          "variant": {
-            "examples": [
-              "thumbnail"
-            ],
-            "type": "string"
-          },
-          "width": {
-            "examples": [
-              320
-            ],
-            "format": "int64",
-            "type": "integer"
-          }
-        },
-        "required": [
-          "variant",
-          "url",
-          "width",
-          "height",
-          "mime_type",
-          "file_size"
-        ],
-        "type": "object"
-      },
       "OperationResult": {
         "additionalProperties": false,
         "properties": {
+          "id": {
+            "description": "Id of the document affected by the action",
+            "type": "string"
+          },
           "success": {
             "type": "boolean"
           }
         },
         "required": [
+          "id",
           "success"
+        ],
+        "type": "object"
+      },
+      "Pagination": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "description": "Number of items per page",
+            "examples": [
+              10
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "page": {
+            "description": "Current page number",
+            "examples": [
+              1
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "total": {
+            "description": "Total number of items",
+            "examples": [
+              100
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "totalPages": {
+            "description": "Total number of pages",
+            "examples": [
+              10
+            ],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "limit",
+          "page",
+          "totalPages"
         ],
         "type": "object"
       },
@@ -1026,6 +973,315 @@
           "message",
           "data"
         ],
+        "type": "object"
+      },
+      "PostBrief": {
+        "additionalProperties": false,
+        "properties": {
+          "author_id": {
+            "description": "Author ID",
+            "examples": [
+              "5d2d6baf-3f1c-4c67-9a73-3aaf0d5a2b1c"
+            ],
+            "type": "string"
+          },
+          "category_id": {
+            "description": "Category ID",
+            "examples": [
+              "7c2bcb4b-5a26-4f08-9dd0-4cbe797a1d2c"
+            ],
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Creation timestamp",
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "description": "Post ID",
+            "examples": [
+              "0d8c0f2b-6f49-4a0c-9b7a-1f2f3c4d5e6f"
+            ],
+            "type": "string"
+          },
+          "likes": {
+            "description": "Number of likes",
+            "format": "int64",
+            "type": "integer"
+          },
+          "published": {
+            "description": "Publication status",
+            "type": "boolean"
+          },
+          "slug": {
+            "description": "URL slug",
+            "examples": [
+              "vietnam-history-timeline"
+            ],
+            "type": "string"
+          },
+          "summary": {
+            "description": "Post summary",
+            "type": "string"
+          },
+          "thumbnail": {
+            "description": "Thumbnail URL",
+            "examples": [
+              "https://example.com/thumbnail.jpg"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "description": "Post title",
+            "examples": [
+              "Vietnam history timeline"
+            ],
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Last update timestamp",
+            "format": "date-time",
+            "type": "string"
+          },
+          "views": {
+            "description": "Number of views",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "slug",
+          "author_id",
+          "views",
+          "likes",
+          "published",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "PostCreateReq": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "localhost:8084/schemas/PostCreateReq.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "author_id": {
+            "description": "Author ID",
+            "examples": [
+              "5d2d6baf-3f1c-4c67-9a73-3aaf0d5a2b1c"
+            ],
+            "type": "string"
+          },
+          "category_id": {
+            "description": "Category ID",
+            "examples": [
+              "7c2bcb4b-5a26-4f08-9dd0-4cbe797a1d2c"
+            ],
+            "type": "string"
+          },
+          "content": {
+            "description": "Post content",
+            "type": "string"
+          },
+          "published": {
+            "description": "Publication status",
+            "type": "boolean"
+          },
+          "slug": {
+            "description": "URL slug",
+            "examples": [
+              "vietnam-history-timeline"
+            ],
+            "type": "string"
+          },
+          "summary": {
+            "description": "Post summary",
+            "type": "string"
+          },
+          "thumbnail": {
+            "description": "Thumbnail URL",
+            "examples": [
+              "https://example.com/thumbnail.jpg"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "description": "Post title",
+            "examples": [
+              "Vietnam history timeline"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "slug",
+          "author_id",
+          "content"
+        ],
+        "type": "object"
+      },
+      "PostDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "author_id": {
+            "description": "Author ID",
+            "examples": [
+              "5d2d6baf-3f1c-4c67-9a73-3aaf0d5a2b1c"
+            ],
+            "type": "string"
+          },
+          "category_id": {
+            "description": "Category ID",
+            "examples": [
+              "7c2bcb4b-5a26-4f08-9dd0-4cbe797a1d2c"
+            ],
+            "type": "string"
+          },
+          "content": {
+            "description": "Post content",
+            "type": "string"
+          },
+          "created_at": {
+            "description": "Creation timestamp",
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "description": "Post ID",
+            "examples": [
+              "0d8c0f2b-6f49-4a0c-9b7a-1f2f3c4d5e6f"
+            ],
+            "type": "string"
+          },
+          "likes": {
+            "description": "Number of likes",
+            "format": "int64",
+            "type": "integer"
+          },
+          "published": {
+            "description": "Publication status",
+            "type": "boolean"
+          },
+          "slug": {
+            "description": "URL slug",
+            "examples": [
+              "vietnam-history-timeline"
+            ],
+            "type": "string"
+          },
+          "summary": {
+            "description": "Post summary",
+            "type": "string"
+          },
+          "thumbnail": {
+            "description": "Thumbnail URL",
+            "examples": [
+              "https://example.com/thumbnail.jpg"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "description": "Post title",
+            "examples": [
+              "Vietnam history timeline"
+            ],
+            "type": "string"
+          },
+          "updated_at": {
+            "description": "Last update timestamp",
+            "format": "date-time",
+            "type": "string"
+          },
+          "views": {
+            "description": "Number of views",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "content",
+          "id",
+          "title",
+          "slug",
+          "author_id",
+          "views",
+          "likes",
+          "published",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object"
+      },
+      "PostUpdateReq": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "localhost:8084/schemas/PostUpdateReq.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "author_id": {
+            "description": "Author ID",
+            "examples": [
+              "5d2d6baf-3f1c-4c67-9a73-3aaf0d5a2b1c"
+            ],
+            "type": "string"
+          },
+          "category_id": {
+            "description": "Category ID",
+            "examples": [
+              "7c2bcb4b-5a26-4f08-9dd0-4cbe797a1d2c"
+            ],
+            "type": "string"
+          },
+          "content": {
+            "description": "Post content",
+            "type": "string"
+          },
+          "published": {
+            "description": "Publication status",
+            "type": "boolean"
+          },
+          "slug": {
+            "description": "URL slug",
+            "examples": [
+              "vietnam-history-timeline"
+            ],
+            "type": "string"
+          },
+          "summary": {
+            "description": "Post summary",
+            "type": "string"
+          },
+          "thumbnail": {
+            "description": "Thumbnail URL",
+            "examples": [
+              "https://example.com/thumbnail.jpg"
+            ],
+            "type": "string"
+          },
+          "title": {
+            "description": "Post title",
+            "examples": [
+              "Vietnam history timeline"
+            ],
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "SocialLinks": {
@@ -1504,68 +1760,6 @@
         ]
       }
     },
-    "/api/v1/media": {
-      "get": {
-        "description": "Retrieve all media items ordered by creation time (desc)",
-        "operationId": "get-media-list",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/APIResponseListMediaRes"
-                }
-              }
-            },
-            "description": "OK"
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "summary": "Get media list",
-        "tags": [
-          "media"
-        ]
-      },
-      "post": {
-        "description": "Upload a new media file (max 10MB)",
-        "operationId": "upload-media",
-        "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/APIResponseOperationResult"
-                }
-              }
-            },
-            "description": "Created"
-          },
-          "default": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Error"
-          }
-        },
-        "summary": "Upload media",
-        "tags": [
-          "media"
-        ]
-      }
-    },
     "/api/v1/ping/100": {
       "get": {
         "description": "Returns pong to check if the service is running",
@@ -1595,6 +1789,314 @@
         "summary": "Ping endpoint",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/api/v1/posts": {
+      "get": {
+        "description": "Retrieve brief published post list",
+        "operationId": "get-published-posts",
+        "parameters": [
+          {
+            "explode": false,
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponseListPostBrief"
+                }
+              }
+            },
+            "description": "Successful response with published posts list"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get published posts",
+        "tags": [
+          "posts"
+        ]
+      },
+      "post": {
+        "description": "Create a new post",
+        "operationId": "create-post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostCreateReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponseOperationResult"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Create post",
+        "tags": [
+          "posts"
+        ]
+      }
+    },
+    "/api/v1/posts/all": {
+      "get": {
+        "description": "Retrieve brief all post list",
+        "operationId": "get-all-posts",
+        "parameters": [
+          {
+            "explode": false,
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter by publication status",
+            "example": true,
+            "explode": false,
+            "in": "query",
+            "name": "published",
+            "schema": {
+              "description": "Filter by publication status",
+              "examples": [
+                true
+              ],
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponseListPostBrief"
+                }
+              }
+            },
+            "description": "Successful response with all posts list"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get all posts",
+        "tags": [
+          "posts"
+        ]
+      }
+    },
+    "/api/v1/posts/{idOrSlug}": {
+      "get": {
+        "description": "Retrieve detailed post information by ID or slug",
+        "operationId": "get-post-by-id-or-slug",
+        "parameters": [
+          {
+            "description": "Post id or slug",
+            "in": "path",
+            "name": "idOrSlug",
+            "required": true,
+            "schema": {
+              "description": "Post id or slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponsePostDetail"
+                }
+              }
+            },
+            "description": "Successful response with post information"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get post by ID",
+        "tags": [
+          "posts"
+        ]
+      }
+    },
+    "/api/v1/posts/{id}": {
+      "delete": {
+        "description": "Delete post by ID",
+        "operationId": "delete-post",
+        "parameters": [
+          {
+            "description": "Post ID",
+            "example": "item_123",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "Post ID",
+              "examples": [
+                "item_123"
+              ],
+              "maxLength": 100,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponseOperationResult"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Delete post",
+        "tags": [
+          "posts"
+        ]
+      },
+      "put": {
+        "description": "Update post information by ID",
+        "operationId": "update-post",
+        "parameters": [
+          {
+            "description": "Post ID",
+            "example": "item_123",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "description": "Post ID",
+              "examples": [
+                "item_123"
+              ],
+              "maxLength": 100,
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostUpdateReq"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponseOperationResult"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Update post",
+        "tags": [
+          "posts"
         ]
       }
     }

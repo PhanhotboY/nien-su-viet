@@ -18,6 +18,16 @@
   .typography {
     max-width: 65ch;
     color: var(--color-foreground);
+
+    figure {
+      figcaption {
+        margin-top: calc(var(--spacing) * 2);
+        font-size: var(--text-sm);
+        line-height: var(--text-sm--line-height);
+        color: var(--color-muted-foreground);
+        text-align: center;
+      }
+    }
   }
   .typography h1:not(.not-typography h1) {
     scroll-margin: calc(var(--spacing) * 20);
@@ -223,7 +233,7 @@
     line-height: var(--text-sm--line-height);
     color: var(--color-muted-foreground);
   }
-  .typography img:not(.not-typography img),
+  .typography figure:not(.not-typography figure),
   .typography picture:not(.not-typography picture),
   .typography video:not(.not-typography video) {
     margin-top: calc(var(--spacing) * 6);

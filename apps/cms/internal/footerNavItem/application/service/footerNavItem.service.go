@@ -8,7 +8,7 @@ import (
 
 type FooterNavItemService interface {
 	GetFooterNavItems(ctx context.Context) ([]*dto.FooterNavItemData, error)
-	CreateFooterNavItem(ctx context.Context, item *dto.FooterNavItemCreateReq) error
-	UpdateFooterNavItem(ctx context.Context, id string, item *dto.FooterNavItemUpdateReq) error
-	DeleteFooterNavItem(ctx context.Context, id string) error
+	CreateFooterNavItem(ctx context.Context, item *dto.FooterNavItemCreateReq) (string, error)
+	UpdateFooterNavItem(ctx context.Context, id string, item *dto.FooterNavItemUpdateReq) (string, error)
+	DeleteFooterNavItem(ctx context.Context, id string) (string, error)
 }

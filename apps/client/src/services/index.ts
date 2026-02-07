@@ -86,7 +86,7 @@ export const retryFetcher = async <T = any>(
     timestamp: string;
   };
 
-  if (response.ok) {
+  if (response.ok && response.status < 400) {
     console.log(
       '%s %s \x1b[32m%s\x1b[0m',
       options?.method || 'GET',

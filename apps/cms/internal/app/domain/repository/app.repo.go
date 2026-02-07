@@ -8,6 +8,6 @@ import (
 
 type AppRepository interface {
 	GetAppInfo(ctx context.Context) (*entity.App, error)
-	CreateApp(ctx context.Context, app *entity.App) error
-	UpdateApp(ctx context.Context, appId string, app *entity.App) error
+	CreateApp(ctx context.Context, app *entity.App) (string, error)
+	UpdateApp(ctx context.Context, appId string, app *entity.App) (string, error)
 }

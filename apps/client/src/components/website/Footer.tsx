@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { LogoIcon } from '../Icons';
 import { Facebook, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import { components } from '@nsv-interfaces/cms-service';
 
 interface FooterProps {
   appTitle?: string;
@@ -20,6 +21,7 @@ interface FooterProps {
     district?: string;
     province?: string;
   };
+  navItems?: components['schemas']['HeaderNavItemData'][] | null;
 }
 
 export const Footer = ({
@@ -30,8 +32,8 @@ export const Footer = ({
   email,
   phone,
   address,
+  navItems,
 }: FooterProps) => {
-  console.log('Rendering Footer with:', appTitle);
   return (
     <footer id="footer">
       <hr className="w-11/12 mx-auto" />
@@ -160,35 +162,20 @@ export const Footer = ({
 
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-lg">About</h3>
-          <div>
-            <Link
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Features
-            </Link>
-          </div>
-
-          <div>
-            <Link
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Pricing
-            </Link>
-          </div>
-
-          <div>
-            <Link
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              FAQ
-            </Link>
-          </div>
+          {(navItems || [])
+            .sort((a, b) => a.order - b.order)
+            .map((item) => (
+              <div key={item.id}>
+                <Link
+                  rel="noreferrer noopener"
+                  href={item.link_url}
+                  target={item.link_new_tab ? '_blank' : ''}
+                  className="opacity-60 hover:opacity-100"
+                >
+                  {item.link_label}
+                </Link>
+              </div>
+            ))}
         </div>
 
         {(email ||

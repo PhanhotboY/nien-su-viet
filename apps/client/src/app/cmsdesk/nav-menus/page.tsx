@@ -107,6 +107,13 @@ export default function NavMenusPage() {
         getFooterNavItems(),
       ]);
 
+      if (
+        !Array.isArray(headerResponse.data) ||
+        !Array.isArray(footerResponse.data)
+      ) {
+        throw new Error('Failed to fetch navigation items');
+      }
+
       setHeaderItems(headerResponse.data);
       setFooterItems(footerResponse.data);
     } catch (error) {
@@ -604,7 +611,7 @@ export default function NavMenusPage() {
   );
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-6xl">
+    <div className="container mx-auto py-8 px-4">
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -621,7 +628,7 @@ export default function NavMenusPage() {
         <Separator />
 
         {/* Tabs for Header and Footer */}
-        <Tabs defaultValue="header" className="space-y-6">
+        <Tabs defaultValue="header" className="space-y-6 max-w-5xl mx-auto">
           <TabsList className="grid w-full grid-cols-2 max-w-md py-0">
             <TabsTrigger value="header">
               Header Navigation

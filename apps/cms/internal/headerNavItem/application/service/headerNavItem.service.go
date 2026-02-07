@@ -8,7 +8,7 @@ import (
 
 type HeaderNavItemService interface {
 	GetHeaderNavItems(ctx context.Context) ([]*dto.HeaderNavItemData, error)
-	CreateHeaderNavItem(ctx context.Context, item *dto.HeaderNavItemCreateReq) error
-	UpdateHeaderNavItem(ctx context.Context, id string, item *dto.HeaderNavItemUpdateReq) error
-	DeleteHeaderNavItem(ctx context.Context, id string) error
+	CreateHeaderNavItem(ctx context.Context, item *dto.HeaderNavItemCreateReq) (string, error)
+	UpdateHeaderNavItem(ctx context.Context, id string, item *dto.HeaderNavItemUpdateReq) (string, error)
+	DeleteHeaderNavItem(ctx context.Context, id string) (string, error)
 }

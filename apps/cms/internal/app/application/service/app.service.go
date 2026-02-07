@@ -9,5 +9,5 @@ import (
 
 type AppService interface {
 	GetAppInfo(ctx context.Context) (*entity.App, error)
-	UpdateAppInfo(ctx context.Context, app *dto.AppUpdateReq) error
+	UpdateAppInfo(ctx context.Context, app *dto.AppUpdateReq) (string, error)
 }

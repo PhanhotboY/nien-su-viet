@@ -42,12 +42,12 @@ func (h *FooterNavItemHandler) GetFooterNavItems(ctx context.Context, input *str
 
 // CreateFooterNavItem creates a new footer navigation item
 func (h *FooterNavItemHandler) CreateFooterNavItem(ctx context.Context, input *request.APIBodyRequest[dto.FooterNavItemCreateReq]) (*response.APIBodyResponse[response.OperationResult], error) {
-	err := h.service.CreateFooterNavItem(ctx, &input.Body)
+	id, err := h.service.CreateFooterNavItem(ctx, &input.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return response.OperationSuccessResponse(201), nil
+	return response.OperationSuccessResponse(201, id), nil
 }
 
 // UpdateFooterNavItem updates an existing footer navigation item
@@ -55,20 +55,20 @@ func (h *FooterNavItemHandler) UpdateFooterNavItem(ctx context.Context, input *s
 	PathIDInput
 	request.APIBodyRequest[dto.FooterNavItemUpdateReq]
 }) (*response.APIBodyResponse[response.OperationResult], error) {
-	err := h.service.UpdateFooterNavItem(ctx, input.ID, &input.Body)
+	id, err := h.service.UpdateFooterNavItem(ctx, input.ID, &input.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return response.OperationSuccessResponse(200), nil
+	return response.OperationSuccessResponse(200, id), nil
 }
 
 // DeleteFooterNavItem deletes a footer navigation item
 func (h *FooterNavItemHandler) DeleteFooterNavItem(ctx context.Context, input *PathIDInput) (*response.APIBodyResponse[response.OperationResult], error) {
-	err := h.service.DeleteFooterNavItem(ctx, input.ID)
+	id, err := h.service.DeleteFooterNavItem(ctx, input.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return response.OperationSuccessResponse(200), nil
+	return response.OperationSuccessResponse(200, id), nil
 }

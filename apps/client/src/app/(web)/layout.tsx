@@ -114,6 +114,7 @@ export default async function RootLayout({
           district: appData?.address?.district || undefined,
           province: appData?.address?.province || undefined,
         }}
+        navItems={footerNavItems}
       />
     </>
   );

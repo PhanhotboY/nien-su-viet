@@ -1,10 +1,9 @@
 'use server';
 
 import { IPaginatedResponse } from '@/interfaces/response.interface';
-import { authClient } from '@/lib/auth-client';
 import type { components, operations } from '@nsv-interfaces/auth-service';
-import { ApiError } from 'next/dist/server/api-utils';
 import { headers } from 'next/headers';
+import { retryFetcher } from '.';
 
 async function getUsers(
   options: Record<string, string>,
@@ -50,27 +49,21 @@ async function getUsers(
 
   const reqHeaders = await headers();
   // Get users from Better Auth
-  const { data, error } = await authClient.$fetch<{
-    users: components['schemas']['User'][];
-    total: number;
-  }>('/admin/list-users', {
-    method: 'GET',
-    query,
-    headers: reqHeaders,
-  });
-
-  if (error) {
-    console.log('Error fetching users: ', error);
-    throw new ApiError(error.status, error.message || 'Failed to fetch users');
-  }
+  const res = (await retryFetcher<components['schemas']['User'][]>(
+    '/auth/admin/list-users?' + new URLSearchParams(query).toString(),
+    {
+      method: 'GET',
+      headers: reqHeaders,
+    },
+  )) as any;
 
   return {
-    data: data.users,
+    data: res.users as any,
     pagination: {
-      total: data.total ?? data.users.length,
+      total: res.total ?? res.users.length,
       limit: query.limit,
       page: query.page,
-      totalPages: Math.ceil(data.total / query.limit),
+      totalPages: Math.ceil(res.total / query.limit),
     },
     statusCode: 200,
     timestamp: new Date().toISOString(),
@@ -85,20 +78,16 @@ async function createUser(
   reqHeaders.delete('content-length');
   reqHeaders.set('content-type', 'application/json');
 
-  const { data, error } = await authClient.$fetch<
-    components['schemas']['User']
-  >('/admin/create-user', {
-    method: 'POST',
-    headers: reqHeaders,
-    body: JSON.stringify(userData),
-  });
+  const res = await retryFetcher<components['schemas']['User']>(
+    '/auth/admin/create-user',
+    {
+      method: 'POST',
+      headers: reqHeaders,
+      body: JSON.stringify(userData),
+    },
+  );
 
-  if (error) {
-    console.log('Error creating user: ', error);
-    throw new ApiError(error.status, error.message || 'Failed to create user');
-  }
-
-  return data;
+  return res;
 }
 
 async function deleteUser(userId: string) {
@@ -107,46 +96,31 @@ async function deleteUser(userId: string) {
   reqHeaders.delete('content-length');
   reqHeaders.set('content-type', 'application/json');
 
-  const { error } = await authClient.$fetch<void>(`/admin/remove-user`, {
+  const res = await retryFetcher(`/auth/admin/remove-user`, {
     method: 'POST',
     headers: reqHeaders,
     body: JSON.stringify({ userId }),
   });
 
-  if (error) {
-    console.log('Error deleting user: ', error);
-    throw new ApiError(error.status, error.message || 'Failed to delete user');
-  }
-
   return;
 }
 
-async function updateUserRole(
-  userId: string,
-  newRole: string,
-): Promise<components['schemas']['User']> {
+async function updateUserRole(userId: string, newRole: string) {
   const reqHeaders = new Headers(await headers());
   // Foward headers from client with different payload
   reqHeaders.delete('content-length');
   reqHeaders.set('content-type', 'application/json');
 
-  const { data, error } = await authClient.$fetch<
-    components['schemas']['User']
-  >('/admin/update-user', {
-    method: 'POST',
-    headers: reqHeaders,
-    body: JSON.stringify({ userId, data: { role: newRole } }),
-  });
+  const res = await retryFetcher<components['schemas']['User']>(
+    '/auth/admin/update-user',
+    {
+      method: 'POST',
+      headers: reqHeaders,
+      body: JSON.stringify({ userId, data: { role: newRole } }),
+    },
+  );
 
-  if (error) {
-    console.log('Error updating user role: ', error);
-    throw new ApiError(
-      error.status,
-      error.message || 'Failed to update user role',
-    );
-  }
-
-  return data;
+  return;
 }
 
 export { getUsers, createUser, deleteUser, updateUserRole };

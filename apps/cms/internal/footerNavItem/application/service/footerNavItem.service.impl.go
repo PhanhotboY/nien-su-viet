@@ -32,25 +32,26 @@ func (s *footerNavItemService) GetFooterNavItems(ctx context.Context) ([]*dto.Fo
 }
 
 // CreateFooterNavItem creates a footer nav item
-func (s *footerNavItemService) CreateFooterNavItem(ctx context.Context, item *dto.FooterNavItemCreateReq) error {
-	if err := s.repo.CreateNavItem(ctx, item.MapToEntity()); err != nil {
-		return fmt.Errorf("failed to create footer nav item: %w", err)
+func (s *footerNavItemService) CreateFooterNavItem(ctx context.Context, item *dto.FooterNavItemCreateReq) (string, error) {
+	var id string
+	if id, err := s.repo.CreateNavItem(ctx, item.MapToEntity()); err != nil {
+		return id, fmt.Errorf("failed to create footer nav item: %w", err)
 	}
-	return nil
+	return id, nil
 }
 
 // UpdateFooterNavItem updates a footer nav item
-func (s *footerNavItemService) UpdateFooterNavItem(ctx context.Context, id string, item *dto.FooterNavItemUpdateReq) error {
-	if err := s.repo.UpdateNavItem(ctx, id, item.MapToEntity()); err != nil {
-		return fmt.Errorf("failed to update footer nav item: %w", err)
+func (s *footerNavItemService) UpdateFooterNavItem(ctx context.Context, id string, item *dto.FooterNavItemUpdateReq) (string, error) {
+	if id, err := s.repo.UpdateNavItem(ctx, id, item.MapToEntity()); err != nil {
+		return id, fmt.Errorf("failed to update footer nav item: %w", err)
 	}
-	return nil
+	return id, nil
 }
 
 // DeleteFooterNavItem deletes a footer nav item
-func (s *footerNavItemService) DeleteFooterNavItem(ctx context.Context, id string) error {
-	if err := s.repo.DeleteNavItem(ctx, id); err != nil {
-		return fmt.Errorf("failed to delete footer nav item: %w", err)
+func (s *footerNavItemService) DeleteFooterNavItem(ctx context.Context, id string) (string, error) {
+	if id, err := s.repo.DeleteNavItem(ctx, id); err != nil {
+		return id, fmt.Errorf("failed to delete footer nav item: %w", err)
 	}
-	return nil
+	return id, nil
 }

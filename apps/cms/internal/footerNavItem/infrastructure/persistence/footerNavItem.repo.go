@@ -32,19 +32,22 @@ func (r *footerNavItemRepository) FindNavItemById(ctx context.Context, id string
 	return &item, nil
 }
 
-func (r *footerNavItemRepository) CreateNavItem(ctx context.Context, navItem *entity.FooterNavItem) error {
+func (r *footerNavItemRepository) CreateNavItem(ctx context.Context, navItem *entity.FooterNavItem) (string, error) {
 	if navItem.Id == "" {
 		navItem.Id = uuid.New().String()
 	}
-	return r.db.WithContext(ctx).Model(&entity.FooterNavItem{}).Create(navItem).Error
+	err := r.db.WithContext(ctx).Model(&entity.FooterNavItem{}).Create(navItem).Error
+	return navItem.Id, err
 }
 
-func (r *footerNavItemRepository) UpdateNavItem(ctx context.Context, id string, navItem *entity.FooterNavItem) error {
-	return r.db.WithContext(ctx).Model(&entity.FooterNavItem{}).Where("id = ?", id).Updates(navItem).Error
+func (r *footerNavItemRepository) UpdateNavItem(ctx context.Context, id string, navItem *entity.FooterNavItem) (string, error) {
+	err := r.db.WithContext(ctx).Model(&entity.FooterNavItem{}).Where("id = ?", id).Updates(navItem).Error
+	return id, err
 }
 
-func (r *footerNavItemRepository) DeleteNavItem(ctx context.Context, id string) error {
-	return r.db.WithContext(ctx).Where("id = ?", id).Delete(&entity.FooterNavItem{}).Error
+func (r *footerNavItemRepository) DeleteNavItem(ctx context.Context, id string) (string, error) {
+	err := r.db.WithContext(ctx).Where("id = ?", id).Delete(&entity.FooterNavItem{}).Error
+	return id, err
 }
 
 func NewFooterNavItemRepository(db *gorm.DB) repository.FooterNavItemRepository {

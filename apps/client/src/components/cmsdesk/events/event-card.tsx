@@ -37,7 +37,7 @@ export function EventCard({ event, onDelete }: EventCardProps) {
           )}
         </div>
       </CardHeader>
-      <CardContent className="px-4">
+      <CardContent className="px-4 grow">
         <div className="mb-2 flex items-start justify-between gap-2">
           <h3 className="line-clamp-2 text-lg font-semibold leading-tight">
             {event.name}

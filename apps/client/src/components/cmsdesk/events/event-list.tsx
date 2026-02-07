@@ -136,7 +136,7 @@ export default function EventList({
   };
 
   const events = data?.data || [];
-  const total = data?.pagination.total || 0;
+  const total = data?.pagination?.total || 0;
   const totalPages = Math.ceil(total / itemsPerPage);
 
   const toggleSortDirection = () => {
