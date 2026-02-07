@@ -10,7 +10,7 @@ import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
-import { components } from '@nsv-interfaces/historical-event';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import ErrorPage from './error';
 import Loading from './loading';
 import { useParams } from 'next/navigation';
@@ -37,6 +37,10 @@ export default function EditEventPage() {
         // fetching from client since calling from server causes issues with cookies
         // ssr can't reset cookies when they expire
         const { data } = await getEvent(eventId);
+        if (!data) {
+          setError('Event not found.');
+          return;
+        }
         setEvent(data);
       } catch (err: any) {
         setError(err.message || 'Failed to load event data.');
@@ -74,7 +78,7 @@ export default function EditEventPage() {
         initialData={event}
         categories={[]}
         onSubmit={async (data) => {
-          await updateEvent(eventId, data);
+          return await updateEvent(eventId, data);
         }}
         submitLabel="Update Event"
       />

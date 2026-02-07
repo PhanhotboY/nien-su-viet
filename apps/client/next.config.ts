@@ -11,7 +11,13 @@ const nextConfig: NextConfig = {
       {
         hostname: 'localhost',
       },
+      {
+        hostname: 'res.cloudinary.com',
+      },
     ],
+  },
+  experimental: {
+    turbopackUseSystemTlsCerts: true,
   },
 };
 

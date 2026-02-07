@@ -42,12 +42,12 @@ func (h *HeaderNavItemHandler) GetHeaderNavItems(ctx context.Context, input *str
 
 // CreateHeaderNavItem creates a new header navigation item
 func (h *HeaderNavItemHandler) CreateHeaderNavItem(ctx context.Context, input *request.APIBodyRequest[dto.HeaderNavItemCreateReq]) (*response.APIBodyResponse[response.OperationResult], error) {
-	err := h.service.CreateHeaderNavItem(ctx, &input.Body)
+	id, err := h.service.CreateHeaderNavItem(ctx, &input.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return response.OperationSuccessResponse(201), nil
+	return response.OperationSuccessResponse(201, id), nil
 }
 
 // UpdateHeaderNavItem updates an existing header navigation item
@@ -55,20 +55,20 @@ func (h *HeaderNavItemHandler) UpdateHeaderNavItem(ctx context.Context, input *s
 	PathIDInput
 	request.APIBodyRequest[dto.HeaderNavItemUpdateReq]
 }) (*response.APIBodyResponse[response.OperationResult], error) {
-	err := h.service.UpdateHeaderNavItem(ctx, input.ID, &input.Body)
+	id, err := h.service.UpdateHeaderNavItem(ctx, input.ID, &input.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	return response.OperationSuccessResponse(200), nil
+	return response.OperationSuccessResponse(200, id), nil
 }
 
 // DeleteHeaderNavItem deletes a header navigation item
 func (h *HeaderNavItemHandler) DeleteHeaderNavItem(ctx context.Context, input *PathIDInput) (*response.APIBodyResponse[response.OperationResult], error) {
-	err := h.service.DeleteHeaderNavItem(ctx, input.ID)
+	id, err := h.service.DeleteHeaderNavItem(ctx, input.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	return response.OperationSuccessResponse(200), nil
+	return response.OperationSuccessResponse(200, id), nil
 }

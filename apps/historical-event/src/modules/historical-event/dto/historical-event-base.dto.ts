@@ -11,6 +11,7 @@ import {
   MinLength,
   IsEnum,
   IsIn,
+  IsUrl,
 } from 'class-validator';
 
 // DTO for creating historical event
@@ -28,9 +29,9 @@ export class HistoricalEventBaseDto {
 
   @Expose()
   @IsOptional()
-  @IsUUID('4', { message: 'Thumbnail không hợp lệ' })
+  @IsUrl({}, { message: 'Thumbnail không hợp lệ' })
   @Transform(({ value }) => value?.trim())
-  thumbnailId?: string;
+  thumbnail?: string | null;
 
   @Expose()
   @IsString({ message: 'Loại ngày bắt đầu không hợp lệ.' })

@@ -9,7 +9,7 @@ import (
 type HeaderNavItemRepository interface {
 	GetNavItems(ctx context.Context) ([]*entity.HeaderNavItem, error)
 	FindNavItemById(ctx context.Context, id string) (*entity.HeaderNavItem, error)
-	UpdateNavItem(ctx context.Context, id string, navItem *entity.HeaderNavItem) error
-	CreateNavItem(ctx context.Context, navItem *entity.HeaderNavItem) error
-	DeleteNavItem(ctx context.Context, id string) error
+	UpdateNavItem(ctx context.Context, id string, navItem *entity.HeaderNavItem) (string, error)
+	CreateNavItem(ctx context.Context, navItem *entity.HeaderNavItem) (string, error)
+	DeleteNavItem(ctx context.Context, id string) (string, error)
 }

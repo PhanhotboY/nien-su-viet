@@ -1,19 +1,19 @@
 'use server';
 
 import { IPaginatedResponse } from '@/interfaces/response.interface';
-import { components } from '@nsv-interfaces/historical-event';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { retryFetcher } from '.';
 import { IApiResponse } from '../interfaces/response.interface';
 
 export async function getEvents(
   query?: Record<string, string> | string,
 ): Promise<
-  IPaginatedResponse<components['schemas']['HistoricalEventBriefResponseDto']>
+  IPaginatedResponse<components['schemas']['HistoricalEventPreviewResponseDto']>
 > {
   const response = (await retryFetcher(
     `/historical-events?${new URLSearchParams(query).toString()}`,
   )) as IPaginatedResponse<
-    components['schemas']['HistoricalEventBriefResponseDto']
+    components['schemas']['HistoricalEventPreviewResponseDto']
   >;
 
   return response;

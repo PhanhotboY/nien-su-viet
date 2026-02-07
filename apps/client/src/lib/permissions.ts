@@ -20,7 +20,6 @@ const eventStatements = {
 
 const cmsStatements = {
   app: crudActions,
-  media: crudActions,
   footerNavItem: crudActions,
   headerNavItem: crudActions,
   ping: crudActions,
@@ -60,7 +59,6 @@ const user = ac.newRole({
   eventCategory: ['read'],
   eventEdit: ['read'],
   app: ['read'],
-  media: ['read'],
   footerNavItem: ['read'],
   headerNavItem: ['read'],
   ...userAc.statements,

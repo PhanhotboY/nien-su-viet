@@ -14,5 +14,5 @@ export interface IPaginatedResponse<T> extends IBaseApiResponse {
 }
 
 export interface IApiResponse<T> extends IBaseApiResponse {
-  data: T;
+  data?: T;
 }

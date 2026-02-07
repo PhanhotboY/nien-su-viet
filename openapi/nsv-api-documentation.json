@@ -960,6 +960,427 @@
           "HistoricalEvent"
         ]
       }
+    },
+    "/api/v1/posts": {
+      "get": {
+        "operationId": "PostController_getAllPosts",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "authorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryIds",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "createdAtFrom",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "createdAtTo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAtFrom",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAtTo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      },
+      "post": {
+        "operationId": "PostController_createPost",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostBaseCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      }
+    },
+    "/api/v1/posts/all": {
+      "get": {
+        "operationId": "PostController_getPosts",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "authorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryIds",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "createdAtFrom",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "createdAtTo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAtFrom",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAtTo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      }
+    },
+    "/api/v1/posts/{id}": {
+      "get": {
+        "operationId": "PostController_getPostById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostDetailResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      },
+      "put": {
+        "operationId": "PostController_updatePost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostBaseUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      },
+      "delete": {
+        "operationId": "PostController_deletePost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      }
+    },
+    "/api/v1/posts/{id}/publish": {
+      "put": {
+        "operationId": "PostController_publishPost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      }
+    },
+    "/api/v1/posts/{id}/unpublish": {
+      "put": {
+        "operationId": "PostController_unpublishPost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      }
     }
   },
   "info": {
@@ -972,33 +1393,6 @@
   "servers": [],
   "components": {
     "schemas": {
-      "ImageBriefResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "caption": {
-            "type": "string"
-          },
-          "publicUrl": {
-            "type": "string",
-            "format": "uri"
-          },
-          "redirectLink": {
-            "type": "string",
-            "format": "uri"
-          },
-          "type": {
-            "type": "string",
-            "maxLength": 100
-          }
-        },
-        "required": [
-          "publicUrl"
-        ]
-      },
       "UserBaseResponseDto": {
         "type": "object",
         "properties": {
@@ -1035,14 +1429,6 @@
           },
           "excerpt": {
             "type": "string"
-          },
-          "thumbnail": {
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ImageBriefResponseDto"
-              }
-            ]
           },
           "author": {
             "$ref": "#/components/schemas/UserBaseResponseDto"
@@ -1099,6 +1485,10 @@
           "toYear": {
             "type": "number",
             "nullable": true
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri"
           }
         },
         "required": [
@@ -1172,12 +1562,8 @@
             "nullable": true
           },
           "thumbnail": {
-            "nullable": true,
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ImageBriefResponseDto"
-              }
-            ]
+            "type": "string",
+            "format": "uri"
           },
           "author": {
             "$ref": "#/components/schemas/UserBaseResponseDto"
@@ -1211,9 +1597,9 @@
             "type": "string",
             "minLength": 1
           },
-          "thumbnailId": {
+          "thumbnail": {
             "type": "string",
-            "format": "uuid"
+            "format": "uri"
           },
           "fromDateType": {
             "type": "string",
@@ -1280,9 +1666,9 @@
             "type": "string",
             "minLength": 1
           },
-          "thumbnailId": {
+          "thumbnail": {
             "type": "string",
-            "format": "uuid"
+            "format": "uri"
           },
           "fromDateType": {
             "type": "string",
@@ -1336,6 +1722,157 @@
           "authorId": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "PostDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "author": {
+            "$ref": "#/components/schemas/UserBaseResponseDto"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thumbnail": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 500
+          },
+          "publishedAt": {
+            "type": "object"
+          },
+          "published": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "object"
+          },
+          "updatedAt": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "content",
+          "author",
+          "id",
+          "title",
+          "slug",
+          "publishedAt",
+          "published",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PostBaseCreateDto": {
+        "type": "object",
+        "properties": {
+          "authorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "publishedAt": {
+            "type": "object"
+          },
+          "published": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 500
+          },
+          "thumbnail": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "categoryId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "title",
+          "slug",
+          "content"
+        ]
+      },
+      "PostBaseUpdateDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 500
+          },
+          "thumbnail": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "categoryId": {
+            "type": "string",
+            "nullable": true,
+            "format": "uuid"
+          },
+          "authorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "publishedAt": {
+            "type": "object"
+          },
+          "published": {
+            "type": "boolean"
           }
         }
       },
@@ -1538,6 +2075,33 @@
             "format": "uuid"
           }
         }
+      },
+      "ImageBriefResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "caption": {
+            "type": "string"
+          },
+          "publicUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "redirectLink": {
+            "type": "string",
+            "format": "uri"
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 100
+          }
+        },
+        "required": [
+          "publicUrl"
+        ]
       },
       "EventCategoryBriefResponseDto": {
         "type": "object",

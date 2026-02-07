@@ -15,6 +15,12 @@ model User {
   role          String?
   editedEvents  EventEdit[]
   createdEvents HistoricalEvent[]
+  createdPosts  Post[]
+}
+
+enum EVENT_DATE_TYPE {
+  EXACT
+  APPROXIMATE
 }
 
 model HistoricalEvent {
@@ -36,7 +42,7 @@ model HistoricalEvent {
   categories   EventCategories[]
   editors      EventEdit[]
   author       User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  thumbnail    Image?            @relation(fields: [thumbnailId], references: [id])
+  thumbnail    String?
 
   @@index([fromYear], map: "idx_event_from_year")
   @@index([fromMonth], map: "idx_event_from_month")
@@ -108,15 +114,33 @@ model EventPeriod {
   description String?
 }
 
-model Image {
-  id          String            @id @default(uuid()) @db.Uuid
-  caption     String?
-  publicUrl   String            @db.VarChar(255)
-  description String?
-  events      HistoricalEvent[]
+model Post {
+  id        String  @id @default(uuid()) @db.Uuid
+  title     String  @db.VarChar(255)
+  slug      String  @unique @db.VarChar(255)
+  content   String
+  summary   String? @db.VarChar(500)
+  thumbnail String?
+
+  authorId   String
+  categoryId String?       @db.Uuid
+  author     User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category   PostCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  views       Int      @default(0)
+  likes       Int      @default(0)
+  publishedAt DateTime @db.Timestamp(6)
+  published   Boolean  @default(false)
+
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
 }
 
-enum EVENT_DATE_TYPE {
-  EXACT
-  APPROXIMATE
+model PostCategory {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique @db.VarChar(255)
+  slug      String   @unique @db.VarChar(255)
+  posts     Post[]
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
 }

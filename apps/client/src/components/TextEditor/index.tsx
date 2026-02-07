@@ -4,13 +4,17 @@ import { useEffect, useRef, useState } from 'react';
 import type EditorJS from '@editorjs/editorjs';
 
 import './index.css';
+import { FoldHorizontal } from 'lucide-react';
+import { tryParseJSONObject } from '@/helper/renderer.helper';
 
 export default function TextEditor({
   value,
   onChange,
+  imageFolderName = 'uploads',
 }: {
   value: any;
   onChange: (...args: any[]) => any;
+  imageFolderName?: string;
 }) {
   const isReady = useRef(false);
   const [editor, setEditor] = useState<EditorJS>();
@@ -78,7 +82,10 @@ export default function TextEditor({
                     byFile: '/api/images/upload',
                     byUrl: '/api/images/fetchUrl',
                   },
-                  field: 'img',
+                  field: 'image',
+                  additionalRequestData: {
+                    folder: imageFolderName,
+                  },
                 },
               },
               linkTool: {
@@ -116,7 +123,7 @@ export default function TextEditor({
                 holder: 'editorjs',
                 // @ts-ignore
                 tools,
-                data: value && JSON.parse(value),
+                data: tryParseJSONObject(value) || { blocks: [] },
                 onChange: (api, e) => {
                   api.saver.save().then((outputData: any) => {
                     onChange(JSON.stringify(outputData));

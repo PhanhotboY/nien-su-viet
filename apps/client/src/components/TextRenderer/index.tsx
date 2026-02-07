@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import Quote from './Quote';
 import Delimiter from './Delimiter';
 import Table from './Table';
+import { tryParseJSONObject } from '@/helper/renderer.helper';
 
 export default function TextRenderer({
   content,
@@ -21,7 +22,7 @@ export default function TextRenderer({
   truncate?: boolean;
   maxLines?: number;
 }) {
-  const { blocks } = JSON.parse(content || '{"blocks": []}');
+  const obj = tryParseJSONObject(content || '{"blocks": []}');
 
   useEffect(() => {
     document.querySelectorAll('.edjs-paragraph a').forEach((a) => {
@@ -46,11 +47,17 @@ export default function TextRenderer({
           : {}
       }
     >
-      {blocks.map((block: any, index: number) => {
-        // @ts-ignore
-        const Component = components[block.type] || Paragraph;
-        return <Component key={index} data={block.data} tunes={block.tunes} />;
-      })}
+      {!(obj && obj.blocks) ? (
+        <Paragraph data={{ text: content }} />
+      ) : (
+        obj.blocks.map((block: any, index: number) => {
+          // @ts-ignore
+          const Component = components[block.type] || Paragraph;
+          return (
+            <Component key={index} data={block.data} tunes={block.tunes} />
+          );
+        })
+      )}
     </section>
   );
 }

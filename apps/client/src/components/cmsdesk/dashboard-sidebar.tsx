@@ -11,6 +11,7 @@ import {
   ChartGantt,
   PanelTop,
   Route,
+  Newspaper,
 } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 
@@ -41,6 +42,11 @@ const sidebarNavItems = [
     href: '/cmsdesk/nav-menus',
     icon: Route,
     label: 'Nav Menus',
+  },
+  {
+    href: '/cmsdesk/posts',
+    icon: Newspaper,
+    label: 'Posts',
   },
 ];
 

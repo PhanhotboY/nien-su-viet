@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/controller/dto"
@@ -19,19 +18,19 @@ func NewAppService(repo repository.AppRepository) AppService {
 	return &appService{appRepo: repo}
 }
 
-func (a *appService) UpdateAppInfo(ctx context.Context, app *dto.AppUpdateReq) error {
+func (a *appService) UpdateAppInfo(ctx context.Context, app *dto.AppUpdateReq) (string, error) {
 	foundApp, err := a.appRepo.GetAppInfo(ctx)
 	if err != nil {
-		return err
+		return "", err
 	}
 	if foundApp == nil {
-		return fmt.Errorf("App info not found")
+		return "", fmt.Errorf("App info not found")
 	}
-	err = a.appRepo.UpdateApp(ctx, strconv.Itoa(int(foundApp.AppId)), app.MapToEntity())
+	id, err := a.appRepo.UpdateApp(ctx, foundApp.AppId, app.MapToEntity())
 	if err != nil {
-		return err
+		return id, err
 	}
-	return nil
+	return id, nil
 }
 
 func (a *appService) GetAppInfo(ctx context.Context) (*entity.App, error) {
@@ -42,7 +41,7 @@ func (a *appService) GetAppInfo(ctx context.Context) (*entity.App, error) {
 
 	if err != nil && strings.Contains(err.Error(), "not found") {
 		// Create default app info
-		err = a.appRepo.CreateApp(ctx, &entity.App{
+		_, err = a.appRepo.CreateApp(ctx, &entity.App{
 			Title: "Nien Su Viet",
 		})
 		if err != nil {

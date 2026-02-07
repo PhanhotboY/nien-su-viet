@@ -32,7 +32,7 @@ import { Public, Permissions, CurrentUser } from '@gateway/common/decorators';
 
 @Controller('historical-events')
 export class HistoricalEventController {
-  private readonly routePath = 'api/v1/historical-events';
+  private readonly routePath = '/api/v1/historical-events*';
 
   constructor(
     private readonly historicalEventService: HistoricalEventService,
@@ -80,6 +80,7 @@ export class HistoricalEventController {
     @Param('id') id: string,
     @Body() event: HistoricalEventBaseUpdateDto,
   ) {
+    await this.redis.mdel(this.routePath);
     return this.historicalEventService.updateEvent(id, event);
   }
 
@@ -90,6 +91,7 @@ export class HistoricalEventController {
     @Param('id') id: string,
     @CurrentUser('id') authorId: string,
   ) {
+    await this.redis.mdel(this.routePath);
     return this.historicalEventService.deleteEvent(id, authorId);
   }
 }

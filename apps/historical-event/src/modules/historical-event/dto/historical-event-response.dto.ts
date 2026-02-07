@@ -2,7 +2,6 @@ import { Exclude, Expose, Type } from 'class-transformer';
 import { OmitType, PickType } from '@nestjs/swagger';
 import { HistoricalEventBaseDto } from './historical-event-base.dto';
 import { IsString } from 'class-validator';
-import { ImageBriefResponseDto } from '@historical-event/modules/image/dto';
 import { UserBaseResponseDto } from '@historical-event/modules/user/dto';
 
 // DTO for response historical event
@@ -20,11 +19,9 @@ export class HistoricalEventBriefResponseDto extends PickType(
     'toDay',
     'toMonth',
     'toYear',
+    'thumbnail',
   ],
 ) {
-  @Type(() => ImageBriefResponseDto)
-  thumbnail?: ImageBriefResponseDto | null;
-
   @Expose()
   @Type(() => UserBaseResponseDto)
   author!: UserBaseResponseDto;
