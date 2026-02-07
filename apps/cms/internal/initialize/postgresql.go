@@ -16,7 +16,6 @@ import (
 	appEntity "github.com/phanhotboy/nien-su-viet/apps/cms/internal/app/domain/model/entity"
 	footerNavItemEntity "github.com/phanhotboy/nien-su-viet/apps/cms/internal/footerNavItem/domain/model/entity"
 	headerNavItemEntity "github.com/phanhotboy/nien-su-viet/apps/cms/internal/headerNavItem/domain/model/entity"
-	postEntity "github.com/phanhotboy/nien-su-viet/apps/cms/internal/post/domain/entity"
 )
 
 func InitPostgreSQL() (*gorm.DB, error) {
@@ -60,7 +59,6 @@ func InitPostgreSQL() (*gorm.DB, error) {
 	// Safe auto migration - will only modify schema if needed
 	if err := global.PostgresDB.AutoMigrate(
 		&appEntity.App{},
-		&postEntity.Post{},
 		&headerNavItemEntity.HeaderNavItem{}, &footerNavItemEntity.FooterNavItem{},
 	); err != nil {
 		// Check if error is about existing relations
