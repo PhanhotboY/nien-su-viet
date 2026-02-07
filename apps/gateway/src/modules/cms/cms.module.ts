@@ -6,7 +6,6 @@ import { AppController } from './app.controller';
 import { HeaderNavItemController } from './header-nav-item.controller';
 import { FooterNavItemController } from './footer-nav-item.controller';
 import { HttpProxyService } from '@gateway/common/services/http-proxy.service';
-import { MediaController } from './media.controller';
 import { ConfigService } from '@phanhotboy/nsv-common';
 import { Config } from '@gateway/config';
 
@@ -24,7 +23,6 @@ import { Config } from '@gateway/config';
   controllers: [
     PingController,
     AppController,
-    MediaController,
     HeaderNavItemController,
     FooterNavItemController,
   ],
