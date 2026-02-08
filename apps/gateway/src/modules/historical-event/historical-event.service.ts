@@ -15,6 +15,10 @@ import { HISTORICAL_EVENT_MESSAGE_PATTERN } from '@phanhotboy/constants/historic
 import { MicroserviceErrorHandler } from '@gateway/common/microservice-error.handler';
 import { PaginatedResponseDto } from '@phanhotboy/nsv-common';
 
+type HistoricalEventPaginatedBriefResponseDto = InstanceType<
+  ReturnType<typeof PaginatedResponseDto<HistoricalEventBriefResponseDto>>
+>;
+
 @Injectable()
 export class HistoricalEventService {
   private readonly serviceName = 'Historical Event Service';
@@ -45,7 +49,7 @@ export class HistoricalEventService {
 
   async getEvents(
     query: HistoricalEventQueryDto,
-  ): Promise<PaginatedResponseDto<HistoricalEventBriefResponseDto>> {
+  ): Promise<HistoricalEventPaginatedBriefResponseDto> {
     return MicroserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(

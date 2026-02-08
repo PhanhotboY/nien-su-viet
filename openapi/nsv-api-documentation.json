@@ -384,86 +384,6 @@
         ]
       }
     },
-    "/api/v1/media": {
-      "get": {
-        "operationId": "MediaController_proxyRequest",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Media"
-        ]
-      },
-      "post": {
-        "operationId": "MediaController_ProxyPostRequest",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Media"
-        ]
-      }
-    },
-    "/api/v1/media/{id}": {
-      "put": {
-        "operationId": "MediaController_proxyPutRequest",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Media"
-        ]
-      },
-      "delete": {
-        "operationId": "MediaController_proxyDeleteRequest",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Media"
-        ]
-      }
-    },
     "/api/v1/header-nav-items": {
       "get": {
         "operationId": "HeaderNavItemController_proxyRequest",
@@ -1787,8 +1707,7 @@
         "type": "object",
         "properties": {
           "authorId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           },
           "publishedAt": {
             "type": "object"
@@ -1865,8 +1784,7 @@
             "format": "uuid"
           },
           "authorId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           },
           "publishedAt": {
             "type": "object"
@@ -2177,46 +2095,9 @@
           "updatedAt"
         ]
       },
-      "PaginationMetaDto": {
-        "type": "object",
-        "properties": {
-          "total": {
-            "type": "number"
-          },
-          "totalPages": {
-            "type": "number"
-          },
-          "page": {
-            "type": "number"
-          },
-          "limit": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "total",
-          "totalPages",
-          "page",
-          "limit"
-        ]
-      },
       "PaginatedResponseDto": {
         "type": "object",
-        "properties": {
-          "data": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "pagination": {
-            "$ref": "#/components/schemas/PaginationMetaDto"
-          }
-        },
-        "required": [
-          "data",
-          "pagination"
-        ]
+        "properties": {}
       }
     }
   }

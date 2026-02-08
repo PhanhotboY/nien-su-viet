@@ -42,7 +42,7 @@ export class PostService {
    */
   async findPosts(
     query: PostQueryDto,
-  ): Promise<PaginatedResponseDto<PostBriefResponseDto>> {
+  ): Promise<ReturnType<typeof PaginatedResponseDto<PostBriefResponseDto>>> {
     const page = query.page || 1;
     const limit = query.limit || 10;
     const skip = (page - 1) * limit;
@@ -72,7 +72,7 @@ export class PostService {
         this.prisma.post.count({ where }),
       ]);
 
-      return {
+      return Object.create({
         data: posts as unknown as PostBriefResponseDto[],
         pagination: {
           page,
@@ -80,7 +80,7 @@ export class PostService {
           total,
           totalPages: Math.ceil(total / limit),
         },
-      };
+      });
     } catch (error) {
       throw new RpcException({
         statusCode: 500,
@@ -95,7 +95,7 @@ export class PostService {
    */
   async getPublishedPosts(
     query: PostQueryDto,
-  ): Promise<PaginatedResponseDto<PostBriefResponseDto>> {
+  ): Promise<ReturnType<typeof PaginatedResponseDto<PostBriefResponseDto>>> {
     const page = query.page || 1;
     const limit = query.limit || 10;
     const skip = (page - 1) * limit;
@@ -150,7 +150,7 @@ export class PostService {
         JSON.stringify(result),
       );
 
-      return result;
+      return Object.create(result);
     } catch (error) {
       throw new RpcException({
         statusCode: 500,
