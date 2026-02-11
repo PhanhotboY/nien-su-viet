@@ -49,9 +49,7 @@ export class HistoricalEventService {
 
   async getEvents(
     query: HistoricalEventQueryDto,
-  ): Promise<
-    ReturnType<typeof PaginatedResponseDto<HistoricalEventBriefResponseDto>>
-  > {
+  ): Promise<PaginatedResponseDto<HistoricalEventBriefResponseDto>> {
     const {
       page = 1,
       limit = 10,

@@ -15,25 +15,11 @@ class PaginationMetaDto {
   limit!: number;
 }
 
-// export class PaginatedResponseDto<T> {
-//   @Expose()
-//   data: T[];
+export class PaginatedResponseDto<T> {
+  @Expose()
+  data: T[];
 
-//   @Expose()
-//   @Type(() => PaginationMetaDto)
-//   pagination: PaginationMetaDto;
-// }
-
-export function PaginatedResponseDto<T extends Object>(ItemDto: T) {
-  class PaginatedResponseDtoClass {
-    @Expose()
-    @Type(() => ItemDto as any)
-    data: T[];
-
-    @Expose()
-    @Type(() => PaginationMetaDto)
-    pagination: PaginationMetaDto;
-  }
-
-  return PaginatedResponseDtoClass;
+  @Expose()
+  @Type(() => PaginationMetaDto)
+  pagination: PaginationMetaDto;
 }

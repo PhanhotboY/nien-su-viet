@@ -18,7 +18,7 @@ async function bootstrap() {
     app,
     name: 'NSV API Documentation',
     isStartEndpoint: true,
-    extraModels: [PaginatedResponseDto],
+    extraModels: [PaginatedResponseDto, HistoricalEventBriefResponseDto],
   });
 
   app.enableShutdownHooks();

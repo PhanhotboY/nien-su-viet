@@ -8,12 +8,12 @@ import { IApiResponse } from '../interfaces/response.interface';
 export async function getEvents(
   query?: Record<string, string> | string,
 ): Promise<
-  IPaginatedResponse<components['schemas']['HistoricalEventPreviewResponseDto']>
+  IPaginatedResponse<components['schemas']['HistoricalEventBriefResponseDto']>
 > {
   const response = (await retryFetcher(
     `/historical-events?${new URLSearchParams(query).toString()}`,
   )) as IPaginatedResponse<
-    components['schemas']['HistoricalEventPreviewResponseDto']
+    components['schemas']['HistoricalEventBriefResponseDto']
   >;
 
   return response;

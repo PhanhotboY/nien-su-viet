@@ -28,8 +28,9 @@ export function HistoricalEventTimeline() {
   useEffect(() => {
     getEvents({ limit: '1000' })
       .then((res) => {
-        if (res.data && res.statusCode <= 400) {
-          return setEvents(res.data);
+        console.log('Fetched events for timeline:', res);
+        if (Array.isArray(res.data) && res.statusCode <= 400) {
+          return setEvents(res);
         }
       })
       .catch(setError);

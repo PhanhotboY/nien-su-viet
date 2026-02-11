@@ -10,12 +10,6 @@ generate-%:
 setup-%:
 	bun --cwd apps/$* setup/index.ts
 
-dbuild-%:
-	docker build -f local/$*-service/Dockerfile .
-
-dpush-%:
-	docker push phanhotboy/nsv-$*-service:v1
-
 OPENAPI_DIR = openapi
 OUTPUT_DIR = libs/nsv-interfaces
 

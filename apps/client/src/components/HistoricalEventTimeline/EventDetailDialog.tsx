@@ -9,7 +9,7 @@ import {
 import useSWR from 'swr';
 import { swrFetcher } from '@/helper/swrFetcher';
 import { Skeleton } from '../ui/skeleton';
-import { components } from '@nsv-interfaces/historical-event';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { formatHistoricalEventDate } from '@/helper/date';
 import { IApiResponse } from '../../interfaces/response.interface';
 import TextRenderer from '../TextRenderer';

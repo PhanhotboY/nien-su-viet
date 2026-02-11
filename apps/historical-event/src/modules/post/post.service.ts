@@ -42,10 +42,18 @@ export class PostService {
    */
   async findPosts(
     query: PostQueryDto,
-  ): Promise<ReturnType<typeof PaginatedResponseDto<PostBriefResponseDto>>> {
+  ): Promise<PaginatedResponseDto<PostBriefResponseDto>> {
     const page = query.page || 1;
     const limit = query.limit || 10;
     const skip = (page - 1) * limit;
+
+    const cacheKey = `${this.cacheKey}:all:${JSON.stringify(query)}`;
+
+    // Try to get from cache
+    const cached = await this.redisService.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
 
     const where = this.buildWhereClause(query, false);
     const orderBy = this.buildOrderByClause(query);
@@ -72,7 +80,7 @@ export class PostService {
         this.prisma.post.count({ where }),
       ]);
 
-      return Object.create({
+      const result = {
         data: posts as unknown as PostBriefResponseDto[],
         pagination: {
           page,
@@ -80,7 +88,16 @@ export class PostService {
           total,
           totalPages: Math.ceil(total / limit),
         },
-      });
+      };
+
+      // Cache the result
+      await this.redisService.setEx(
+        cacheKey,
+        this.cacheTTL,
+        JSON.stringify(result),
+      );
+
+      return result;
     } catch (error) {
       throw new RpcException({
         statusCode: 500,
@@ -95,7 +112,7 @@ export class PostService {
    */
   async getPublishedPosts(
     query: PostQueryDto,
-  ): Promise<ReturnType<typeof PaginatedResponseDto<PostBriefResponseDto>>> {
+  ): Promise<PaginatedResponseDto<PostBriefResponseDto>> {
     const page = query.page || 1;
     const limit = query.limit || 10;
     const skip = (page - 1) * limit;
@@ -150,7 +167,7 @@ export class PostService {
         JSON.stringify(result),
       );
 
-      return Object.create(result);
+      return result;
     } catch (error) {
       throw new RpcException({
         statusCode: 500,

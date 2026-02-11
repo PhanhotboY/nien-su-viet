@@ -2095,9 +2095,119 @@
           "updatedAt"
         ]
       },
+      "PaginationMetaDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "totalPages",
+          "page",
+          "limit"
+        ]
+      },
       "PaginatedResponseDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/PaginationMetaDto"
+          }
+        },
+        "required": [
+          "data",
+          "pagination"
+        ]
+      },
+      "HistoricalEventBriefResponseDto": {
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/UserBaseResponseDto"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "fromDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "fromMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "fromYear": {
+            "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "toMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "toYear": {
+            "type": "number",
+            "nullable": true
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "author",
+          "id",
+          "name",
+          "fromDateType",
+          "fromYear",
+          "toDateType"
+        ]
       }
     }
   }

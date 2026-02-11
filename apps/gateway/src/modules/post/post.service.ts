@@ -44,7 +44,7 @@ export class PostService {
 
   async findPosts(
     query: PostQueryDto,
-  ): Promise<ReturnType<typeof PaginatedResponseDto<PostBriefResponseDto>>> {
+  ): Promise<PaginatedResponseDto<PostBriefResponseDto>> {
     return MicroserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
@@ -62,7 +62,7 @@ export class PostService {
 
   async getPublishedPosts(
     query: PostQueryDto,
-  ): Promise<ReturnType<typeof PaginatedResponseDto<PostBriefResponseDto>>> {
+  ): Promise<PaginatedResponseDto<PostBriefResponseDto>> {
     return MicroserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
