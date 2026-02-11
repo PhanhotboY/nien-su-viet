@@ -4,6 +4,7 @@ import { middleware } from './gateway.middleware';
 import { initSwagger } from '@phanhotboy/nsv-common/swagger';
 import { HistoricalEventBriefResponseDto } from './modules/historical-event/dto';
 import { PaginatedResponseDto } from '@phanhotboy/nsv-common';
+import { AppDto } from './modules/cms/dto';
 
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule, { bodyParser: false });

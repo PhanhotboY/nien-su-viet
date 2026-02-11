@@ -1,11 +1,17 @@
 import type { Request } from 'express';
-import { Controller, Get, Inject, Put, Req } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Put, Req } from '@nestjs/common';
 
 import { HttpProxyService } from '@gateway/common/services/http-proxy.service';
 import { Throttle } from '@nestjs/throttler';
 import { RATE_LIMIT } from '@gateway/config';
 import { Permissions, Public } from '@gateway/common/decorators';
-import { RedisService, type RedisServiceType } from '@phanhotboy/nsv-common';
+import {
+  RedisService,
+  Serialize,
+  type RedisServiceType,
+} from '@phanhotboy/nsv-common';
+import { AppDto, AppUpdateDto } from './dto';
+import { OperationResponseDto } from '@phanhotboy/nsv-common/dto/response/operation-response.dto';
 
 @Controller('app')
 export class AppController {
@@ -17,14 +23,20 @@ export class AppController {
 
   @Get()
   @Public()
-  proxyRequest(@Req() req: Request) {
-    return this.cmsProxy.proxyRequest(req);
+  @Serialize(AppDto)
+  async proxyRequest(@Req() req: Request): Promise<AppDto> {
+    const res = await this.cmsProxy.proxyRequest<AppDto>(req);
+    return res as AppDto;
   }
 
   @Put()
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ app: ['update'] })
-  async proxyPutRequest(@Req() req: Request) {
+  @Serialize(OperationResponseDto)
+  async proxyPutRequest(
+    @Req() req: Request,
+    @Body() body: AppUpdateDto,
+  ): Promise<OperationResponseDto> {
     await this.redis.mdel(this.routePath);
     return await this.cmsProxy.proxyRequest(req);
   }
