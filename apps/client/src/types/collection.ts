@@ -1,22 +1,13 @@
-import { components } from '@nsv-interfaces/cms-service';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 
 // export type Category = components['schemas']['']
 // export type Author = Database["public"]["Tables"]["authors"]["Row"];
-export type Post = {
-  id: string;
-  title: string;
-  slug: string;
-  categoryId?: string;
-  thumbnail?: string | null;
-  authorId: string;
-  content: string;
-  summary?: string | null;
-  views: number;
-  likes: number;
-  published: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-};
+export type PostResponseDto = components['schemas']['PostDetailResponseDto'];
+export type PostBriefResponseDto =
+  components['schemas']['PostBriefResponseDto'];
+export type PostCreateDto = components['schemas']['PostBaseCreateDto'];
+export type PostUpdateDto = components['schemas']['PostBaseUpdateDto'];
+
 // export type Comment = Database["public"]["Tables"]["comments"]["Row"];
 // export type BookMark = Database["public"]["Tables"]["bookmarks"]["Row"];
 // export type Profile = Database["public"]["Tables"]["profiles"]["Row"];

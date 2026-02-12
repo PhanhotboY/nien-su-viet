@@ -3,11 +3,17 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 import * as AuthDto from '../dto';
 
-export function initSwagger(
-  app: INestApplication,
-  name: string,
+export function initSwagger({
+  app,
+  name,
   isStartEndpoint = false,
-) {
+  extraModels = [],
+}: {
+  app: INestApplication;
+  name: string;
+  isStartEndpoint?: boolean;
+  extraModels?: any[];
+}) {
   const config = new DocumentBuilder()
     .setTitle(`NSV - ${name} API`)
     .setDescription(`The ${name} API description`)
@@ -15,7 +21,7 @@ export function initSwagger(
     .build();
 
   const document = SwaggerModule.createDocument(app, config, {
-    extraModels: Object.values(AuthDto),
+    extraModels: [Object.values(AuthDto), extraModels].flat(),
   });
 
   // Save OpenAPI JSON into monorepo

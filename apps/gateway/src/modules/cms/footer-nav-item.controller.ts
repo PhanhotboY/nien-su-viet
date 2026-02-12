@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -13,7 +14,17 @@ import { HttpProxyService } from '@gateway/common/services/http-proxy.service';
 import { Permissions, Public } from '@gateway/common/decorators';
 import { Throttle } from '@nestjs/throttler';
 import { RATE_LIMIT } from '@gateway/config';
-import { RedisService, type RedisServiceType } from '@phanhotboy/nsv-common';
+import {
+  RedisService,
+  Serialize,
+  type RedisServiceType,
+} from '@phanhotboy/nsv-common';
+import {
+  FooterNavItemCreateDto,
+  FooterNavItemDto,
+  FooterNavItemUpdateDto,
+} from './dto';
+import { OperationResponseDto } from '@phanhotboy/nsv-common/dto/response/operation-response.dto';
 
 // ref: apps/cms/internal/footerNavItem/controller/http/footerNavItem.router.go
 @Controller('footer-nav-items')
@@ -26,14 +37,19 @@ export class FooterNavItemController {
 
   @Get()
   @Public()
-  proxyRequest(@Req() req: Request) {
-    return this.cmsProxy.proxyRequest(req);
+  // @Serialize(FooterNavItemDto)
+  proxyRequest(@Req() req: Request): Promise<FooterNavItemDto> {
+    return this.cmsProxy.proxyRequest<FooterNavItemDto>(req);
   }
 
   @Post()
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ footerNavItem: ['create'] })
-  async ProxyPostRequest(@Req() req: Request) {
+  @Serialize(OperationResponseDto)
+  async proxyPostRequest(
+    @Req() req: Request,
+    @Body() body: FooterNavItemCreateDto,
+  ): Promise<OperationResponseDto> {
     await this.redis.mdel(this.routePath);
     return await this.cmsProxy.proxyRequest(req);
   }
@@ -41,7 +57,11 @@ export class FooterNavItemController {
   @Put(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ footerNavItem: ['update'] })
-  async proxyPutRequest(@Req() req: Request) {
+  @Serialize(OperationResponseDto)
+  async proxyPutRequest(
+    @Req() req: Request,
+    @Body() body: FooterNavItemUpdateDto,
+  ): Promise<OperationResponseDto> {
     await this.redis.mdel(this.routePath);
     return await this.cmsProxy.proxyRequest(req);
   }
@@ -49,7 +69,8 @@ export class FooterNavItemController {
   @Delete(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ footerNavItem: ['delete'] })
-  async proxyDeleteRequest(@Req() req: Request) {
+  @Serialize(OperationResponseDto)
+  async proxyDeleteRequest(@Req() req: Request): Promise<OperationResponseDto> {
     await this.redis.mdel(this.routePath);
     return await this.cmsProxy.proxyRequest(req);
   }

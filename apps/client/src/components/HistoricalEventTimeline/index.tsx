@@ -17,16 +17,24 @@ import './index.css';
 import { useRouter } from 'next/navigation';
 import { getEvents } from '@/services/historical-event.service';
 import { EventDetailDialog } from './EventDetailDialog';
+import { useTranslations } from 'next-intl';
 
 export function HistoricalEventTimeline() {
   const [events, setEvents] = useState<IPaginatedResponse<
-    components['schemas']['HistoricalEventPreviewResponseDto']
+    components['schemas']['HistoricalEventBriefResponseDto']
   > | null>(null);
   const [previewItemId, setPreviewItemId] = useState<string | null>(null);
   const [error, setError] = useState<Error | null>(null);
+  const t = useTranslations('EventPage');
 
   useEffect(() => {
-    getEvents({ limit: '1000' }).then(setEvents).catch(setError);
+    getEvents({ limit: '1000' })
+      .then((res) => {
+        if (Array.isArray(res.data) && res.statusCode <= 400) {
+          return setEvents(res);
+        }
+      })
+      .catch(setError);
   }, []);
   const timelineRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -215,10 +223,20 @@ export function HistoricalEventTimeline() {
   function FunctionalButtons() {
     return (
       <div className="p-4 border-b flex gap-2">
-        <Button variant="outline" size="icon" onClick={handleZoomIn}>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={handleZoomIn}
+          title={t('zoom-in')}
+        >
           <ZoomIn className="h-4 w-4" />
         </Button>
-        <Button variant="outline" size="icon" onClick={handleZoomOut}>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={handleZoomOut}
+          title={t('zoom-out')}
+        >
           <ZoomOut className="h-4 w-4" />
         </Button>
         <Button
@@ -234,12 +252,17 @@ export function HistoricalEventTimeline() {
               timeline.setWindow(newStart, newEnd);
             }
           }}
-          title="Move Left"
+          title={t('move-left')}
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <Button variant="outline" onClick={handleToday} className="text-xs">
-          Today
+        <Button
+          variant="outline"
+          onClick={handleToday}
+          className="text-xs"
+          title={t('today')}
+        >
+          {t('today')}
         </Button>
         <Button
           variant="outline"
@@ -254,7 +277,7 @@ export function HistoricalEventTimeline() {
               timeline.setWindow(newStart, newEnd);
             }
           }}
-          title="Move Right"
+          title={t('move-right')}
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -273,7 +296,7 @@ export function HistoricalEventTimeline() {
           </div>
         ) : (
           <div className="p-6 text-red-600 font-semibold">
-            Lỗi khi tải dữ liệu lịch sử: {error?.message}
+            {t('error-loading-event')} {error?.message}
           </div>
         )}
 

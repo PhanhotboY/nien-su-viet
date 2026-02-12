@@ -354,7 +354,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/AppDto"
                 }
               }
             }
@@ -367,13 +367,23 @@
       "put": {
         "operationId": "AppController_proxyPutRequest",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppUpdateDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OperationResponseDto"
                 }
               }
             }
@@ -381,86 +391,6 @@
         },
         "tags": [
           "App"
-        ]
-      }
-    },
-    "/api/v1/media": {
-      "get": {
-        "operationId": "MediaController_proxyRequest",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Media"
-        ]
-      },
-      "post": {
-        "operationId": "MediaController_ProxyPostRequest",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Media"
-        ]
-      }
-    },
-    "/api/v1/media/{id}": {
-      "put": {
-        "operationId": "MediaController_proxyPutRequest",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Media"
-        ]
-      },
-      "delete": {
-        "operationId": "MediaController_proxyDeleteRequest",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Media"
         ]
       }
     },
@@ -474,7 +404,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/HeaderNavItemDto"
                 }
               }
             }
@@ -485,15 +415,25 @@
         ]
       },
       "post": {
-        "operationId": "HeaderNavItemController_ProxyPostRequest",
+        "operationId": "HeaderNavItemController_proxyPostRequest",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HeaderNavItemCreateDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OperationResponseDto"
                 }
               }
             }
@@ -508,13 +448,23 @@
       "put": {
         "operationId": "HeaderNavItemController_proxyPutRequest",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HeaderNavItemUpdateDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OperationResponseDto"
                 }
               }
             }
@@ -533,7 +483,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OperationResponseDto"
                 }
               }
             }
@@ -554,7 +504,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/FooterNavItemDto"
                 }
               }
             }
@@ -565,15 +515,25 @@
         ]
       },
       "post": {
-        "operationId": "FooterNavItemController_ProxyPostRequest",
+        "operationId": "FooterNavItemController_proxyPostRequest",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FooterNavItemCreateDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OperationResponseDto"
                 }
               }
             }
@@ -588,13 +548,23 @@
       "put": {
         "operationId": "FooterNavItemController_proxyPutRequest",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FooterNavItemUpdateDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OperationResponseDto"
                 }
               }
             }
@@ -613,7 +583,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/OperationResponseDto"
                 }
               }
             }
@@ -924,7 +894,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoricalEventBriefResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1071,7 +1051,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PostBriefResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1218,7 +1208,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PostBriefResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1393,6 +1393,442 @@
   "servers": [],
   "components": {
     "schemas": {
+      "SocialLinksDto": {
+        "type": "object",
+        "properties": {
+          "facebook": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "youtube": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "tiktok": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "zalo": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          }
+        }
+      },
+      "AddressDto": {
+        "type": "object",
+        "properties": {
+          "province": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 100
+          },
+          "district": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 100
+          },
+          "street": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 255
+          }
+        }
+      },
+      "AppDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1000
+          },
+          "logo": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "social": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SocialLinksDto"
+              }
+            ]
+          },
+          "tax_code": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 50
+          },
+          "address": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AddressDto"
+              }
+            ]
+          },
+          "msisdn": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "format": "email"
+          },
+          "map": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "head_scripts": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5000
+          },
+          "body_scripts": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5000
+          }
+        },
+        "required": [
+          "title"
+        ]
+      },
+      "AppUpdateDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 1000
+          },
+          "logo": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "social": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/SocialLinksDto"
+              }
+            ]
+          },
+          "tax_code": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 50
+          },
+          "address": {
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/AddressDto"
+              }
+            ]
+          },
+          "msisdn": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "format": "email"
+          },
+          "map": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "head_scripts": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5000
+          },
+          "body_scripts": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 5000
+          }
+        }
+      },
+      "OperationResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "success"
+        ]
+      },
+      "OperationResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/OperationResponse"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "HeaderNavItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "order": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "link_new_tab": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "link_url": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "link_label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "link_type": {
+            "type": "string",
+            "enum": [
+              "internal",
+              "external"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "order",
+          "link_url",
+          "link_label",
+          "link_type"
+        ]
+      },
+      "HeaderNavItemCreateDto": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "link_new_tab": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "link_url": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "link_label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "link_type": {
+            "type": "string",
+            "enum": [
+              "internal",
+              "external"
+            ]
+          }
+        },
+        "required": [
+          "order",
+          "link_url",
+          "link_label",
+          "link_type"
+        ]
+      },
+      "HeaderNavItemUpdateDto": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "link_new_tab": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "link_url": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "link_label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "link_type": {
+            "type": "string",
+            "enum": [
+              "internal",
+              "external"
+            ]
+          }
+        },
+        "required": [
+          "order",
+          "link_url",
+          "link_label",
+          "link_type"
+        ]
+      },
+      "FooterNavItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "order": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "link_new_tab": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "link_url": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "link_label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "link_type": {
+            "type": "string",
+            "enum": [
+              "internal",
+              "external"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "order",
+          "link_url",
+          "link_label",
+          "link_type"
+        ]
+      },
+      "FooterNavItemCreateDto": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "link_new_tab": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "link_url": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "link_label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "link_type": {
+            "type": "string",
+            "enum": [
+              "internal",
+              "external"
+            ]
+          }
+        },
+        "required": [
+          "order",
+          "link_url",
+          "link_label",
+          "link_type"
+        ]
+      },
+      "FooterNavItemUpdateDto": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "link_new_tab": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "link_url": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2048
+          },
+          "link_label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "link_type": {
+            "type": "string",
+            "enum": [
+              "internal",
+              "external"
+            ]
+          }
+        },
+        "required": [
+          "order",
+          "link_url",
+          "link_label",
+          "link_type"
+        ]
+      },
       "UserBaseResponseDto": {
         "type": "object",
         "properties": {
@@ -1586,6 +2022,79 @@
           "categories"
         ]
       },
+      "HistoricalEventBriefResponseDto": {
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/UserBaseResponseDto"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "fromDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "fromMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "fromYear": {
+            "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "toMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "toYear": {
+            "type": "number",
+            "nullable": true
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "author",
+          "id",
+          "name",
+          "fromDateType",
+          "fromYear",
+          "toDateType"
+        ]
+      },
       "HistoricalEventBaseCreateDto": {
         "type": "object",
         "properties": {
@@ -1725,12 +2234,9 @@
           }
         }
       },
-      "PostDetailResponseDto": {
+      "PostBriefResponseDto": {
         "type": "object",
         "properties": {
-          "content": {
-            "type": "string"
-          },
           "author": {
             "$ref": "#/components/schemas/UserBaseResponseDto"
           },
@@ -1772,7 +2278,6 @@
           }
         },
         "required": [
-          "content",
           "author",
           "id",
           "title",
@@ -1783,12 +2288,69 @@
           "updatedAt"
         ]
       },
+      "PostDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/UserBaseResponseDto"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thumbnail": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 500
+          },
+          "publishedAt": {
+            "type": "object"
+          },
+          "published": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "object"
+          },
+          "updatedAt": {
+            "type": "object"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "author",
+          "id",
+          "title",
+          "slug",
+          "publishedAt",
+          "published",
+          "createdAt",
+          "updatedAt",
+          "content"
+        ]
+      },
       "PostBaseCreateDto": {
         "type": "object",
         "properties": {
           "authorId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           },
           "publishedAt": {
             "type": "object"
@@ -1865,8 +2427,7 @@
             "format": "uuid"
           },
           "authorId": {
-            "type": "string",
-            "format": "uuid"
+            "type": "string"
           },
           "publishedAt": {
             "type": "object"
@@ -1875,233 +2436,6 @@
             "type": "boolean"
           }
         }
-      },
-      "QueryImageDto": {
-        "type": "object",
-        "properties": {
-          "page": {
-            "type": "number",
-            "minimum": 1
-          },
-          "limit": {
-            "type": "number",
-            "minimum": 1
-          },
-          "search": {
-            "type": "string"
-          },
-          "sortBy": {
-            "type": "string"
-          },
-          "sortOrder": {
-            "type": "string",
-            "enum": [
-              "asc",
-              "desc"
-            ]
-          },
-          "name": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "uploaderId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "createdAtFrom": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "createdAtTo": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "updatedAtFrom": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "updatedAtTo": {
-            "format": "date-time",
-            "type": "string"
-          }
-        }
-      },
-      "BulkDeleteImageDto": {
-        "type": "object",
-        "properties": {
-          "imageIds": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        },
-        "required": [
-          "imageIds"
-        ]
-      },
-      "ImageBaseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "caption": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "publicUrl": {
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "required": [
-          "publicUrl"
-        ]
-      },
-      "ImageFullDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "caption": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "publicUrl": {
-            "type": "string",
-            "format": "uri"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "redirectLink": {
-            "type": "string",
-            "format": "uri"
-          },
-          "type": {
-            "type": "string",
-            "maxLength": 100
-          },
-          "uploaderId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "required": [
-          "publicUrl",
-          "name",
-          "uploaderId"
-        ]
-      },
-      "ImageFullCreateDto": {
-        "type": "object",
-        "properties": {
-          "caption": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "publicUrl": {
-            "type": "string",
-            "format": "uri"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "redirectLink": {
-            "type": "string",
-            "format": "uri"
-          },
-          "type": {
-            "type": "string",
-            "maxLength": 100
-          },
-          "uploaderId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "required": [
-          "publicUrl",
-          "name",
-          "uploaderId"
-        ]
-      },
-      "ImageFullUpdateDto": {
-        "type": "object",
-        "properties": {
-          "caption": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "publicUrl": {
-            "type": "string",
-            "format": "uri"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "redirectLink": {
-            "type": "string",
-            "format": "uri"
-          },
-          "type": {
-            "type": "string",
-            "maxLength": 100
-          },
-          "uploaderId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        }
-      },
-      "ImageBriefResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "caption": {
-            "type": "string"
-          },
-          "publicUrl": {
-            "type": "string",
-            "format": "uri"
-          },
-          "redirectLink": {
-            "type": "string",
-            "format": "uri"
-          },
-          "type": {
-            "type": "string",
-            "maxLength": 100
-          }
-        },
-        "required": [
-          "publicUrl"
-        ]
       },
       "EventCategoryBriefResponseDto": {
         "type": "object",

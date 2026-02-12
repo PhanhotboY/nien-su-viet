@@ -42,15 +42,15 @@ export class PostController {
   @Get()
   @Public()
   @Serialize(PostBriefResponseDto)
-  getAllPosts(@Query() query: PostQueryDto) {
-    return this.postService.getPublishedPosts(query);
+  getAllPosts(@Query() query: PostQueryDto): PostBriefResponseDto[] {
+    return this.postService.getPublishedPosts(query) as any;
   }
 
   @Get('all')
   @Permissions({ post: ['read'] })
   @Serialize(PostBriefResponseDto)
-  getPosts(@Query() query: PostQueryDto) {
-    return this.postService.findPosts(query);
+  getPosts(@Query() query: PostQueryDto): PostBriefResponseDto[] {
+    return this.postService.findPosts(query) as any;
   }
 
   @Get(':id')

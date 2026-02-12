@@ -46,7 +46,7 @@ import {
   EditorUploadCoverImageItem,
   EditorUploadCoverImagePlaceHolder,
 } from './upload';
-import { Post } from '@/types/collection';
+import { PostResponseDto } from '@/types/collection';
 import { updatePost } from '@/services/post.service';
 import { useAuthenticate } from '@daveyplate/better-auth-ui';
 import TextEditor from '@/components/TextEditor';
@@ -56,7 +56,7 @@ export const dynamic = 'force-dynamic';
 type FormData = z.infer<typeof postEditFormSchema>;
 
 interface EditorProps {
-  post: Post;
+  post: PostResponseDto;
   imageFolderName: string;
 }
 
@@ -94,7 +94,6 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
     title: post.title ?? 'Untitled',
     slug: post.slug ?? `post-${v4()}`,
     thumbnail: post.thumbnail ?? undefined,
-    categoryId: post.categoryId ?? protectedEditorConfig.defaultCategoryId,
     summary: post.summary ?? 'Post summary',
     content: content ?? protectedEditorConfig.placeholderContent,
     published: post.published === true,

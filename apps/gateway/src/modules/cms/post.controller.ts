@@ -33,8 +33,7 @@ export class PostController {
   }
 
   @Get('all')
-  @Public()
-  // @Permissions({ post: ['create'] }) // only users have create post permission can get unpublished posts
+  @Permissions({ post: ['create'] }) // only users have create post permission can get unpublished posts
   proxyFindAllPosts(@Req() req: Request, @Query() query: PostQueryDto) {
     return this.cmsProxy.proxyRequest(req);
   }

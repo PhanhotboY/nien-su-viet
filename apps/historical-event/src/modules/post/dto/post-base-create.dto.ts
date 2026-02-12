@@ -17,7 +17,6 @@ export class PostBaseCreateDto extends OmitType(PostBaseDto, [
   // Required in schema but optional through API
   @Expose()
   @IsOptional()
-  @IsUUID('4', { message: 'ID tác giả không hợp lệ' })
   authorId?: PostBaseDto['authorId'];
 
   @Expose()

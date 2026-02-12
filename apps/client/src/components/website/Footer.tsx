@@ -2,7 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { LogoIcon } from '../Icons';
 import { Facebook, Youtube, Mail, Phone, MapPin } from 'lucide-react';
-import { components } from '@nsv-interfaces/cms-service';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
+import { getTranslations } from 'next-intl/server';
 
 interface FooterProps {
   appTitle?: string;
@@ -21,10 +22,10 @@ interface FooterProps {
     district?: string;
     province?: string;
   };
-  navItems?: components['schemas']['HeaderNavItemData'][] | null;
+  navItems?: components['schemas']['HeaderNavItemDto'][] | null;
 }
 
-export const Footer = ({
+export const Footer = async ({
   appTitle = 'ShadcnUI/React',
   appLogo,
   appDescription,
@@ -34,6 +35,8 @@ export const Footer = ({
   address,
   navItems,
 }: FooterProps) => {
+  const t = await getTranslations('HomePage.Footer');
+
   return (
     <footer id="footer">
       <hr className="w-11/12 mx-auto" />
@@ -56,7 +59,6 @@ export const Footer = ({
             ) : (
               <LogoIcon />
             )}
-            {appTitle}
           </Link>
           {appDescription && (
             <p className="mt-4 text-sm text-muted-foreground">
@@ -70,7 +72,7 @@ export const Footer = ({
           social?.tiktok ||
           social?.zalo) && (
           <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-lg">Follow Us</h3>
+            <h3 className="font-bold text-lg">{t('follow-us')}</h3>
             {social?.facebook && (
               <div>
                 <Link
@@ -128,49 +130,16 @@ export const Footer = ({
         )}
 
         <div className="flex flex-col gap-2">
-          <h3 className="font-bold text-lg">Platforms</h3>
-          <div>
-            <Link
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Web
-            </Link>
-          </div>
-
-          <div>
-            <Link
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Mobile
-            </Link>
-          </div>
-
-          <div>
-            <Link
-              rel="noreferrer noopener"
-              href="#"
-              className="opacity-60 hover:opacity-100"
-            >
-              Desktop
-            </Link>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <h3 className="font-bold text-lg">About</h3>
-          {(navItems || [])
-            .sort((a, b) => a.order - b.order)
-            .map((item) => (
-              <div key={item.id}>
+          {/*<h3 className="font-bold text-lg">Platforms</h3>*/}
+          {navItems
+            ?.sort((a, b) => a.order - b.order)
+            .map((item, index) => (
+              <div key={index}>
                 <Link
                   rel="noreferrer noopener"
                   href={item.link_url}
-                  target={item.link_new_tab ? '_blank' : ''}
                   className="opacity-60 hover:opacity-100"
+                  target={item.link_new_tab ? '_blank' : ''}
                 >
                   {item.link_label}
                 </Link>
@@ -184,7 +153,7 @@ export const Footer = ({
           address?.district ||
           address?.province) && (
           <div className="flex flex-col gap-2">
-            <h3 className="font-bold text-lg">Contact</h3>
+            <h3 className="font-bold text-lg">{t('contact')}</h3>
             {email && (
               <div>
                 <Link
@@ -234,9 +203,7 @@ export const Footer = ({
       </section>
 
       <section className="container pb-14 text-center">
-        <h3>
-          &copy; {new Date().getFullYear()} {appTitle}. All rights reserved.
-        </h3>
+        <h3>{t('copyright')}</h3>
       </section>
     </footer>
   );

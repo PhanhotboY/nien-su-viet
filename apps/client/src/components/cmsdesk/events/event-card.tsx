@@ -10,8 +10,9 @@ import { Button } from '@/components/ui/button';
 import { Calendar, Edit, Trash2, User } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { components } from '@nsv-interfaces/historical-event';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { formatHistoricalEventDate } from '@/helper/date';
+import { useTranslations } from 'next-intl';
 
 interface EventCardProps {
   event: components['schemas']['HistoricalEventBriefResponseDto'];
@@ -19,13 +20,15 @@ interface EventCardProps {
 }
 
 export function EventCard({ event, onDelete }: EventCardProps) {
+  const t = useTranslations('EventPage');
+
   return (
     <Card className="group overflow-hidden transition-all hover:shadow-lg p-0 gap-2">
       <CardHeader className="p-0">
         <div className="relative aspect-video w-full overflow-hidden bg-muted">
-          {event.thumbnail?.publicUrl ? (
+          {event.thumbnail ? (
             <Image
-              src={event.thumbnail.publicUrl}
+              src={event.thumbnail}
               alt={event.name}
               fill
               className="object-cover transition-transform group-hover:scale-105"
@@ -49,6 +52,7 @@ export function EventCard({ event, onDelete }: EventCardProps) {
           <span>
             {formatHistoricalEventDate(
               event.fromDateType,
+              t('approximate'),
               event.fromYear,
               event.fromMonth,
               event.fromDay,
@@ -56,6 +60,7 @@ export function EventCard({ event, onDelete }: EventCardProps) {
             {' - '}
             {formatHistoricalEventDate(
               event.toDateType,
+              t('approximate'),
               event.toYear,
               event.toMonth,
               event.toDay,

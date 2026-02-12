@@ -1,4 +1,5 @@
 import { HISTORICAL_EVENT } from '@/constants/historical-event.constant';
+import { useTranslations } from 'next-intl';
 
 // Helper function to create date from parts
 const createDate = (
@@ -22,6 +23,7 @@ const createDate = (
 
 const formatHistoricalEventDate = (
   dateType: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>,
+  prefixText: string,
   year?: number | null,
   month?: number | null,
   day?: number | null,
@@ -33,7 +35,9 @@ const formatHistoricalEventDate = (
     : '';
 
   const prefix =
-    dateType === HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE ? 'Khoảng ' : '';
+    dateType === HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE
+      ? `${prefixText} `
+      : '';
 
   return prefix + (year && year < 0 ? `${dateStr} TCN` : dateStr);
 };
