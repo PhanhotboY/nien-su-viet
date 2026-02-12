@@ -42,7 +42,7 @@ export class HistoricalEventController {
 
   @Get(':id/preview')
   @Public()
-  @Serialize(HistoricalEventPreviewResponseDto)
+  @Serialize(HistoricalEventBriefResponseDto)
   getHistoricalEventPreviewById(@Param('id') id: string) {
     return this.historicalEventService.getEventPreviewById(id);
   }
@@ -75,7 +75,6 @@ export class HistoricalEventController {
   @Put(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ historicalEvent: ['update'] })
-  @Serialize(HistoricalEventBaseDto)
   async updateHistoricalEvent(
     @Param('id') id: string,
     @Body() event: HistoricalEventBaseUpdateDto,

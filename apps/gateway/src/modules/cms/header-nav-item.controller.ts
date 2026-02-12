@@ -1,6 +1,7 @@
 import type { Request } from 'express';
 import { Throttle } from '@nestjs/throttler';
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -13,7 +14,17 @@ import {
 import { RATE_LIMIT } from '@gateway/config';
 import { Permissions, Public } from '@gateway/common/decorators';
 import { HttpProxyService } from '@gateway/common/services/http-proxy.service';
-import { RedisService, type RedisServiceType } from '@phanhotboy/nsv-common';
+import {
+  RedisService,
+  Serialize,
+  type RedisServiceType,
+} from '@phanhotboy/nsv-common';
+import {
+  HeaderNavItemCreateDto,
+  HeaderNavItemDto,
+  HeaderNavItemUpdateDto,
+} from './dto';
+import { OperationResponseDto } from '@phanhotboy/nsv-common/dto/response/operation-response.dto';
 
 // ref: apps/cms/internal/headerNavItem/controller/http/headerNavItem.router.go
 @Controller('header-nav-items')
@@ -26,14 +37,19 @@ export class HeaderNavItemController {
 
   @Get()
   @Public()
-  proxyRequest(@Req() req: Request) {
-    return this.cmsProxy.proxyRequest(req);
+  @Serialize(HeaderNavItemDto)
+  async proxyRequest(@Req() req: Request): Promise<HeaderNavItemDto> {
+    return await this.cmsProxy.proxyRequest<HeaderNavItemDto>(req);
   }
 
   @Post()
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ headerNavItem: ['create'] })
-  async ProxyPostRequest(@Req() req: Request) {
+  @Serialize(OperationResponseDto)
+  async proxyPostRequest(
+    @Req() req: Request,
+    @Body() body: HeaderNavItemCreateDto,
+  ): Promise<OperationResponseDto> {
     await this.redis.mdel(this.routePath);
     return await this.cmsProxy.proxyRequest(req);
   }
@@ -41,7 +57,11 @@ export class HeaderNavItemController {
   @Put(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ headerNavItem: ['update'] })
-  async proxyPutRequest(@Req() req: Request) {
+  @Serialize(OperationResponseDto)
+  async proxyPutRequest(
+    @Req() req: Request,
+    @Body() body: HeaderNavItemUpdateDto,
+  ): Promise<OperationResponseDto> {
     await this.redis.mdel(this.routePath);
     return await this.cmsProxy.proxyRequest(req);
   }
@@ -49,7 +69,8 @@ export class HeaderNavItemController {
   @Delete(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ headerNavItem: ['delete'] })
-  async proxyDeleteRequest(@Req() req: Request) {
+  @Serialize(OperationResponseDto)
+  async proxyDeleteRequest(@Req() req: Request): Promise<OperationResponseDto> {
     await this.redis.mdel(this.routePath);
     return await this.cmsProxy.proxyRequest(req);
   }

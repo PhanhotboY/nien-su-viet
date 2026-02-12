@@ -53,7 +53,7 @@ export class PostBaseDto {
   thumbnail?: string | null;
 
   @Expose()
-  @IsUUID('4', { message: 'ID tác giả không hợp lệ' })
+  @IsString({ message: 'ID tác giả không hợp lệ' })
   authorId!: string;
 
   @Expose()

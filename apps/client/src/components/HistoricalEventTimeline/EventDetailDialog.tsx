@@ -9,13 +9,14 @@ import {
 import useSWR from 'swr';
 import { swrFetcher } from '@/helper/swrFetcher';
 import { Skeleton } from '../ui/skeleton';
-import { components } from '@nsv-interfaces/historical-event';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { formatHistoricalEventDate } from '@/helper/date';
 import { IApiResponse } from '../../interfaces/response.interface';
 import TextRenderer from '../TextRenderer';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 // Custom React component for item details
 export function EventDetailDialog({
@@ -30,6 +31,7 @@ export function EventDetailDialog({
   useEffect(() => {
     mutate();
   }, [eventId, open]);
+  const t = useTranslations('EventPage');
 
   const { data, error, isLoading, mutate } = useSWR<
     IApiResponse<components['schemas']['HistoricalEventPreviewResponseDto']>
@@ -41,7 +43,7 @@ export function EventDetailDialog({
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Error</DialogTitle>
-            <DialogDescription>Failed to load event details.</DialogDescription>
+            <DialogDescription>{t('error-loading-details')}</DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>
@@ -79,6 +81,7 @@ export function EventDetailDialog({
               <DialogDescription>
                 {formatHistoricalEventDate(
                   eventData.fromDateType,
+                  t('approximate'),
                   eventData.fromYear,
                   eventData.fromMonth,
                   eventData.fromDay,
@@ -86,6 +89,7 @@ export function EventDetailDialog({
                 {' - '}
                 {formatHistoricalEventDate(
                   eventData.toDateType,
+                  t('approximate'),
                   eventData.toYear,
                   eventData.toMonth,
                   eventData.toDay,
@@ -93,10 +97,14 @@ export function EventDetailDialog({
               </DialogDescription>
             </DialogHeader>
 
-            <TextRenderer content={eventData.excerpt} />
+            {eventData.excerpt ? (
+              <TextRenderer content={eventData.excerpt} />
+            ) : (
+              t('empty-excerpt')
+            )}
 
             <Button asChild>
-              <Link href={`/su-kien/${eventData.id}`}>Xem chi tiết</Link>
+              <Link href={`/su-kien/${eventData.id}`}>{t('view-detail')}</Link>
             </Button>
           </>
         )}

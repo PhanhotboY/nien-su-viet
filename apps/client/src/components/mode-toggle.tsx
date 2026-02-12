@@ -3,14 +3,15 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export function ModeToggle() {
   const { theme, setTheme } = useTheme();
+  const t = useTranslations('HomePage');
 
   return (
     <DropdownMenu>
@@ -29,19 +30,19 @@ export function ModeToggle() {
           onClick={() => setTheme('light')}
           checked={theme === 'light'}
         >
-          Light
+          {t('Theme.light')}
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           onClick={() => setTheme('dark')}
           checked={theme === 'dark'}
         >
-          Dark
+          {t('Theme.dark')}
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           onClick={() => setTheme('system')}
           checked={theme === 'system'}
         >
-          System
+          {t('Theme.system')}
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>

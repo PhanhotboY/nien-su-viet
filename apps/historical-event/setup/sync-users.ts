@@ -45,7 +45,7 @@ async function syncUsersFromAuthService() {
   const listUserRes = await fetch(`${gatewayEndpoint}/auth/admin/list-users`, {
     method: 'GET',
     headers: {
-      Cookie: `nsv-auth.session_token=${token}`,
+      Cookie: `${process.env.AUTH_COOKIE_PREFIX}.session_token=${token}`,
     },
   });
   if (!listUserRes.ok) {

@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { components } from '@nsv-interfaces/historical-event';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { IPaginatedResponse } from '@/interfaces/response.interface';
 import { swrFetcher } from '@/helper/swrFetcher';
 

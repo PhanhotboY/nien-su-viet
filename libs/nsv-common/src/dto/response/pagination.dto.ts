@@ -17,7 +17,6 @@ class PaginationMetaDto {
 
 export class PaginatedResponseDto<T> {
   @Expose()
-  @Type(() => Object)
   data: T[];
 
   @Expose()
