@@ -894,7 +894,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoricalEventBriefResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1041,7 +1051,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PostBriefResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1188,7 +1208,17 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PostBriefResponseDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -1992,6 +2022,79 @@
           "categories"
         ]
       },
+      "HistoricalEventBriefResponseDto": {
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/UserBaseResponseDto"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "fromDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "fromMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "fromYear": {
+            "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDay": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 31
+          },
+          "toMonth": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1,
+            "maximum": 12
+          },
+          "toYear": {
+            "type": "number",
+            "nullable": true
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "author",
+          "id",
+          "name",
+          "fromDateType",
+          "fromYear",
+          "toDateType"
+        ]
+      },
       "HistoricalEventBaseCreateDto": {
         "type": "object",
         "properties": {
@@ -2131,12 +2234,9 @@
           }
         }
       },
-      "PostDetailResponseDto": {
+      "PostBriefResponseDto": {
         "type": "object",
         "properties": {
-          "content": {
-            "type": "string"
-          },
           "author": {
             "$ref": "#/components/schemas/UserBaseResponseDto"
           },
@@ -2178,7 +2278,6 @@
           }
         },
         "required": [
-          "content",
           "author",
           "id",
           "title",
@@ -2187,6 +2286,64 @@
           "published",
           "createdAt",
           "updatedAt"
+        ]
+      },
+      "PostDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "author": {
+            "$ref": "#/components/schemas/UserBaseResponseDto"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thumbnail": {
+            "type": "string",
+            "nullable": true,
+            "format": "uri"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "summary": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 500
+          },
+          "publishedAt": {
+            "type": "object"
+          },
+          "published": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "object"
+          },
+          "updatedAt": {
+            "type": "object"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "author",
+          "id",
+          "title",
+          "slug",
+          "publishedAt",
+          "published",
+          "createdAt",
+          "updatedAt",
+          "content"
         ]
       },
       "PostBaseCreateDto": {
@@ -2393,79 +2550,6 @@
         "required": [
           "data",
           "pagination"
-        ]
-      },
-      "HistoricalEventBriefResponseDto": {
-        "type": "object",
-        "properties": {
-          "author": {
-            "$ref": "#/components/schemas/UserBaseResponseDto"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "fromDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
-          },
-          "fromDay": {
-            "type": "number",
-            "nullable": true,
-            "minimum": 1,
-            "maximum": 31
-          },
-          "fromMonth": {
-            "type": "number",
-            "nullable": true,
-            "minimum": 1,
-            "maximum": 12
-          },
-          "fromYear": {
-            "type": "number"
-          },
-          "toDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
-          },
-          "toDay": {
-            "type": "number",
-            "nullable": true,
-            "minimum": 1,
-            "maximum": 31
-          },
-          "toMonth": {
-            "type": "number",
-            "nullable": true,
-            "minimum": 1,
-            "maximum": 12
-          },
-          "toYear": {
-            "type": "number",
-            "nullable": true
-          },
-          "thumbnail": {
-            "type": "string",
-            "format": "uri"
-          }
-        },
-        "required": [
-          "author",
-          "id",
-          "name",
-          "fromDateType",
-          "fromYear",
-          "toDateType"
         ]
       }
     }

@@ -57,8 +57,10 @@ export class HistoricalEventController {
   @Get()
   @Public()
   @Serialize(HistoricalEventBriefResponseDto)
-  getAllHistoricalEvents(@Query() query: HistoricalEventQueryDto) {
-    return this.historicalEventService.getEvents(query);
+  getAllHistoricalEvents(
+    @Query() query: HistoricalEventQueryDto,
+  ): HistoricalEventBriefResponseDto[] {
+    return this.historicalEventService.getEvents(query) as any;
   }
 
   @Post()
