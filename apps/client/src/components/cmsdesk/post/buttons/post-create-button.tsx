@@ -9,8 +9,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { protectedPostConfig } from '@/config/cmsdesk';
 import { createPost } from '@/services/post.service';
-import { Post } from '@/types/collection';
 import { useAuthenticate } from '@daveyplate/better-auth-ui';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { Loader2 as SpinnerIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -25,7 +25,7 @@ const PostCreateButton = () => {
     setIsLoading(true);
 
     if (session?.user.id) {
-      const post: Partial<Post> = {
+      const post: components['schemas']['PostBaseCreateDto'] = {
         title: protectedPostConfig.untitled,
         authorId: session?.user.id,
         slug: `untitled-${Math.random().toString(36).substring(2, 8)}`,

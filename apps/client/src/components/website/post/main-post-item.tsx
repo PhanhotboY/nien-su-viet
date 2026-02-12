@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getMinutes, shimmer, toBase64 } from '@/lib/utils';
-import { components } from '@nsv-interfaces/nsv-api-documentation';
+import { PostBriefResponseDto } from '@/types/collection';
 import { format, parseISO } from 'date-fns';
 import { enUS, vi } from 'date-fns/locale';
 import { CalendarIcon, Clock10Icon, MessageCircleIcon } from 'lucide-react';
@@ -36,13 +36,13 @@ export const dynamic = 'force-dynamic';
 // }
 
 interface MainPostItemProps {
-  post: components['schemas']['PostDetailResponseDto'];
+  post: PostBriefResponseDto;
   locale: string;
 }
 
 const MainPostItem: React.FC<MainPostItemProps> = async ({ post, locale }) => {
   const tshared = await getTranslations('Shared');
-  const readTime = readingTime(post.content ? post.content : '');
+  const readTime = readingTime('');
   // const comments = await getComments(post.id ? post.id : "");
 
   return (

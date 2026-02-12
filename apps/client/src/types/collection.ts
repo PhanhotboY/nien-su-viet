@@ -3,6 +3,11 @@ import { components } from '@nsv-interfaces/nsv-api-documentation';
 // export type Category = components['schemas']['']
 // export type Author = Database["public"]["Tables"]["authors"]["Row"];
 export type PostResponseDto = components['schemas']['PostDetailResponseDto'];
+export type PostBriefResponseDto =
+  components['schemas']['PostBriefResponseDto'];
+export type PostCreateDto = components['schemas']['PostBaseCreateDto'];
+export type PostUpdateDto = components['schemas']['PostBaseUpdateDto'];
+
 // export type Comment = Database["public"]["Tables"]["comments"]["Row"];
 // export type BookMark = Database["public"]["Tables"]["bookmarks"]["Row"];
 // export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
