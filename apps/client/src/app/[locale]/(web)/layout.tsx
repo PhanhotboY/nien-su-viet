@@ -9,8 +9,13 @@ import {
 } from '@/services/cms.service';
 import '@/styles/globals.css';
 
-export async function generateMetadata(): Promise<Metadata> {
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
+    const locale = (await params).locale;
     const response = await getAppInfo();
     const appData = response.data;
 
@@ -26,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
         title: title,
         description: description,
         type: 'website',
-        locale: 'vi_VN',
+        locale,
         siteName: title,
         ...(logo && { images: [{ url: logo, alt: title }] }),
       },

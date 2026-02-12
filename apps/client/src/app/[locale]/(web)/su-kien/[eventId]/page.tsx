@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import TextRenderer from '@/components/TextRenderer';
 import Link from 'next/link';
 import { formatHistoricalEventDate } from '@/helper/date';
+import { getTranslations } from 'next-intl/server';
 
 export default async function EventDetailPage({
   params,
@@ -15,6 +16,8 @@ export default async function EventDetailPage({
 }) {
   const { eventId } = await params;
   const response = await getEvent(eventId);
+  const t = await getTranslations('EventPage');
+  const tshared = await getTranslations('Shared');
 
   if (!response?.data) {
     notFound();
@@ -24,12 +27,14 @@ export default async function EventDetailPage({
 
   const startDate = formatHistoricalEventDate(
     event.fromDateType,
+    t('approximate'),
     event.fromYear,
     event.fromMonth,
     event.fromDay,
   );
   const endDate = formatHistoricalEventDate(
     event.toDateType,
+    t('approximate'),
     event.toYear,
     event.toMonth,
     event.toDay,
@@ -66,7 +71,6 @@ export default async function EventDetailPage({
           </svg>
         </div>
       </div>
-
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12 -mt-8">
         {/* Info Cards */}
@@ -79,14 +83,20 @@ export default async function EventDetailPage({
                   <Calendar className="h-6 w-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold mb-2">Thời gian</h3>
+                  <h3 className="font-semibold mb-2">{tshared('period')}</h3>
                   <div className="space-y-1">
                     <p className="text-sm ">
-                      <span className="font-medium">Bắt đầu:</span> {startDate}
+                      <span className="font-medium">
+                        {tshared('period-from')}:
+                      </span>{' '}
+                      {startDate}
                     </p>
                     {endDate && (
                       <p className="text-sm">
-                        <span className="font-medium">Kết thúc:</span> {endDate}
+                        <span className="font-medium">
+                          {tshared('period-to')}:
+                        </span>{' '}
+                        {endDate}
                       </p>
                     )}
                   </div>
@@ -104,7 +114,7 @@ export default async function EventDetailPage({
                     <User className="h-6 w-6 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold mb-2">Tác giả</h3>
+                    <h3 className="font-semibold mb-2">{tshared('author')}</h3>
                     <p className="text-sm">{event.author.name}</p>
                   </div>
                 </div>
@@ -122,7 +132,7 @@ export default async function EventDetailPage({
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">
-                      Danh mục
+                      {tshared('category')}
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {event.categories.map((cat: any) => (
@@ -147,7 +157,7 @@ export default async function EventDetailPage({
           <CardContent className="p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="h-1 w-12 bg-gradient-to-r from-red-500 to-yellow-500 rounded-full" />
-              <h2 className="text-2xl font-bold">Nội dung chi tiết</h2>
+              <h2 className="text-2xl font-bold">{t('detailed-content')}</h2>
               <div className="h-1 flex-1 bg-gradient-to-r from-yellow-500 to-red-500 rounded-full" />
             </div>
 
@@ -158,9 +168,7 @@ export default async function EventDetailPage({
                 <TextRenderer content={event.content} />
               </div>
             ) : (
-              <p className="italic text-center py-8">
-                Nội dung đang được cập nhật...
-              </p>
+              <p className="italic text-center py-8">{t('empty-content')}</p>
             )}
           </CardContent>
         </Card>
@@ -168,11 +176,11 @@ export default async function EventDetailPage({
         {/* Back to Timeline */}
         <div className="mt-8 text-center">
           <Link
-            href="/timeline"
+            href="/"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
           >
             <Clock className="h-4 w-4" />
-            Quay lại dòng thời gian
+            {t('back-to-timeline')}
           </Link>
         </div>
       </div>

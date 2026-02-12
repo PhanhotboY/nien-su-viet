@@ -4,6 +4,8 @@ import { Providers } from './provider';
 import { ScrollToTop } from '@/components/ScrollToTop';
 
 import '@/styles/globals.css';
+import { getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -15,14 +17,18 @@ export default async function AdminLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const messages = await getMessages();
+
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased flex min-h-svh flex-col`}>
-        <Providers>
-          {children}
+        <NextIntlClientProvider messages={messages}>
+          <Providers>
+            {children}
 
-          <ScrollToTop />
-        </Providers>
+            <ScrollToTop />
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

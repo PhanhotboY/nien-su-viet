@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getMinutes, shimmer, toBase64 } from '@/lib/utils';
 import { ArchiveIcon, CalendarIcon, ClockIcon } from 'lucide-react';
-import { cookies } from 'next/headers';
+import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import { FC } from 'react';
 import { ReadTimeResults } from 'reading-time';
@@ -10,8 +10,8 @@ interface DetailPostHeadingProps {
   id: string;
   title: string;
   thumbnail: string;
-  // authorImage: string;
-  // authorName: string;
+  authorImage?: string;
+  authorName: string;
   date: string;
   // category: string;
   readTime: ReadTimeResults;
@@ -21,12 +21,13 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
   id,
   title,
   thumbnail,
-  // authorName,
-  // authorImage,
+  authorName,
+  authorImage,
   date,
   // category,
   readTime,
 }) => {
+  const tshared = await getTranslations('Shared');
   return (
     <section className="flex flex-col items-start justify-between">
       <div className="relative w-full">
@@ -52,18 +53,18 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
           {/* Author */}
           <div className="inline-flex items-start justify-start">
             <Avatar>
-              <AvatarImage src={'hi'} />
+              <AvatarImage src={authorImage} />
               <AvatarFallback>P</AvatarFallback>
             </Avatar>
             <div className="ml-2 flex flex-col">
-              <span className="text-md flex font-semibold">author Name</span>
+              <span className="text-md flex font-semibold">{authorName}</span>
             </div>
           </div>
 
           {/* Date */}
           <div className="inline-flex space-x-2 border-gray-400 border-opacity-50">
             <p className="mt-0.5 opacity-80">
-              <span className="sr-only">Date</span>
+              <span className="sr-only">{tshared('date')}</span>
               <CalendarIcon className="h-4 w-4" aria-hidden="true" />
             </p>
             <span className="text-sm">{date}</span>
@@ -71,7 +72,7 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
           {/* Category */}
           <div className="inline-flex space-x-2 border-gray-400 border-opacity-50">
             <p className="mt-0.5 opacity-80">
-              <span className="sr-only">Category</span>
+              <span className="sr-only">{tshared('category')}</span>
               <ArchiveIcon className="h-4 w-4" aria-hidden="true" />
             </p>
             {/*<span className="text-sm">{category}</span>*/}
@@ -80,7 +81,7 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
           {/* Reading time */}
           <div className="inline-flex space-x-2 border-gray-400 border-opacity-50">
             <p className="mt-0.5 opacity-80">
-              <span className="sr-only">Minutes to read</span>
+              <span className="sr-only">{tshared('minute-to-read')}</span>
               <ClockIcon className="h-4 w-4" aria-hidden="true" />
             </p>
             <span className="text-sm">{getMinutes(readTime.minutes)}</span>
@@ -90,20 +91,20 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
         {/* Desktop view */}
         <div className="mb-7 hidden justify-start text-card-foreground sm:flex sm:flex-row">
           <Avatar>
-            <AvatarImage src={'hi'} />
+            <AvatarImage src={authorImage} />
             <AvatarFallback>P</AvatarFallback>
           </Avatar>
           {/* Author */}
           <div className="mb-5 flex flex-row items-center justify-start pr-3.5 md:mb-0">
             <div className="ml-2 flex flex-col">
-              <span className="text-md flex font-semibold">authorName</span>
+              <span className="text-md flex font-semibold">{authorName}</span>
             </div>
           </div>
           <div className="flex flex-row items-center">
             {/* Date */}
             <div className="flex space-x-2 border-gray-400 border-opacity-50 pl-0 pr-3.5 md:border-l md:pl-3.5">
               <p className="mt-0.5 opacity-80">
-                <span className="sr-only">Date</span>
+                <span className="sr-only">{tshared('date')}</span>
                 <CalendarIcon className="h-4 w-4" aria-hidden="true" />
               </p>
               <span className="text-sm">{date}</span>
@@ -111,7 +112,7 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
             {/* Category */}
             <div className="flex space-x-2 border-l border-gray-400 border-opacity-50 pl-3.5 pr-3.5">
               <p className="mt-0.5 opacity-80">
-                <span className="sr-only">Category</span>
+                <span className="sr-only">{tshared('category')}</span>
                 <ArchiveIcon className="h-4 w-4" aria-hidden="true" />
               </p>
               {/*<span className="text-sm">{category}</span>*/}
@@ -119,10 +120,12 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
             {/* Reading time */}
             <div className="flex space-x-2 border-l border-gray-400 border-opacity-50 pl-3.5">
               <p className="mt-0.5 opacity-80">
-                <span className="sr-only">Minutes to read</span>
+                <span className="sr-only">{tshared('minute-to-read')}</span>
                 <ClockIcon className="h-4 w-4" aria-hidden="true" />
               </p>
-              <span className="text-sm">{getMinutes(readTime.minutes)}</span>
+              <span className="text-sm">
+                {getMinutes(readTime.minutes, tshared('minute'))}
+              </span>
             </div>
           </div>
         </div>

@@ -9,10 +9,15 @@ export const revalidate = 0;
 
 interface HomePageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: Promise<{ locale: string }>;
 }
 
-export default async function HomePage({ searchParams }: HomePageProps) {
+export default async function HomePage({
+  searchParams,
+  params,
+}: HomePageProps) {
   const resolvedSearchParams = await searchParams;
+  const { locale } = await params;
   // Fetch posts
   const { data, pagination } = await getPublicPosts({
     page: (resolvedSearchParams.page as string) || '1',
@@ -34,7 +39,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         {data?.map((post) => (
           <div key={post.id}>
             <Suspense fallback={<MainPostItemLoading />}>
-              <MainPostItem post={post} />
+              <MainPostItem post={post} locale={locale} />
             </Suspense>
           </div>
         ))}

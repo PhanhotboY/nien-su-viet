@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Loader2, Calendar } from 'lucide-react';
-import { components } from '@nsv-interfaces/historical-event';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import TextEditor from '@/components/TextEditor';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -51,7 +51,7 @@ export function EventForm({
     toYear: initialData?.toYear || null,
     toMonth: initialData?.toMonth || null,
     toDay: initialData?.toDay || null,
-    thumbnailId: initialData?.thumbnailId,
+    thumbnail: initialData?.thumbnail,
     fromDateType:
       initialData?.fromDateType || HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT,
     toDateType:

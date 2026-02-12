@@ -1,20 +1,22 @@
 '@/components/detail/post';
 import TextRenderer from '@/components/TextRenderer';
 import { seoData } from '@/config/root/seo';
-import { getOgImageUrl, getUrl, sanitizeHtml } from '@/lib/utils';
 import { getPost } from '@/services/post.service';
 import { format, parseISO } from 'date-fns';
+import { vi, enUS } from 'date-fns/locale';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import readingTime, { ReadTimeResults } from 'reading-time';
 import DetailPostHeading from '@/components/detail/post/detail-post-heading';
 import { Card, CardContent } from '@/components/ui/card';
+import { CLIENT_HOST } from '@/lib/config';
 
 export const revalidate = 0;
 
 interface PostPageProps {
   params: Promise<{
     slug: string[];
+    locale: string;
   }>;
 }
 
@@ -47,7 +49,7 @@ export async function generateMetadata({
 }: PostPageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const post = await getPostHandler(resolvedParams);
-  const truncateDescription = post?.summary?.slice(0, 100) + ('...' as string);
+  const description = post?.summary?.slice(0, 100) + ('...' as string);
   const slug = '/posts/' + post?.slug;
 
   if (!post) {
@@ -56,43 +58,31 @@ export async function generateMetadata({
 
   return {
     title: post.title,
-    description: truncateDescription,
+    description,
     authors: {
       name: seoData.author.name,
       url: seoData.author.twitterUrl,
     },
-    // openGraph: {
-    //   title: post.title as string,
-    //   description,
-    //   type: 'article',
-    //   url: getUrl() + slug,
-    //   images: [
-    //     {
-    //       url: getOgImageUrl(
-    //         post.title as string,
-    //         truncateDescription as string,
-    //         [post.categories?.title as string] as string[],
-    //         slug as string,
-    //       ),
-    //       width: 1200,
-    //       height: 630,
-    //       alt: post.title as string,
-    //     },
-    //   ],
-    // },
-    // twitter: {
-    //   card: 'summary_large_image',
-    //   title: post.title as string,
-    //   description: post.description as string,
-    //   images: [
-    //     getOgImageUrl(
-    //       post.title as string,
-    //       truncateDescription as string,
-    //       [post.categories?.title as string] as string[],
-    //       slug as string,
-    //     ),
-    //   ],
-    // },
+    openGraph: {
+      title: post.title as string,
+      description,
+      type: 'article',
+      url: CLIENT_HOST + slug,
+      images: [
+        {
+          url: post.thumbnail!,
+          width: 1200,
+          height: 630,
+          alt: post.title as string,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title as string,
+      description,
+      images: [post.thumbnail!],
+    },
   };
 }
 
@@ -111,7 +101,7 @@ export async function generateMetadata({
 // }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const resolvedParams = await params;
+  const { locale, ...resolvedParams } = await params;
   // Get post data
   const post = await getPostHandler(resolvedParams);
   if (!post) {
@@ -137,9 +127,15 @@ export default async function PostPage({ params }: PostPageProps) {
               id={post.id}
               title={post.title as string}
               thumbnail={post.thumbnail as string}
-              // authorName={post.profiles.full_name as string}
-              // authorImage={post.profiles.avatar_url as string}
-              date={format(parseISO(post.updatedAt!), 'MMMM dd, yyyy')}
+              authorName={post.author.name}
+              authorImage={post.author.image!}
+              date={format(
+                parseISO(post.createdAt as any),
+                locale === 'vi' ? 'dd MMMM, yyyy' : 'MMMM dd, yyyy',
+                {
+                  locale: locale === 'vi' ? vi : enUS,
+                },
+              )}
               // category={post.categories?.title as string}
               readTime={readTime as ReadTimeResults}
             />

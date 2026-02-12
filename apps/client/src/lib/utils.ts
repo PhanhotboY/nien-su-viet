@@ -7,9 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Reading Time
-export function getMinutes(minutes: number) {
+export function getMinutes(minutes: number, unit: string = 'min') {
   const roundedMinutes = Math.round(minutes);
-  return `${roundedMinutes} min`;
+  return `${roundedMinutes} ${unit}`;
 }
 
 // Open Graph Images for Twitter and Facebook

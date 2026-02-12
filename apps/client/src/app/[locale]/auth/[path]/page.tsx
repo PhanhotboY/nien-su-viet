@@ -4,6 +4,7 @@ import { AuthView } from '@daveyplate/better-auth-ui';
 
 import { getAuthSession } from '@/helper/auth.helper';
 import { authLocalization } from '@/localization/vi/auth-localization';
+import { getTranslations } from 'next-intl/server';
 
 export default async function AuthPage({
   params,
@@ -14,6 +15,7 @@ export default async function AuthPage({
 }) {
   const { path } = await params;
   const { user, error } = await getAuthSession();
+  const tshared = await getTranslations('Shared');
 
   let { redirectTo } = await searchParams;
   if (!redirectTo) {
@@ -55,7 +57,7 @@ export default async function AuthPage({
           >
             {authLocalization.TERMS_OF_SERVICE}
           </Link>{' '}
-          and{' '}
+          {tshared('and')}{' '}
           <Link
             className="text-warning underline"
             href="/privacy"

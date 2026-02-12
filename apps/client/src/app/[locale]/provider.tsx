@@ -4,7 +4,7 @@ import { AuthUIProvider } from '@daveyplate/better-auth-ui';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ThemeProvider } from 'next-themes';
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Toaster } from 'sonner';
 import { authClient, signInWithGoogle } from '@/lib/auth-client';
 import { CLIENT_HOST } from '@/lib/config';

@@ -1,0 +1,51 @@
+{
+  "HomePage": {
+    "Auth": {
+      "account": "Tài khoản",
+      "cms-desk": "Quản lý nội dung",
+      "admin-dashboard": "Quản trị",
+      "sign-out": "Đăng xuất",
+      "sign-in": "Đăng nhập",
+      "sign-up": "Đăng ký"
+    },
+    "Theme": {
+      "light": "Sáng",
+      "dark": "Tối",
+      "system": "Hệ thống"
+    },
+    "Footer": {
+      "follow-us": "Theo dõi chúng tôi",
+      "copyright": "© 2026 NienSuViet. All rights reserved.",
+      "social-media": "Mạng xã hội",
+      "contact": "Liên hệ"
+    }
+  },
+  "EventPage": {
+    "title": "Sự kiện Lịch sử Việt Nam",
+    "description": "Tìm hiểu về lịch sử Việt Nam thông qua các sự kiện quan trọng.",
+    "today": "Hôm nay",
+    "move-left": "Sang trái",
+    "move-right": "Sang phải",
+    "zoom-in": "Phóng to",
+    "zoom-out": "Thu nhỏ",
+    "approximate": "Khoảng",
+    "error-loading-event": "Lỗi khi tải dữ liệu lịch sử:",
+    "view-detail": "Xem chi tiết",
+    "error-loading-details": "Lỗi khi tải dữ liệu chi tiết",
+    "empty-excerpt": "Chưa có nội dung",
+    "back-to-timeline": "Quay lại",
+    "detailed-content": "Nội dung chi tiết",
+    "empty-content": "Chưa có nội dung"
+  },
+  "Shared": {
+    "author": "Tác giả",
+    "period": "Thời gian",
+    "period-from": "Bắt đầu",
+    "period-to": "Kết thúc",
+    "category": "Danh mục",
+    "date": "Ngày",
+    "minute-to-read": "Phút đọc",
+    "minute": "phút",
+    "and": "và"
+  }
+}

@@ -3,6 +3,7 @@
 import { IPaginatedResponse } from '@/interfaces/response.interface';
 import { retryFetcher } from '.';
 import { Post } from '@/types/collection';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 
 export async function getPublicPosts(
   query?: Record<string, string> | string,
@@ -25,7 +26,9 @@ export async function findPosts(
 }
 
 export async function getPost(id: string) {
-  const response = await retryFetcher<Post>(`/posts/${id}`, {
+  const response = await retryFetcher<
+    components['schemas']['PostDetailResponseDto']
+  >(`/posts/${id}`, {
     method: 'GET',
   });
 

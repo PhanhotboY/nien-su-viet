@@ -1,9 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getMinutes, shimmer, toBase64 } from '@/lib/utils';
-import { Post } from '@/types/collection';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { format, parseISO } from 'date-fns';
+import { enUS, vi } from 'date-fns/locale';
 import { CalendarIcon, Clock10Icon, MessageCircleIcon } from 'lucide-react';
-import { cookies } from 'next/headers';
+import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -35,10 +36,12 @@ export const dynamic = 'force-dynamic';
 // }
 
 interface MainPostItemProps {
-  post: Post;
+  post: components['schemas']['PostDetailResponseDto'];
+  locale: string;
 }
 
-const MainPostItem: React.FC<MainPostItemProps> = async ({ post }) => {
+const MainPostItem: React.FC<MainPostItemProps> = async ({ post, locale }) => {
+  const tshared = await getTranslations('Shared');
   const readTime = readingTime(post.content ? post.content : '');
   // const comments = await getComments(post.id ? post.id : "");
 
@@ -88,13 +91,16 @@ const MainPostItem: React.FC<MainPostItemProps> = async ({ post }) => {
                     <div className="inline-flex items-center text-gray-500">
                       <CalendarIcon className="h-4 w-4" />
                       <span className="ml-1">
-                        {format(parseISO(post.updatedAt!), 'dd/MM/yyyy')}
+                        {format(parseISO(post.updatedAt as any), 'dd/MM/yyyy')}
                       </span>
                     </div>
                     <div className="inline-flex items-center text-gray-500">
                       <Clock10Icon className="h-4 w-4" />
                       <span className="ml-1">
-                        {getMinutes(readTime.minutes ? readTime.minutes : 0)}
+                        {getMinutes(
+                          readTime.minutes ? readTime.minutes : 0,
+                          tshared('minute'),
+                        )}
                       </span>
                     </div>
                   </div>
@@ -106,13 +112,17 @@ const MainPostItem: React.FC<MainPostItemProps> = async ({ post }) => {
                     <div className="inline-flex items-center text-gray-500">
                       <CalendarIcon className="h-4 w-4" />
                       <span className="ml-1">
-                        {format(parseISO(post.updatedAt!), 'MMMM dd, yyyy')}
+                        {format(
+                          parseISO(post.updatedAt as any),
+                          locale === 'vi' ? 'dd MMMM, yyyy' : 'MMMM dd, yyyy',
+                          { locale: locale === 'vi' ? vi : enUS },
+                        )}
                       </span>
                     </div>
                     <div className="inline-flex items-center text-gray-500">
                       <Clock10Icon className="h-4 w-4" />
                       <span className="ml-1">
-                        {getMinutes(readTime.minutes)}
+                        {getMinutes(readTime.minutes, tshared('minute'))}
                       </span>
                     </div>
                     {/* <div className="inline-flex items-center text-gray-500">
@@ -125,12 +135,17 @@ const MainPostItem: React.FC<MainPostItemProps> = async ({ post }) => {
                 <div className="mt-3 flex border-t border-gray-900/5 pt-2">
                   <div className="relative flex items-center gap-x-2">
                     <Avatar>
-                      <AvatarImage src={'/images/avatar.png'} alt={'Avatar'} />
+                      <AvatarImage
+                        src={post.author.image!}
+                        alt={post.author.name}
+                      />
 
                       <AvatarFallback>P</AvatarFallback>
                     </Avatar>
                     <div className="text-sm">
-                      <p className="font-semibold text-gray-900">Author Name</p>
+                      <p className="font-semibold text-gray-900">
+                        {post.author.name}
+                      </p>
                       <p className="text-gray-600">{'Author'}</p>
                     </div>
                   </div>

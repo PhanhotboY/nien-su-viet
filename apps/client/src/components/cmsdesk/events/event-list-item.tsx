@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Calendar, User, Edit, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { components } from '@nsv-interfaces/historical-event';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { formatHistoricalEventDate } from '@/helper/date';
+import { useTranslations } from 'next-intl';
 
 type IHistoricalEvent =
   components['schemas']['HistoricalEventBriefResponseDto'];
@@ -15,12 +16,14 @@ interface EventListItemProps {
 }
 
 export function EventListItem({ event, onDelete }: EventListItemProps) {
+  const t = useTranslations('EventPage');
+
   return (
     <div className="group flex gap-4 rounded-lg border bg-card p-4 transition-all hover:shadow-md">
       <div className="relative h-24 w-32 flex-shrink-0 overflow-hidden rounded-md bg-muted">
-        {event.thumbnail?.publicUrl ? (
+        {event.thumbnail ? (
           <Image
-            src={event.thumbnail.publicUrl}
+            src={event.thumbnail}
             alt={event.name}
             fill
             className="object-cover transition-transform group-hover:scale-105"
@@ -44,6 +47,7 @@ export function EventListItem({ event, onDelete }: EventListItemProps) {
               <span>
                 {formatHistoricalEventDate(
                   event.fromDateType,
+                  t('approximate'),
                   event.fromYear,
                   event.fromMonth,
                   event.fromDay,
@@ -51,6 +55,7 @@ export function EventListItem({ event, onDelete }: EventListItemProps) {
                 {' - '}
                 {formatHistoricalEventDate(
                   event.toDateType,
+                  t('approximate'),
                   event.toYear,
                   event.toMonth,
                   event.toDay,

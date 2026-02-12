@@ -21,28 +21,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-import { Button, buttonVariants } from '../ui/button';
-import { Menu, User, LogOut, LayoutDashboard } from 'lucide-react';
-import { ModeToggle } from '../mode-toggle';
-import { LogoIcon } from '../Icons';
 import Link from 'next/link';
-import { SignedIn, SignedOut, UserAvatar } from '@daveyplate/better-auth-ui';
-import { useRouter } from 'next/navigation';
-import { authClient, isAdmin, isEditor } from '@/lib/auth-client';
 import Image from 'next/image';
-import { components } from '@nsv-interfaces/cms-service';
-import NavLink from './NavLink';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { Menu, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { SignedIn, SignedOut, UserAvatar } from '@daveyplate/better-auth-ui';
 
-interface RouteProps {
-  href: string;
-  label: string;
-}
+import NavLink from './NavLink';
+import { LogoIcon } from '../Icons';
+import { ModeToggle } from '../mode-toggle';
+import { Button, buttonVariants } from '../ui/button';
+import { authClient, isAdmin, isEditor } from '@/lib/auth-client';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
+import LanguageSwitcher from '../language-switcher';
 
 interface NavbarProps {
   appTitle?: string;
   appLogo?: string;
-  navItems?: components['schemas']['HeaderNavItemData'][];
+  navItems?: components['schemas']['HeaderNavItemDto'][];
 }
 
 export const Navbar = ({
@@ -53,6 +50,7 @@ export const Navbar = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
   const { data: session } = authClient.useSession();
+  const t = useTranslations('HomePage');
 
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -80,7 +78,6 @@ export const Navbar = ({
               ) : (
                 <LogoIcon />
               )}
-              {appTitle}
             </Link>
           </NavigationMenuItem>
 
@@ -112,7 +109,6 @@ export const Navbar = ({
                     ) : (
                       <LogoIcon />
                     )}
-                    {appTitle}
                   </SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col justify-center items-center gap-2">
@@ -172,7 +168,7 @@ export const Navbar = ({
                   <DropdownMenuItem asChild>
                     <Link href="/account/settings" className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
-                      Account
+                      {t('Auth.account')}
                     </Link>
                   </DropdownMenuItem>
 
@@ -180,7 +176,7 @@ export const Navbar = ({
                     <DropdownMenuItem asChild>
                       <Link href="/cmsdesk" className="cursor-pointer">
                         <LayoutDashboard className="mr-2 h-4 w-4" />
-                        CMS Desk
+                        {t('Auth.cms-desk')}
                       </Link>
                     </DropdownMenuItem>
                   )}
@@ -189,7 +185,7 @@ export const Navbar = ({
                     <DropdownMenuItem asChild>
                       <Link href="/admin" className="cursor-pointer">
                         <LayoutDashboard className="mr-2 h-4 w-4" />
-                        Admin Dashboard
+                        {t('Auth.admin-dashboard')}
                       </Link>
                     </DropdownMenuItem>
                   )}
@@ -199,7 +195,7 @@ export const Navbar = ({
                     className="cursor-pointer text-destructive focus:text-destructive"
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    Sign Out
+                    {t('Auth.sign-out')}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -207,9 +203,12 @@ export const Navbar = ({
 
             <SignedOut>
               <Button asChild>
-                <Link href="/auth/sign-in">Login</Link>
+                <Link href="/auth/sign-in">{t('Auth.sign-in')}</Link>
               </Button>
             </SignedOut>
+
+            <LanguageSwitcher />
+
             <ModeToggle />
           </div>
         </NavigationMenuList>

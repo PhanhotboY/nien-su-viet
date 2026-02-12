@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { components } from '@nsv-interfaces/cms-service';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import {
   getHeaderNavItems,
   getFooterNavItems,
@@ -62,8 +62,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Plus, MoreVertical, Pencil, Trash2, ExternalLink } from 'lucide-react';
 
-type HeaderNavItem = components['schemas']['HeaderNavItemData'];
-type FooterNavItem = components['schemas']['FooterNavItemData'];
+type HeaderNavItem = components['schemas']['HeaderNavItemDto'];
+type FooterNavItem = components['schemas']['FooterNavItemDto'];
 type LinkType = 'internal' | 'external';
 
 interface EditingItem {

@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { Save, Loader2 } from 'lucide-react';
 
 import { getAppInfo, updateApp } from '@/services/cms.service';
-import { components } from '@nsv-interfaces/cms-service';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -19,8 +19,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-type AppData = components['schemas']['AppData'];
-type AppUpdateReq = components['schemas']['AppUpdateReq'];
+type AppData = components['schemas']['AppDto'];
+type AppUpdateReq = components['schemas']['AppUpdateDto'];
 
 export default function AppSettingsPage() {
   const router = useRouter();
