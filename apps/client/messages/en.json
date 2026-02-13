@@ -1,5 +1,51 @@
 {
   "HomePage": {
-    "title": "Hello world!"
+    "Auth": {
+      "account": "Account",
+      "cms-desk": "Content Management",
+      "admin-dashboard": "Administration",
+      "sign-out": "Sign Out",
+      "sign-in": "Sign In",
+      "sign-up": "Sign Up"
+    },
+    "Theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "Footer": {
+      "follow-us": "Follow Us",
+      "copyright": "© 2026 NienSuViet. All rights reserved.",
+      "social-media": "Social Media",
+      "contact": "Contact"
+    }
+  },
+  "EventPage": {
+    "title": "Vietnamese Historical Events",
+    "description": "Learn about Vietnamese history through important events.",
+    "today": "Today",
+    "move-left": "Move Left",
+    "move-right": "Move Right",
+    "zoom-in": "Zoom In",
+    "zoom-out": "Zoom Out",
+    "approximate": "Approximately",
+    "error-loading-event": "Error loading historical data:",
+    "view-detail": "View Details",
+    "error-loading-details": "Error loading detailed data",
+    "empty-excerpt": "No content yet",
+    "back-to-timeline": "Back to Timeline",
+    "detailed-content": "Detailed Content",
+    "empty-content": "No content yet"
+  },
+  "Shared": {
+    "author": "Author",
+    "period": "Period",
+    "period-from": "From",
+    "period-to": "To",
+    "category": "Category",
+    "date": "Date",
+    "minute-to-read": "Minutes to Read",
+    "minute": "minute",
+    "and": "and"
   }
 }
