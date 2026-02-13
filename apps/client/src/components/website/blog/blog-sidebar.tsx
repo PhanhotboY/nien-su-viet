@@ -110,7 +110,7 @@ export default async function BlogSidebar({
         </Card>*/}
 
         {/* Newsletter CTA */}
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
+        {/*<Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
           <CardHeader>
             <CardTitle className="text-lg">
               {t('subscribe-newsletter')}
@@ -131,7 +131,7 @@ export default async function BlogSidebar({
               </button>
             </div>
           </CardContent>
-        </Card>
+        </Card>*/}
       </div>
     </aside>
   );

@@ -8,6 +8,9 @@ import {
   getHeaderNavItems,
 } from '@/services/cms.service';
 import '@/styles/globals.css';
+import { getTranslations } from 'next-intl/server';
+import { CLIENT_HOST } from '@/lib/config';
+import { genMetadata } from '@/lib/metadata.lib';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -16,52 +19,19 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const locale = (await params).locale;
-    const response = await getAppInfo();
-    const appData = response.data;
+    const { data: appData } = await getAppInfo();
 
     const title = appData?.title || 'Nien Su Viet';
     const description =
       appData?.description || 'Vietnam history timeline website';
     const logo = appData?.logo;
 
-    return {
-      title: title,
-      description: description,
-      openGraph: {
-        title: title,
-        description: description,
-        type: 'website',
-        locale,
-        siteName: title,
-        ...(logo && { images: [{ url: logo, alt: title }] }),
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: title,
-        description: description,
-        ...(logo && { images: [logo] }),
-      },
-    };
+    return genMetadata({ title, description, locale, logo, path: '/' });
   } catch (error) {
     const title = 'Nien Su Viet';
     const description = 'Vietnam history timeline website';
 
-    return {
-      title: title,
-      description: description,
-      openGraph: {
-        title: title,
-        description: description,
-        type: 'website',
-        locale: 'vi_VN',
-        siteName: title,
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: title,
-        description: description,
-      },
-    };
+    return genMetadata({ title, description, locale: 'vi', path: '/' });
   }
 }
 
