@@ -130,7 +130,7 @@ export const Footer = async ({
         )}
 
         <div className="flex flex-col gap-2">
-          {/*<h3 className="font-bold text-lg">Platforms</h3>*/}
+          <h3 className="font-bold text-lg">{t('see-more')}</h3>
           {navItems
             ?.sort((a, b) => a.order - b.order)
             .map((item, index) => (

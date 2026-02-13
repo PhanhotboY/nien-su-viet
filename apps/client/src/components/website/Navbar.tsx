@@ -65,15 +65,15 @@ export const Navbar = ({
             <Link
               rel="noreferrer noopener"
               href="/"
-              className="ml-2 font-bold text-xl flex items-center"
+              className="ml-2 font-bold text-xl flex items-center py-1"
             >
               {appLogo ? (
                 <Image
                   src={appLogo}
                   alt={appTitle}
-                  width={32}
-                  height={32}
-                  className="mr-2 h-8 w-8 object-contain"
+                  width={100}
+                  height={50}
+                  className="mr-2 object-contain"
                 />
               ) : (
                 <LogoIcon />

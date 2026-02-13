@@ -96,6 +96,7 @@ export default function AppSettingsPage() {
     try {
       setIsSubmitting(true);
 
+      console.log('Submitting form data:', formData);
       // Clean up empty strings to undefined for optional fields
       const payload: AppUpdateReq = {
         title: formData.title,

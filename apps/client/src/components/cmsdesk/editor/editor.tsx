@@ -115,7 +115,7 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
       thumbnail: data.thumbnail,
       summary: data.summary,
       content: content!,
-      categoryId: data.categoryId,
+      // categoryId: data.categoryId,
       published: data.published,
     });
 
@@ -139,7 +139,7 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
           className="grid grid-cols-12 gap-8"
         >
           {/* General information */}
-          <Card className="col-span-9">
+          <Card className="col-span-12">
             <CardHeader>
               <CardTitle>{protectedEditorConfig.generalTitle}</CardTitle>
               <CardDescription>
@@ -199,7 +199,7 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
           </Card>
 
           {/* Category */}
-          <Card className="col-span-3">
+          {/*<Card className="col-span-3">
             <CardHeader>
               <CardTitle>{protectedEditorConfig.categoryTitle}</CardTitle>
               <CardDescription>
@@ -242,7 +242,7 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
                 )}
               />
             </CardContent>
-          </Card>
+          </Card>*/}
 
           {/* Cover Image */}
           <Card className="col-span-4">

@@ -17,7 +17,8 @@
       "follow-us": "Follow Us",
       "copyright": "© 2026 NienSuViet. All rights reserved.",
       "social-media": "Social Media",
-      "contact": "Contact"
+      "contact": "Contact",
+      "see-more": "See More"
     }
   },
   "EventPage": {
@@ -36,6 +37,33 @@
     "back-to-timeline": "Back to Timeline",
     "detailed-content": "Detailed Content",
     "empty-content": "No content yet"
+  },
+  "BlogPage": {
+    "title": "Blog",
+    "description": "Explore articles about Vietnamese history and culture",
+    "search-placeholder": "Search articles...",
+    "filter-by-category": "Filter by Category",
+    "all-categories": "All Categories",
+    "sort-by": "Sort By",
+    "latest": "Latest",
+    "oldest": "Oldest",
+    "most-popular": "Most Popular",
+    "no-posts-found": "No articles found",
+    "no-posts-description": "Try adjusting your search or filter to find what you're looking for.",
+    "clear-filters": "Clear Filters",
+    "showing-results": "Showing {count} {count, plural, one {article} other {articles}}",
+    "read-more": "Read More",
+    "featured-posts": "Featured Articles",
+    "recent-posts": "Recent Articles",
+    "popular-tags": "Popular Tags",
+    "subscribe-newsletter": "Subscribe to Newsletter",
+    "enter-email": "Enter your email",
+    "subscribe": "Subscribe",
+    "subscription-success": "Thank you for subscribing!",
+    "subscription-failed": "Subscription failed. Please try again.",
+    "already-subscribed": "This email is already subscribed.",
+    "invalid-email": "Invalid email address.",
+    "subscription-cta": "Get the latest articles about Vietnamese history delivered straight to your inbox."
   },
   "Shared": {
     "author": "Author",

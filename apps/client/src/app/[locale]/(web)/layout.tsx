@@ -41,7 +41,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         description: description,
         ...(logo && { images: [logo] }),
       },
-      ...(logo && { icons: { icon: logo, apple: logo } }),
     };
   } catch (error) {
     const title = 'Nien Su Viet';
@@ -87,6 +86,7 @@ export default async function RootLayout({
     console.error('Failed to fetch app info:', error);
   }
 
+  console.log('app data: ', appData);
   return (
     <>
       <CustomScripts
