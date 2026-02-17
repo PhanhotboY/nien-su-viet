@@ -81,22 +81,32 @@ func (dto *AppUpdateReq) MapToEntity() *entity.App {
 	if dto == nil {
 		return nil
 	}
-	return &entity.App{
-		Title:       dto.Title,
-		Description: dto.Description,
-		Logo:        dto.Logo,
-		Social: &entity.SocialLinks{
+
+	var socialLinks *entity.SocialLinks
+	if dto.Social != nil {
+		socialLinks = &entity.SocialLinks{
 			Facebook: dto.Social.Facebook,
 			Youtube:  dto.Social.Youtube,
 			Tiktok:   dto.Social.Tiktok,
 			Zalo:     dto.Social.Zalo,
-		},
-		TaxCode: dto.TaxCode,
-		Address: &entity.Address{
+		}
+	}
+	var address *entity.Address
+	if dto.Address != nil {
+		address = &entity.Address{
 			Province: dto.Address.Province,
 			District: dto.Address.District,
 			Street:   dto.Address.Street,
-		},
+		}
+	}
+
+	return &entity.App{
+		Title:       dto.Title,
+		Description: dto.Description,
+		Logo:        dto.Logo,
+		Social:      socialLinks,
+		TaxCode:     dto.TaxCode,
+		Address:     address,
 		Msisdn:      dto.Msisdn,
 		Email:       dto.Email,
 		Map:         dto.Map,
