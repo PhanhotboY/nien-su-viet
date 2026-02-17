@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getMinutes, shimmer, toBase64 } from '@/lib/utils';
+import { getAvatarFallback, getMinutes, shimmer, toBase64 } from '@/lib/utils';
 import { ArchiveIcon, CalendarIcon, ClockIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
@@ -54,7 +54,7 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
           <div className="inline-flex items-start justify-start">
             <Avatar>
               <AvatarImage src={authorImage} />
-              <AvatarFallback>P</AvatarFallback>
+              <AvatarFallback>{getAvatarFallback(authorName)}</AvatarFallback>
             </Avatar>
             <div className="ml-2 flex flex-col">
               <span className="text-md flex font-semibold">{authorName}</span>
@@ -92,7 +92,7 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
         <div className="mb-7 hidden justify-start text-card-foreground sm:flex sm:flex-row">
           <Avatar>
             <AvatarImage src={authorImage} />
-            <AvatarFallback>P</AvatarFallback>
+            <AvatarFallback>{getAvatarFallback(authorName)}</AvatarFallback>
           </Avatar>
           {/* Author */}
           <div className="mb-5 flex flex-row items-center justify-start pr-3.5 md:mb-0">

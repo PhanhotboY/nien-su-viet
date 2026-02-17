@@ -2,6 +2,7 @@ package entity
 
 import (
 	"database/sql/driver"
+	"fmt"
 	"time"
 
 	"github.com/phanhotboy/nien-su-viet/apps/cms/global/util"
@@ -33,13 +34,14 @@ type SocialLinks struct {
 }
 
 func (links *SocialLinks) Value() (driver.Value, error) {
-	if links == nil {
-		return nil, nil
-	}
-	return util.JsonbValue(*links)
+	return util.JsonbValue(links)
 }
 
 func (links *SocialLinks) Scan(value interface{}) error {
+	fmt.Printf("Scanning value: %v", value)
+	if links == nil {
+		links = new(SocialLinks)
+	}
 	return util.JsonbScan(links, value)
 }
 
@@ -50,10 +52,7 @@ type Address struct {
 }
 
 func (addr *Address) Value() (driver.Value, error) {
-	if addr == nil {
-		return nil, nil
-	}
-	return util.JsonbValue(*addr)
+	return util.JsonbValue(addr)
 }
 
 func (addr *Address) Scan(value interface{}) error {

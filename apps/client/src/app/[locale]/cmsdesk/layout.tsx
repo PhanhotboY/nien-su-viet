@@ -4,6 +4,15 @@ import { RedirectToSignIn } from '@daveyplate/better-auth-ui';
 import DashboardLayout from '@/components/cmsdesk/dashboard-layout';
 import { isEditor } from '@/lib/auth-client';
 import { getAuthSession } from '@/helper/auth.helper';
+import { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    robots: {
+      index: false,
+    },
+  };
+}
 
 export default async function AdminLayout({
   children,

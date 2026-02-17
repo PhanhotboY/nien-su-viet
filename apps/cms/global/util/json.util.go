@@ -11,7 +11,11 @@ func JsonbValue(v interface{}) (driver.Value, error) {
 	if v == nil {
 		return nil, nil
 	}
-	return json.Marshal(v)
+	bytes, err := json.Marshal(v)
+	if err != nil {
+		return nil, err
+	}
+	return string(bytes), nil
 }
 
 // jsonbScan is a generic helper for JSONB Scan method

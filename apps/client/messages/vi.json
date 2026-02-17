@@ -17,7 +17,8 @@
       "follow-us": "Theo dõi chúng tôi",
       "copyright": "© 2026 NienSuViet. All rights reserved.",
       "social-media": "Mạng xã hội",
-      "contact": "Liên hệ"
+      "contact": "Liên hệ",
+      "see-more": "Xem thêm"
     }
   },
   "EventPage": {
@@ -36,6 +37,33 @@
     "back-to-timeline": "Quay lại",
     "detailed-content": "Nội dung chi tiết",
     "empty-content": "Chưa có nội dung"
+  },
+  "BlogPage": {
+    "title": "Blog",
+    "description": "Khám phá các bài viết về lịch sử và văn hóa Việt Nam",
+    "search-placeholder": "Tìm kiếm bài viết...",
+    "filter-by-category": "Lọc theo danh mục",
+    "all-categories": "Tất cả danh mục",
+    "sort-by": "Sắp xếp theo",
+    "latest": "Mới nhất",
+    "oldest": "Cũ nhất",
+    "most-popular": "Phổ biến nhất",
+    "no-posts-found": "Không tìm thấy bài viết",
+    "no-posts-description": "Thử điều chỉnh tìm kiếm hoặc bộ lọc để tìm nội dung bạn cần.",
+    "clear-filters": "Xóa bộ lọc",
+    "showing-results": "Hiển thị {count} bài viết",
+    "read-more": "Đọc thêm",
+    "featured-posts": "Bài viết nổi bật",
+    "recent-posts": "Bài viết gần đây",
+    "popular-tags": "Thẻ phổ biến",
+    "subscribe-newsletter": "Đăng ký nhận bản tin",
+    "enter-email": "Nhập email của bạn",
+    "subscribe": "Đăng ký",
+    "subscription-success": "Cảm ơn bạn đã đăng ký!",
+    "subscription-failed": "Đăng ký thất bại. Vui lòng thử lại.",
+    "already-subscribed": "Email này đã được đăng ký.",
+    "invalid-email": "Địa chỉ email không hợp lệ.",
+    "subscription-cta": "Nhận các bài viết mới nhất về lịch sử Việt Nam trực tiếp trong hộp thư đến của bạn."
   },
   "Shared": {
     "author": "Tác giả",
