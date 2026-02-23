@@ -1,13 +1,13 @@
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
-import { headerNavItems } from '@/content/menus/header-nav-items';
+import { getHeaderNavItems } from '@/content/menus/header-nav-items';
 
 export default function NavLink({
   navItem,
   ...props
 }: Partial<Parameters<typeof Link>[0]> & {
-  navItem: (typeof headerNavItems)[number];
+  navItem: Awaited<ReturnType<typeof getHeaderNavItems>>[number];
 }) {
   return (
     <Link

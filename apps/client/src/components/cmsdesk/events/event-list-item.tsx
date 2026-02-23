@@ -44,7 +44,7 @@ export function EventListItem({ event, onDelete }: EventListItemProps) {
           <div className="mb-2 flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <Calendar className="h-4 w-4" />
-              <span>{toEventPeriodString(event, tshare)}</span>
+              <span>{toEventPeriodString(event, tshared)}</span>
             </div>
             {/* <div className="flex items-center gap-1.5">
               <User className="h-4 w-4" />
