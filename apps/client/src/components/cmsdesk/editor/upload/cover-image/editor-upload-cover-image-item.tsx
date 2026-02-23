@@ -54,7 +54,11 @@ const EditorUploadCoverImageItem: FC<EditorUploadCoverImageItemProps> = ({
   return (
     <div className="col-span-full max-w-2xl">
       <Image
-        src={imageUrl || imageUrl !== '' ? imageUrl : '/images/not-found.jpg'}
+        src={
+          imageUrl || imageUrl !== ''
+            ? imageUrl
+            : '/assets/image/not-found.webp'
+        }
         className="mb-5 rounded-lg shadow-sm"
         alt="Cover image"
         height={400}

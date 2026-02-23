@@ -1,12 +1,13 @@
-import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+
+import { getHeaderNavItems } from '@/content/menus/header-nav-items';
 
 export default function NavLink({
   navItem,
   ...props
 }: Partial<Parameters<typeof Link>[0]> & {
-  navItem: components['schemas']['HeaderNavItemDto'];
+  navItem: Awaited<ReturnType<typeof getHeaderNavItems>>[number];
 }) {
   return (
     <Link

@@ -29,25 +29,28 @@ import { Menu, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { SignedIn, SignedOut, UserAvatar } from '@daveyplate/better-auth-ui';
 
 import NavLink from './NavLink';
-import { LogoIcon } from '../Icons';
 import { ModeToggle } from '../mode-toggle';
 import { Button, buttonVariants } from '../ui/button';
 import { authClient, isAdmin, isEditor } from '@/lib/auth-client';
-import { components } from '@nsv-interfaces/nsv-api-documentation';
 import LanguageSwitcher from '../language-switcher';
+import { getHeaderNavItems } from '@/content/menus/header-nav-items';
+import { useTheme } from 'next-themes';
 
 interface NavbarProps {
-  appTitle?: string;
-  appLogo?: string;
-  navItems?: components['schemas']['HeaderNavItemDto'][];
+  appTitle: string;
+  appLogo: string;
+  appLogoDark: string;
+  navItems: Awaited<ReturnType<typeof getHeaderNavItems>>;
 }
 
 export const Navbar = ({
   appTitle = 'NienSuViet',
   appLogo,
+  appLogoDark,
   navItems,
 }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { theme } = useTheme();
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const t = useTranslations('HomePage');
@@ -56,6 +59,8 @@ export const Navbar = ({
     await authClient.signOut();
     router.push('/');
   };
+
+  const logoToUse = theme === 'dark' ? appLogoDark : appLogo;
 
   return (
     <header className="sticky border-b top-0 z-40 w-full bg-white dark:border-b-slate-700 dark:bg-background">
@@ -67,17 +72,13 @@ export const Navbar = ({
               href="/"
               className="ml-2 font-bold text-xl flex items-center py-1"
             >
-              {appLogo ? (
-                <Image
-                  src={appLogo}
-                  alt={appTitle}
-                  width={100}
-                  height={50}
-                  className="mr-2 object-contain"
-                />
-              ) : (
-                <LogoIcon />
-              )}
+              <Image
+                src={logoToUse}
+                alt={appTitle}
+                width={100}
+                height={50}
+                className="mr-2 object-contain"
+              />
             </Link>
           </NavigationMenuItem>
 
@@ -98,22 +99,18 @@ export const Navbar = ({
               <SheetContent side={'left'}>
                 <SheetHeader>
                   <SheetTitle className="font-bold text-xl flex items-center">
-                    {appLogo ? (
-                      <Image
-                        src={appLogo}
-                        alt={appTitle}
-                        width={24}
-                        height={24}
-                        className="mr-2 h-6 w-6 object-contain"
-                      />
-                    ) : (
-                      <LogoIcon />
-                    )}
+                    <Image
+                      src={logoToUse}
+                      alt={appTitle}
+                      width={100}
+                      height={100}
+                      className="m-auto object-contain"
+                    />
                   </SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col justify-center items-center gap-2">
                   {navItems
-                    ?.sort((a, b) => a.order - b.order)
+                    .sort((a, b) => a.order - b.order)
                     .map((item, i) => (
                       <NavLink
                         key={i}
@@ -128,9 +125,9 @@ export const Navbar = ({
           </span>
 
           {/* desktop */}
-          <nav className="hidden md:flex gap-2 ml-20">
+          <nav className="hidden md:flex gap-2 ml-20 grow">
             {navItems
-              ?.sort((a, b) => a.order - b.order)
+              .sort((a, b) => a.order - b.order)
               .map((item, i) => (
                 <NavLink
                   key={i}
@@ -142,7 +139,7 @@ export const Navbar = ({
               ))}
           </nav>
 
-          <div className="hidden md:flex gap-2 ml-auto">
+          <div className="hidden md:flex gap-2">
             <SignedIn>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

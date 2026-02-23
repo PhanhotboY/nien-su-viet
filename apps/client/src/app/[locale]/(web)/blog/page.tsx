@@ -11,7 +11,6 @@ import MainPostItem from '@/components/website/post/main-post-item';
 import MainPostItemLoading from '@/components/website/post/main-post-item-loading';
 import { CLIENT_HOST } from '@/lib/config';
 import { genMetadata } from '@/lib/metadata.lib';
-import { getAppInfo } from '@/services/cms.service';
 import { getPublicPosts } from '@/services/post.service';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -29,11 +28,10 @@ export async function generateMetadata({
   params,
 }: BlogPageProps): Promise<Metadata> {
   const { locale } = await params;
-  const { data } = await getAppInfo();
   const t = await getTranslations('BlogPage');
 
   return genMetadata({
-    title: `${t('title')} - ${data?.title || 'Nien Su Viet'}`,
+    title: `${t('title')} - 'Nien Su Viet'`,
     description: t('description'),
     locale,
     path: '/blog',

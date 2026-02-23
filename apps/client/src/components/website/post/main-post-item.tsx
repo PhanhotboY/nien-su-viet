@@ -17,7 +17,7 @@ export const dynamic = 'force-dynamic';
 
 //   if (data && data.publicUrl) return data.publicUrl;
 
-//   return "/images/not-found.jpg";
+//   return "/asset/image/not-found.webp";
 // }
 
 // async function getComments(postId: string) {
@@ -52,7 +52,7 @@ const MainPostItem: React.FC<MainPostItemProps> = async ({ post, locale }) => {
         <article className="relative isolate flex flex-col gap-2 rounded-lg sm:gap-8 px-4 sm:px-6 lg:flex-row">
           <div className="relative aspect-video sm:aspect-2/1 lg:aspect-square lg:w-64 lg:shrink-0">
             <Image
-              src={post.thumbnail ?? '/images/not-found.jpg'}
+              src={post.thumbnail ?? '/assets/image/not-found.webp'}
               alt={post.title ?? 'Cover'}
               height={256}
               width={256}

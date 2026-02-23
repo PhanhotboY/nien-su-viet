@@ -126,7 +126,7 @@ export default async function PostPage({ params }: PostPageProps) {
             <DetailPostHeading
               id={post.id}
               title={post.title as string}
-              thumbnail={post.thumbnail as string}
+              thumbnail={post.thumbnail || '/assets/image/not-found.webp'}
               authorName={post.author.name}
               authorImage={post.author.image!}
               date={format(
