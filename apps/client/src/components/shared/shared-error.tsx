@@ -1,32 +1,110 @@
-"use client";
+'use client';
 
-import { sharedEmptyConfig } from "@/config/shared";
-import { useRouter } from "next/navigation";
+import { AlertTriangle, RefreshCcw, Home } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import Link from 'next/link';
+import { Inter } from 'next/font/google';
+import '@/styles/globals.css';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useTheme } from 'next-themes';
 
-const SharedError = () => {
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+});
+
+const SharedError = ({ error }: { error: Error & { digest?: string } }) => {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   const router = useRouter();
+  const { theme } = useTheme();
 
   return (
-    <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
-      <div className="text-center">
-        <p className="text-base font-semibold text-gray-900">
-          {sharedEmptyConfig.sorry}
-        </p>
-        <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-          {sharedEmptyConfig.error}
-        </h1>
+    <html lang="en" className={theme === 'dark' ? 'dark' : ''}>
+      <body className={`${inter.variable} antialiased flex min-h-svh flex-col`}>
+        <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-background via-muted/10 to-background p-4">
+          <div className="absolute inset-0 bg-grid-slate-900/[0.04] dark:bg-grid-slate-100/[0.03] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
 
-        <div className="mt-10 flex items-center justify-center gap-x-6">
-          <button
-            type="button"
-            onClick={() => router.refresh()}
-            className="rounded-md bg-gray-200 px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-300"
-          >
-            {sharedEmptyConfig.tryAgain}
-          </button>
+          <Card className="relative z-10 w-full max-w-lg border-destructive/20 shadow-2xl">
+            <CardHeader className="space-y-4 text-center">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-destructive/10 ring-8 ring-destructive/5">
+                <AlertTriangle className="h-10 w-10 text-destructive animate-pulse" />
+              </div>
+
+              <div className="space-y-2">
+                <CardTitle className="text-3xl font-bold tracking-tight">
+                  Đã xảy ra lỗi
+                </CardTitle>
+                <CardDescription className="text-base">
+                  Xin lỗi, có vấn đề đã xảy ra khi tải trang này
+                </CardDescription>
+              </div>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              <div className="rounded-lg bg-muted/50 p-4 border border-muted">
+                <p className="text-sm font-mono text-muted-foreground break-all">
+                  {error.message || 'Lỗi không xác định'}
+                </p>
+                {error.digest && (
+                  <p className="mt-2 text-xs text-muted-foreground/60">
+                    ID: {error.digest}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2 text-sm text-muted-foreground">
+                <p>Bạn có thể thử:</p>
+                <ul className="list-inside list-disc space-y-1 ml-2">
+                  <li>Tải lại trang</li>
+                  <li>Quay về trang chủ</li>
+                  <li>Liên hệ hỗ trợ nếu vấn đề vẫn tiếp diễn</li>
+                </ul>
+              </div>
+            </CardContent>
+
+            <CardFooter className="flex gap-3">
+              <Button
+                onClick={router.refresh}
+                className="flex-1 gap-2"
+                size="lg"
+              >
+                <RefreshCcw className="h-4 w-4" />
+                Thử lại
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => (window.location.href = '/')}
+                size="lg"
+                asChild
+              >
+                <Link href="/" className="flex items-center gap-2">
+                  <Home className="h-4 w-4" />
+                  Trang chủ
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>
+
+          {/* Decorative elements */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-destructive/5 blur-3xl" />
+            <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-primary/5 blur-3xl" />
+          </div>
         </div>
-      </div>
-    </main>
+      </body>
+    </html>
   );
 };
 

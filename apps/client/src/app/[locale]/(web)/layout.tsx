@@ -1,16 +1,11 @@
 import type { Metadata } from 'next';
 import { Navbar } from '@/components/website/Navbar';
 import { Footer } from '@/components/website/Footer';
-import { CustomScripts } from '@/components/website/CustomScripts';
-import {
-  getAppInfo,
-  getFooterNavItems,
-  getHeaderNavItems,
-} from '@/services/cms.service';
 import '@/styles/globals.css';
-import { getTranslations } from 'next-intl/server';
-import { CLIENT_HOST } from '@/lib/config';
 import { genMetadata } from '@/lib/metadata.lib';
+import { getMetadata } from '@/content/landing/metadata';
+import { getHeaderNavItems } from '@/content/menus/header-nav-items';
+import { getFooterNavItems } from '@/content/menus/footer-nav-items';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -19,12 +14,11 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const locale = (await params).locale;
-    const { data: appData } = await getAppInfo();
+    const metadata = await getMetadata();
 
-    const title = appData?.title || 'Nien Su Viet';
-    const description =
-      appData?.description || 'Vietnam history timeline website';
-    const logo = appData?.logo;
+    const title = metadata.title;
+    const description = metadata.description;
+    const logo = metadata.logo;
 
     return genMetadata({ title, description, locale, logo, path: '/' });
   } catch (error) {
@@ -40,54 +34,38 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let appData,
-    headerNavItems,
-    footerNavItems = null;
+  const appData = await getMetadata();
+  const headerNavItems = await getHeaderNavItems();
+  const footerNavItems = await getFooterNavItems();
 
-  try {
-    [{ data: appData }, { data: headerNavItems }, { data: footerNavItems }] =
-      await Promise.all([
-        getAppInfo(),
-        getHeaderNavItems(),
-        getFooterNavItems(),
-      ]);
-    // appData = response.data;
-  } catch (error) {
-    console.error('Failed to fetch app info:', error);
-  }
-
-  console.log('app data: ', appData);
   return (
     <>
-      <CustomScripts
-        headScripts={appData?.head_scripts || undefined}
-        bodyScripts={appData?.body_scripts || undefined}
-      />
-
       <Navbar
-        appTitle={appData?.title}
-        appLogo={appData?.logo || undefined}
+        appTitle={appData.title}
+        appLogo={appData.logo}
+        appLogoDark={appData.logoDark}
         navItems={headerNavItems}
       />
 
       {children}
 
       <Footer
-        appTitle={appData?.title}
-        appLogo={appData?.logo || undefined}
-        appDescription={appData?.description || undefined}
+        title={appData.title}
+        logo={appData.logo}
+        logoDark={appData.logoDark}
+        description={appData.description}
         social={{
-          facebook: appData?.social?.facebook || undefined,
-          youtube: appData?.social?.youtube || undefined,
-          tiktok: appData?.social?.tiktok || undefined,
-          zalo: appData?.social?.zalo || undefined,
+          facebook: appData.social.facebook,
+          // youtube: appData.social.youtube,
+          // tiktok: appData.social.tiktok,
+          // zalo: appData.social.zalo,
         }}
-        email={appData?.email || undefined}
-        phone={appData?.msisdn || undefined}
+        email={appData.email}
+        // msisdn={appData.msisdn}
         address={{
-          street: appData?.address?.street || undefined,
-          district: appData?.address?.district || undefined,
-          province: appData?.address?.province || undefined,
+          street: appData.address.street,
+          district: appData.address.district,
+          province: appData.address.province,
         }}
         navItems={footerNavItems}
       />

@@ -7,5 +7,3 @@ Provide more interesting way to learn Heroic history of Vietnam.
 ## Author
 
 - [PhanhotboY](mailto:nguyenduyphan2003@gmail.com)
-- Hung
-- Hoai

@@ -1,5 +1,12 @@
 {
   "HomePage": {
+    "Metadata": {
+      "title": "NienSuViet - Lịch sử Việt Nam",
+      "description": "Khám phá lịch sử Việt Nam qua các sự kiện quan trọng, nhân vật nổi bật và những câu chuyện hấp dẫn.",
+      "og-title": "NienSuViet - Lịch sử Việt Nam",
+      "og-description": "Khám phá lịch sử Việt Nam qua các sự kiện quan trọng, nhân vật nổi bật và những câu chuyện hấp dẫn.",
+      "og-image": "https://nien-su-viet.vercel.app/og-image.png"
+    },
     "Auth": {
       "account": "Tài khoản",
       "cms-desk": "Quản lý nội dung",
@@ -29,7 +36,6 @@
     "move-right": "Sang phải",
     "zoom-in": "Phóng to",
     "zoom-out": "Thu nhỏ",
-    "approximate": "Khoảng",
     "error-loading-event": "Lỗi khi tải dữ liệu lịch sử:",
     "view-detail": "Xem chi tiết",
     "error-loading-details": "Lỗi khi tải dữ liệu chi tiết",
@@ -74,6 +80,18 @@
     "date": "Ngày",
     "minute-to-read": "Phút đọc",
     "minute": "phút",
-    "and": "và"
+    "and": "và",
+    "about-us": "Giới thiệu",
+    "blog": "Blog",
+    "contact": "Liên hệ",
+    "privacy-policy": "Chính sách bảo mật",
+    "terms-of-service": "Điều khoản dịch vụ",
+    "approximate": "Khoảng",
+    "bce": "TCN",
+    "ce": "SCN",
+    "year": "năm",
+    "month": "tháng",
+    "day": "ngày",
+    "loading": "Đang tải..."
   }
 }
