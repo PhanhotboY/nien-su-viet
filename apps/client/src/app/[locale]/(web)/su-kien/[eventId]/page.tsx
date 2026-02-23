@@ -8,6 +8,7 @@ import TextRenderer from '@/components/TextRenderer';
 import Link from 'next/link';
 import { formatHistoricalEventDate } from '@/helper/date';
 import { getTranslations } from 'next-intl/server';
+import { Button } from '@/components/ui/button';
 
 export default async function EventDetailPage({
   params,
@@ -25,35 +26,35 @@ export default async function EventDetailPage({
 
   const event = response.data;
 
-  const startDate = formatHistoricalEventDate(
-    event.fromDateType,
-    t('approximate'),
-    event.fromYear,
-    event.fromMonth,
-    event.fromDay,
-  );
-  const endDate = formatHistoricalEventDate(
-    event.toDateType,
-    t('approximate'),
-    event.toYear,
-    event.toMonth,
-    event.toDay,
-  );
+  const startDate = formatHistoricalEventDate({
+    dateType: event.fromDateType,
+    sharedTranslator: tshared,
+    year: event.fromYear,
+    month: event.fromMonth,
+    day: event.fromDay,
+  });
+  const endDate = formatHistoricalEventDate({
+    dateType: event.toDateType,
+    sharedTranslator: tshared,
+    year: event.toYear,
+    month: event.toMonth,
+    day: event.toDay,
+  });
 
   return (
     <Card className="border-none py-0">
       {/* Header with Vietnamese pattern */}
-      <div className="relative bg-gradient-to-r from-red-700 via-yellow-600 to-red-700 dark:from-red-900 dark:via-yellow-900 dark:to-red-900">
-        <div className="absolute inset-0 opacity-10">
+      <div className="relative bg-gradient-to-r from-secondary via-primary to-secondary">
+        {/*<div className="absolute inset-0 opacity-10">
           <div
             className="h-full w-full"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
             }}
           />
-        </div>
+        </div>*/}
         <div className="container text-center px-4 py-16 relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 drop-shadow-lg">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 drop-shadow-lg text-primary-foreground">
             {event.name}
           </h1>
         </div>
@@ -76,10 +77,10 @@ export default async function EventDetailPage({
         {/* Info Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {/* Date Card */}
-          <Card className="border-2 border-red-200 dark:border-red-900 backdrop-blur">
+          <Card className="border-2 border-secondary backdrop-blur">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-gradient-to-br from-red-500 to-yellow-500 rounded-lg">
+                <div className="p-3 bg-gradient-to-br from-secondary to-primary rounded-lg">
                   <Calendar className="h-6 w-6 text-white" />
                 </div>
                 <div className="flex-1">
@@ -107,10 +108,10 @@ export default async function EventDetailPage({
 
           {/* Author Card */}
           {event.author && (
-            <Card className="border-2 border-amber-200 dark:border-amber-900 backdrop-blur">
+            <Card className="border-2 border-primary backdrop-blur">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-lg">
+                  <div className="p-3 bg-gradient-to-br from-primary/60 to-primary rounded-lg">
                     <User className="h-6 w-6 text-white" />
                   </div>
                   <div className="flex-1">
@@ -124,7 +125,7 @@ export default async function EventDetailPage({
 
           {/* Categories Card */}
           {event.categories && event.categories.length > 0 && (
-            <Card className="border-2 border-orange-200 dark:border-orange-900 bg-white/80 dark:bg-gray-900/80 backdrop-blur">
+            <Card className="border-2 backdrop-blur">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg">
@@ -153,15 +154,15 @@ export default async function EventDetailPage({
         </div>
 
         {/* Content Card */}
-        <Card className="border-2 border-red-200 dark:border-red-900 bg-white/90 dark:bg-gray-900/90 backdrop-blur">
+        <Card className="border-2 border-secondary backdrop-blur">
           <CardContent className="p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-1 w-12 bg-gradient-to-r from-red-500 to-yellow-500 rounded-full" />
+              <div className="h-1 w-12 bg-gradient-to-r from-secondary to-primary rounded-full" />
               <h2 className="text-2xl font-bold">{t('detailed-content')}</h2>
-              <div className="h-1 flex-1 bg-gradient-to-r from-yellow-500 to-red-500 rounded-full" />
+              <div className="h-1 flex-1 bg-gradient-to-r from-primary to-secondary rounded-full" />
             </div>
 
-            <Separator className="mb-6 bg-gradient-to-r from-red-200 via-yellow-200 to-red-200" />
+            <Separator className="mb-6 bg-gradient-to-r from-secondary via-primary to-secondary" />
 
             {event.content ? (
               <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:text-red-900 dark:prose-headings:text-red-400 prose-a:text-red-600 dark:prose-a:text-red-400">
@@ -175,13 +176,9 @@ export default async function EventDetailPage({
 
         {/* Back to Timeline */}
         <div className="mt-8 text-center">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
-          >
-            <Clock className="h-4 w-4" />
-            {t('back-to-timeline')}
-          </Link>
+          <Button asChild>
+            <Link href="/">{t('back-to-timeline')}</Link>
+          </Button>
         </div>
       </div>
     </Card>

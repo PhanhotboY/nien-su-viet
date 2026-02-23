@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Link from 'next/link';
-import { Providers } from '../provider';
+import { Providers } from '@/app/provider';
 import { Inter } from 'next/font/google';
 import '@/styles/globals.css';
 import { useRouter } from 'next/navigation';

@@ -1,5 +1,12 @@
 {
   "HomePage": {
+    "Metadata": {
+      "title": "NienSuViet - Vietnamese History",
+      "description": "Explore Vietnamese history through important events, notable figures, and fascinating stories.",
+      "og-title": "NienSuViet - Vietnamese History",
+      "og-description": "Explore Vietnamese history through important events, notable figures, and fascinating stories.",
+      "og-image": "https://nien-su-viet.vercel.app/og-image.png"
+    },
     "Auth": {
       "account": "Account",
       "cms-desk": "Content Management",
@@ -29,7 +36,6 @@
     "move-right": "Move Right",
     "zoom-in": "Zoom In",
     "zoom-out": "Zoom Out",
-    "approximate": "Approximately",
     "error-loading-event": "Error loading historical data:",
     "view-detail": "View Details",
     "error-loading-details": "Error loading detailed data",
@@ -74,6 +80,18 @@
     "date": "Date",
     "minute-to-read": "Minutes to Read",
     "minute": "minute",
-    "and": "and"
+    "and": "and",
+    "about-us": "About Us",
+    "blog": "Blog",
+    "contact": "Contact",
+    "privacy-policy": "Privacy Policy",
+    "terms-of-service": "Terms of Service",
+    "approximate": "About",
+    "bce": "BCE",
+    "ce": "CE",
+    "year": "year",
+    "month": "month",
+    "day": "day",
+    "loading": "Loading..."
   }
 }

@@ -10,7 +10,7 @@ import useSWR from 'swr';
 import { swrFetcher } from '@/helper/swrFetcher';
 import { Skeleton } from '../ui/skeleton';
 import { components } from '@nsv-interfaces/nsv-api-documentation';
-import { formatHistoricalEventDate } from '@/helper/date';
+import { toEventPeriodString } from '@/helper/date';
 import { IApiResponse } from '../../interfaces/response.interface';
 import TextRenderer from '../TextRenderer';
 import Link from 'next/link';
@@ -32,6 +32,7 @@ export function EventDetailDialog({
     mutate();
   }, [eventId, open]);
   const t = useTranslations('EventPage');
+  const tshared = useTranslations('Shared');
 
   const { data, error, isLoading, mutate } = useSWR<
     IApiResponse<components['schemas']['HistoricalEventPreviewResponseDto']>
@@ -79,21 +80,7 @@ export function EventDetailDialog({
                 {eventData.name}
               </DialogTitle>
               <DialogDescription>
-                {formatHistoricalEventDate(
-                  eventData.fromDateType,
-                  t('approximate'),
-                  eventData.fromYear,
-                  eventData.fromMonth,
-                  eventData.fromDay,
-                )}
-                {' - '}
-                {formatHistoricalEventDate(
-                  eventData.toDateType,
-                  t('approximate'),
-                  eventData.toYear,
-                  eventData.toMonth,
-                  eventData.toDay,
-                )}
+                {toEventPeriodString(eventData, tshared)}
               </DialogDescription>
             </DialogHeader>
 

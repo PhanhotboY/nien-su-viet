@@ -5,7 +5,7 @@ import { Calendar, User, Edit, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { components } from '@nsv-interfaces/nsv-api-documentation';
-import { formatHistoricalEventDate } from '@/helper/date';
+import { toEventPeriodString } from '@/helper/date';
 import { useTranslations } from 'next-intl';
 
 type IHistoricalEvent =
@@ -16,7 +16,7 @@ interface EventListItemProps {
 }
 
 export function EventListItem({ event, onDelete }: EventListItemProps) {
-  const t = useTranslations('EventPage');
+  const tshared = useTranslations('Shared');
 
   return (
     <div className="group flex gap-4 rounded-lg border bg-card p-4 transition-all hover:shadow-md">
@@ -44,23 +44,7 @@ export function EventListItem({ event, onDelete }: EventListItemProps) {
           <div className="mb-2 flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <Calendar className="h-4 w-4" />
-              <span>
-                {formatHistoricalEventDate(
-                  event.fromDateType,
-                  t('approximate'),
-                  event.fromYear,
-                  event.fromMonth,
-                  event.fromDay,
-                )}
-                {' - '}
-                {formatHistoricalEventDate(
-                  event.toDateType,
-                  t('approximate'),
-                  event.toYear,
-                  event.toMonth,
-                  event.toDay,
-                )}
-              </span>
+              <span>{toEventPeriodString(event, tshare)}</span>
             </div>
             {/* <div className="flex items-center gap-1.5">
               <User className="h-4 w-4" />

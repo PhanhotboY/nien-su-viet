@@ -33,16 +33,16 @@ const sidebarNavItems = [
     icon: ChartGantt,
     label: 'Historical Events',
   },
-  {
-    href: '/cmsdesk/website',
-    icon: PanelTop,
-    label: 'Website',
-  },
-  {
-    href: '/cmsdesk/nav-menus',
-    icon: Route,
-    label: 'Nav Menus',
-  },
+  // {
+  //   href: '/cmsdesk/website',
+  //   icon: PanelTop,
+  //   label: 'Website',
+  // },
+  // {
+  //   href: '/cmsdesk/nav-menus',
+  //   icon: Route,
+  //   label: 'Nav Menus',
+  // },
   {
     href: '/cmsdesk/posts',
     icon: Newspaper,

@@ -39,7 +39,7 @@ export default async function FeaturedPost({
           {/* Image Section */}
           <div className="relative h-64 overflow-hidden md:h-full">
             <Image
-              src={post.thumbnail ?? '/images/not-found.jpg'}
+              src={post.thumbnail ?? '/assets/image/not-found.webp'}
               alt={post.title ?? 'Featured post'}
               fill
               priority
