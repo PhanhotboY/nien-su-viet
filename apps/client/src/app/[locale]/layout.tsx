@@ -24,8 +24,6 @@ export default async function AdminLayout({
 
   return (
     <html lang={locale}>
-      <head></head>
-
       <body className={`${inter.variable} antialiased flex min-h-svh flex-col`}>
         <NextIntlClientProvider messages={messages}>
           <Providers>
