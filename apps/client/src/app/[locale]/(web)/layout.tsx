@@ -6,6 +6,7 @@ import { genMetadata } from '@/lib/metadata.lib';
 import { getMetadata } from '@/content/landing/metadata';
 import { getHeaderNavItems } from '@/content/menus/header-nav-items';
 import { getFooterNavItems } from '@/content/menus/footer-nav-items';
+import GoogleAnalytics from '@/components/website/GoogleAnalytics';
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -47,6 +48,7 @@ export default async function RootLayout({
         navItems={headerNavItems}
       />
 
+      <GoogleAnalytics />
       {children}
 
       <Footer
