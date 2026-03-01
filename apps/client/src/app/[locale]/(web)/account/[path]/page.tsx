@@ -10,13 +10,13 @@ export function generateStaticParams() {
 export default async function AccountPage({
   params,
 }: {
-  params: Promise<{ path: string }>;
+  params: Promise<{ path: string; locale: string }>;
 }) {
-  const { path } = await params;
+  const { path, locale } = await params;
 
   return (
     <main className="container self-center p-4 md:p-6">
-      <AccountView path={path} pathname="/account" />
+      <AccountView path={path} pathname={`/${locale}/account`} />
     </main>
   );
 }
