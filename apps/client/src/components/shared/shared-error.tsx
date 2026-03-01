@@ -28,7 +28,7 @@ const SharedError = ({ error }: { error: Error & { digest?: string } }) => {
   }, [error]);
 
   const router = useRouter();
-  const { theme } = useTheme();
+  const { resolvedTheme: theme } = useTheme();
 
   return (
     <html lang="en" className={theme === 'dark' ? 'dark' : ''}>

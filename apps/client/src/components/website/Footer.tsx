@@ -46,7 +46,7 @@ export const Footer = ({
   navItems,
 }: FooterProps) => {
   const t = useTranslations('HomePage.Footer');
-  const { theme } = useTheme();
+  const { resolvedTheme: theme } = useTheme();
   const logoToUse = theme === 'dark' ? logoDark : logo;
 
   return (

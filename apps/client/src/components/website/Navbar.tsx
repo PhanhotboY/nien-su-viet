@@ -50,7 +50,7 @@ export const Navbar = ({
   navItems,
 }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { theme } = useTheme();
+  const { resolvedTheme: theme } = useTheme();
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const t = useTranslations('HomePage');
