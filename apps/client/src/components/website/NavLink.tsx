@@ -1,5 +1,5 @@
 import { ExternalLink } from 'lucide-react';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 
 import { getHeaderNavItems } from '@/content/menus/header-nav-items';
 

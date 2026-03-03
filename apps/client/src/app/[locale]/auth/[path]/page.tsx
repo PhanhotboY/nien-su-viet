@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import { redirect } from 'next/navigation';
 import { AuthView } from '@daveyplate/better-auth-ui';
 
@@ -10,12 +10,12 @@ export default async function AuthPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ path: string }>;
+  params: Promise<{ path: string; locale: string }>;
   searchParams: Promise<{ redirectTo?: string }>;
 }) {
-  const { path } = await params;
+  const { path, locale } = await params;
   const { user, error } = await getAuthSession();
-  const tshared = await getTranslations('Shared');
+  const tshared = await getTranslations({ locale, namespace: 'Shared' });
 
   let { redirectTo } = await searchParams;
   if (!redirectTo) {

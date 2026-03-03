@@ -26,7 +26,7 @@ import {
   SortAsc,
   SortDesc,
 } from 'lucide-react';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import { toast } from 'sonner';
 import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { IPaginatedResponse } from '@/interfaces/response.interface';

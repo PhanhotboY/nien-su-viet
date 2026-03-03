@@ -7,11 +7,9 @@ import { enUS, vi } from 'date-fns/locale';
 import { CalendarIcon, Clock10Icon, MessageCircleIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import React from 'react';
 import readingTime from 'reading-time';
-
-export const dynamic = 'force-dynamic';
 
 // async function getPublicImageUrl(postId: string, fileName: string) {
 
@@ -42,7 +40,7 @@ interface MainPostItemProps {
 }
 
 const MainPostItem: React.FC<MainPostItemProps> = async ({ post, locale }) => {
-  const tshared = await getTranslations('Shared');
+  const tshared = await getTranslations({ locale, namespace: 'Shared' });
   const readTime = readingTime('');
   // const comments = await getComments(post.id ? post.id : "");
 

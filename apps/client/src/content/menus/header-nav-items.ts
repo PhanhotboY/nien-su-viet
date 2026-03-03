@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
-export async function getHeaderNavItems() {
-  const t = await getTranslations('Shared');
+export async function getHeaderNavItems({ locale }: { locale: string }) {
+  const t = await getTranslations({ locale, namespace: 'Shared' });
 
   return [
     // {

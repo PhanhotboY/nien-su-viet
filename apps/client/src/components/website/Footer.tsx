@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import Image from 'next/image';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { getFooterNavItems } from '@/content/menus/footer-nav-items';

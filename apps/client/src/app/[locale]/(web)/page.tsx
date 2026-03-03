@@ -4,8 +4,13 @@ import { QuickTips } from '@/components/website/QuickTips';
 import { FeaturedPeriods } from '@/components/website/FeaturedPeriods';
 import { getTranslations } from 'next-intl/server';
 
-export default async function HomeTimePage() {
-  const t = await getTranslations('EventPage');
+export default async function HomeTimePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'EventPage' });
   return (
     <main className="min-h-screen">
       {/* Page Header */}
@@ -32,7 +37,7 @@ export default async function HomeTimePage() {
       <EventStatistics />
 
       {/* Featured Historical Periods */}
-      <FeaturedPeriods />
+      <FeaturedPeriods locale={locale} />
     </main>
   );
 }

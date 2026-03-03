@@ -9,7 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Calendar, Edit, Trash2, User } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { toEventPeriodString } from '@/helper/date';
 import { useTranslations } from 'next-intl';

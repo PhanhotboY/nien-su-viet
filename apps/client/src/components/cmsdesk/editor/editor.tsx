@@ -51,8 +51,6 @@ import { updatePost } from '@/services/post.service';
 import { useAuthenticate } from '@daveyplate/better-auth-ui';
 import TextEditor from '@/components/TextEditor';
 
-export const dynamic = 'force-dynamic';
-
 type FormData = z.infer<typeof postEditFormSchema>;
 
 interface EditorProps {

@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import TextRenderer from '@/components/TextRenderer';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import { formatHistoricalEventDate } from '@/helper/date';
 import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/ui/button';
@@ -24,8 +24,8 @@ export async function generateMetadata({
   params,
 }: EventDetailPageProps): Promise<Metadata> {
   const { eventId, locale } = await params;
-  const tshared = await getTranslations('Shared');
-  const tevent = await getTranslations('EventPage');
+  const tshared = await getTranslations({ locale, namespace: 'Shared' });
+  const tevent = await getTranslations({ locale, namespace: 'EventPage' });
   const response = await getEvent(eventId);
 
   if (!response?.data) {
@@ -54,10 +54,10 @@ export async function generateMetadata({
 export default async function EventDetailPage({
   params,
 }: EventDetailPageProps) {
-  const { eventId } = await params;
+  const { eventId, locale } = await params;
   const response = await getEvent(eventId);
-  const t = await getTranslations('EventPage');
-  const tshared = await getTranslations('Shared');
+  const tshared = await getTranslations({ locale, namespace: 'Shared' });
+  const t = await getTranslations({ locale, namespace: 'EventPage' });
 
   if (!response?.data) {
     notFound();

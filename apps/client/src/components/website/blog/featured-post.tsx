@@ -8,7 +8,7 @@ import { enUS, vi } from 'date-fns/locale';
 import { Calendar, Clock, Star } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import readingTime from 'reading-time';
 
 interface FeaturedPostProps {
@@ -20,8 +20,8 @@ export default async function FeaturedPost({
   post,
   locale,
 }: FeaturedPostProps) {
-  const tshared = await getTranslations('Shared');
-  const tblog = await getTranslations('BlogPage');
+  const tshared = await getTranslations({ locale, namespace: 'Shared' });
+  const tblog = await getTranslations({ locale, namespace: 'BlogPage' });
   const readTime = readingTime(post.summary || '');
 
   return (

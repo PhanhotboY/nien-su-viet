@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
-export async function getMetadata() {
-  const t = await getTranslations('HomePage.Metadata');
+export async function getMetadata({ locale }: { locale: string }) {
+  const t = await getTranslations({ locale, namespace: 'HomePage.Metadata' });
 
   return {
     title: t('title'),

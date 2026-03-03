@@ -1,8 +1,8 @@
 import { LoadingStar } from '@/components/LoadingStar';
-import { getTranslations } from 'next-intl/server';
+import { useTranslations } from 'next-intl';
 
-export default async function Loading() {
-  const t = await getTranslations('Shared');
+export default function Loading() {
+  const t = useTranslations('Shared');
 
   return (
     <div className="flex h-screen w-full items-center justify-center bg-gradient-to-br from-background via-background to-muted/20">

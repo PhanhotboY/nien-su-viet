@@ -2,7 +2,7 @@ import { Button } from '../ui/button';
 import { buttonVariants } from '../ui/button';
 import { HeroCards } from './HeroCards';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 
 export const Hero = () => {
   return (

@@ -1,8 +1,8 @@
 import { BookOpen } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-export default async function BlogHeader() {
-  const t = await getTranslations('BlogPage');
+export default async function BlogHeader({ locale }: { locale: string }) {
+  const t = await getTranslations({ locale, namespace: 'BlogPage' });
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-b from-muted/50 to-background">

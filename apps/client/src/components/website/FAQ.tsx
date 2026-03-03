@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 
 interface FAQProps {
   question: string;
