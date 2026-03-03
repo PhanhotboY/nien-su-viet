@@ -14,7 +14,6 @@ import { Throttle } from '@nestjs/throttler';
 import { HistoricalEventService } from './historical-event.service';
 import {
   HistoricalEventBaseCreateDto,
-  HistoricalEventBaseDto,
   HistoricalEventBaseUpdateDto,
   HistoricalEventBriefResponseDto,
   HistoricalEventDetailResponseDto,
@@ -42,7 +41,7 @@ export class HistoricalEventController {
 
   @Get(':id/preview')
   @Public()
-  @Serialize(HistoricalEventBriefResponseDto)
+  @Serialize(HistoricalEventPreviewResponseDto)
   getHistoricalEventPreviewById(@Param('id') id: string) {
     return this.historicalEventService.getEventPreviewById(id);
   }
