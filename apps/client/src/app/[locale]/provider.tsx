@@ -1,7 +1,7 @@
 'use client';
 
 import { AuthUIProvider } from '@daveyplate/better-auth-ui';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import { useRouter } from 'next/navigation';
 import { ThemeProvider } from 'next-themes';
 import { type ReactNode } from 'react';

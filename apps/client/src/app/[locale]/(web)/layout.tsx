@@ -8,14 +8,16 @@ import { getHeaderNavItems } from '@/content/menus/header-nav-items';
 import { getFooterNavItems } from '@/content/menus/footer-nav-items';
 import GoogleAnalytics from '@/components/website/GoogleAnalytics';
 
+export const revalidate = 60; // Revalidate every 60 seconds
+
 type Props = {
   params: Promise<{ locale: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
-    const locale = (await params).locale;
-    const metadata = await getMetadata();
+    const { locale } = await params;
+    const metadata = await getMetadata({ locale });
 
     const title = metadata.title;
     const description = metadata.description;
@@ -32,12 +34,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
-  const appData = await getMetadata();
-  const headerNavItems = await getHeaderNavItems();
-  const footerNavItems = await getFooterNavItems();
+  const { locale } = await params;
+  const appData = await getMetadata({ locale });
+  const headerNavItems = await getHeaderNavItems({ locale });
+  const footerNavItems = await getFooterNavItems({ locale });
 
   return (
     <>

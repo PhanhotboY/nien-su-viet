@@ -15,6 +15,7 @@ interface DetailPostHeadingProps {
   date: string;
   // category: string;
   readTime: ReadTimeResults;
+  locale: string;
 }
 
 const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
@@ -26,8 +27,9 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
   date,
   // category,
   readTime,
+  locale,
 }) => {
-  const tshared = await getTranslations('Shared');
+  const tshared = await getTranslations({ locale, namespace: 'Shared' });
   return (
     <section className="flex flex-col items-start justify-between">
       <div className="relative w-full">

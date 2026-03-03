@@ -13,7 +13,7 @@ import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { toEventPeriodString } from '@/helper/date';
 import { IApiResponse } from '../../interfaces/response.interface';
 import TextRenderer from '../TextRenderer';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import { Button } from '../ui/button';
 import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';

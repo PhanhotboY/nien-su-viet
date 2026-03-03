@@ -9,15 +9,12 @@ import {
 } from '@/components/website/blog';
 import MainPostItem from '@/components/website/post/main-post-item';
 import MainPostItemLoading from '@/components/website/post/main-post-item-loading';
-import { CLIENT_HOST } from '@/lib/config';
 import { genMetadata } from '@/lib/metadata.lib';
 import { getPublicPosts } from '@/services/post.service';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
-
-export const revalidate = 0;
 
 interface BlogPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -28,10 +25,10 @@ export async function generateMetadata({
   params,
 }: BlogPageProps): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations('BlogPage');
+  const t = await getTranslations({ locale, namespace: 'BlogPage' });
 
   return genMetadata({
-    title: `${t('title')} - 'Nien Su Viet'`,
+    title: `${t('title')} - Nien Su Viet`,
     description: t('description'),
     locale,
     path: '/blog',
@@ -75,7 +72,7 @@ export default async function HomePage({
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/50">
       {/* Header Section */}
-      <BlogHeader />
+      <BlogHeader locale={locale} />
 
       {/* Main Content */}
       <div className="container pb-8 md:pb-12">
@@ -100,13 +97,13 @@ export default async function HomePage({
             {/* Stats and Filters */}
             {!hasNoPosts && (
               <div className="mb-8">
-                <BlogStats totalPosts={pagination.total} />
+                <BlogStats totalPosts={pagination.total} locale={locale} />
               </div>
             )}
 
             {/* Posts Grid or Empty State */}
             {hasNoPosts ? (
-              <EmptyState hasFilters={hasSearchQuery} />
+              <EmptyState hasFilters={hasSearchQuery} locale={locale} />
             ) : (
               <>
                 <div className="space-y-8">

@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/breadcrumb';
 
 import React from 'react';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import { usePathname } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import { DashboardSidebar } from '@/components/cmsdesk/dashboard-sidebar';

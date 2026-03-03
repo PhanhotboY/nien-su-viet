@@ -123,7 +123,16 @@ export default function TextEditor({
                 holder: 'editorjs',
                 // @ts-ignore
                 tools,
-                data: tryParseJSONObject(value) || { blocks: [] },
+                data: tryParseJSONObject(value) || {
+                  blocks: [
+                    {
+                      type: 'paragraph',
+                      data: {
+                        text: value,
+                      },
+                    },
+                  ],
+                },
                 onChange: (api, e) => {
                   api.saver.save().then((outputData: any) => {
                     onChange(JSON.stringify(outputData));

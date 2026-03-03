@@ -1,16 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { FileX } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 
 interface EmptyStateProps {
   hasFilters?: boolean;
+  locale: string;
 }
 
 export default async function EmptyState({
   hasFilters = false,
+  locale,
 }: EmptyStateProps) {
-  const t = await getTranslations('BlogPage');
+  const t = await getTranslations({ locale, namespace: 'BlogPage' });
 
   return (
     <div className="flex min-h-[400px] flex-col items-center justify-center rounded-lg border border-dashed border-border bg-muted/50 p-12 text-center">

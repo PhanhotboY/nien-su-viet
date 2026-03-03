@@ -89,14 +89,13 @@ const getExcerpt = (content: string, excerptLenght: number): string => {
         break;
       }
     }
-    console.log(text);
 
     return JSON.stringify({
       blocks: excerptBlocks,
       ...attrs,
     });
   } catch (error) {
-    return '';
+    return content;
   }
 };
 
