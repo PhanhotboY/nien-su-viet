@@ -82,6 +82,8 @@ export function HistoricalEventTimeline() {
       end: initEndDate,
       minHeight: '70vh',
       maxHeight: '90vh',
+      verticalScroll: false,
+      horizontalScroll: false,
       format: {
         minorLabels: (date: any, scale, step) => {
           switch (scale) {

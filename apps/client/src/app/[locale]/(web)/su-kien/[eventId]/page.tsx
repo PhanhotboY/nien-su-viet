@@ -9,12 +9,51 @@ import Link from 'next/link';
 import { formatHistoricalEventDate } from '@/helper/date';
 import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/ui/button';
+import { Metadata } from 'next';
+import { getExcerptStr } from '@/lib/content.lib';
+import { genMetadata } from '@/lib/metadata.lib';
+
+interface EventDetailPageProps {
+  params: Promise<{
+    eventId: string;
+    locale: string;
+  }>;
+}
+
+export async function generateMetadata({
+  params,
+}: EventDetailPageProps): Promise<Metadata> {
+  const { eventId, locale } = await params;
+  const tshared = await getTranslations('Shared');
+  const tevent = await getTranslations('EventPage');
+  const response = await getEvent(eventId);
+
+  if (!response?.data) {
+    return {
+      title: tshared('not-found'),
+    };
+  }
+
+  const event = response.data;
+  console.log(
+    'Event description for metadata:',
+    getExcerptStr(event.content, 160),
+  );
+
+  return genMetadata({
+    title:
+      event.name.length > 50
+        ? event.name
+        : `${event.name} - ${tevent('title')}`,
+    description: getExcerptStr(event.content, 160),
+    locale,
+    path: `/su-kien/${eventId}`,
+  });
+}
 
 export default async function EventDetailPage({
   params,
-}: {
-  params: Promise<{ eventId: string }>;
-}) {
+}: EventDetailPageProps) {
   const { eventId } = await params;
   const response = await getEvent(eventId);
   const t = await getTranslations('EventPage');
@@ -53,8 +92,8 @@ export default async function EventDetailPage({
             }}
           />
         </div>*/}
-        <div className="container text-center px-4 py-16 relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 drop-shadow-lg text-primary-foreground">
+        <div className="container text-center px-4 py-8 md:py-10 relative z-10">
+          <h1 className="text-2xl md:text-4xl font-bold mb-8 md:mb-10 drop-shadow-lg text-primary-foreground leading-snug">
             {event.name}
           </h1>
         </div>

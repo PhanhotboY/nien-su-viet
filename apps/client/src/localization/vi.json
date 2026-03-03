@@ -42,7 +42,8 @@
     "empty-excerpt": "Chưa có nội dung",
     "back-to-timeline": "Quay lại",
     "detailed-content": "Nội dung chi tiết",
-    "empty-content": "Chưa có nội dung"
+    "empty-content": "Chưa có nội dung",
+    "not-found": "Không tìm thấy sự kiện"
   },
   "BlogPage": {
     "title": "Blog",
