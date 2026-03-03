@@ -7,7 +7,7 @@ import {
 } from '@/services/historical-event.service';
 import { EventForm } from '@/components/cmsdesk/events/event-form';
 import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { components } from '@nsv-interfaces/nsv-api-documentation';

@@ -20,6 +20,15 @@ const nextConfig: NextConfig = {
   experimental: {
     turbopackUseSystemTlsCerts: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/vi',
+        permanent: false,
+      },
+    ];
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();

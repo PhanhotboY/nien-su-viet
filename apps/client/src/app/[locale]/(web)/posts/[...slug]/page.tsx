@@ -1,4 +1,3 @@
-'@/components/detail/post';
 import TextRenderer from '@/components/TextRenderer';
 import { seoData } from '@/config/root/seo';
 import { getPost } from '@/services/post.service';
@@ -10,8 +9,6 @@ import readingTime, { ReadTimeResults } from 'reading-time';
 import DetailPostHeading from '@/components/detail/post/detail-post-heading';
 import { Card, CardContent } from '@/components/ui/card';
 import { CLIENT_HOST } from '@/lib/config';
-
-export const revalidate = 0;
 
 interface PostPageProps {
   params: Promise<{
@@ -138,6 +135,7 @@ export default async function PostPage({ params }: PostPageProps) {
               )}
               // category={post.categories?.title as string}
               readTime={readTime as ReadTimeResults}
+              locale={locale}
             />
             {/* Top Floatingbar */}
             {/*<div className="mx-auto">

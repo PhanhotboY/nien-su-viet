@@ -11,8 +11,8 @@ import { getImportantEvents } from '@/content/landing/important-events';
 import { toEventPeriodString } from '@/helper/date';
 import { getTranslations } from 'next-intl/server';
 
-export const FeaturedPeriods = async () => {
-  const tshared = await getTranslations('Shared');
+export const FeaturedPeriods = async ({ locale }: { locale: string }) => {
+  const tshared = await getTranslations({ locale, namespace: 'Shared' });
   const importantEvents = await getImportantEvents();
 
   return (

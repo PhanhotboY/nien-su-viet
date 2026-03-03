@@ -12,7 +12,7 @@ import {
 import { Check, Linkedin } from 'lucide-react';
 import { LightBulbIcon } from '../Icons';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 
 export const HeroCards = () => {
   return (

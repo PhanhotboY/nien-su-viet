@@ -5,9 +5,6 @@
 // import { Session } from '@supabase/supabase-js';
 import React from 'react';
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
 interface DetailPostCommentProps {
   postId: string;
   // comments: CommentWithProfile[];

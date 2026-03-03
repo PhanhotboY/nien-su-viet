@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import { format } from 'date-fns';
 // import { IPage } from '~/interfaces/page.interface';
 
@@ -66,10 +66,10 @@ export function PostCard({
           </span>
 
           <div
-            className={`center relative inline-block select-none whitespace-nowrap rounded-full 
+            className={`center relative inline-block select-none whitespace-nowrap rounded-full
           ${
             page.pst_isPublished ? 'bg-green-500' : 'bg-red-500'
-          } py-1 px-2 align-baseline font-sans text-xs font-medium capitalize leading-none 
+          } py-1 px-2 align-baseline font-sans text-xs font-medium capitalize leading-none
           tracking-wide text-white hover:cursor-pointer`}
           >
             <div className="mt-px">

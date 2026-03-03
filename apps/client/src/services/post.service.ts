@@ -14,6 +14,7 @@ export async function getPublicPosts(
 ): Promise<IPaginatedResponse<PostBriefResponseDto>> {
   const response = (await retryFetcher(
     `/posts?${new URLSearchParams(query).toString()}`,
+    { retry: false },
   )) as IPaginatedResponse<PostResponseDto>;
 
   return response;

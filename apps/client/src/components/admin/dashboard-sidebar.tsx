@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import Link from '@/i18n/navigation';
 import { Users, Settings, LogOut, GalleryVerticalEnd } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 
