@@ -1,27 +1,74 @@
 import { CLIENT_HOST } from '@/lib/config';
 import { getPublicPosts } from '@/services/post.service';
+import { getEvents } from '@/services/historical-event.service';
 import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = CLIENT_HOST;
-  const { data: posts } = await getPublicPosts();
+  const locales = ['vi', 'en'] as const;
 
-  const routes = ['', '/gioi-thieu', '/lien-he', '/blog'];
+  const paths = ['', '/gioi-thieu', '/lien-he', '/blog'];
 
-  const defaultRoutes = routes.map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: route === '' ? 1 : 0.7,
-  }));
+  const defaultRoutes = locales.map((locale) =>
+    paths.map((path) =>
+      genSitemap({
+        path: `${path}`,
+        locale,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: path === '' ? 1 : 0.7,
+      }),
+    ),
+  );
 
-  const postRoutes =
-    posts?.map((post: any) => ({
-      url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: new Date(post.updatedAt),
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    })) || [];
+  try {
+    const [{ data: posts }, { data: events }] = await Promise.all([
+      getPublicPosts(),
+      getEvents({ page: '1', limit: '100' }),
+    ]);
+    const postRoutes = locales.map(
+      (locale) =>
+        posts?.map((post) =>
+          genSitemap({
+            path: `/posts/${post.slug}`,
+            locale,
+            lastModified: new Date(post.updatedAt as any),
+            changeFrequency: 'monthly' as const,
+            priority: 0.6,
+          }),
+        ) || [],
+    );
 
-  return [...defaultRoutes, ...postRoutes];
+    const eventRoutes = locales.map(
+      (locale) =>
+        events?.map((event) =>
+          genSitemap({
+            path: `/su-kien/${event.id}`,
+            locale,
+            lastModified: new Date(),
+            changeFrequency: 'monthly' as const,
+            priority: 0.6,
+          }),
+        ) || [],
+    );
+
+    return [...defaultRoutes, ...postRoutes, ...eventRoutes].flat();
+  } catch (e) {
+    return defaultRoutes.flat();
+  }
 }
+
+const genSitemap = ({
+  locale,
+  path,
+  lastModified,
+  changeFrequency,
+  priority,
+}: Omit<MetadataRoute.Sitemap[number], 'url'> & {
+  locale: string;
+  path: string;
+}) => ({
+  url: `${CLIENT_HOST}/${locale}${path}`,
+  lastModified,
+  changeFrequency,
+  priority,
+});
