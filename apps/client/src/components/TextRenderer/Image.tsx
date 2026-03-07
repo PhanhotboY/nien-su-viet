@@ -8,13 +8,14 @@ export default function Image({
   tunes: { caption: boolean };
 }) {
   return (
-    <figure>
+    <figure className="max-w-[1200px] max-h-[800px] overflow-hidden">
       <NextImage
         src={data.file.url}
         alt={data.caption}
         loading="lazy"
         width={1200}
         height={800}
+        // className="w-full h-full object-cover object-center"
       />
       <figcaption>{data.caption}</figcaption>
     </figure>
