@@ -23,7 +23,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const description = metadata.description;
     const logo = metadata.logo;
 
-    return genMetadata({ title, description, locale, logo, path: '/' });
+    const keywords =
+      locale === 'vi'
+        ? [
+            'lịch sử Việt Nam',
+            'sự kiện lịch sử',
+            'niên sử Việt',
+            'timeline lịch sử',
+            'nhân vật lịch sử',
+            'triều đại Việt Nam',
+            'văn hóa Việt Nam',
+          ]
+        : [
+            'Vietnamese history',
+            'historical events',
+            'Vietnam timeline',
+            'historical figures',
+            'Vietnamese dynasties',
+            'Vietnam culture',
+          ];
+
+    return genMetadata({
+      title,
+      description,
+      locale,
+      logo,
+      path: '/',
+      keywords,
+    });
   } catch (error) {
     const title = 'Nien Su Viet';
     const description = 'Vietnam history timeline website';
