@@ -7,6 +7,7 @@ interface GenMetadataParams {
   locale: string;
   logo?: string | null;
   path?: string;
+  keywords?: string[];
 }
 function genMetadata({
   title,
@@ -14,17 +15,22 @@ function genMetadata({
   locale,
   logo,
   path = '/',
+  keywords,
 }: GenMetadataParams): Metadata {
+  const canonicalPath = path === '/' ? '' : path;
+
   return {
     title,
     description,
+    ...(keywords && { keywords }),
     openGraph: {
       title,
       description,
       type: 'website',
-      locale,
+      locale: locale === 'vi' ? 'vi_VN' : 'en_US',
       siteName: title,
       images: logo ? [logo] : undefined,
+      alternateLocale: locale === 'vi' ? ['en_US'] : ['vi_VN'],
     },
     twitter: {
       card: 'summary_large_image',
@@ -33,7 +39,12 @@ function genMetadata({
       images: logo ? [logo] : undefined,
     },
     alternates: {
-      canonical: `${CLIENT_HOST}/${locale}${path === '/' ? '' : path}`,
+      canonical: `${CLIENT_HOST}/${locale}${canonicalPath}`,
+      languages: {
+        vi: `${CLIENT_HOST}/vi${canonicalPath}`,
+        en: `${CLIENT_HOST}/en${canonicalPath}`,
+        'x-default': `${CLIENT_HOST}/vi${canonicalPath}`,
+      },
     },
     robots: {
       index: true,

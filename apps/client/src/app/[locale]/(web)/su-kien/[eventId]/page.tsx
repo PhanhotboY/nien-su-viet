@@ -1,4 +1,4 @@
-import { getEvent } from '@/services/historical-event.service';
+import { getEvent, getEvents } from '@/services/historical-event.service';
 import { notFound } from 'next/navigation';
 import { Calendar, User, Tag, Clock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,6 +12,21 @@ import { Button } from '@/components/ui/button';
 import { Metadata } from 'next';
 import { getExcerptStr } from '@/lib/content.lib';
 import { genMetadata } from '@/lib/metadata.lib';
+
+export async function generateStaticParams() {
+  try {
+    const { data: events } = await getEvents({
+      page: '1',
+      limit: '1000',
+    });
+    return events.map((event) => ({
+      eventId: event.id,
+    }));
+  } catch (error) {
+    console.error('Error fetching events for static params:', error);
+    return [];
+  }
+}
 
 interface EventDetailPageProps {
   params: Promise<{

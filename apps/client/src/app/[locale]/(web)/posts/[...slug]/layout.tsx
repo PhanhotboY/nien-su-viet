@@ -1,6 +1,21 @@
 import { DetailPostHeader } from '@/components/detail/post';
-import { getPost } from '@/services/post.service';
+import { getPost, getPublicPosts } from '@/services/post.service';
 import { notFound } from 'next/navigation';
+
+export async function generateStaticParams() {
+  try {
+    const { data: posts } = await getPublicPosts({
+      page: '1',
+      limit: '1000',
+    });
+    return posts.map((post) => ({
+      slug: post.slug.split('/'),
+    }));
+  } catch (error) {
+    console.error('Error fetching posts for static params:', error);
+    return [];
+  }
+}
 
 async function getPostHandler(params: { slug: string[] }) {
   'use server';

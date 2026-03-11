@@ -4,6 +4,7 @@ import { IPaginatedResponse } from '@/interfaces/response.interface';
 import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { retryFetcher } from '.';
 import { IApiResponse } from '../interfaces/response.interface';
+import { avoidRateLimit } from '@/helper/rate-limit.helper';
 
 export async function getEvents(
   query?: Record<string, string> | string,
@@ -12,6 +13,9 @@ export async function getEvents(
 > {
   const response = (await retryFetcher(
     `/historical-events?${new URLSearchParams(query).toString()}`,
+    {
+      isPublicRoute: true,
+    },
   )) as IPaginatedResponse<
     components['schemas']['HistoricalEventBriefResponseDto']
   >;
@@ -24,7 +28,10 @@ export async function getEvent(
 ): Promise<
   IApiResponse<components['schemas']['HistoricalEventDetailResponseDto']>
 > {
-  const response = await retryFetcher(`/historical-events/${id}`);
+  await avoidRateLimit();
+  const response = await retryFetcher(`/historical-events/${id}`, {
+    isPublicRoute: true,
+  });
 
   return response;
 }
