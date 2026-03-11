@@ -12,6 +12,9 @@ export async function getEvents(
 > {
   const response = (await retryFetcher(
     `/historical-events?${new URLSearchParams(query).toString()}`,
+    {
+      isPublicRoute: true,
+    },
   )) as IPaginatedResponse<
     components['schemas']['HistoricalEventBriefResponseDto']
   >;
@@ -24,7 +27,9 @@ export async function getEvent(
 ): Promise<
   IApiResponse<components['schemas']['HistoricalEventDetailResponseDto']>
 > {
-  const response = await retryFetcher(`/historical-events/${id}`);
+  const response = await retryFetcher(`/historical-events/${id}`, {
+    isPublicRoute: true,
+  });
 
   return response;
 }
