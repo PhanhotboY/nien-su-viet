@@ -37,32 +37,39 @@ export const EventStatistics = () => {
   ];
 
   return (
-    <section className="container mx-auto px-4 py-6 md:py-8">
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+    <section
+      className="container mx-auto px-4 py-6 md:py-8"
+      aria-label="Thống kê lịch sử Việt Nam"
+    >
+      <h2 className="sr-only">Thống kê lịch sử Việt Nam</h2>
+      <dl className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {stats.map((stat, index) => (
           <Card
             key={index}
             className="group hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
           >
             <CardContent className="p-4 md:p-5 text-center space-y-2">
-              <div className="inline-flex p-2 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+              <div
+                className="inline-flex p-2 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                aria-hidden="true"
+              >
                 {stat.icon}
               </div>
               <div className="space-y-1">
-                <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-br from-primary to-secondary text-transparent bg-clip-text">
+                <dd className="text-2xl md:text-3xl font-bold bg-gradient-to-br from-primary to-secondary text-transparent bg-clip-text">
                   {stat.value}
-                </h3>
-                <p className="font-semibold text-sm md:text-base">
+                </dd>
+                <dt className="font-semibold text-sm md:text-base">
                   {stat.label}
-                </p>
-                <p className="text-xs text-muted-foreground hidden md:block">
+                </dt>
+                <dd className="text-xs text-muted-foreground hidden md:block">
                   {stat.description}
-                </p>
+                </dd>
               </div>
             </CardContent>
           </Card>
         ))}
-      </div>
+      </dl>
     </section>
   );
 };

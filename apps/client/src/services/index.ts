@@ -7,8 +7,10 @@ import { CONFIG } from '../config';
 
 export const retryFetcher = async <T = any>(
   url: string,
-  options?: RequestInit & {
-    retry?: boolean;
+  options: RequestInit & {
+    isPublicRoute?: boolean;
+  } = {
+    isPublicRoute: false,
   },
 ): Promise<{
   data: T;
@@ -23,7 +25,7 @@ export const retryFetcher = async <T = any>(
   };
 }> => {
   let response;
-  if (options?.retry === true) {
+  if (options?.isPublicRoute === false) {
     const reqHeaders = new Headers(await headers());
     reqHeaders.delete('content-length'); // UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
     reqHeaders.delete('content-type');

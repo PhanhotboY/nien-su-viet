@@ -1,7 +1,10 @@
 import { redirect } from 'next/navigation';
 
-const CmsdeskPage = async () => {
-  redirect('/cmsdesk/historical-events');
-};
-
-export default CmsdeskPage;
+export default async function CmsdeskPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  redirect(`/${locale}/cmsdesk/historical-events`);
+}

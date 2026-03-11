@@ -16,7 +16,7 @@ export default async function AccountPage({
 
   return (
     <main className="container self-center p-4 md:p-6">
-      <AccountView path={path} pathname={`/${locale}/account`} />
+      <AccountView path={path} pathname={`/${locale}/account/${path}`} />
     </main>
   );
 }

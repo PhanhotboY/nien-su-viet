@@ -7,17 +7,20 @@ import { getAuthSession } from '@/helper/auth.helper';
 
 export default async function AdminLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
   const { user } = await getAuthSession();
+  const { locale } = await params;
 
   if (user && !isAdmin(user.role)) {
     switch (user.role) {
       case 'editor':
-        redirect('/cmsdesk');
+        redirect(`/${locale}/cmsdesk`);
       default:
-        redirect('/');
+        redirect(`/${locale}/`);
     }
   }
 
