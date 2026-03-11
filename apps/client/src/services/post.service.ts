@@ -8,6 +8,7 @@ import {
   PostResponseDto,
   PostUpdateDto,
 } from '@/types/collection';
+import { avoidRateLimit } from '@/helper/rate-limit.helper';
 
 export async function getPublicPosts(
   query?: Record<string, string> | string,
@@ -31,6 +32,7 @@ export async function findPosts(
 }
 
 export async function getPost(id: string) {
+  await avoidRateLimit();
   const response = await retryFetcher<PostResponseDto>(`/posts/${id}`, {
     method: 'GET',
     isPublicRoute: true,
