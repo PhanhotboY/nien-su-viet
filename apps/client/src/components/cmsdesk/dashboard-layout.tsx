@@ -20,10 +20,15 @@ import { usePathname } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import { DashboardSidebar } from '@/components/cmsdesk/dashboard-sidebar';
 import { ModeToggle } from '../mode-toggle';
+import { useLocale } from 'next-intl';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-  const pathSegments = pathname.split('/').filter((segment) => segment);
+  const locale = useLocale();
+  const pathSegments = pathname
+    .replace(`/${locale}`, '')
+    .split('/')
+    .filter((segment) => segment);
 
   const relevantSegments =
     pathSegments[0] === 'cmsdesk' ? pathSegments.slice(1) : pathSegments;

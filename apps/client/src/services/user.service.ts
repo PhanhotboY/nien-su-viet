@@ -47,7 +47,7 @@ async function getUsers(
     query.searchValue = options.name;
   }
 
-  const reqHeaders = await headers();
+  const reqHeaders = new Headers(await headers());
   // Get users from Better Auth
   const res = (await retryFetcher<components['schemas']['User'][]>(
     '/auth/admin/list-users?' + new URLSearchParams(query).toString(),
