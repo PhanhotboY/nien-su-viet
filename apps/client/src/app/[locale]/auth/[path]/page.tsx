@@ -21,13 +21,13 @@ export default async function AuthPage({
   if (!redirectTo) {
     switch (user?.role) {
       case 'admin':
-        redirectTo = '/admin';
+        redirectTo = `/${locale}/admin`;
         break;
       case 'editor':
-        redirectTo = '/cmsdesk';
+        redirectTo = `/${locale}/cmsdesk`;
         break;
       default:
-        redirectTo = '/';
+        redirectTo = `/${locale}/`;
     }
   }
 

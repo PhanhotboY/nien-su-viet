@@ -17,6 +17,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { useLocale } from 'next-intl';
+import { CLIENT_HOST } from '@/lib/config';
 
 const sidebarNavItems = [
   {
@@ -29,12 +31,12 @@ const sidebarNavItems = [
 export function DashboardSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const locale = useLocale();
   const { signOut } = authClient;
 
   const handleLogout = async () => {
     try {
       await signOut();
-      router.push('/auth/sign-in');
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -98,7 +100,7 @@ export function DashboardSidebar() {
               tooltip="Logout"
               className="cursor-pointer"
             >
-              <button onClick={handleLogout}>
+              <button onClick={handleLogout} type="button">
                 <LogOut className="h-4 w-4" />
                 <span>Logout</span>
               </button>

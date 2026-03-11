@@ -20,10 +20,15 @@ import { usePathname } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import { DashboardSidebar } from '@/components/admin/dashboard-sidebar';
 import { ModeToggle } from '../mode-toggle';
+import { useLocale } from 'next-intl';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+  const locale = useLocale();
   const pathname = usePathname();
-  const pathSegments = pathname.split('/').filter((segment) => segment);
+  const pathSegments = pathname
+    .replace(`/${locale}`, '')
+    .split('/')
+    .filter((segment) => segment);
 
   const relevantSegments =
     pathSegments[0] === 'admin' ? pathSegments.slice(1) : pathSegments;
@@ -46,7 +51,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
                 </BreadcrumbItem>
                 {relevantSegments.length > 0 && <BreadcrumbSeparator />}
                 {relevantSegments.map((segment, index) => {
-                  const href = `/admin/${relevantSegments
+                  const href = `/${locale}/admin/${relevantSegments
                     .slice(0, index + 1)
                     .join('/')}`;
                   const isLast = index === relevantSegments.length - 1;

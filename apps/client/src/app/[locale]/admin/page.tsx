@@ -1,7 +1,10 @@
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
 
-const AdminPage = async () => {
-  redirect("/admin/users");
-};
-
-export default AdminPage;
+export default async function AdminPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  redirect(`/${locale}/admin/users`);
+}

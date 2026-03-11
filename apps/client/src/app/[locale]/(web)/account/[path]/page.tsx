@@ -13,10 +13,11 @@ export default async function AccountPage({
   params: Promise<{ path: string; locale: string }>;
 }) {
   const { path, locale } = await params;
+  console.log(path, locale);
 
   return (
     <main className="container self-center p-4 md:p-6">
-      <AccountView path={path} pathname={`/${locale}/account`} />
+      <AccountView path={path} pathname={`/${locale}/account/${path}`} />
     </main>
   );
 }
