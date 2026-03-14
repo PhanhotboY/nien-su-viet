@@ -25,6 +25,7 @@ import {
   Loader2 as SpinnerIcon,
   Trash as TrashIcon,
 } from 'lucide-react';
+import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
@@ -39,6 +40,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
   const [showLoadingAlert, setShowLoadingAlert] = useState<boolean>(false);
   const { data: session } = useAuthenticate();
+  const locale = useLocale();
 
   // Delete post
   async function deleteMyPost() {
@@ -76,7 +78,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
               className="flex w-full"
               onClick={() => {
                 setShowLoadingAlert(true);
-                router.push(`/cmsdesk/posts/${id}`);
+                router.push(`/${locale}/cmsdesk/posts/${id}`);
                 setShowLoadingAlert(false);
               }}
             >

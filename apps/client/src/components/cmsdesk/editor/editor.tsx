@@ -50,6 +50,7 @@ import { PostResponseDto } from '@/types/collection';
 import { updatePost } from '@/services/post.service';
 import { useAuthenticate } from '@daveyplate/better-auth-ui';
 import TextEditor from '@/components/TextEditor';
+import { useLocale } from 'next-intl';
 
 type FormData = z.infer<typeof postEditFormSchema>;
 
@@ -64,6 +65,7 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
   const router = useRouter();
   const { data } = useAuthenticate();
   const userId = data?.user.id || '';
+  const locale = useLocale();
 
   // These are the values that will be used to upload the image
   // States
@@ -119,7 +121,7 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
 
     if (response.statusCode < 400) {
       toast.success(protectedEditorConfig.successMessage);
-      router.push(`/cmsdesk/posts?search=refresh`);
+      router.push(`/${locale}/cmsdesk/posts?search=refresh`);
     } else {
       toast.error(protectedEditorConfig.errorMessage + ': ' + response.message);
     }
@@ -299,7 +301,7 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
                 </div>
                 {/* )} */}
 
-                {form.getValues('thumbnail') !== '' ? (
+                {form.getValues('thumbnail') ? (
                   <EditorUploadCoverImageItem
                     userId={userId}
                     postId={post.id}

@@ -3,9 +3,9 @@ export default function Heading({
   tunes,
 }: {
   data: { text: string; level: number };
-  tunes: { textAlign: { alignment: string } };
+  tunes?: { textAlign: { alignment: string } };
 }) {
-  const className = `heading-${data.level} text-${tunes.textAlign.alignment}`;
+  const className = `heading-${data.level} text-${tunes?.textAlign.alignment}`;
 
   return [
     <h1

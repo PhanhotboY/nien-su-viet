@@ -12,6 +12,7 @@ import { createPost } from '@/services/post.service';
 import { useAuthenticate } from '@daveyplate/better-auth-ui';
 import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { Loader2 as SpinnerIcon } from 'lucide-react';
+import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
@@ -20,6 +21,7 @@ const PostCreateButton = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { data: session } = useAuthenticate();
   const router = useRouter();
+  const locale = useLocale();
 
   async function createPostHandler() {
     setIsLoading(true);
@@ -29,7 +31,7 @@ const PostCreateButton = () => {
         title: protectedPostConfig.untitled,
         authorId: session?.user.id,
         slug: `untitled-${Math.random().toString(36).substring(2, 8)}`,
-        content: '{blocks: []}',
+        content: '{"blocks": []}',
         published: false,
       };
 
@@ -40,7 +42,7 @@ const PostCreateButton = () => {
         // This forces a cache invalidation.
         router.refresh();
         // Redirect to the new post
-        router.push('/cmsdesk/posts/' + response.data.id);
+        router.push(`/${locale}/cmsdesk/posts/` + response.data.id);
         setIsLoading(false);
       } else {
         setIsLoading(false);

@@ -24,6 +24,7 @@ import TextEditor from '@/components/TextEditor';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { HISTORICAL_EVENT } from '@/constants/historical-event.constant';
+import { useLocale } from 'next-intl';
 
 interface EventFormProps {
   initialData?: components['schemas']['HistoricalEventBaseCreateDto'];
@@ -59,6 +60,7 @@ export function EventForm({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const locale = useLocale();
 
   // const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
   //   new Set(initialData?.categoryIds || []),
@@ -71,7 +73,7 @@ export function EventForm({
     try {
       await onSubmit(formData);
       toast.success('Event updated successfully!');
-      router.push('/cmsdesk/historical-events');
+      router.push(`/${locale}/cmsdesk/historical-events`);
     } catch (error) {
       toast.error('Failed to update event');
       console.error(error);
