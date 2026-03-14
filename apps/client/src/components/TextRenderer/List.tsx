@@ -2,7 +2,7 @@ import { decodeHtmlEntities } from '@/helper/renderer.helper';
 
 type ListItem = {
   content: string;
-  meta: { checked?: boolean };
+  meta?: { checked?: boolean };
   items?: ListItem[];
 };
 
@@ -11,7 +11,7 @@ export default function List({
 }: {
   data: {
     items: ListItem[];
-    meta: { counterType?: '' | 'numeric' };
+    meta?: { counterType?: '' | 'numeric' };
     style: 'ordered' | 'unordered' | 'checklist';
   };
 }) {
@@ -24,7 +24,7 @@ export default function List({
         return (
           <li key={index}>
             {data.style === 'checklist' && (
-              <input type="checkbox" checked={item.meta.checked} disabled />
+              <input type="checkbox" checked={item.meta?.checked} disabled />
             )}
             <p dangerouslySetInnerHTML={{ __html: content }}></p>
 

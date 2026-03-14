@@ -5,7 +5,7 @@ export default function Image({
   tunes,
 }: {
   data: { file: { url: string }; caption: string };
-  tunes: { caption: boolean };
+  tunes?: { caption: boolean };
 }) {
   return (
     <figure className="max-w-[1200px] max-h-[800px] overflow-hidden">
@@ -17,7 +17,7 @@ export default function Image({
         height={800}
         // className="w-full h-full object-cover object-center"
       />
-      <figcaption>{data.caption}</figcaption>
+      {tunes?.caption && <figcaption>{data.caption}</figcaption>}
     </figure>
   );
 }

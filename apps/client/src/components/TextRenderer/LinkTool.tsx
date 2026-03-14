@@ -5,8 +5,8 @@ export default function LinkTool({
   data,
 }: {
   data: {
-    link: string;
-    meta: { title: string; description: string; image: { url: string } };
+    link?: string;
+    meta?: { title: string; description: string; image: { url: string } };
   };
 }) {
   useEffect(() => {
@@ -30,13 +30,13 @@ export default function LinkTool({
           <section>
             <div
               className="link-tool__image"
-              style={{ backgroundImage: `url("${data.meta.image.url}")` }}
+              style={{ backgroundImage: `url("${data.meta?.image.url}")` }}
             ></div>
-            <h3 className="link-tool__title">{data.meta.title}</h3>
+            <h3 className="link-tool__title">{data.meta?.title}</h3>
           </section>
-          <p className="link-tool__description">{data.meta.description}</p>
+          <p className="link-tool__description">{data.meta?.description}</p>
           <footer className="link-tool__anchor">
-            {data.link.replace(/https?:\/\//gm, '').replace(/\/.*/gm, '')}
+            {data.link?.replace(/https?:\/\//gm, '').replace(/\/.*/gm, '')}
           </footer>
         </a>
       </div>

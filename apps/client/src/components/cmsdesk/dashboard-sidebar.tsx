@@ -58,7 +58,6 @@ export function DashboardSidebar() {
   const handleLogout = async () => {
     try {
       await signOut();
-      router.push('/auth/sign-in');
     } catch (error) {
       console.error('Logout failed:', error);
     }

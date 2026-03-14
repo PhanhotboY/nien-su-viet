@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from '@/i18n/navigation';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { Menu, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { SignedIn, SignedOut, UserAvatar } from '@daveyplate/better-auth-ui';
@@ -54,10 +54,11 @@ export const Navbar = ({
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const t = useTranslations('HomePage');
+  const locale = useLocale();
 
   const handleSignOut = async () => {
     await authClient.signOut();
-    router.push('/');
+    router.push(`/${locale}`);
   };
 
   const logoToUse = theme === 'dark' ? appLogoDark : appLogo;

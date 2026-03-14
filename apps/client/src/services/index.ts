@@ -25,7 +25,7 @@ export const retryFetcher = async <T = any>(
   };
 }> => {
   let response;
-  if (options?.isPublicRoute === false) {
+  if (!options?.isPublicRoute) {
     const reqHeaders = new Headers(await headers());
     reqHeaders.delete('content-length'); // UND_ERR_REQ_CONTENT_LENGTH_MISMATCH
     reqHeaders.delete('content-type');
