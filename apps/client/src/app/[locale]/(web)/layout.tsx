@@ -90,6 +90,7 @@ export default async function RootLayout({
         description={appData.description}
         social={{
           facebook: appData.social.facebook,
+          twitter: appData.social.twitter,
           // youtube: appData.social.youtube,
           // tiktok: appData.social.tiktok,
           // zalo: appData.social.zalo,

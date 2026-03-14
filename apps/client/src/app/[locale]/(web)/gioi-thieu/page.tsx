@@ -13,21 +13,27 @@ import { Testimonials } from '@/components/website/Testimonials';
 // import '@/styles/landing-page.css';
 // import '@/styles/landing-page.css';
 
-export default function App() {
+export default async function App({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
   return (
     <main>
-      <Hero />
-      <Sponsors />
-      <About />
-      <HowItWorks />
-      <Features />
-      <Services />
-      <Cta />
-      <Testimonials />
-      <Team />
-      <Pricing />
-      <Newsletter />
-      <FAQ />
+      <Hero locale={locale} />
+      <Sponsors locale={locale} />
+      <About locale={locale} />
+      <HowItWorks locale={locale} />
+      <Features locale={locale} />
+      <Services locale={locale} />
+      <Cta locale={locale} />
+      <Testimonials locale={locale} />
+      <Team locale={locale} />
+      <Pricing locale={locale} />
+      <Newsletter locale={locale} />
+      <FAQ locale={locale} />
     </main>
   );
 }
