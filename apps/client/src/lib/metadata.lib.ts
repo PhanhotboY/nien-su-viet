@@ -8,6 +8,7 @@ interface GenMetadataParams {
   logo?: string | null;
   path?: string;
   keywords?: string[];
+  images?: string[];
 }
 function genMetadata({
   title,
@@ -16,8 +17,12 @@ function genMetadata({
   logo,
   path = '/',
   keywords,
+  images = [],
 }: GenMetadataParams): Metadata {
   const canonicalPath = path === '/' ? '' : path;
+  if (!images.length && logo) {
+    images = [logo];
+  }
 
   return {
     title,
@@ -29,14 +34,14 @@ function genMetadata({
       type: 'website',
       locale: locale === 'vi' ? 'vi_VN' : 'en_US',
       siteName: title,
-      images: logo ? [logo] : undefined,
+      images,
       alternateLocale: locale === 'vi' ? ['en_US'] : ['vi_VN'],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: logo ? [logo] : undefined,
+      images,
     },
     alternates: {
       canonical: `${CLIENT_HOST}/${locale}${canonicalPath}`,
