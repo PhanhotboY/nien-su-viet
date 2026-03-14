@@ -1,5 +1,6 @@
 import { Radar } from 'lucide-react';
 import { JSX } from 'react';
+import { getTranslations } from 'next-intl/server';
 
 interface SponsorProps {
   icon: JSX.Element;
@@ -33,11 +34,13 @@ const sponsors: SponsorProps[] = [
   },
 ];
 
-export const Sponsors = () => {
+export const Sponsors = async ({ locale }: { locale: string }) => {
+  const t = await getTranslations({ namespace: 'AboutPage.Sponsors', locale });
+
   return (
     <section id="sponsors" className="container pt-24 sm:py-32">
       <h2 className="text-center text-md lg:text-2xl font-bold mb-8 text-secondary">
-        Đối tác và nguồn tham khảo
+        {t('title')}
       </h2>
 
       <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8">

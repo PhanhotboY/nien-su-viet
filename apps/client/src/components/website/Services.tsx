@@ -2,6 +2,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { MagnifierIcon, WalletIcon, ChartIcon } from '../Icons';
 import { JSX } from 'react';
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 
 interface ServiceProps {
   title: string;
@@ -9,42 +10,40 @@ interface ServiceProps {
   icon: JSX.Element;
 }
 
-const serviceList: ServiceProps[] = [
-  {
-    title: 'Tra cứu sự kiện',
-    description:
-      'Tìm kiếm và khám phá các sự kiện lịch sử quan trọng của Việt Nam. Xem chi tiết thời gian, địa điểm, nhân vật liên quan và ý nghĩa lịch sử.',
-    icon: <ChartIcon />,
-  },
-  {
-    title: 'Thư viện nhân vật',
-    description:
-      'Tìm hiểu về các anh hùng dân tộc, vua chúa, danh tướng, văn nhân và các nhân vật tiêu biểu trong lịch sử Việt Nam qua từng thời kỳ.',
-    icon: <WalletIcon />,
-  },
-  {
-    title: 'Tài liệu lịch sử',
-    description:
-      'Truy cập kho tài liệu số hóa với hình ảnh, văn bản cổ, bản đồ lịch sử và các nguồn tài liệu quý giá được sưu tầm và bảo quản.',
-    icon: <MagnifierIcon />,
-  },
-];
+export const Services = async ({ locale }: { locale: string }) => {
+  const t = await getTranslations({ namespace: 'Services', locale });
 
-export const Services = () => {
+  const serviceList: ServiceProps[] = [
+    {
+      title: t('items.eventLookup.title'),
+      description: t('items.eventLookup.description'),
+      icon: <ChartIcon />,
+    },
+    {
+      title: t('items.figureLibrary.title'),
+      description: t('items.figureLibrary.description'),
+      icon: <WalletIcon />,
+    },
+    {
+      title: t('items.historicalDocuments.title'),
+      description: t('items.historicalDocuments.description'),
+      icon: <MagnifierIcon />,
+    },
+  ];
+
   return (
     <section className="container py-24 sm:py-32">
       <div className="grid lg:grid-cols-2 gap-8 place-items-center">
         <div>
           <h2 className="text-3xl md:text-4xl font-bold">
             <span className="bg-gradient-to-b from-secondary/60 to-secondary text-transparent bg-clip-text">
-              Dịch vụ{' '}
+              {t('heading.emphasis')}{' '}
             </span>
-            Của Chúng Tôi
+            {t('heading.rest')}
           </h2>
 
           <p className="text-muted-foreground text-xl mt-4 mb-8 ">
-            Khám phá và tìm hiểu lịch sử Việt Nam một cách toàn diện với các
-            dịch vụ chất lượng cao.
+            {t('description')}
           </p>
 
           <div className="flex flex-col gap-8">

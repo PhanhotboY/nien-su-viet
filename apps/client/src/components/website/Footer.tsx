@@ -9,6 +9,7 @@ import {
   YoutubeIcon,
   TiktokIcon,
   ZaloIcon,
+  TwitterIcon,
 } from '@/icons/socials';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
@@ -23,6 +24,7 @@ interface FooterProps {
     youtube?: string;
     tiktok?: string;
     zalo?: string;
+    twitter?: string;
   };
   email: string;
   msisdn?: string;
@@ -87,6 +89,20 @@ export const Footer = ({
                 >
                   <FacebookIcon className="h-6 w-6" />
                   Facebook
+                </Link>
+              </div>
+            )}
+
+            {social?.twitter && (
+              <div>
+                <Link
+                  rel="noreferrer noopener"
+                  href={social.twitter}
+                  target="_blank"
+                  className="opacity-60 hover:opacity-100 flex items-center gap-2"
+                >
+                  <TwitterIcon className="h-6 w-6" />
+                  Twitter
                 </Link>
               </div>
             )}

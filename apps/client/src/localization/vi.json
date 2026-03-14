@@ -1,11 +1,403 @@
 {
+  "AboutPage": {
+    "about": "Về",
+    "title": "Niên Sử Việt",
+    "description": "Niên Sử Việt là nền tảng số hóa lịch sử Việt Nam, mang đến cho bạn cái nhìn toàn diện và sinh động về hành trình phát triển của dân tộc. Chúng tôi tập hợp và sắp xếp các sự kiện lịch sử theo thời gian, giúp bạn dễ dàng theo dõi và hiểu rõ dòng chảy lịch sử từ thời Hùng Vương đến thời kỳ đổi mới. Với sứ mệnh bảo tồn và lan tỏa giá trị lịch sử, văn hóa Việt Nam đến thế hệ trẻ và cộng đồng quốc tế.",
+    "Sponsors": {
+      "title": "Được tin tưởng bởi"
+    },
+    "Hero": {
+      "brand": "Niên Sử Việt",
+      "headline": {
+        "emphasis": "Khám phá",
+        "rest": "lịch sử Việt Nam"
+      },
+      "description": "Khám phá hành trình lịch sử Việt Nam qua dòng thời gian tương tác, nhân vật tiêu biểu và những câu chuyện hấp dẫn.",
+      "cta": {
+        "primary": "Bắt đầu khám phá",
+        "secondary": "Tìm hiểu thêm"
+      }
+    },
+    "HowItWorks": {
+      "title": {
+        "prefix": "Học lịch sử theo cách",
+        "highlight": "trực quan",
+        "suffix": "và dễ hiểu"
+      },
+      "subtitle": "Tìm sự kiện theo thời gian, tra cứu nhân vật, xem bản đồ và khám phá tư liệu chỉ trong vài bước.",
+      "features": {
+        "timeline": {
+          "title": "Dòng thời gian",
+          "description": "Theo dõi các mốc sự kiện theo từng giai đoạn lịch sử một cách trực quan."
+        },
+        "map": {
+          "title": "Bản đồ lịch sử",
+          "description": "Khám phá địa danh và diễn biến qua bản đồ giúp bạn ghi nhớ dễ hơn."
+        },
+        "library": {
+          "title": "Thư viện tư liệu",
+          "description": "Tổng hợp nguồn tham khảo, hình ảnh và tư liệu lịch sử đáng tin cậy."
+        },
+        "learning": {
+          "title": "Học tập tương tác",
+          "description": "Trải nghiệm học lịch sử sinh động với các nội dung được biên soạn dễ tiếp cận."
+        }
+      }
+    },
+    "Features": {
+      "title": {
+        "prefix": "Tính năng",
+        "highlight": "nổi bật"
+      },
+      "badges": [
+        "Dòng thời gian",
+        "Bản đồ",
+        "Nhân vật",
+        "Tư liệu",
+        "Tìm kiếm",
+        "Tương tác"
+      ],
+      "items": [
+        {
+          "title": "Dòng thời gian tương tác",
+          "description": "Duyệt lịch sử theo thời gian với thao tác kéo – thả, phóng to/thu nhỏ, lọc nhanh theo giai đoạn."
+        },
+        {
+          "title": "Tra cứu sự kiện nhanh",
+          "description": "Tìm kiếm và xem chi tiết sự kiện với mô tả rõ ràng, dễ hiểu và có trích dẫn nguồn."
+        },
+        {
+          "title": "Thư viện nhân vật",
+          "description": "Khám phá tiểu sử nhân vật lịch sử, đóng góp và bối cảnh liên quan."
+        },
+        {
+          "title": "Tư liệu đáng tin cậy",
+          "description": "Tổng hợp hình ảnh, sách, tài liệu tham khảo để bạn học và kiểm chứng thông tin."
+        },
+        {
+          "title": "Hỗ trợ nhiều thiết bị",
+          "description": "Trải nghiệm mượt mà trên máy tính, máy tính bảng và điện thoại."
+        },
+        {
+          "title": "Cộng đồng đóng góp",
+          "description": "Cùng nhau bổ sung và cải thiện nội dung để lan tỏa tri thức lịch sử."
+        }
+      ]
+    },
+    "Pricing": {
+      "title": {
+        "prefix": "Gói",
+        "highlight": "dịch vụ",
+        "suffix": "phù hợp cho mọi nhu cầu"
+      },
+      "subtitle": "Chọn gói phù hợp để bắt đầu khám phá và học lịch sử hiệu quả hơn.",
+      "popularBadge": "Phổ biến",
+      "price": {
+        "free": "Miễn phí",
+        "amount": "{amount}",
+        "perMonth": "/tháng"
+      },
+      "plans": {
+        "free": {
+          "title": "Miễn phí",
+          "description": "Bắt đầu khám phá lịch sử với các tính năng cơ bản.",
+          "buttonText": "Dùng miễn phí",
+          "benefits": {
+            "timeline": "Truy cập dòng thời gian",
+            "search100": "Tìm kiếm sự kiện",
+            "biographies": "Xem tiểu sử nhân vật",
+            "communitySupport": "Hỗ trợ cộng đồng",
+            "multiDevice": "Dùng trên nhiều thiết bị"
+          }
+        },
+        "premium": {
+          "title": "Premium",
+          "description": "Trải nghiệm đầy đủ tính năng nâng cao, không giới hạn.",
+          "buttonText": "Nâng cấp Premium",
+          "benefits": {
+            "fullAccess": "Toàn quyền truy cập nội dung",
+            "downloads": "Tải tư liệu chọn lọc",
+            "interactiveMap": "Bản đồ tương tác nâng cao",
+            "noAds": "Không quảng cáo",
+            "prioritySupport": "Hỗ trợ ưu tiên"
+          }
+        },
+        "organization": {
+          "title": "Tổ chức",
+          "description": "Giải pháp cho trường học, thư viện và tổ chức giáo dục.",
+          "buttonText": "Liên hệ tư vấn",
+          "benefits": {
+            "unlimitedAccounts": "Tài khoản không giới hạn",
+            "centralManagement": "Quản trị tập trung",
+            "customContent": "Nội dung tùy chỉnh",
+            "apiIntegration": "Tích hợp API",
+            "trainingSupport": "Hỗ trợ đào tạo"
+          }
+        }
+      }
+    },
+    "Statistics": {
+      "items": {
+        "years": "Năm lịch sử",
+        "events": "Sự kiện",
+        "figures": "Nhân vật",
+        "dynasties": "Triều đại"
+      }
+    },
+    "FAQ": {
+      "title": {
+        "prefix": "Câu hỏi",
+        "highlight": "thường gặp"
+      },
+      "items": {
+        "item-1": {
+          "question": "Niên Sử Việt là gì?",
+          "answer": "Niên Sử Việt là nền tảng giúp bạn khám phá lịch sử Việt Nam qua dòng thời gian, nhân vật và tư liệu một cách trực quan."
+        },
+        "item-2": {
+          "question": "Nội dung có đáng tin cậy không?",
+          "answer": "Chúng tôi tổng hợp từ nhiều nguồn tham khảo và liên tục kiểm chứng, cập nhật để đảm bảo độ chính xác."
+        },
+        "item-3": {
+          "question": "Tôi có thể góp ý hoặc đóng góp nội dung không?",
+          "answer": "Có. Bạn có thể liên hệ với chúng tôi để gửi góp ý, đề xuất chỉnh sửa hoặc bổ sung nguồn tư liệu."
+        },
+        "item-4": {
+          "question": "Niên Sử Việt có thể dùng trên điện thoại không?",
+          "answer": "Có. Ứng dụng/website được tối ưu để hoạt động tốt trên cả máy tính và thiết bị di động."
+        },
+        "item-5": {
+          "question": "Làm sao để bắt đầu?",
+          "answer": "Bạn chỉ cần truy cập trang sự kiện, tìm kiếm theo mốc thời gian hoặc khám phá theo chủ đề và giai đoạn."
+        }
+      },
+      "footer": {
+        "prefix": "Bạn vẫn còn thắc mắc?",
+        "href": "/lien-he",
+        "linkText": "Liên hệ với chúng tôi"
+      }
+    },
+    "Cta": {
+      "title": {
+        "prefix": "Khám Phá",
+        "highlight": "Lịch Sử Việt Nam",
+        "suffix": "Ngay Hôm Nay"
+      },
+      "description": "Tham gia cùng hàng ngàn người dùng đang khám phá và học hỏi về lịch sử dân tộc. Trải nghiệm miễn phí ngay hôm nay!",
+      "actions": {
+        "primary": "Bắt đầu khám phá",
+        "secondary": "Xem thêm tính năng"
+      }
+    },
+    "Team": {
+      "title": {
+        "prefix": "Đội Ngũ",
+        "suffix": "Của Chúng Tôi"
+      },
+      "description": "Chuyên gia nghiên cứu lịch sử Việt Nam",
+      "memberTagline": "Cống hiến cho sự nghiệp bảo tồn và phát triển lịch sử dân tộc",
+      "social": {
+        "srOnly": "{name} icon"
+      }
+    },
+    "Testimonials": {
+      "title": {
+        "prefix": "Khám Phá Lý Do",
+        "highlight": "Mọi Người Yêu Thích",
+        "suffix": "Niên Sử Việt"
+      },
+      "subtitle": "Hàng ngàn người dùng đã tin tưởng và sử dụng Niên Sử Việt để khám phá và học hỏi về lịch sử dân tộc",
+      "items": [
+        {
+          "image": "https://github.com/shadcn.png",
+          "name": "Nguyễn Văn An",
+          "userName": "@nguyen_van_an",
+          "comment": "Website tuyệt vời! Giúp tôi hiểu rõ hơn về lịch sử dân tộc. Giao diện đẹp và dễ sử dụng."
+        },
+        {
+          "image": "https://github.com/shadcn.png",
+          "name": "Trần Thị Mai",
+          "userName": "@tran_thi_mai",
+          "comment": "Là giáo viên lịch sử, tôi thường xuyên sử dụng Niên Sử Việt để chuẩn bị bài giảng. Nội dung chính xác và phong phú, rất hữu ích cho công việc giảng dạy."
+        },
+        {
+          "image": "https://github.com/shadcn.png",
+          "name": "Lê Hoàng Nam",
+          "userName": "@le_hoang_nam",
+          "comment": "Dòng thời gian tương tác rất ấn tượng! Tôi có thể dễ dàng tìm kiếm và theo dõi các sự kiện lịch sử từ thời Hùng Vương đến hiện đại. Đây là nguồn tài liệu tuyệt vời."
+        },
+        {
+          "image": "https://github.com/shadcn.png",
+          "name": "Phạm Minh Châu",
+          "userName": "@pham_minh_chau",
+          "comment": "Con tôi học lớp 10 và rất thích lịch sử nhờ website này. Các hình ảnh và tài liệu giúp em học một cách sinh động hơn rất nhiều so với sách giáo khoa."
+        },
+        {
+          "image": "https://github.com/shadcn.png",
+          "name": "Võ Thành Công",
+          "userName": "@vo_thanh_cong",
+          "comment": "Là người yêu thích lịch sử, tôi đã tìm thấy nhiều tài liệu quý giá trên Niên Sử Việt. Đặc biệt là phần bản đồ lịch sử rất trực quan và dễ hiểu."
+        },
+        {
+          "image": "https://github.com/shadcn.png",
+          "name": "Hoàng Thị Lan",
+          "userName": "@hoang_thi_lan",
+          "comment": "Website được thiết kế rất chuyên nghiệp và khoa học. Tôi đã giới thiệu cho nhiều bạn bè cùng tìm hiểu về lịch sử Việt Nam qua trang web này."
+        }
+      ]
+    }
+  },
+  "Services": {
+    "heading": {
+      "emphasis": "Dịch vụ",
+      "rest": "của chúng tôi"
+    },
+    "description": "Một bộ công cụ giúp bạn tra cứu, học tập và khám phá lịch sử Việt Nam hiệu quả.",
+    "items": {
+      "eventLookup": {
+        "title": "Tra cứu sự kiện",
+        "description": "Tìm kiếm và xem sự kiện theo mốc thời gian, giai đoạn và chủ đề."
+      },
+      "figureLibrary": {
+        "title": "Thư viện nhân vật",
+        "description": "Khám phá nhân vật lịch sử, tiểu sử và các mối liên hệ liên quan."
+      },
+      "historicalDocuments": {
+        "title": "Tư liệu lịch sử",
+        "description": "Tổng hợp và trình bày tư liệu giúp bạn học và đối chiếu thông tin."
+      }
+    }
+  },
+  "Newsletter": {
+    "titlePrefix": "Nhận",
+    "titleEmphasis": "bản tin",
+    "description": "Đăng ký để nhận các bài viết và cập nhật mới nhất về lịch sử Việt Nam.",
+    "emailPlaceholder": "Nhập email của bạn",
+    "emailAriaLabel": "Email",
+    "submit": "Đăng ký"
+  },
+  "ContactPage": {
+    "common": {
+      "empty": "—"
+    },
+    "address": {
+      "countryFallback": "Việt Nam"
+    },
+    "header": {
+      "title": "Liên Hệ",
+      "description": "Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn. Hãy liên hệ với chúng tôi qua biểu mẫu bên dưới hoặc thông qua các kênh liên lạc khác."
+    },
+    "info": {
+      "title": "Thông Tin Liên Hệ",
+      "address": {
+        "label": "Địa Chỉ"
+      },
+      "phone": {
+        "label": "Điện Thoại"
+      },
+      "email": {
+        "label": "Email"
+      }
+    },
+    "social": {
+      "title": "Mạng Xã Hội",
+      "description": "Kết nối với chúng tôi trên các nền tảng",
+      "aria": {
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn"
+      }
+    },
+    "faq": {
+      "title": "Câu Hỏi Thường Gặp",
+      "description": "Bạn có thể tìm thấy câu trả lời cho các câu hỏi phổ biến trong trang FAQ của chúng tôi.",
+      "cta": "Xem FAQ"
+    },
+    "map": {
+      "title": "Bản Đồ",
+      "description": "Tìm đường đến văn phòng của chúng tôi",
+      "open": "Mở bản đồ",
+      "placeholder": "[Tích hợp Google Maps hoặc bản đồ khác tại đây]"
+    }
+  },
+  "ContactForm": {
+    "header": {
+      "title": "Gửi Tin Nhắn",
+      "description": "Điền thông tin vào biểu mẫu bên dưới và chúng tôi sẽ liên hệ lại với bạn sớm nhất có thể."
+    },
+    "fields": {
+      "name": {
+        "label": "Họ và Tên",
+        "placeholder": "Nguyễn Văn A"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "email@example.com"
+      },
+      "phone": {
+        "label": "Số Điện Thoại",
+        "placeholder": "0912 345 678"
+      },
+      "subject": {
+        "label": "Tiêu Đề",
+        "placeholder": "Chủ đề tin nhắn"
+      },
+      "message": {
+        "label": "Nội Dung",
+        "placeholder": "Nhập nội dung tin nhắn của bạn..."
+      }
+    },
+    "actions": {
+      "submit": "Gửi Tin Nhắn",
+      "submitting": "Đang Gửi..."
+    },
+    "alerts": {
+      "success": "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong thời gian sớm nhất."
+    },
+    "privacy": {
+      "prefix": "Bằng việc gửi biểu mẫu này, bạn đồng ý với",
+      "and": "và",
+      "suffix": "của chúng tôi.",
+      "privacyLinkText": "Chính Sách Bảo Mật",
+      "termsLinkText": "Điều Khoản Sử Dụng",
+      "privacyHref": "/privacy",
+      "termsHref": "/terms"
+    },
+    "shortcuts": {
+      "title": "Cần Hỗ Trợ Ngay?",
+      "description": "Nếu bạn cần hỗ trợ khẩn cấp hoặc có câu hỏi cần giải đáp ngay lập tức, đừng ngần ngại liên hệ với chúng tôi qua hotline hoặc email.",
+      "callHotline": "Gọi Hotline",
+      "sendEmail": "Gửi Email"
+    }
+  },
   "HomePage": {
     "Metadata": {
       "title": "NienSuViet - Lịch sử Việt Nam",
       "description": "Khám phá lịch sử Việt Nam qua các sự kiện quan trọng, nhân vật nổi bật và những câu chuyện hấp dẫn.",
       "og-title": "NienSuViet - Lịch sử Việt Nam",
       "og-description": "Khám phá lịch sử Việt Nam qua các sự kiện quan trọng, nhân vật nổi bật và những câu chuyện hấp dẫn.",
-      "og-image": "https://nien-su-viet.vercel.app/og-image.png"
+      "og-image": "https://res.cloudinary.com/dr814cumk/image/upload/v1770954853/Nien_Su_Viet_logo_bviv6p.webp",
+      "logo": "/assets/logo/nsv-logo.webp",
+      "logoDark": "/assets/logo/nsv-logo-dark.webp",
+      "social": {
+        "facebook": "https://facebook.com/niensuviet",
+        "twitter": "https://x.com/niensuviet",
+        "instagram": "https://instagram.com/niensuviet",
+        "linkedin": "https://linkedin.com/company/niensuviet",
+        "youtube": "https://youtube.com/@niensuviet",
+        "tiktok": "https://tiktok.com/@niensuviet",
+        "zalo": "https://zalo.me/niensuviet"
+      },
+      "address": {
+        "street": "123 Nguyen Trai",
+        "district": "Thu Duc",
+        "province": "Ho Chi Minh City",
+        "country": "Việt Nam"
+      },
+      "msisdn": "+84987654321",
+      "email": "contact@niensuviet.app",
+      "map": "https://maps.google.com/?q=123+Nguyen+Trai+Thu+Duc+Ho+Chi+Minh+City"
     },
     "Auth": {
       "account": "Tài khoản",

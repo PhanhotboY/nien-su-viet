@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Check } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 enum PopularPlanType {
   NO = 0,
@@ -24,66 +25,68 @@ interface PricingProps {
   benefitList: string[];
 }
 
-const pricingList: PricingProps[] = [
-  {
-    title: 'Miễn phí',
-    popular: 0,
-    price: 0,
-    description: 'Dành cho người mới bắt đầu tìm hiểu lịch sử Việt Nam',
-    buttonText: 'Bắt đầu ngay',
-    benefitList: [
-      'Xem dòng thời gian cơ bản',
-      'Tra cứu 100+ sự kiện',
-      'Đọc tiểu sử nhân vật',
-      'Hỗ trợ cộng đồng',
-      'Truy cập trên mọi thiết bị',
-    ],
-  },
-  {
-    title: 'Cao cấp',
-    popular: 1,
-    price: 0,
-    description: 'Trải nghiệm đầy đủ với tất cả tính năng cao cấp',
-    buttonText: 'Dùng thử miễn phí',
-    benefitList: [
-      'Truy cập toàn bộ nội dung',
-      'Tải tài liệu và hình ảnh',
-      'Bản đồ lịch sử tương tác',
-      'Không quảng cáo',
-      'Hỗ trợ ưu tiên 24/7',
-    ],
-  },
-  {
-    title: 'Tổ chức',
-    popular: 0,
-    price: 0,
-    description: 'Giải pháp cho trường học, thư viện và tổ chức',
-    buttonText: 'Liên hệ',
-    benefitList: [
-      'Tài khoản không giới hạn',
-      'Quản lý tập trung',
-      'Tùy chỉnh nội dung',
-      'API tích hợp',
-      'Đào tạo và hỗ trợ chuyên biệt',
-    ],
-  },
-];
+export const Pricing = async ({ locale }: { locale: string }) => {
+  const t = await getTranslations({ namespace: 'AboutPage.Pricing', locale });
 
-export const Pricing = () => {
+  const pricingList: PricingProps[] = [
+    {
+      title: t('plans.free.title'),
+      popular: PopularPlanType.NO,
+      price: 0,
+      description: t('plans.free.description'),
+      buttonText: t('plans.free.buttonText'),
+      benefitList: [
+        t('plans.free.benefits.timeline'),
+        t('plans.free.benefits.search100'),
+        t('plans.free.benefits.biographies'),
+        t('plans.free.benefits.communitySupport'),
+        t('plans.free.benefits.multiDevice'),
+      ],
+    },
+    {
+      title: t('plans.premium.title'),
+      popular: PopularPlanType.YES,
+      price: 0,
+      description: t('plans.premium.description'),
+      buttonText: t('plans.premium.buttonText'),
+      benefitList: [
+        t('plans.premium.benefits.fullAccess'),
+        t('plans.premium.benefits.downloads'),
+        t('plans.premium.benefits.interactiveMap'),
+        t('plans.premium.benefits.noAds'),
+        t('plans.premium.benefits.prioritySupport'),
+      ],
+    },
+    {
+      title: t('plans.organization.title'),
+      popular: PopularPlanType.NO,
+      price: 0,
+      description: t('plans.organization.description'),
+      buttonText: t('plans.organization.buttonText'),
+      benefitList: [
+        t('plans.organization.benefits.unlimitedAccounts'),
+        t('plans.organization.benefits.centralManagement'),
+        t('plans.organization.benefits.customContent'),
+        t('plans.organization.benefits.apiIntegration'),
+        t('plans.organization.benefits.trainingSupport'),
+      ],
+    },
+  ];
+
   return (
     <section id="pricing" className="container py-24 sm:py-32">
       <h2 className="text-3xl md:text-4xl font-bold text-center">
-        Chọn Gói
+        {t('title.prefix')}
         <span className="bg-gradient-to-b from-secondary/60 to-secondary text-transparent bg-clip-text">
           {' '}
-          Phù Hợp{' '}
+          {t('title.highlight')}{' '}
         </span>
-        Với Bạn
+        {t('title.suffix')}
       </h2>
       <h3 className="text-xl text-center text-muted-foreground pt-4 pb-8">
-        Tất cả các gói đều miễn phí. Chúng tôi cam kết mang kiến thức lịch sử
-        đến với mọi người.
+        {t('subtitle')}
       </h3>
+
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {pricingList.map((pricing: PricingProps) => (
           <Card
@@ -98,15 +101,21 @@ export const Pricing = () => {
               <CardTitle className="flex item-center justify-between">
                 {pricing.title}
                 {pricing.popular === PopularPlanType.YES ? (
-                  <Badge variant="secondary">Phổ biến nhất</Badge>
+                  <Badge variant="secondary">{t('popularBadge')}</Badge>
                 ) : null}
               </CardTitle>
+
               <div>
                 <span className="text-3xl font-bold">
-                  {pricing.price === 0 ? 'Miễn phí' : `${pricing.price}đ`}
+                  {pricing.price === 0
+                    ? t('price.free')
+                    : t('price.amount', { amount: `${pricing.price}đ` })}
                 </span>
                 {pricing.price > 0 && (
-                  <span className="text-muted-foreground"> /tháng</span>
+                  <span className="text-muted-foreground">
+                    {' '}
+                    {t('price.perMonth')}
+                  </span>
                 )}
               </div>
 

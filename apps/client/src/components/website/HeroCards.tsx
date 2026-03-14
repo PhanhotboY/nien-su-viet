@@ -13,8 +13,22 @@ import { Check, Linkedin } from 'lucide-react';
 import { LightBulbIcon } from '../Icons';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import Link from '@/i18n/navigation';
+import { getTranslations } from 'next-intl/server';
 
-export const HeroCards = () => {
+export const HeroCards = async ({ locale }: { locale: string }) => {
+  const t = await getTranslations({ locale });
+
+  const firstTestimonial = (
+    await getTranslations({ namespace: 'AboutPage.Testimonials', locale })
+  ).raw('items.0');
+  const pricingPlan = await getTranslations({
+    namespace: 'AboutPage.Pricing.plans.free',
+    locale,
+  });
+  const pricingTitle = (
+    await getTranslations({ namespace: 'AboutPage.Pricing', locale })
+  )('title.prefix');
+
   return (
     <div className="hidden lg:flex flex-row gap-8 w-[700px] h-[500px]">
       <div className="flex flex-col items-end gap-8">
@@ -22,57 +36,53 @@ export const HeroCards = () => {
         <Card className="w-[340px] drop-shadow-xl shadow-black/10 dark:shadow-white/10 gap-2">
           <CardHeader className="flex flex-row items-center gap-4">
             <Avatar className="size-10">
-              <AvatarImage alt="" src="https://github.com/shadcn.png" />
+              <AvatarImage alt="" src={firstTestimonial.image} />
               <AvatarFallback>SH</AvatarFallback>
             </Avatar>
 
             <div className="flex flex-col">
-              <CardTitle className="text-lg">Nguyễn Văn An</CardTitle>
-              <CardDescription>@nguyen_van_an</CardDescription>
+              <CardTitle className="text-lg">{firstTestimonial.name}</CardTitle>
+              <CardDescription>{firstTestimonial.userName}</CardDescription>
             </div>
           </CardHeader>
 
-          <CardContent>
-            Website tuyệt vời! Giúp tôi hiểu rõ hơn về lịch sử dân tộc.
-          </CardContent>
+          <CardContent>{firstTestimonial.comment}</CardContent>
         </Card>
 
         {/* Pricing */}
         <Card className="w-72 drop-shadow-xl shadow-black/10 dark:shadow-white/10 gap-4">
           <CardHeader>
             <CardTitle className="flex item-center justify-between">
-              Miễn phí
+              {pricingPlan('title')}
               <Badge variant="secondary" className="text-sm">
-                Phổ biến nhất
+                {t('AboutPage.Pricing.popularBadge')}
               </Badge>
             </CardTitle>
             <div>
-              <span className="text-3xl font-bold">Miễn phí</span>
+              <span className="text-3xl font-bold">{pricingPlan('title')}</span>
             </div>
 
-            <CardDescription>
-              Truy cập đầy đủ nội dung lịch sử Việt Nam hoàn toàn miễn phí
-            </CardDescription>
+            <CardDescription>{pricingPlan('description')}</CardDescription>
           </CardHeader>
 
           <CardContent>
-            <Button className="w-full">Bắt đầu khám phá</Button>
+            <Button className="w-full">
+              {t('AboutPage.Hero.cta.primary')}
+            </Button>
           </CardContent>
 
           <hr className="w-4/5 m-auto" />
 
           <CardFooter className="flex">
             <div className="space-y-4">
-              {[
-                'Xem dòng thời gian',
-                'Tra cứu sự kiện',
-                'Thư viện nhân vật',
-              ].map((benefit: string) => (
-                <span key={benefit} className="flex">
-                  <Check className="text-green-500" />{' '}
-                  <h3 className="ml-2">{benefit}</h3>
-                </span>
-              ))}
+              {Object.values(pricingPlan.raw('benefits')).map(
+                (benefit: any) => (
+                  <span key={benefit} className="flex">
+                    <Check className="text-green-500" />{' '}
+                    <h3 className="ml-2">{benefit}</h3>
+                  </span>
+                ),
+              )}
             </div>
           </CardFooter>
         </Card>
@@ -87,17 +97,16 @@ export const HeroCards = () => {
               alt="user avatar"
               className="absolute grayscale-[0%] -top-12 rounded-full w-24 h-24 aspect-square object-cover"
             />
-            <CardTitle className="text-center">TS. Nguyễn Văn Minh</CardTitle>
+            <CardTitle className="text-center">
+              {t('AboutPage.Team.title.prefix')} Nguyễn Văn Minh
+            </CardTitle>
             <CardDescription className="font-normal text-secondary">
-              Chuyên gia Lịch sử Việt Nam
+              {t('AboutPage.Team.description')}
             </CardDescription>
           </CardHeader>
 
           <CardContent className="text-center pb-2">
-            <p>
-              Tôi tận tâm với sứ mệnh bảo tồn và lan tỏa kiến thức lịch sử Việt
-              Nam đến thế hệ trẻ
-            </p>
+            <p>{t('AboutPage.Team.memberTagline')}</p>
           </CardContent>
         </Card>
 
@@ -108,10 +117,11 @@ export const HeroCards = () => {
               <LightBulbIcon />
             </div>
             <div>
-              <CardTitle>Bản đồ lịch sử tương tác</CardTitle>
+              <CardTitle>
+                {t('AboutPage.HowItWorks.features.map.title')}
+              </CardTitle>
               <CardDescription className="text-md mt-2">
-                Khám phá các sự kiện lịch sử trên bản đồ Việt Nam với giao diện
-                trực quan và dễ sử dụng.
+                {t('AboutPage.HowItWorks.features.map.description')}
               </CardDescription>
             </div>
           </CardHeader>

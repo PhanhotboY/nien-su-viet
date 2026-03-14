@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card';
 import { Facebook, Instagram, Linkedin } from 'lucide-react';
 import Link from '@/i18n/navigation';
+import { getTranslations } from 'next-intl/server';
 
 interface TeamProps {
   imageUrl: string;
@@ -94,7 +95,9 @@ const teamList: TeamProps[] = [
   },
 ];
 
-export const Team = () => {
+export const Team = async ({ locale }: { locale: string }) => {
+  const t = await getTranslations({ namespace: 'AboutPage.Team', locale });
+
   const socialIcon = (iconName: string) => {
     switch (iconName) {
       case 'Linkedin':
@@ -112,14 +115,13 @@ export const Team = () => {
     <section id="team" className="container py-24 sm:py-32">
       <h2 className="text-3xl md:text-4xl font-bold">
         <span className="bg-gradient-to-b from-secondary/60 to-secondary text-transparent bg-clip-text">
-          Đội Ngũ{' '}
+          {t('title.prefix')}{' '}
         </span>
-        Của Chúng Tôi
+        {t('title.suffix')}
       </h2>
 
       <p className="mt-4 mb-10 text-xl text-muted-foreground">
-        Đội ngũ chuyên gia, nhà nghiên cứu và kỹ sư tận tâm với sứ mệnh bảo tồn
-        và lan tỏa lịch sử Việt Nam
+        {t('description')}
       </p>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 gap-y-10">
@@ -142,9 +144,7 @@ export const Team = () => {
               </CardHeader>
 
               <CardContent className="text-center pb-2">
-                <p>
-                  Cống hiến cho sự nghiệp bảo tồn và phát triển lịch sử dân tộc
-                </p>
+                <p>{t('memberTagline')}</p>
               </CardContent>
 
               <CardFooter>
@@ -159,7 +159,9 @@ export const Team = () => {
                         size: 'sm',
                       })}
                     >
-                      <span className="sr-only">{name} icon</span>
+                      <span className="sr-only">
+                        {t('social.srOnly', { name })}
+                      </span>
                       {socialIcon(name)}
                     </Link>
                   </div>
