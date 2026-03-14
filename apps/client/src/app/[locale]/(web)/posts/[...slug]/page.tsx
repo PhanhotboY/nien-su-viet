@@ -9,6 +9,7 @@ import readingTime, { ReadTimeResults } from 'reading-time';
 import DetailPostHeading from '@/components/detail/post/detail-post-heading';
 import { Card, CardContent } from '@/components/ui/card';
 import { CLIENT_HOST } from '@/lib/config';
+import { genMetadata } from '@/lib/metadata.lib';
 
 interface PostPageProps {
   params: Promise<{
@@ -53,34 +54,13 @@ export async function generateMetadata({
     return {};
   }
 
-  return {
+  return genMetadata({
     title: post.title,
     description,
-    authors: {
-      name: seoData.author.name,
-      url: seoData.author.twitterUrl,
-    },
-    openGraph: {
-      title: post.title as string,
-      description,
-      type: 'article',
-      url: CLIENT_HOST + slug,
-      images: [
-        {
-          url: post.thumbnail!,
-          width: 1200,
-          height: 630,
-          alt: post.title as string,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title as string,
-      description,
-      images: [post.thumbnail!],
-    },
-  };
+    locale: resolvedParams.locale,
+    path: `/posts/${post.slug}`,
+    images: [post.thumbnail || '/assets/image/not-found.webp'],
+  });
 }
 
 // async function getComments(postId: string) {

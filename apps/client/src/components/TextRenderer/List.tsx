@@ -1,10 +1,12 @@
 import { decodeHtmlEntities } from '@/helper/renderer.helper';
 
-type ListItem = {
-  content: string;
-  meta?: { checked?: boolean };
-  items?: ListItem[];
-};
+type ListItem =
+  | {
+      content: string;
+      meta?: { checked?: boolean };
+      items?: ListItem[];
+    }
+  | string;
 
 export default function List({
   data,
@@ -20,6 +22,14 @@ export default function List({
   return (
     <Wrapper className={data.style === 'checklist' ? 'list-none' : ''}>
       {data.items.map((item, index) => {
+        if (typeof item === 'string') {
+          const content = decodeHtmlEntities(item);
+          return (
+            <li key={index}>
+              <p dangerouslySetInnerHTML={{ __html: content }}></p>
+            </li>
+          );
+        }
         const content = decodeHtmlEntities(item.content);
         return (
           <li key={index}>
