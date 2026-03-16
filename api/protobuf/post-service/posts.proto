@@ -1,0 +1,276 @@
+syntax = "proto3";
+
+package post.v1;
+
+option go_package = "./;posts_service";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// ============================================================
+// Common Message Types
+// ============================================================
+
+// Post represents a post entity
+message Post {
+  string id = 1;
+  string title = 2;
+  string slug = 3;
+  string category_id = 4;
+  string thumbnail = 5;
+  string author_id = 6;
+  string content = 7;
+  string summary = 8;
+  int32 views = 9;
+  int32 likes = 10;
+  bool published = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
+}
+
+// Pagination represents pagination information
+message Pagination {
+  int32 page = 1;
+  int32 limit = 2;
+  int64 total = 3;
+  int32 total_pages = 4;
+}
+
+// ============================================================
+// COMMANDS - Write Operations
+// ============================================================
+
+// CreatePostCommand represents a command to create a new post
+message CreatePostCommand {
+  string title = 1;
+  string slug = 2;
+  string category_id = 3;
+  string thumbnail = 4;
+  string author_id = 5;
+  string content = 6;
+  string summary = 7;
+  bool published = 8;
+}
+
+message CreatePostCommandResponse {
+  string id = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+// UpdatePostCommand represents a command to update an existing post
+message UpdatePostCommand {
+  string id = 1;
+  string title = 2;
+  string slug = 3;
+  string category_id = 4;
+  string thumbnail = 5;
+  string content = 6;
+  string summary = 7;
+  bool published = 8;
+}
+
+message UpdatePostCommandResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// PublishPostCommand represents a command to publish a post
+message PublishPostCommand {
+  string id = 1;
+}
+
+message PublishPostCommandResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// UnpublishPostCommand represents a command to unpublish a post
+message UnpublishPostCommand {
+  string id = 1;
+}
+
+message UnpublishPostCommandResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// DeletePostCommand represents a command to delete a post
+message DeletePostCommand {
+  string id = 1;
+}
+
+message DeletePostCommandResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// IncrementPostViewsCommand represents a command to increment post views
+message IncrementPostViewsCommand {
+  string id = 1;
+}
+
+message IncrementPostViewsCommandResponse {
+  int32 views = 1;
+  bool success = 2;
+}
+
+// IncrementPostLikesCommand represents a command to increment post likes
+message IncrementPostLikesCommand {
+  string id = 1;
+}
+
+message IncrementPostLikesCommandResponse {
+  int32 likes = 1;
+  bool success = 2;
+}
+
+// ============================================================
+// QUERIES - Read Operations
+// ============================================================
+
+// GetPostQuery represents a query to get a single post by ID
+message GetPostQuery {
+  string id = 1;
+}
+
+message GetPostQueryResponse {
+  Post post = 1;
+  bool found = 2;
+}
+
+// GetPostBySlugQuery represents a query to get a post by slug
+message GetPostBySlugQuery {
+  string slug = 1;
+}
+
+message GetPostBySlugQueryResponse {
+  Post post = 1;
+  bool found = 2;
+}
+
+// ListPostsQuery represents a query to list posts with pagination and filtering
+message ListPostsQuery {
+  int32 page = 1;
+  int32 limit = 2;
+  string category_id = 3;
+  string author_id = 4;
+  bool published_only = 5;
+  string search = 6; // Search in title and content
+}
+
+message ListPostsQueryResponse {
+  repeated Post posts = 1;
+  Pagination pagination = 2;
+}
+
+// GetPostsByCategoryQuery represents a query to get posts by category
+message GetPostsByCategoryQuery {
+  string category_id = 1;
+  int32 page = 2;
+  int32 limit = 3;
+}
+
+message GetPostsByCategoryQueryResponse {
+  repeated Post posts = 1;
+  Pagination pagination = 2;
+}
+
+// GetPostsByAuthorQuery represents a query to get posts by author
+message GetPostsByAuthorQuery {
+  string author_id = 1;
+  int32 page = 2;
+  int32 limit = 3;
+}
+
+message GetPostsByAuthorQueryResponse {
+  repeated Post posts = 1;
+  Pagination pagination = 2;
+}
+
+// GetPopularPostsQuery represents a query to get popular posts by views
+message GetPopularPostsQuery {
+  int32 limit = 1;
+  int32 days_ago = 2; // Optional: get posts from last N days
+}
+
+message GetPopularPostsQueryResponse {
+  repeated Post posts = 1;
+}
+
+// ============================================================
+// EVENTS - Domain Events
+// ============================================================
+
+// PostCreatedEvent represents an event when a post is created
+message PostCreatedEvent {
+  string id = 1;
+  string title = 2;
+  string slug = 3;
+  string author_id = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+// PostUpdatedEvent represents an event when a post is updated
+message PostUpdatedEvent {
+  string id = 1;
+  string title = 2;
+  string slug = 3;
+  google.protobuf.Timestamp updated_at = 4;
+}
+
+// PostPublishedEvent represents an event when a post is published
+message PostPublishedEvent {
+  string id = 1;
+  string title = 2;
+  google.protobuf.Timestamp published_at = 3;
+}
+
+// PostUnpublishedEvent represents an event when a post is unpublished
+message PostUnpublishedEvent {
+  string id = 1;
+  google.protobuf.Timestamp unpublished_at = 2;
+}
+
+// PostDeletedEvent represents an event when a post is deleted
+message PostDeletedEvent {
+  string id = 1;
+  string title = 2;
+  google.protobuf.Timestamp deleted_at = 3;
+}
+
+// PostViewsIncrementedEvent represents an event when post views are incremented
+message PostViewsIncrementedEvent {
+  string id = 1;
+  int32 views = 2;
+  google.protobuf.Timestamp incremented_at = 3;
+}
+
+// PostLikesIncrementedEvent represents an event when post likes are incremented
+message PostLikesIncrementedEvent {
+  string id = 1;
+  int32 likes = 2;
+  google.protobuf.Timestamp incremented_at = 3;
+}
+
+// ============================================================
+// SERVICE DEFINITIONS - CQRS Pattern
+// ============================================================
+
+// PostCommandService handlers
+service PostsService {
+  rpc CreatePost(CreatePostCommand) returns (CreatePostCommandResponse);
+  rpc UpdatePost(UpdatePostCommand) returns (UpdatePostCommandResponse);
+  rpc PublishPost(PublishPostCommand) returns (PublishPostCommandResponse);
+  rpc UnpublishPost(UnpublishPostCommand) returns (UnpublishPostCommandResponse);
+  rpc DeletePost(DeletePostCommand) returns (DeletePostCommandResponse);
+  rpc IncrementPostViews(IncrementPostViewsCommand) returns (IncrementPostViewsCommandResponse);
+  rpc IncrementPostLikes(IncrementPostLikesCommand) returns (IncrementPostLikesCommandResponse);
+
+  rpc GetPost(GetPostQuery) returns (GetPostQueryResponse);
+  rpc GetPostBySlug(GetPostBySlugQuery) returns (GetPostBySlugQueryResponse);
+  rpc ListPosts(ListPostsQuery) returns (ListPostsQueryResponse);
+  rpc GetPostsByCategory(GetPostsByCategoryQuery) returns (GetPostsByCategoryQueryResponse);
+  rpc GetPostsByAuthor(GetPostsByAuthorQuery) returns (GetPostsByAuthorQueryResponse);
+  rpc GetPopularPosts(GetPopularPostsQuery) returns (GetPopularPostsQueryResponse);
+}

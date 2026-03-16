@@ -16,7 +16,7 @@ build: clean
 run: build
 	CMS_SERVER_ENV=production ./bin/$(APP_NAME)
 
-OPENAPI_DIR = ../../openapi
+OPENAPI_DIR = ../../api/openapi
 OUTPUT_DIR = pkg/generated
 
 JSONS := $(wildcard $(OPENAPI_DIR)/*.json)

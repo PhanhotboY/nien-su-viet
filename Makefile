@@ -39,3 +39,18 @@ swagger2openapi:
 	done
 
 .PHONY: gen-types clean-types
+
+.PHONY: gengoproto
+gengoproto:
+	@./cli/gengoproto.sh post
+
+.PHONY: gentsproto
+gentsproto:
+	@./cli/gentsproto.sh post
+
+.PHONY: genproto
+genproto:
+	@echo "Generating protobuf files for Go"
+	@make gengoproto
+	@echo "Generating protobuf files for TypeScript"
+	@make gentsproto
