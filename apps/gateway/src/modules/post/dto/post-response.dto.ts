@@ -1,5 +1,5 @@
 import { Exclude, Expose, Type } from 'class-transformer';
-import { OmitType, PickType } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PickType } from '@nestjs/swagger';
 import { PostBaseDto } from './post-base.dto';
 import { UserBaseResponseDto } from '@gateway/modules/auth/dto';
 
@@ -11,12 +11,10 @@ export class PostBriefResponseDto extends PickType(PostBaseDto, [
   'title',
   'slug',
   'summary',
-  'publishedAt',
   'published',
-  'createdAt',
-  'updatedAt',
 ]) {
   @Expose()
+  @ApiProperty()
   @Type(() => UserBaseResponseDto)
   author!: UserBaseResponseDto;
 }

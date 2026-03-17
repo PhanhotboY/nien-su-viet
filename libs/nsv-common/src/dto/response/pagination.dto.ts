@@ -1,7 +1,7 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 
 @Exclude()
-class PaginationMetaDto {
+export class PaginationMetadataDto {
   @Expose()
   total!: number;
 
@@ -20,6 +20,6 @@ export class PaginatedResponseDto<T> {
   data: T[];
 
   @Expose()
-  @Type(() => PaginationMetaDto)
-  pagination: PaginationMetaDto;
+  @Type(() => PaginationMetadataDto)
+  pagination: PaginationMetadataDto;
 }

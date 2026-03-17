@@ -1,3 +1,6 @@
+import { OmitType } from '@nestjs/swagger';
+import { TimestampDto } from '@phanhotboy/nsv-common';
+import { TimestampUtil } from '@phanhotboy/nsv-common/util/grpc.util';
 import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
@@ -50,11 +53,11 @@ export class PostQueryDto {
     if (typeof value === 'string') {
       return value.split(',').map((v) => v.trim());
     }
-    return Array.isArray(value) ? value : undefined;
+    return Array.isArray(value) ? value : [];
   })
   @IsArray({ message: 'Danh sách danh mục phải là mảng' })
   @IsUUID('4', { message: 'ID danh mục không hợp lệ' })
-  categoryIds?: string[];
+  categoryIds: string[];
 
   // Filter by created date range
   @IsOptional()
@@ -77,4 +80,27 @@ export class PostQueryDto {
   @IsDateString({}, { message: 'Ngày cập nhật đến không hợp lệ' })
   @Transform(({ value }: any) => (value ? new Date(value) : undefined))
   updatedAtTo?: Date;
+}
+
+export class PostQueryGrpcDto extends OmitType(PostQueryDto, [
+  'createdAtFrom',
+  'createdAtTo',
+  'updatedAtFrom',
+  'updatedAtTo',
+]) {
+  @IsOptional()
+  @Transform(({ value }) => TimestampUtil.toTimestamp(value))
+  createdAtFrom?: TimestampDto;
+
+  @IsOptional()
+  @Transform(({ value }) => TimestampUtil.toTimestamp(value))
+  createdAtTo?: TimestampDto;
+
+  @IsOptional()
+  @Transform(({ value }) => TimestampUtil.toTimestamp(value))
+  updatedAtFrom?: TimestampDto;
+
+  @IsOptional()
+  @Transform(({ value }) => TimestampUtil.toTimestamp(value))
+  updatedAtTo?: TimestampDto;
 }

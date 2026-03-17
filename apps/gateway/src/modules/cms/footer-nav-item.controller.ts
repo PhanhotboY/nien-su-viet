@@ -24,7 +24,7 @@ import {
   FooterNavItemDto,
   FooterNavItemUpdateDto,
 } from './dto';
-import { OperationResponseDto } from '@phanhotboy/nsv-common/dto/response/operation-response.dto';
+import { OperationMetadataDto } from '@phanhotboy/nsv-common/dto/response';
 
 // ref: apps/cms/internal/footerNavItem/controller/http/footerNavItem.router.go
 @Controller('footer-nav-items')
@@ -45,11 +45,11 @@ export class FooterNavItemController {
   @Post()
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ footerNavItem: ['create'] })
-  @Serialize(OperationResponseDto)
+  @Serialize(OperationMetadataDto)
   async proxyPostRequest(
     @Req() req: Request,
     @Body() body: FooterNavItemCreateDto,
-  ): Promise<OperationResponseDto> {
+  ) {
     await this.redis.mdel(this.routePath);
     return await this.cmsProxy.proxyRequest(req);
   }
@@ -57,11 +57,11 @@ export class FooterNavItemController {
   @Put(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ footerNavItem: ['update'] })
-  @Serialize(OperationResponseDto)
+  @Serialize(OperationMetadataDto)
   async proxyPutRequest(
     @Req() req: Request,
     @Body() body: FooterNavItemUpdateDto,
-  ): Promise<OperationResponseDto> {
+  ) {
     await this.redis.mdel(this.routePath);
     return await this.cmsProxy.proxyRequest(req);
   }
@@ -69,8 +69,8 @@ export class FooterNavItemController {
   @Delete(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ footerNavItem: ['delete'] })
-  @Serialize(OperationResponseDto)
-  async proxyDeleteRequest(@Req() req: Request): Promise<OperationResponseDto> {
+  @Serialize(OperationMetadataDto)
+  async proxyDeleteRequest(@Req() req: Request) {
     await this.redis.mdel(this.routePath);
     return await this.cmsProxy.proxyRequest(req);
   }

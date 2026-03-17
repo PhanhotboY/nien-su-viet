@@ -17,15 +17,15 @@ services:
       - nsv-hevent-data:/data
     env_file:
       - ./historical-event-service/.env
-  nsv-cms-service:
-    image: phanhotboy/nsv-cms-service:v1
-    container_name: nsv-cms-service
+  nsv-post-service:
+    image: phanhotboy/nsv-post-service:v1
+    container_name: nsv-post-service
     ports:
       - '8084:8084'
     volumes:
-      - nsv-cms-data:/data
+      - nsv-post-data:/data
     env_file:
-      - ./cms-service/.env
+      - ./post-service/.env
   nsv-gateway-service:
     image: phanhotboy/nsv-gateway-service:v1
     container_name: nsv-gateway-service
@@ -37,11 +37,11 @@ services:
       - ./gateway-service/.env
     environment:
       - AUTH_SERVICE_ENDPOINT=http://nsv-auth-service:8081
-      - CMS_SERVICE_ENDPOINT=http://nsv-cms-service:8084
+      - POST_SERVICE_ENDPOINT=http://nsv-post-service:8084
       - HISTORICAL_EVENT_SERVICE_HOST=nsv-hevent-service
 
 volumes:
   nsv-auth-data:
   nsv-hevent-data:
-  nsv-cms-data:
+  nsv-post-data:
   nsv-gateway-data:

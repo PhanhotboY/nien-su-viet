@@ -25,6 +25,10 @@ import {
   type RedisServiceType,
   ConfigService,
   Serialize,
+  SerializedResponseDto,
+  ApiOkSerializedResponse,
+  ApiOkSerializedPaginatedResponse,
+  ApiOkSerializedOperationResponse,
 } from '@phanhotboy/nsv-common';
 import { RATE_LIMIT } from '@gateway/config';
 import { Public, Permissions, CurrentUser } from '@gateway/common/decorators';
@@ -42,6 +46,7 @@ export class HistoricalEventController {
   @Get(':id/preview')
   @Public()
   @Serialize(HistoricalEventPreviewResponseDto)
+  @ApiOkSerializedResponse(HistoricalEventPreviewResponseDto)
   getHistoricalEventPreviewById(@Param('id') id: string) {
     return this.historicalEventService.getEventPreviewById(id);
   }
@@ -49,6 +54,7 @@ export class HistoricalEventController {
   @Get(':id')
   @Public()
   @Serialize(HistoricalEventDetailResponseDto)
+  @ApiOkSerializedResponse(HistoricalEventDetailResponseDto)
   getHistoricalEventById(@Param('id') id: string) {
     return this.historicalEventService.getEventById(id);
   }
@@ -56,15 +62,15 @@ export class HistoricalEventController {
   @Get()
   @Public()
   @Serialize(HistoricalEventBriefResponseDto)
-  getAllHistoricalEvents(
-    @Query() query: HistoricalEventQueryDto,
-  ): HistoricalEventBriefResponseDto[] {
+  @ApiOkSerializedPaginatedResponse(HistoricalEventBriefResponseDto)
+  getAllHistoricalEvents(@Query() query: HistoricalEventQueryDto) {
     return this.historicalEventService.getEvents(query) as any;
   }
 
   @Post()
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ historicalEvent: ['create'] })
+  @ApiOkSerializedOperationResponse()
   async createHistoricalEvent(
     @Body() event: HistoricalEventBaseCreateDto,
     @CurrentUser('id') authorId: string,
@@ -76,6 +82,7 @@ export class HistoricalEventController {
   @Put(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ historicalEvent: ['update'] })
+  @ApiOkSerializedOperationResponse()
   async updateHistoricalEvent(
     @Param('id') id: string,
     @Body() event: HistoricalEventBaseUpdateDto,
@@ -87,6 +94,7 @@ export class HistoricalEventController {
   @Delete(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ historicalEvent: ['delete'] })
+  @ApiOkSerializedOperationResponse()
   async deleteHistoricalEvent(
     @Param('id') id: string,
     @CurrentUser('id') authorId: string,

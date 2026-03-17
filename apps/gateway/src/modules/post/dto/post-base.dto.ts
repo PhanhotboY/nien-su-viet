@@ -1,35 +1,36 @@
-import { Exclude, Expose, Transform } from 'class-transformer';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import {
   IsString,
   IsOptional,
   IsInt,
   IsUUID,
+  Length,
   MinLength,
-  MaxLength,
   IsUrl,
   Min,
-  IsDate,
   IsBoolean,
+  IsDate,
 } from 'class-validator';
+import { Post } from '@phanhotboy/genproto/post_service/posts';
 
 // DTO for Post
 @Exclude()
-export class PostBaseDto {
+export class PostBaseDto
+  implements Omit<Post, 'publishedAt' | 'createdAt' | 'updatedAt'>
+{
   @Expose()
   @IsUUID('4', { message: 'Id không hợp lệ' })
   id!: string;
 
   @Expose()
   @IsString({ message: 'Tiêu đề không hợp lệ' })
-  @MinLength(1, { message: 'Tiêu đề là bắt buộc' })
-  @MaxLength(255, { message: 'Tiêu đề không được vượt quá 255 ký tự' })
+  @Length(1, 255, { message: 'Độ dài tiêu đề phải từ 1 đến 255 ký tự' })
   @Transform(({ value }) => value?.trim())
   title!: string;
 
   @Expose()
   @IsString({ message: 'Slug không hợp lệ' })
-  @MinLength(1, { message: 'Slug là bắt buộc' })
-  @MaxLength(255, { message: 'Slug không được vượt quá 255 ký tự' })
+  @Length(1, 255, { message: 'Slug phải từ 1 đến 255 ký tự' })
   @Transform(({ value }) => value?.trim())
   slug!: string;
 
@@ -42,15 +43,15 @@ export class PostBaseDto {
   @Expose()
   @IsOptional()
   @IsString({ message: 'Tóm tắt không hợp lệ' })
-  @MaxLength(500, { message: 'Tóm tắt không được vượt quá 500 ký tự' })
+  @Length(1, 500, { message: 'Tóm tắt phải từ 1 đến 500 ký tự' })
   @Transform(({ value }) => value?.trim())
-  summary?: string | null;
+  summary?: string;
 
   @Expose()
   @IsOptional()
   @IsUrl({}, { message: 'Thumbnail không hợp lệ' })
   @Transform(({ value }) => value?.trim())
-  thumbnail?: string | null;
+  thumbnail?: string;
 
   @Expose()
   @IsString({ message: 'ID tác giả không hợp lệ' })
@@ -59,7 +60,7 @@ export class PostBaseDto {
   @Expose()
   @IsOptional()
   @IsUUID('4', { message: 'ID danh mục không hợp lệ' })
-  categoryId?: string | null;
+  categoryId?: string;
 
   @Expose()
   @IsInt({ message: 'Số lượt xem không hợp lệ' })
@@ -78,12 +79,11 @@ export class PostBaseDto {
 
   @Expose()
   @IsOptional()
-  @IsDate({ message: 'Ngày xuất bản không hợp lệ' })
-  publishedAt!: string | Date;
+  publishedAt!: number;
 
   @Expose()
-  createdAt!: string | Date;
+  createdAt!: number;
 
   @Expose()
-  updatedAt!: string | Date;
+  updatedAt!: number;
 }

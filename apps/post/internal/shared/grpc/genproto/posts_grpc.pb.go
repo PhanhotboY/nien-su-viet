@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.1
 // - protoc             v7.34.0
-// source: posts.proto
+// source: post_service/posts.proto
 
 package posts_service
 
@@ -19,40 +19,42 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PostsService_CreatePost_FullMethodName         = "/post.v1.PostsService/CreatePost"
-	PostsService_UpdatePost_FullMethodName         = "/post.v1.PostsService/UpdatePost"
-	PostsService_PublishPost_FullMethodName        = "/post.v1.PostsService/PublishPost"
-	PostsService_UnpublishPost_FullMethodName      = "/post.v1.PostsService/UnpublishPost"
-	PostsService_DeletePost_FullMethodName         = "/post.v1.PostsService/DeletePost"
-	PostsService_IncrementPostViews_FullMethodName = "/post.v1.PostsService/IncrementPostViews"
-	PostsService_IncrementPostLikes_FullMethodName = "/post.v1.PostsService/IncrementPostLikes"
-	PostsService_GetPost_FullMethodName            = "/post.v1.PostsService/GetPost"
-	PostsService_GetPostBySlug_FullMethodName      = "/post.v1.PostsService/GetPostBySlug"
-	PostsService_ListPosts_FullMethodName          = "/post.v1.PostsService/ListPosts"
-	PostsService_GetPostsByCategory_FullMethodName = "/post.v1.PostsService/GetPostsByCategory"
-	PostsService_GetPostsByAuthor_FullMethodName   = "/post.v1.PostsService/GetPostsByAuthor"
-	PostsService_GetPopularPosts_FullMethodName    = "/post.v1.PostsService/GetPopularPosts"
+	PostsService_CreatePost_FullMethodName         = "/post_service.PostsService/CreatePost"
+	PostsService_UpdatePost_FullMethodName         = "/post_service.PostsService/UpdatePost"
+	PostsService_PublishPost_FullMethodName        = "/post_service.PostsService/PublishPost"
+	PostsService_UnpublishPost_FullMethodName      = "/post_service.PostsService/UnpublishPost"
+	PostsService_DeletePost_FullMethodName         = "/post_service.PostsService/DeletePost"
+	PostsService_DeletePosts_FullMethodName        = "/post_service.PostsService/DeletePosts"
+	PostsService_IncrementPostViews_FullMethodName = "/post_service.PostsService/IncrementPostViews"
+	PostsService_IncrementPostLikes_FullMethodName = "/post_service.PostsService/IncrementPostLikes"
+	PostsService_GetPost_FullMethodName            = "/post_service.PostsService/GetPost"
+	PostsService_GetPublishedPosts_FullMethodName  = "/post_service.PostsService/GetPublishedPosts"
+	PostsService_GetAllPosts_FullMethodName        = "/post_service.PostsService/GetAllPosts"
+	PostsService_GetPostsByCategory_FullMethodName = "/post_service.PostsService/GetPostsByCategory"
+	PostsService_GetPostsByAuthor_FullMethodName   = "/post_service.PostsService/GetPostsByAuthor"
+	PostsService_GetPopularPosts_FullMethodName    = "/post_service.PostsService/GetPopularPosts"
 )
 
 // PostsServiceClient is the client API for PostsService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// PostCommandService handlers
+// PostsService handlers
 type PostsServiceClient interface {
-	CreatePost(ctx context.Context, in *CreatePostCommand, opts ...grpc.CallOption) (*CreatePostCommandResponse, error)
-	UpdatePost(ctx context.Context, in *UpdatePostCommand, opts ...grpc.CallOption) (*UpdatePostCommandResponse, error)
-	PublishPost(ctx context.Context, in *PublishPostCommand, opts ...grpc.CallOption) (*PublishPostCommandResponse, error)
-	UnpublishPost(ctx context.Context, in *UnpublishPostCommand, opts ...grpc.CallOption) (*UnpublishPostCommandResponse, error)
-	DeletePost(ctx context.Context, in *DeletePostCommand, opts ...grpc.CallOption) (*DeletePostCommandResponse, error)
-	IncrementPostViews(ctx context.Context, in *IncrementPostViewsCommand, opts ...grpc.CallOption) (*IncrementPostViewsCommandResponse, error)
-	IncrementPostLikes(ctx context.Context, in *IncrementPostLikesCommand, opts ...grpc.CallOption) (*IncrementPostLikesCommandResponse, error)
-	GetPost(ctx context.Context, in *GetPostQuery, opts ...grpc.CallOption) (*GetPostQueryResponse, error)
-	GetPostBySlug(ctx context.Context, in *GetPostBySlugQuery, opts ...grpc.CallOption) (*GetPostBySlugQueryResponse, error)
-	ListPosts(ctx context.Context, in *ListPostsQuery, opts ...grpc.CallOption) (*ListPostsQueryResponse, error)
-	GetPostsByCategory(ctx context.Context, in *GetPostsByCategoryQuery, opts ...grpc.CallOption) (*GetPostsByCategoryQueryResponse, error)
-	GetPostsByAuthor(ctx context.Context, in *GetPostsByAuthorQuery, opts ...grpc.CallOption) (*GetPostsByAuthorQueryResponse, error)
-	GetPopularPosts(ctx context.Context, in *GetPopularPostsQuery, opts ...grpc.CallOption) (*GetPopularPostsQueryResponse, error)
+	CreatePost(ctx context.Context, in *CreatePostRequest, opts ...grpc.CallOption) (*CreatePostResponse, error)
+	UpdatePost(ctx context.Context, in *UpdatePostRequest, opts ...grpc.CallOption) (*UpdatePostResponse, error)
+	PublishPost(ctx context.Context, in *PublishPostRequest, opts ...grpc.CallOption) (*PublishPostResponse, error)
+	UnpublishPost(ctx context.Context, in *UnpublishPostRequest, opts ...grpc.CallOption) (*UnpublishPostResponse, error)
+	DeletePost(ctx context.Context, in *DeletePostRequest, opts ...grpc.CallOption) (*DeletePostResponse, error)
+	DeletePosts(ctx context.Context, in *DeletePostsRequest, opts ...grpc.CallOption) (*DeletePostsResponse, error)
+	IncrementPostViews(ctx context.Context, in *IncrementPostViewsRequest, opts ...grpc.CallOption) (*IncrementPostViewsResponse, error)
+	IncrementPostLikes(ctx context.Context, in *IncrementPostLikesRequest, opts ...grpc.CallOption) (*IncrementPostLikesResponse, error)
+	GetPost(ctx context.Context, in *GetPostRequest, opts ...grpc.CallOption) (*GetPostResponse, error)
+	GetPublishedPosts(ctx context.Context, in *GetPublishedPostsRequest, opts ...grpc.CallOption) (*GetPublishedPostsResponse, error)
+	GetAllPosts(ctx context.Context, in *GetAllPostsRequest, opts ...grpc.CallOption) (*GetAllPostsResponse, error)
+	GetPostsByCategory(ctx context.Context, in *GetPostsByCategoryRequest, opts ...grpc.CallOption) (*GetPostsByCategoryResponse, error)
+	GetPostsByAuthor(ctx context.Context, in *GetPostsByAuthorRequest, opts ...grpc.CallOption) (*GetPostsByAuthorResponse, error)
+	GetPopularPosts(ctx context.Context, in *GetPopularPostsRequest, opts ...grpc.CallOption) (*GetPopularPostsResponse, error)
 }
 
 type postsServiceClient struct {
@@ -63,9 +65,9 @@ func NewPostsServiceClient(cc grpc.ClientConnInterface) PostsServiceClient {
 	return &postsServiceClient{cc}
 }
 
-func (c *postsServiceClient) CreatePost(ctx context.Context, in *CreatePostCommand, opts ...grpc.CallOption) (*CreatePostCommandResponse, error) {
+func (c *postsServiceClient) CreatePost(ctx context.Context, in *CreatePostRequest, opts ...grpc.CallOption) (*CreatePostResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreatePostCommandResponse)
+	out := new(CreatePostResponse)
 	err := c.cc.Invoke(ctx, PostsService_CreatePost_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -73,9 +75,9 @@ func (c *postsServiceClient) CreatePost(ctx context.Context, in *CreatePostComma
 	return out, nil
 }
 
-func (c *postsServiceClient) UpdatePost(ctx context.Context, in *UpdatePostCommand, opts ...grpc.CallOption) (*UpdatePostCommandResponse, error) {
+func (c *postsServiceClient) UpdatePost(ctx context.Context, in *UpdatePostRequest, opts ...grpc.CallOption) (*UpdatePostResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdatePostCommandResponse)
+	out := new(UpdatePostResponse)
 	err := c.cc.Invoke(ctx, PostsService_UpdatePost_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -83,9 +85,9 @@ func (c *postsServiceClient) UpdatePost(ctx context.Context, in *UpdatePostComma
 	return out, nil
 }
 
-func (c *postsServiceClient) PublishPost(ctx context.Context, in *PublishPostCommand, opts ...grpc.CallOption) (*PublishPostCommandResponse, error) {
+func (c *postsServiceClient) PublishPost(ctx context.Context, in *PublishPostRequest, opts ...grpc.CallOption) (*PublishPostResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(PublishPostCommandResponse)
+	out := new(PublishPostResponse)
 	err := c.cc.Invoke(ctx, PostsService_PublishPost_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -93,9 +95,9 @@ func (c *postsServiceClient) PublishPost(ctx context.Context, in *PublishPostCom
 	return out, nil
 }
 
-func (c *postsServiceClient) UnpublishPost(ctx context.Context, in *UnpublishPostCommand, opts ...grpc.CallOption) (*UnpublishPostCommandResponse, error) {
+func (c *postsServiceClient) UnpublishPost(ctx context.Context, in *UnpublishPostRequest, opts ...grpc.CallOption) (*UnpublishPostResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UnpublishPostCommandResponse)
+	out := new(UnpublishPostResponse)
 	err := c.cc.Invoke(ctx, PostsService_UnpublishPost_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -103,9 +105,9 @@ func (c *postsServiceClient) UnpublishPost(ctx context.Context, in *UnpublishPos
 	return out, nil
 }
 
-func (c *postsServiceClient) DeletePost(ctx context.Context, in *DeletePostCommand, opts ...grpc.CallOption) (*DeletePostCommandResponse, error) {
+func (c *postsServiceClient) DeletePost(ctx context.Context, in *DeletePostRequest, opts ...grpc.CallOption) (*DeletePostResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeletePostCommandResponse)
+	out := new(DeletePostResponse)
 	err := c.cc.Invoke(ctx, PostsService_DeletePost_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -113,9 +115,19 @@ func (c *postsServiceClient) DeletePost(ctx context.Context, in *DeletePostComma
 	return out, nil
 }
 
-func (c *postsServiceClient) IncrementPostViews(ctx context.Context, in *IncrementPostViewsCommand, opts ...grpc.CallOption) (*IncrementPostViewsCommandResponse, error) {
+func (c *postsServiceClient) DeletePosts(ctx context.Context, in *DeletePostsRequest, opts ...grpc.CallOption) (*DeletePostsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(IncrementPostViewsCommandResponse)
+	out := new(DeletePostsResponse)
+	err := c.cc.Invoke(ctx, PostsService_DeletePosts_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *postsServiceClient) IncrementPostViews(ctx context.Context, in *IncrementPostViewsRequest, opts ...grpc.CallOption) (*IncrementPostViewsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(IncrementPostViewsResponse)
 	err := c.cc.Invoke(ctx, PostsService_IncrementPostViews_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -123,9 +135,9 @@ func (c *postsServiceClient) IncrementPostViews(ctx context.Context, in *Increme
 	return out, nil
 }
 
-func (c *postsServiceClient) IncrementPostLikes(ctx context.Context, in *IncrementPostLikesCommand, opts ...grpc.CallOption) (*IncrementPostLikesCommandResponse, error) {
+func (c *postsServiceClient) IncrementPostLikes(ctx context.Context, in *IncrementPostLikesRequest, opts ...grpc.CallOption) (*IncrementPostLikesResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(IncrementPostLikesCommandResponse)
+	out := new(IncrementPostLikesResponse)
 	err := c.cc.Invoke(ctx, PostsService_IncrementPostLikes_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -133,9 +145,9 @@ func (c *postsServiceClient) IncrementPostLikes(ctx context.Context, in *Increme
 	return out, nil
 }
 
-func (c *postsServiceClient) GetPost(ctx context.Context, in *GetPostQuery, opts ...grpc.CallOption) (*GetPostQueryResponse, error) {
+func (c *postsServiceClient) GetPost(ctx context.Context, in *GetPostRequest, opts ...grpc.CallOption) (*GetPostResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPostQueryResponse)
+	out := new(GetPostResponse)
 	err := c.cc.Invoke(ctx, PostsService_GetPost_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -143,29 +155,29 @@ func (c *postsServiceClient) GetPost(ctx context.Context, in *GetPostQuery, opts
 	return out, nil
 }
 
-func (c *postsServiceClient) GetPostBySlug(ctx context.Context, in *GetPostBySlugQuery, opts ...grpc.CallOption) (*GetPostBySlugQueryResponse, error) {
+func (c *postsServiceClient) GetPublishedPosts(ctx context.Context, in *GetPublishedPostsRequest, opts ...grpc.CallOption) (*GetPublishedPostsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPostBySlugQueryResponse)
-	err := c.cc.Invoke(ctx, PostsService_GetPostBySlug_FullMethodName, in, out, cOpts...)
+	out := new(GetPublishedPostsResponse)
+	err := c.cc.Invoke(ctx, PostsService_GetPublishedPosts_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *postsServiceClient) ListPosts(ctx context.Context, in *ListPostsQuery, opts ...grpc.CallOption) (*ListPostsQueryResponse, error) {
+func (c *postsServiceClient) GetAllPosts(ctx context.Context, in *GetAllPostsRequest, opts ...grpc.CallOption) (*GetAllPostsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListPostsQueryResponse)
-	err := c.cc.Invoke(ctx, PostsService_ListPosts_FullMethodName, in, out, cOpts...)
+	out := new(GetAllPostsResponse)
+	err := c.cc.Invoke(ctx, PostsService_GetAllPosts_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *postsServiceClient) GetPostsByCategory(ctx context.Context, in *GetPostsByCategoryQuery, opts ...grpc.CallOption) (*GetPostsByCategoryQueryResponse, error) {
+func (c *postsServiceClient) GetPostsByCategory(ctx context.Context, in *GetPostsByCategoryRequest, opts ...grpc.CallOption) (*GetPostsByCategoryResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPostsByCategoryQueryResponse)
+	out := new(GetPostsByCategoryResponse)
 	err := c.cc.Invoke(ctx, PostsService_GetPostsByCategory_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -173,9 +185,9 @@ func (c *postsServiceClient) GetPostsByCategory(ctx context.Context, in *GetPost
 	return out, nil
 }
 
-func (c *postsServiceClient) GetPostsByAuthor(ctx context.Context, in *GetPostsByAuthorQuery, opts ...grpc.CallOption) (*GetPostsByAuthorQueryResponse, error) {
+func (c *postsServiceClient) GetPostsByAuthor(ctx context.Context, in *GetPostsByAuthorRequest, opts ...grpc.CallOption) (*GetPostsByAuthorResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPostsByAuthorQueryResponse)
+	out := new(GetPostsByAuthorResponse)
 	err := c.cc.Invoke(ctx, PostsService_GetPostsByAuthor_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -183,9 +195,9 @@ func (c *postsServiceClient) GetPostsByAuthor(ctx context.Context, in *GetPostsB
 	return out, nil
 }
 
-func (c *postsServiceClient) GetPopularPosts(ctx context.Context, in *GetPopularPostsQuery, opts ...grpc.CallOption) (*GetPopularPostsQueryResponse, error) {
+func (c *postsServiceClient) GetPopularPosts(ctx context.Context, in *GetPopularPostsRequest, opts ...grpc.CallOption) (*GetPopularPostsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetPopularPostsQueryResponse)
+	out := new(GetPopularPostsResponse)
 	err := c.cc.Invoke(ctx, PostsService_GetPopularPosts_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -197,21 +209,22 @@ func (c *postsServiceClient) GetPopularPosts(ctx context.Context, in *GetPopular
 // All implementations should embed UnimplementedPostsServiceServer
 // for forward compatibility.
 //
-// PostCommandService handlers
+// PostsService handlers
 type PostsServiceServer interface {
-	CreatePost(context.Context, *CreatePostCommand) (*CreatePostCommandResponse, error)
-	UpdatePost(context.Context, *UpdatePostCommand) (*UpdatePostCommandResponse, error)
-	PublishPost(context.Context, *PublishPostCommand) (*PublishPostCommandResponse, error)
-	UnpublishPost(context.Context, *UnpublishPostCommand) (*UnpublishPostCommandResponse, error)
-	DeletePost(context.Context, *DeletePostCommand) (*DeletePostCommandResponse, error)
-	IncrementPostViews(context.Context, *IncrementPostViewsCommand) (*IncrementPostViewsCommandResponse, error)
-	IncrementPostLikes(context.Context, *IncrementPostLikesCommand) (*IncrementPostLikesCommandResponse, error)
-	GetPost(context.Context, *GetPostQuery) (*GetPostQueryResponse, error)
-	GetPostBySlug(context.Context, *GetPostBySlugQuery) (*GetPostBySlugQueryResponse, error)
-	ListPosts(context.Context, *ListPostsQuery) (*ListPostsQueryResponse, error)
-	GetPostsByCategory(context.Context, *GetPostsByCategoryQuery) (*GetPostsByCategoryQueryResponse, error)
-	GetPostsByAuthor(context.Context, *GetPostsByAuthorQuery) (*GetPostsByAuthorQueryResponse, error)
-	GetPopularPosts(context.Context, *GetPopularPostsQuery) (*GetPopularPostsQueryResponse, error)
+	CreatePost(context.Context, *CreatePostRequest) (*CreatePostResponse, error)
+	UpdatePost(context.Context, *UpdatePostRequest) (*UpdatePostResponse, error)
+	PublishPost(context.Context, *PublishPostRequest) (*PublishPostResponse, error)
+	UnpublishPost(context.Context, *UnpublishPostRequest) (*UnpublishPostResponse, error)
+	DeletePost(context.Context, *DeletePostRequest) (*DeletePostResponse, error)
+	DeletePosts(context.Context, *DeletePostsRequest) (*DeletePostsResponse, error)
+	IncrementPostViews(context.Context, *IncrementPostViewsRequest) (*IncrementPostViewsResponse, error)
+	IncrementPostLikes(context.Context, *IncrementPostLikesRequest) (*IncrementPostLikesResponse, error)
+	GetPost(context.Context, *GetPostRequest) (*GetPostResponse, error)
+	GetPublishedPosts(context.Context, *GetPublishedPostsRequest) (*GetPublishedPostsResponse, error)
+	GetAllPosts(context.Context, *GetAllPostsRequest) (*GetAllPostsResponse, error)
+	GetPostsByCategory(context.Context, *GetPostsByCategoryRequest) (*GetPostsByCategoryResponse, error)
+	GetPostsByAuthor(context.Context, *GetPostsByAuthorRequest) (*GetPostsByAuthorResponse, error)
+	GetPopularPosts(context.Context, *GetPopularPostsRequest) (*GetPopularPostsResponse, error)
 }
 
 // UnimplementedPostsServiceServer should be embedded to have
@@ -221,43 +234,46 @@ type PostsServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedPostsServiceServer struct{}
 
-func (UnimplementedPostsServiceServer) CreatePost(context.Context, *CreatePostCommand) (*CreatePostCommandResponse, error) {
+func (UnimplementedPostsServiceServer) CreatePost(context.Context, *CreatePostRequest) (*CreatePostResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreatePost not implemented")
 }
-func (UnimplementedPostsServiceServer) UpdatePost(context.Context, *UpdatePostCommand) (*UpdatePostCommandResponse, error) {
+func (UnimplementedPostsServiceServer) UpdatePost(context.Context, *UpdatePostRequest) (*UpdatePostResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdatePost not implemented")
 }
-func (UnimplementedPostsServiceServer) PublishPost(context.Context, *PublishPostCommand) (*PublishPostCommandResponse, error) {
+func (UnimplementedPostsServiceServer) PublishPost(context.Context, *PublishPostRequest) (*PublishPostResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method PublishPost not implemented")
 }
-func (UnimplementedPostsServiceServer) UnpublishPost(context.Context, *UnpublishPostCommand) (*UnpublishPostCommandResponse, error) {
+func (UnimplementedPostsServiceServer) UnpublishPost(context.Context, *UnpublishPostRequest) (*UnpublishPostResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UnpublishPost not implemented")
 }
-func (UnimplementedPostsServiceServer) DeletePost(context.Context, *DeletePostCommand) (*DeletePostCommandResponse, error) {
+func (UnimplementedPostsServiceServer) DeletePost(context.Context, *DeletePostRequest) (*DeletePostResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeletePost not implemented")
 }
-func (UnimplementedPostsServiceServer) IncrementPostViews(context.Context, *IncrementPostViewsCommand) (*IncrementPostViewsCommandResponse, error) {
+func (UnimplementedPostsServiceServer) DeletePosts(context.Context, *DeletePostsRequest) (*DeletePostsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeletePosts not implemented")
+}
+func (UnimplementedPostsServiceServer) IncrementPostViews(context.Context, *IncrementPostViewsRequest) (*IncrementPostViewsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method IncrementPostViews not implemented")
 }
-func (UnimplementedPostsServiceServer) IncrementPostLikes(context.Context, *IncrementPostLikesCommand) (*IncrementPostLikesCommandResponse, error) {
+func (UnimplementedPostsServiceServer) IncrementPostLikes(context.Context, *IncrementPostLikesRequest) (*IncrementPostLikesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method IncrementPostLikes not implemented")
 }
-func (UnimplementedPostsServiceServer) GetPost(context.Context, *GetPostQuery) (*GetPostQueryResponse, error) {
+func (UnimplementedPostsServiceServer) GetPost(context.Context, *GetPostRequest) (*GetPostResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPost not implemented")
 }
-func (UnimplementedPostsServiceServer) GetPostBySlug(context.Context, *GetPostBySlugQuery) (*GetPostBySlugQueryResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method GetPostBySlug not implemented")
+func (UnimplementedPostsServiceServer) GetPublishedPosts(context.Context, *GetPublishedPostsRequest) (*GetPublishedPostsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPublishedPosts not implemented")
 }
-func (UnimplementedPostsServiceServer) ListPosts(context.Context, *ListPostsQuery) (*ListPostsQueryResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListPosts not implemented")
+func (UnimplementedPostsServiceServer) GetAllPosts(context.Context, *GetAllPostsRequest) (*GetAllPostsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetAllPosts not implemented")
 }
-func (UnimplementedPostsServiceServer) GetPostsByCategory(context.Context, *GetPostsByCategoryQuery) (*GetPostsByCategoryQueryResponse, error) {
+func (UnimplementedPostsServiceServer) GetPostsByCategory(context.Context, *GetPostsByCategoryRequest) (*GetPostsByCategoryResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPostsByCategory not implemented")
 }
-func (UnimplementedPostsServiceServer) GetPostsByAuthor(context.Context, *GetPostsByAuthorQuery) (*GetPostsByAuthorQueryResponse, error) {
+func (UnimplementedPostsServiceServer) GetPostsByAuthor(context.Context, *GetPostsByAuthorRequest) (*GetPostsByAuthorResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPostsByAuthor not implemented")
 }
-func (UnimplementedPostsServiceServer) GetPopularPosts(context.Context, *GetPopularPostsQuery) (*GetPopularPostsQueryResponse, error) {
+func (UnimplementedPostsServiceServer) GetPopularPosts(context.Context, *GetPopularPostsRequest) (*GetPopularPostsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPopularPosts not implemented")
 }
 func (UnimplementedPostsServiceServer) testEmbeddedByValue() {}
@@ -281,7 +297,7 @@ func RegisterPostsServiceServer(s grpc.ServiceRegistrar, srv PostsServiceServer)
 }
 
 func _PostsService_CreatePost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreatePostCommand)
+	in := new(CreatePostRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -293,13 +309,13 @@ func _PostsService_CreatePost_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: PostsService_CreatePost_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).CreatePost(ctx, req.(*CreatePostCommand))
+		return srv.(PostsServiceServer).CreatePost(ctx, req.(*CreatePostRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PostsService_UpdatePost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdatePostCommand)
+	in := new(UpdatePostRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -311,13 +327,13 @@ func _PostsService_UpdatePost_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: PostsService_UpdatePost_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).UpdatePost(ctx, req.(*UpdatePostCommand))
+		return srv.(PostsServiceServer).UpdatePost(ctx, req.(*UpdatePostRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PostsService_PublishPost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PublishPostCommand)
+	in := new(PublishPostRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -329,13 +345,13 @@ func _PostsService_PublishPost_Handler(srv interface{}, ctx context.Context, dec
 		FullMethod: PostsService_PublishPost_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).PublishPost(ctx, req.(*PublishPostCommand))
+		return srv.(PostsServiceServer).PublishPost(ctx, req.(*PublishPostRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PostsService_UnpublishPost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UnpublishPostCommand)
+	in := new(UnpublishPostRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -347,13 +363,13 @@ func _PostsService_UnpublishPost_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: PostsService_UnpublishPost_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).UnpublishPost(ctx, req.(*UnpublishPostCommand))
+		return srv.(PostsServiceServer).UnpublishPost(ctx, req.(*UnpublishPostRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PostsService_DeletePost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeletePostCommand)
+	in := new(DeletePostRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -365,13 +381,31 @@ func _PostsService_DeletePost_Handler(srv interface{}, ctx context.Context, dec 
 		FullMethod: PostsService_DeletePost_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).DeletePost(ctx, req.(*DeletePostCommand))
+		return srv.(PostsServiceServer).DeletePost(ctx, req.(*DeletePostRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PostsService_DeletePosts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePostsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PostsServiceServer).DeletePosts(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PostsService_DeletePosts_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PostsServiceServer).DeletePosts(ctx, req.(*DeletePostsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PostsService_IncrementPostViews_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IncrementPostViewsCommand)
+	in := new(IncrementPostViewsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -383,13 +417,13 @@ func _PostsService_IncrementPostViews_Handler(srv interface{}, ctx context.Conte
 		FullMethod: PostsService_IncrementPostViews_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).IncrementPostViews(ctx, req.(*IncrementPostViewsCommand))
+		return srv.(PostsServiceServer).IncrementPostViews(ctx, req.(*IncrementPostViewsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PostsService_IncrementPostLikes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(IncrementPostLikesCommand)
+	in := new(IncrementPostLikesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -401,13 +435,13 @@ func _PostsService_IncrementPostLikes_Handler(srv interface{}, ctx context.Conte
 		FullMethod: PostsService_IncrementPostLikes_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).IncrementPostLikes(ctx, req.(*IncrementPostLikesCommand))
+		return srv.(PostsServiceServer).IncrementPostLikes(ctx, req.(*IncrementPostLikesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PostsService_GetPost_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPostQuery)
+	in := new(GetPostRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -419,49 +453,49 @@ func _PostsService_GetPost_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: PostsService_GetPost_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).GetPost(ctx, req.(*GetPostQuery))
+		return srv.(PostsServiceServer).GetPost(ctx, req.(*GetPostRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PostsService_GetPostBySlug_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPostBySlugQuery)
+func _PostsService_GetPublishedPosts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPublishedPostsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PostsServiceServer).GetPostBySlug(ctx, in)
+		return srv.(PostsServiceServer).GetPublishedPosts(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PostsService_GetPostBySlug_FullMethodName,
+		FullMethod: PostsService_GetPublishedPosts_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).GetPostBySlug(ctx, req.(*GetPostBySlugQuery))
+		return srv.(PostsServiceServer).GetPublishedPosts(ctx, req.(*GetPublishedPostsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PostsService_ListPosts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListPostsQuery)
+func _PostsService_GetAllPosts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllPostsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PostsServiceServer).ListPosts(ctx, in)
+		return srv.(PostsServiceServer).GetAllPosts(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: PostsService_ListPosts_FullMethodName,
+		FullMethod: PostsService_GetAllPosts_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).ListPosts(ctx, req.(*ListPostsQuery))
+		return srv.(PostsServiceServer).GetAllPosts(ctx, req.(*GetAllPostsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PostsService_GetPostsByCategory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPostsByCategoryQuery)
+	in := new(GetPostsByCategoryRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -473,13 +507,13 @@ func _PostsService_GetPostsByCategory_Handler(srv interface{}, ctx context.Conte
 		FullMethod: PostsService_GetPostsByCategory_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).GetPostsByCategory(ctx, req.(*GetPostsByCategoryQuery))
+		return srv.(PostsServiceServer).GetPostsByCategory(ctx, req.(*GetPostsByCategoryRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PostsService_GetPostsByAuthor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPostsByAuthorQuery)
+	in := new(GetPostsByAuthorRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -491,13 +525,13 @@ func _PostsService_GetPostsByAuthor_Handler(srv interface{}, ctx context.Context
 		FullMethod: PostsService_GetPostsByAuthor_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).GetPostsByAuthor(ctx, req.(*GetPostsByAuthorQuery))
+		return srv.(PostsServiceServer).GetPostsByAuthor(ctx, req.(*GetPostsByAuthorRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _PostsService_GetPopularPosts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetPopularPostsQuery)
+	in := new(GetPopularPostsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -509,7 +543,7 @@ func _PostsService_GetPopularPosts_Handler(srv interface{}, ctx context.Context,
 		FullMethod: PostsService_GetPopularPosts_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PostsServiceServer).GetPopularPosts(ctx, req.(*GetPopularPostsQuery))
+		return srv.(PostsServiceServer).GetPopularPosts(ctx, req.(*GetPopularPostsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -518,7 +552,7 @@ func _PostsService_GetPopularPosts_Handler(srv interface{}, ctx context.Context,
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var PostsService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "post.v1.PostsService",
+	ServiceName: "post_service.PostsService",
 	HandlerType: (*PostsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -542,6 +576,10 @@ var PostsService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PostsService_DeletePost_Handler,
 		},
 		{
+			MethodName: "DeletePosts",
+			Handler:    _PostsService_DeletePosts_Handler,
+		},
+		{
 			MethodName: "IncrementPostViews",
 			Handler:    _PostsService_IncrementPostViews_Handler,
 		},
@@ -554,12 +592,12 @@ var PostsService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PostsService_GetPost_Handler,
 		},
 		{
-			MethodName: "GetPostBySlug",
-			Handler:    _PostsService_GetPostBySlug_Handler,
+			MethodName: "GetPublishedPosts",
+			Handler:    _PostsService_GetPublishedPosts_Handler,
 		},
 		{
-			MethodName: "ListPosts",
-			Handler:    _PostsService_ListPosts_Handler,
+			MethodName: "GetAllPosts",
+			Handler:    _PostsService_GetAllPosts_Handler,
 		},
 		{
 			MethodName: "GetPostsByCategory",
@@ -575,5 +613,5 @@ var PostsService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "posts.proto",
+	Metadata: "post_service/posts.proto",
 }

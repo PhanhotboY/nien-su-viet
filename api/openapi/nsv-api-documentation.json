@@ -383,7 +383,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OperationResponseDto"
+                  "type": "object"
                 }
               }
             }
@@ -433,7 +433,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OperationResponseDto"
+                  "type": "object"
                 }
               }
             }
@@ -464,7 +464,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OperationResponseDto"
+                  "type": "object"
                 }
               }
             }
@@ -483,7 +483,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OperationResponseDto"
+                  "type": "object"
                 }
               }
             }
@@ -533,7 +533,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OperationResponseDto"
+                  "type": "object"
                 }
               }
             }
@@ -564,7 +564,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OperationResponseDto"
+                  "type": "object"
                 }
               }
             }
@@ -583,7 +583,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OperationResponseDto"
+                  "type": "object"
                 }
               }
             }
@@ -609,11 +609,22 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized result of HistoricalEventPreviewResponseDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HistoricalEventPreviewResponseDto"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/HistoricalEventPreviewResponseDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -639,11 +650,22 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized result of HistoricalEventDetailResponseDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HistoricalEventDetailResponseDto"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/HistoricalEventDetailResponseDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -677,11 +699,22 @@
         },
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized result of OperationMetadataDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -705,11 +738,22 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized result of OperationMetadataDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -894,14 +938,25 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized paginated result of HistoricalEventBriefResponseDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/HistoricalEventBriefResponseDto"
-                  }
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/HistoricalEventBriefResponseDto"
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/PaginationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -925,6 +980,27 @@
           }
         },
         "responses": {
+          "200": {
+            "description": "The serialized result of OperationMetadataDto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
           "201": {
             "description": "",
             "content": {
@@ -1002,7 +1078,7 @@
           },
           {
             "name": "categoryIds",
-            "required": false,
+            "required": true,
             "in": "query",
             "schema": {
               "type": "array",
@@ -1051,14 +1127,25 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized paginated result of PostBriefResponseDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PostBriefResponseDto"
-                  }
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/PostBriefResponseDto"
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/PaginationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1083,11 +1170,22 @@
         },
         "responses": {
           "201": {
-            "description": "",
+            "description": "The serialized result of Creation result",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1159,7 +1257,7 @@
           },
           {
             "name": "categoryIds",
-            "required": false,
+            "required": true,
             "in": "query",
             "schema": {
               "type": "array",
@@ -1208,14 +1306,25 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized paginated result of PostBriefResponseDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PostBriefResponseDto"
-                  }
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/PostBriefResponseDto"
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/PaginationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1241,11 +1350,22 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized result of PostDetailResponseDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PostDetailResponseDto"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/PostDetailResponseDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1279,11 +1399,22 @@
         },
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized result of OperationMetadataDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1307,11 +1438,22 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized result of OperationMetadataDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1337,11 +1479,22 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized result of OperationMetadataDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1367,11 +1520,22 @@
         ],
         "responses": {
           "200": {
-            "description": "",
+            "description": "The serialized result of OperationMetadataDto",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -1570,32 +1734,6 @@
             "maxLength": 5000
           }
         }
-      },
-      "OperationResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "success": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "id",
-          "success"
-        ]
-      },
-      "OperationResponseDto": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "$ref": "#/components/schemas/OperationResponse"
-          }
-        },
-        "required": [
-          "data"
-        ]
       },
       "HeaderNavItemDto": {
         "type": "object",
@@ -1827,6 +1965,29 @@
           "link_url",
           "link_label",
           "link_type"
+        ]
+      },
+      "SerializedResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          },
+          "message": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "number"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "message",
+          "statusCode",
+          "timestamp"
         ]
       },
       "UserBaseResponseDto": {
@@ -2095,6 +2256,44 @@
           "toDateType"
         ]
       },
+      "PaginationMetadataDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "totalPages",
+          "page",
+          "limit"
+        ]
+      },
+      "OperationMetadataDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "success"
+        ]
+      },
       "HistoricalEventBaseCreateDto": {
         "type": "object",
         "properties": {
@@ -2246,7 +2445,6 @@
           },
           "thumbnail": {
             "type": "string",
-            "nullable": true,
             "format": "uri"
           },
           "title": {
@@ -2261,20 +2459,11 @@
           },
           "summary": {
             "type": "string",
-            "nullable": true,
+            "minLength": 1,
             "maxLength": 500
-          },
-          "publishedAt": {
-            "type": "object"
           },
           "published": {
             "type": "boolean"
-          },
-          "createdAt": {
-            "type": "object"
-          },
-          "updatedAt": {
-            "type": "object"
           }
         },
         "required": [
@@ -2282,10 +2471,7 @@
           "id",
           "title",
           "slug",
-          "publishedAt",
-          "published",
-          "createdAt",
-          "updatedAt"
+          "published"
         ]
       },
       "PostDetailResponseDto": {
@@ -2300,7 +2486,6 @@
           },
           "thumbnail": {
             "type": "string",
-            "nullable": true,
             "format": "uri"
           },
           "title": {
@@ -2315,20 +2500,11 @@
           },
           "summary": {
             "type": "string",
-            "nullable": true,
+            "minLength": 1,
             "maxLength": 500
-          },
-          "publishedAt": {
-            "type": "object"
           },
           "published": {
             "type": "boolean"
-          },
-          "createdAt": {
-            "type": "object"
-          },
-          "updatedAt": {
-            "type": "object"
           },
           "content": {
             "type": "string"
@@ -2339,10 +2515,7 @@
           "id",
           "title",
           "slug",
-          "publishedAt",
           "published",
-          "createdAt",
-          "updatedAt",
           "content"
         ]
       },
@@ -2353,7 +2526,7 @@
             "type": "string"
           },
           "publishedAt": {
-            "type": "object"
+            "type": "number"
           },
           "published": {
             "type": "boolean"
@@ -2374,17 +2547,15 @@
           },
           "summary": {
             "type": "string",
-            "nullable": true,
+            "minLength": 1,
             "maxLength": 500
           },
           "thumbnail": {
             "type": "string",
-            "nullable": true,
             "format": "uri"
           },
           "categoryId": {
             "type": "string",
-            "nullable": true,
             "format": "uuid"
           }
         },
@@ -2413,24 +2584,22 @@
           },
           "summary": {
             "type": "string",
-            "nullable": true,
+            "minLength": 1,
             "maxLength": 500
           },
           "thumbnail": {
             "type": "string",
-            "nullable": true,
             "format": "uri"
           },
           "categoryId": {
             "type": "string",
-            "nullable": true,
             "format": "uuid"
           },
           "authorId": {
             "type": "string"
           },
           "publishedAt": {
-            "type": "object"
+            "type": "number"
           },
           "published": {
             "type": "boolean"
@@ -2511,29 +2680,6 @@
           "updatedAt"
         ]
       },
-      "PaginationMetaDto": {
-        "type": "object",
-        "properties": {
-          "total": {
-            "type": "number"
-          },
-          "totalPages": {
-            "type": "number"
-          },
-          "page": {
-            "type": "number"
-          },
-          "limit": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "total",
-          "totalPages",
-          "page",
-          "limit"
-        ]
-      },
       "PaginatedResponseDto": {
         "type": "object",
         "properties": {
@@ -2544,12 +2690,30 @@
             }
           },
           "pagination": {
-            "$ref": "#/components/schemas/PaginationMetaDto"
+            "$ref": "#/components/schemas/PaginationMetadataDto"
           }
         },
         "required": [
           "data",
           "pagination"
+        ]
+      },
+      "TimestampDto": {
+        "type": "object",
+        "properties": {
+          "seconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "nanos": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 999999999
+          }
+        },
+        "required": [
+          "seconds",
+          "nanos"
         ]
       }
     }
