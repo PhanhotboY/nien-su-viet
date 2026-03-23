@@ -1,36 +1,29 @@
 package fxapp
 
 import (
-	"fmt"
-
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/fxapp/contracts"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
-	loggerConfig "github.com/phanhotboy/nien-su-viet/libs/pkg/logger/config"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/zap"
 	"go.uber.org/fx"
 )
 
 type applicationBuilder struct {
-	provides    []interface{}
-	decorates   []interface{}
-	options     []fx.Option
-	logger      logger.Logger
-	environment environment.Environment
+	provides  []interface{}
+	decorates []interface{}
+	options   []fx.Option
+	logger    logger.Logger
+	settings  settings.Config
 }
 
-func NewApplicationBuilder(environments ...environment.Environment) contracts.ApplicationBuilder {
-	env := environment.ConfigAppEnv(environments...)
+func NewApplicationBuilder() contracts.ApplicationBuilder {
+	cfg := settings.LoadConfig()
 
 	var logger logger.Logger
-	logoption, err := loggerConfig.ProvideLogConfig(env)
-	if err != nil {
-		fmt.Printf("Error loading log config: %v\n", err)
-	}
-	if err == nil && logoption != nil {
-		logger = zap.NewZapLogger(logoption, env)
-	}
-	return &applicationBuilder{logger: logger, environment: env}
+
+	logger = zap.NewZapLogger(cfg)
+
+	return &applicationBuilder{logger: logger, settings: cfg}
 }
 
 func (a *applicationBuilder) ProvideModule(module fx.Option) {
@@ -46,7 +39,7 @@ func (a *applicationBuilder) Decorate(constructors ...interface{}) {
 }
 
 func (a *applicationBuilder) Build() contracts.Application {
-	app := NewApplication(a.provides, a.decorates, a.options, a.logger, a.environment)
+	app := NewApplication(a.provides, a.decorates, a.options, a.logger, a.settings)
 
 	return app
 }
@@ -67,6 +60,6 @@ func (a *applicationBuilder) Logger() logger.Logger {
 	return a.logger
 }
 
-func (a *applicationBuilder) Environment() environment.Environment {
-	return a.environment
+func (a *applicationBuilder) Settings() settings.Config {
+	return a.settings
 }

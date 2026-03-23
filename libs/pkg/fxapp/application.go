@@ -2,8 +2,10 @@ package fxapp
 
 import (
 	"context"
+	"os"
+	"time"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/fxapp/contracts"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 
@@ -11,13 +13,13 @@ import (
 )
 
 type application struct {
-	provides    []interface{}
-	decorates   []interface{}
-	invokes     []interface{}
-	options     []fx.Option
-	logger      logger.Logger
-	fxapp       *fx.App
-	environment environment.Environment
+	provides  []interface{}
+	decorates []interface{}
+	invokes   []interface{}
+	options   []fx.Option
+	logger    logger.Logger
+	fxapp     *fx.App
+	settings  settings.Config
 }
 
 func NewApplication(
@@ -25,14 +27,14 @@ func NewApplication(
 	decorates []interface{},
 	options []fx.Option,
 	logger logger.Logger,
-	env environment.Environment,
+	settings settings.Config,
 ) contracts.Application {
 	return &application{
-		provides:    providers,
-		decorates:   decorates,
-		options:     options,
-		logger:      logger,
-		environment: env,
+		provides:  providers,
+		decorates: decorates,
+		options:   options,
+		logger:    logger,
+		settings:  settings,
 	}
 }
 
@@ -60,27 +62,27 @@ func (a *application) Run() {
 	fxApp.Run()
 
 	//// startup ctx just for setup dependencies about 15 seconds
-	//const defaultTimeout = 15 * time.Second
-	//startCtx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
-	//defer cancel()
-	//
-	//if err := fxApp.Start(startCtx); err != nil {
-	//	os.Exit(1)
-	//}
-	//// wait until get a os signal
-	//sig := <-fxApp.Wait()
-	//exitCode := sig.ExitCode
-	//// shutdown ctx just for shut down process and about 15 seconds
-	//stopCtx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
-	//defer cancel()
-	//
-	//if err := fxApp.Stop(stopCtx); err != nil {
-	//	exitCode = 1
-	//}
-	//
-	//if exitCode != 0 {
-	//	os.Exit(exitCode)
-	//}
+	const defaultTimeout = 15 * time.Second
+	startCtx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+	defer cancel()
+
+	if err := fxApp.Start(startCtx); err != nil {
+		os.Exit(1)
+	}
+	// wait until get a os signal
+	sig := <-fxApp.Wait()
+	exitCode := sig.ExitCode
+	// shutdown ctx just for shut down process and about 15 seconds
+	stopCtx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
+	defer cancel()
+
+	if err := fxApp.Stop(stopCtx); err != nil {
+		exitCode = 1
+	}
+
+	if exitCode != 0 {
+		os.Exit(exitCode)
+	}
 }
 
 func (a *application) Start(ctx context.Context) error {
@@ -109,6 +111,6 @@ func (a *application) Logger() logger.Logger {
 	return a.logger
 }
 
-func (a *application) Environment() environment.Environment {
-	return a.environment
+func (a *application) Settings() settings.Config {
+	return a.settings
 }

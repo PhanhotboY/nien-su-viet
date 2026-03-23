@@ -3,7 +3,7 @@ package contracts
 import (
 	"context"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"go.uber.org/fx"
 )
@@ -16,5 +16,5 @@ type Application interface {
 	Stop(ctx context.Context) error
 	Wait() <-chan fx.ShutdownSignal
 	Logger() logger.Logger
-	Environment() environment.Environment
+	Settings() settings.Config
 }

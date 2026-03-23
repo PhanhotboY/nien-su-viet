@@ -36,6 +36,8 @@ require (
 	github.com/mehdihadeli/go-mediatr v1.4.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pterm/pterm v0.12.83 // indirect
+	github.com/samber/lo v1.53.0 // indirect
+	github.com/satori/go.uuid v1.2.0 // indirect
 	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect

@@ -1,7 +1,7 @@
 package contracts
 
 import (
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"go.uber.org/fx"
 )
@@ -18,5 +18,5 @@ type ApplicationBuilder interface {
 	GetDecorates() []interface{}
 	Options() []fx.Option
 	Logger() logger.Logger
-	Environment() environment.Environment
+	Settings() settings.Config
 }

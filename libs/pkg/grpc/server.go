@@ -9,7 +9,7 @@ import (
 	grpcMiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpcRecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpcCtxTags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/config"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/handler/otel"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/interceptors"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
@@ -37,14 +37,14 @@ type GrpcServer interface {
 
 type grpcServer struct {
 	server         *googleGrpc.Server
-	config         *config.GrpcOptions
+	config         *settings.GrpcConfig
 	log            logger.Logger
 	serviceName    string
 	serviceBuilder *GrpcServiceBuilder
 }
 
 func NewGrpcServer(
-	config *config.GrpcOptions,
+	cfg settings.Config,
 	logger logger.Logger,
 ) GrpcServer {
 	unaryServerInterceptors := []googleGrpc.UnaryServerInterceptor{
@@ -82,15 +82,15 @@ func NewGrpcServer(
 	healthServer := health.NewServer()
 	grpc_health_v1.RegisterHealthServer(s, healthServer)
 	healthServer.SetServingStatus(
-		config.Name,
+		cfg.Grpc.Name,
 		grpc_health_v1.HealthCheckResponse_SERVING,
 	)
 
 	return &grpcServer{
 		server:         s,
-		config:         config,
+		config:         &cfg.Grpc,
 		log:            logger,
-		serviceName:    config.Name,
+		serviceName:    cfg.Grpc.Name,
 		serviceBuilder: NewGrpcServiceBuilder(s),
 	}
 }

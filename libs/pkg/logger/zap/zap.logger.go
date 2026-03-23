@@ -5,10 +5,9 @@ import (
 	"time"
 
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/constants"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
-	config2 "github.com/phanhotboy/nien-su-viet/libs/pkg/logger/config"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/models"
 
 	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.uber.org/zap"
@@ -16,10 +15,9 @@ import (
 )
 
 type zapLogger struct {
-	level       string
 	sugarLogger *zap.SugaredLogger
 	logger      *zap.Logger
-	logOptions  *config2.LogOptions
+	logOptions  settings.LoggerConfig
 }
 
 type ZapLogger interface {
@@ -42,11 +40,10 @@ var loggerLevelMap = map[string]zapcore.Level{
 
 // NewZapLogger create new zap logger
 func NewZapLogger(
-	cfg *config2.LogOptions,
-	env environment.Environment,
+	cfg settings.Config,
 ) ZapLogger {
-	zapLogger := &zapLogger{level: cfg.LogLevel, logOptions: cfg}
-	zapLogger.initLogger(env)
+	zapLogger := &zapLogger{logOptions: cfg.Logger}
+	zapLogger.initLogger(cfg.Server.Env)
 
 	return zapLogger
 }
@@ -56,7 +53,7 @@ func (l *zapLogger) InternalLogger() *zap.Logger {
 }
 
 func (l *zapLogger) getLoggerLevel() zapcore.Level {
-	level, exist := loggerLevelMap[l.level]
+	level, exist := loggerLevelMap[l.logOptions.LogLevel]
 	if !exist {
 		return zapcore.DebugLevel
 	}
@@ -126,10 +123,6 @@ func (l *zapLogger) initLogger(env environment.Environment) {
 
 func (l *zapLogger) Configure(cfg func(internalLog interface{})) {
 	cfg(l.logger)
-}
-
-func (l *zapLogger) LogType() models.LogType {
-	return models.Zap
 }
 
 // WithName add logger microservice name
