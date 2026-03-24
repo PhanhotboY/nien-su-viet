@@ -551,13 +551,6 @@ export interface components {
             head_scripts?: string | null;
             body_scripts?: string | null;
         };
-        OperationResponse: {
-            id: string;
-            success: boolean;
-        };
-        OperationResponseDto: {
-            data: components["schemas"]["OperationResponse"];
-        };
         HeaderNavItemDto: {
             /** Format: uuid */
             id: string;
@@ -609,6 +602,12 @@ export interface components {
             link_label: string;
             /** @enum {string} */
             link_type: "internal" | "external";
+        };
+        SerializedResponseDto: {
+            data: Record<string, never>;
+            message: string;
+            statusCode: number;
+            timestamp: string;
         };
         UserBaseResponseDto: {
             id: string;
@@ -675,6 +674,16 @@ export interface components {
             /** Format: uri */
             thumbnail?: string;
         };
+        PaginationMetadataDto: {
+            total: number;
+            totalPages: number;
+            page: number;
+            limit: number;
+        };
+        OperationMetadataDto: {
+            id: string;
+            success: boolean;
+        };
         HistoricalEventBaseCreateDto: {
             /** Format: uuid */
             authorId?: string;
@@ -716,54 +725,48 @@ export interface components {
             /** Format: uuid */
             id: string;
             /** Format: uri */
-            thumbnail?: string | null;
+            thumbnail?: string;
             title: string;
             slug: string;
-            summary?: string | null;
-            publishedAt: Record<string, never>;
+            summary?: string;
             published: boolean;
-            createdAt: Record<string, never>;
-            updatedAt: Record<string, never>;
         };
         PostDetailResponseDto: {
             author: components["schemas"]["UserBaseResponseDto"];
             /** Format: uuid */
             id: string;
             /** Format: uri */
-            thumbnail?: string | null;
+            thumbnail?: string;
             title: string;
             slug: string;
-            summary?: string | null;
-            publishedAt: Record<string, never>;
+            summary?: string;
             published: boolean;
-            createdAt: Record<string, never>;
-            updatedAt: Record<string, never>;
             content: string;
         };
         PostBaseCreateDto: {
             authorId?: string;
-            publishedAt?: Record<string, never>;
+            publishedAt?: number;
             published?: boolean;
             title: string;
             slug: string;
             content: string;
-            summary?: string | null;
+            summary?: string;
             /** Format: uri */
-            thumbnail?: string | null;
+            thumbnail?: string;
             /** Format: uuid */
-            categoryId?: string | null;
+            categoryId?: string;
         };
         PostBaseUpdateDto: {
             title?: string;
             slug?: string;
             content?: string;
-            summary?: string | null;
+            summary?: string;
             /** Format: uri */
-            thumbnail?: string | null;
+            thumbnail?: string;
             /** Format: uuid */
-            categoryId?: string | null;
+            categoryId?: string;
             authorId?: string;
-            publishedAt?: Record<string, never>;
+            publishedAt?: number;
             published?: boolean;
         };
         EventCategoryBriefResponseDto: {
@@ -787,15 +790,13 @@ export interface components {
             createdAt: Record<string, never>;
             updatedAt: Record<string, never>;
         };
-        PaginationMetaDto: {
-            total: number;
-            totalPages: number;
-            page: number;
-            limit: number;
-        };
         PaginatedResponseDto: {
             data: string[];
-            pagination: components["schemas"]["PaginationMetaDto"];
+            pagination: components["schemas"]["PaginationMetadataDto"];
+        };
+        TimestampDto: {
+            seconds: number;
+            nanos: number;
         };
     };
     responses: never;
@@ -1253,7 +1254,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OperationResponseDto"];
+                    "application/json": Record<string, never>;
                 };
             };
         };
@@ -1295,7 +1296,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OperationResponseDto"];
+                    "application/json": Record<string, never>;
                 };
             };
         };
@@ -1318,7 +1319,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OperationResponseDto"];
+                    "application/json": Record<string, never>;
                 };
             };
         };
@@ -1337,7 +1338,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OperationResponseDto"];
+                    "application/json": Record<string, never>;
                 };
             };
         };
@@ -1379,7 +1380,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OperationResponseDto"];
+                    "application/json": Record<string, never>;
                 };
             };
         };
@@ -1402,7 +1403,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OperationResponseDto"];
+                    "application/json": Record<string, never>;
                 };
             };
         };
@@ -1421,7 +1422,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OperationResponseDto"];
+                    "application/json": Record<string, never>;
                 };
             };
         };
@@ -1437,12 +1438,15 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The serialized result of HistoricalEventPreviewResponseDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HistoricalEventPreviewResponseDto"];
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["HistoricalEventPreviewResponseDto"];
+                    };
                 };
             };
         };
@@ -1458,12 +1462,15 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The serialized result of HistoricalEventDetailResponseDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HistoricalEventDetailResponseDto"];
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["HistoricalEventDetailResponseDto"];
+                    };
                 };
             };
         };
@@ -1483,12 +1490,15 @@ export interface operations {
             };
         };
         responses: {
+            /** @description The serialized result of OperationMetadataDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["OperationMetadataDto"];
+                    };
                 };
             };
         };
@@ -1504,12 +1514,15 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The serialized result of OperationMetadataDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["OperationMetadataDto"];
+                    };
                 };
             };
         };
@@ -1542,12 +1555,16 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The serialized paginated result of HistoricalEventBriefResponseDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["HistoricalEventBriefResponseDto"][];
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["HistoricalEventBriefResponseDto"];
+                        pagination?: components["schemas"]["PaginationMetadataDto"];
+                    };
                 };
             };
         };
@@ -1565,6 +1582,17 @@ export interface operations {
             };
         };
         responses: {
+            /** @description The serialized result of OperationMetadataDto */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["OperationMetadataDto"];
+                    };
+                };
+            };
             201: {
                 headers: {
                     [name: string]: unknown;
@@ -1577,14 +1605,14 @@ export interface operations {
     };
     PostController_getAllPosts: {
         parameters: {
-            query?: {
+            query: {
                 page?: number;
                 limit?: number;
                 search?: string;
                 sortBy?: string;
                 sortOrder?: "asc" | "desc";
                 authorId?: string;
-                categoryIds?: string[];
+                categoryIds: string[];
                 createdAtFrom?: string;
                 createdAtTo?: string;
                 updatedAtFrom?: string;
@@ -1596,12 +1624,16 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The serialized paginated result of PostBriefResponseDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PostBriefResponseDto"][];
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["PostBriefResponseDto"];
+                        pagination?: components["schemas"]["PaginationMetadataDto"];
+                    };
                 };
             };
         };
@@ -1619,26 +1651,29 @@ export interface operations {
             };
         };
         responses: {
+            /** @description The serialized result of Creation result */
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["OperationMetadataDto"];
+                    };
                 };
             };
         };
     };
     PostController_getPosts: {
         parameters: {
-            query?: {
+            query: {
                 page?: number;
                 limit?: number;
                 search?: string;
                 sortBy?: string;
                 sortOrder?: "asc" | "desc";
                 authorId?: string;
-                categoryIds?: string[];
+                categoryIds: string[];
                 createdAtFrom?: string;
                 createdAtTo?: string;
                 updatedAtFrom?: string;
@@ -1650,12 +1685,16 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The serialized paginated result of PostBriefResponseDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PostBriefResponseDto"][];
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["PostBriefResponseDto"];
+                        pagination?: components["schemas"]["PaginationMetadataDto"];
+                    };
                 };
             };
         };
@@ -1671,12 +1710,15 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The serialized result of PostDetailResponseDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PostDetailResponseDto"];
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["PostDetailResponseDto"];
+                    };
                 };
             };
         };
@@ -1696,12 +1738,15 @@ export interface operations {
             };
         };
         responses: {
+            /** @description The serialized result of OperationMetadataDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["OperationMetadataDto"];
+                    };
                 };
             };
         };
@@ -1717,12 +1762,15 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The serialized result of OperationMetadataDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["OperationMetadataDto"];
+                    };
                 };
             };
         };
@@ -1738,12 +1786,15 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The serialized result of OperationMetadataDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["OperationMetadataDto"];
+                    };
                 };
             };
         };
@@ -1759,12 +1810,15 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
+            /** @description The serialized result of OperationMetadataDto */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["SerializedResponseDto"] & {
+                        data?: components["schemas"]["OperationMetadataDto"];
+                    };
                 };
             };
         };
