@@ -33,6 +33,8 @@ import {
   ApiOkSerializedPaginatedResponse,
   ApiOkSerializedResponse,
 } from '@phanhotboy/nsv-common/decorators';
+import { ClientRMQ } from '@nestjs/microservices';
+import { RMQ } from '@phanhotboy/constants';
 
 @Controller('posts')
 export class PostController {
@@ -42,15 +44,17 @@ export class PostController {
     private readonly postService: PostService,
     @Inject(RedisService) private readonly redis: RedisServiceType,
     private readonly config: ConfigService,
+    @Inject(RMQ.TOPIC_EVENTS_EXCHANGE) private readonly clientRmq: ClientRMQ,
   ) {}
 
   @Get()
   @Public()
   @Serialize(PostBriefResponseDto)
   @ApiOkSerializedPaginatedResponse(PostBriefResponseDto)
-  async getAllPosts(@Query() query: PostQueryDto) {
+  async getPublishedPosts(@Query() query: PostQueryDto) {
+    console.log('Querying posts with parameters:', query);
     const res = await this.postService.getPublishedPosts(query);
-    console.log('res', res);
+    console.log('Retrieved posts:', res);
     return res;
   }
 
@@ -58,7 +62,7 @@ export class PostController {
   @Permissions({ post: ['read'] })
   @Serialize(PostBriefResponseDto)
   @ApiOkSerializedPaginatedResponse(PostBriefResponseDto)
-  getPosts(@Query() query: PostQueryDto) {
+  getAllPosts(@Query() query: PostQueryDto) {
     return this.postService.getAllPosts(query);
   }
 
@@ -72,7 +76,6 @@ export class PostController {
 
   @Post()
   @Throttle(RATE_LIMIT.INTERNAL)
-  @Public()
   @Permissions({ post: ['create'] })
   @ApiCreatedSerializedResponse()
   async createPost(
@@ -86,7 +89,6 @@ export class PostController {
   @Put(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ post: ['update'] })
-  @Public()
   @ApiOkSerializedOperationResponse()
   async updatePost(@Param('id') id: string, @Body() post: PostBaseUpdateDto) {
     await this.redis.mdel(this.routePath);

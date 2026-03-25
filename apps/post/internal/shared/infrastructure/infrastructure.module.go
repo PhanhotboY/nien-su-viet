@@ -4,6 +4,7 @@ import (
 	"github.com/go-playground/validator"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc"
+	postgres "github.com/phanhotboy/nien-su-viet/libs/pkg/postgresql"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/rabbitmq"
 	"go.uber.org/fx"
 )
@@ -16,6 +17,7 @@ var Module = fx.Module(
 	core.Module,
 	grpc.Module,
 	rabbitmq.Module,
+	postgres.Module,
 
 	// Other provides
 	fx.Provide(validator.New),

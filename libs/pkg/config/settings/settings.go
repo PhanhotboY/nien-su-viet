@@ -15,7 +15,7 @@ import (
 
 type Config struct {
 	Server     ServerConfig     `mapstructure:"server"`
-	Postgresql PostgresqlConfig `mapstructure:"db"`
+	Postgresql PostgresqlConfig `mapstructure:"pg"`
 	Rmq        RmqConfig        `mapstructure:"rmq"`
 	Grpc       GrpcConfig       `mapstructure:"grpc"`
 	Logger     LoggerConfig     `mapstructure:"logger"`

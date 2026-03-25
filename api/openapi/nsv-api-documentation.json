@@ -1019,7 +1019,7 @@
     },
     "/api/v1/posts": {
       "get": {
-        "operationId": "PostController_getAllPosts",
+        "operationId": "PostController_getPublishedPosts",
         "parameters": [
           {
             "name": "page",
@@ -1198,7 +1198,7 @@
     },
     "/api/v1/posts/all": {
       "get": {
-        "operationId": "PostController_getPosts",
+        "operationId": "PostController_getAllPosts",
         "parameters": [
           {
             "name": "page",

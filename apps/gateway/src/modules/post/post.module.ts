@@ -2,14 +2,13 @@ import { Module } from '@nestjs/common';
 import { PostService } from './post.service';
 import { PostController } from './post.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { GRPC_SERVICE } from '@phanhotboy/constants';
-import { ConfigService } from '@phanhotboy/nsv-common';
-import { Config } from '@gateway/config';
+import { GRPC_SERVICE, RMQ } from '@phanhotboy/constants';
 import { POST_SERVICE_PACKAGE_NAME } from '@phanhotboy/genproto/post_service/posts';
-import { join } from 'path';
+import { RmqModule } from '@phanhotboy/nsv-common';
 
 @Module({
   imports: [
+    RmqModule.register({ name: RMQ.TOPIC_EVENTS_EXCHANGE }),
     ClientsModule.registerAsync([
       {
         name: GRPC_SERVICE.POST.NAME,

@@ -3,33 +3,56 @@ package queries
 import (
 	"context"
 
+	postDto "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/dto"
+	sharedDto "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/dto"
+
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPublishedPosts/v1/dto"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/consumer"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/types"
+	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/repository"
+	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
-	dtoUtil "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/dto"
 )
 
 type GetPublishedPostsHandler struct {
-	log logger.Logger
+	log      logger.Logger
+	postRepo repository.PostRepository
+	// dbRepository repository.PostRepository
+	// cacheRepository repository.PostCacheRepository
+}
+
+type IGetPublishedPostsHandler interface {
+	grpcTypes.GrpcHandler[*GetPublishedPostsQuery, *dto.GetPublishedPostsRes]
 }
 
 func NewGetPublishedPostsHandler(
 	log logger.Logger,
-) consumer.ConsumerHandler {
-	return &GetPublishedPostsHandler{
-		log: log,
+	postRepo repository.PostRepository,
+) GetPublishedPostsHandler {
+	return GetPublishedPostsHandler{
+		log:      log,
+		postRepo: postRepo,
 	}
 }
 
-func (c *GetPublishedPostsHandler) Handle(
-	ctx context.Context, consumeContext types.MessageConsumeContext,
-) error {
-	c.log.Info("products fetched")
+func (c GetPublishedPostsHandler) Handle(
+	ctx context.Context,
+	query *GetPublishedPostsQuery,
+) (*dto.GetPublishedPostsRes, error) {
+	posts, err := c.postRepo.GetPosts(ctx, query.MapToQuery(), query.MapToPagination())
+	if err != nil {
+		c.log.Errorf("failed to get published posts: %v", err)
+		return nil, err
+	}
+	c.log.Warnf("[PostService] Get published posts query result %+v", posts)
 
-	c.log.Infof("consume context raw data: %v", string(consumeContext.Message().GetData()))
-	data := dtoUtil.ValidateConsumeContextData(consumeContext, dto.GetPublicPostsQueryReq{}, c.log)
-	c.log.Infof("consume context parsed data: %v", data.Limit)
+	postBriefs := make([]postDto.PostBriefDto, 0)
+	for _, post := range posts {
+		postBrief := postDto.PostBriefDto{}
+		postBrief.FromEntity(post)
+		postBriefs = append(postBriefs, postBrief)
+	}
 
-	return nil
+	return dto.NewGetPublishedPostsRes(
+		postBriefs,
+		*sharedDto.NewPaginationDto(query.Page, query.Limit, 10, 1),
+	), nil
 }

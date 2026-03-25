@@ -24,7 +24,7 @@ export function Serialize<T>(dto: ClassConstructor<T>) {
                 )
               : plainToInstance(dto, data, { excludeExtraneousValues: true });
 
-          if (data.data) {
+          if (data?.pagination || data?.data) {
             return {
               ...data,
               data: serializeResponseData(data.data),
