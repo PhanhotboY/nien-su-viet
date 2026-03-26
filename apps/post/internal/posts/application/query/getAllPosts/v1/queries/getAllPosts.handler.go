@@ -34,13 +34,14 @@ func (c GetAllPostsHandler) Handle(
 	ctx context.Context,
 	query *GetAllPostsQuery,
 ) (*dto.GetAllPostsRes, error) {
-	c.log.Info("handling get all posts query")
-
-	c.log.Infof("query data: %v", query.Limit)
-
 	posts, err := c.postRepo.GetPosts(ctx, query.MapToQuery(), query.MapToPagination())
 	if err != nil {
 		c.log.Errorf("failed to get all posts: %v", err)
+		return nil, err
+	}
+	total, err := c.postRepo.CountPosts(ctx, query.MapToQuery())
+	if err != nil {
+		c.log.Errorf("failed to count all posts: %v", err)
 		return nil, err
 	}
 
@@ -53,6 +54,6 @@ func (c GetAllPostsHandler) Handle(
 
 	return dto.NewGetAllPostsRes(
 		postBriefs,
-		*sharedDto.NewPaginationDto(query.Page, query.Limit, 1, 1),
+		*sharedDto.NewPaginationDto(query.Page, query.Limit, total),
 	), nil
 }

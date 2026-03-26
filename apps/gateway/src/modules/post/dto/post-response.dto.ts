@@ -1,7 +1,8 @@
-import { Exclude, Expose, Type } from 'class-transformer';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { ApiProperty, OmitType, PickType } from '@nestjs/swagger';
 import { PostBaseDto } from './post-base.dto';
-import { UserBaseResponseDto } from '@gateway/modules/auth/dto';
+import { TimestampDto } from '@phanhotboy/nsv-common';
+import { TimestampUtil } from '@phanhotboy/nsv-common/util/grpc.util';
 
 // DTO for response historical event
 @Exclude()
@@ -12,11 +13,21 @@ export class PostBriefResponseDto extends PickType(PostBaseDto, [
   'slug',
   'summary',
   'published',
+  'authorId',
 ]) {
   @Expose()
   @ApiProperty()
-  @Type(() => UserBaseResponseDto)
-  author!: UserBaseResponseDto;
+  @Transform(({ value }: { value: TimestampDto }) =>
+    TimestampUtil.toDate(value)?.toISOString(),
+  )
+  updatedAt: string;
+
+  @Expose()
+  @ApiProperty()
+  @Transform(({ value }: { value: TimestampDto }) =>
+    TimestampUtil.toDate(value)?.toISOString(),
+  )
+  createdAt: string;
 }
 
 @Exclude()

@@ -21,8 +21,8 @@ import (
 	getPublishedPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPublishedPosts/v1/queries"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/metrics"
 	pb "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto"
+	grpcUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/utils"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
-	dtoUtil "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/dto"
 )
 
 type PostsGrpcServerHandler struct {
@@ -110,25 +110,25 @@ func (p *PostsGrpcServerHandler) CreatePost(
 	// Create command
 	cmd, err := createPostCommand.NewCreatePostCommandWithValidation(req)
 	if err != nil {
-		p.logger.Errorf("[PostService] Invalid create post command: %v", err)
+		p.logger.Errorf("[PostService] Invalid create post command: %s", err.Error())
 		return nil, err
 	}
 
 	// Handle command
 	res, err := p.createPostHandler.Handle(ctx, cmd)
 	if err != nil {
-		p.logger.Errorf("[PostService] Failed to create post: %v", err)
+		p.logger.Errorf("[PostService] Failed to create post: %s", err.Error())
 		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(res, pb.CreatePostResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(res, &pb.CreatePostResponse{}, p.logger)
 }
 
 func (p *PostsGrpcServerHandler) UpdatePost(
 	ctx context.Context,
 	req *pb.UpdatePostRequest,
 ) (*pb.UpdatePostResponse, error) {
-	p.logger.Info("[PostService] Handle update post command", "post_id", req.GetId())
+	p.logger.Infof("[PostService] Handle update post command for: %s", req.GetId())
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "UpdatePost"))
 	// p.postMetrics.UpdatePostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
@@ -136,25 +136,25 @@ func (p *PostsGrpcServerHandler) UpdatePost(
 	// Create command
 	cmd, err := updatePostCommand.NewUpdatePostCommandWithValidation(req)
 	if err != nil {
-		p.logger.Errorf("[PostService] Invalid update post command: %v", err)
+		p.logger.Errorf("[PostService] Invalid update post command: %s", err.Error())
 		return nil, err
 	}
 
 	// Handle command
 	res, err := p.updatePostHandler.Handle(ctx, cmd)
 	if err != nil {
-		p.logger.Errorf("[PostService] Failed to update post: %v", err)
+		p.logger.Errorf("[PostService] Failed to update post: %s", err.Error())
 		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(res, pb.UpdatePostResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(res, &pb.UpdatePostResponse{}, p.logger)
 }
 
 func (p *PostsGrpcServerHandler) PublishPost(
 	ctx context.Context,
 	req *pb.PublishPostRequest,
 ) (*pb.PublishPostResponse, error) {
-	p.logger.Info("[PostService] Handle publish post command", "post_id", req.GetId())
+	p.logger.Infof("[PostService] Handle publish post command for: %s", req.GetId())
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "PublishPost"))
 	// p.postMetrics.PublishPostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
@@ -162,25 +162,25 @@ func (p *PostsGrpcServerHandler) PublishPost(
 	// Create command
 	cmd, err := publishPostCommand.NewPublishPostCommandWithValidation(req)
 	if err != nil {
-		p.logger.Errorf("[PostService] Invalid publish post command: %v", err)
+		p.logger.Errorf("[PostService] Invalid publish post command: %s", err.Error())
 		return nil, err
 	}
 
 	// Handle command
 	res, err := p.publishPostHandler.Handle(ctx, cmd)
 	if err != nil {
-		p.logger.Errorf("[PostService] Failed to publish post: %v", err)
+		p.logger.Errorf("[PostService] Failed to publish post: %s", err.Error())
 		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(res, pb.PublishPostResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(res, &pb.PublishPostResponse{}, p.logger)
 }
 
 func (p *PostsGrpcServerHandler) UnpublishPost(
 	ctx context.Context,
 	req *pb.UnpublishPostRequest,
 ) (*pb.UnpublishPostResponse, error) {
-	p.logger.Info("[PostService] Handle unpublish post command", "post_id", req.GetId())
+	p.logger.Infof("[PostService] Handle unpublish post command for: %s", req.GetId())
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "UnpublishPost"))
 	// p.postMetrics.UnpublishPostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
@@ -188,25 +188,25 @@ func (p *PostsGrpcServerHandler) UnpublishPost(
 	// Create command
 	cmd, err := unpublishPostCommand.NewUnpublishPostCommandWithValidation(req)
 	if err != nil {
-		p.logger.Errorf("[PostService] Invalid unpublish post command: %v", err)
+		p.logger.Errorf("[PostService] Invalid unpublish post command: %s", err.Error())
 		return nil, err
 	}
 
 	// Handle command
 	res, err := p.unpublishPostHandler.Handle(ctx, cmd)
 	if err != nil {
-		p.logger.Errorf("[PostService] Failed to unpublish post: %v", err)
+		p.logger.Errorf("[PostService] Failed to unpublish post: %s", err.Error())
 		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(res, pb.UnpublishPostResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(res, &pb.UnpublishPostResponse{}, p.logger)
 }
 
 func (p *PostsGrpcServerHandler) DeletePost(
 	ctx context.Context,
 	req *pb.DeletePostRequest,
 ) (*pb.DeletePostResponse, error) {
-	p.logger.Info("[PostService] Handle delete post command", "post_id", req.GetId())
+	p.logger.Infof("[PostService] Handle delete post command for: %s", req.GetId())
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "DeletePost"))
 	// p.postMetrics.DeletePostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
@@ -221,18 +221,18 @@ func (p *PostsGrpcServerHandler) DeletePost(
 	// Handle command
 	res, err := p.deletePostHandler.Handle(ctx, cmd)
 	if err != nil {
-		p.logger.Errorf("[PostService] Failed to delete post: %v", err)
+		p.logger.Errorf("[PostService] Failed to delete post: %s", err.Error())
 		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(res, pb.DeletePostResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(res, &pb.DeletePostResponse{}, p.logger)
 }
 
 func (p *PostsGrpcServerHandler) DeletePosts(
 	ctx context.Context,
 	req *pb.DeletePostsRequest,
 ) (*pb.DeletePostsResponse, error) {
-	p.logger.Info("[PostService] Handle delete posts command", "post_ids_count", len(req.GetPostIds()))
+	p.logger.Infof("[PostService] Handle delete posts command: %s", len(req.GetPostIds()))
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "DeletePosts"))
 	// p.postMetrics.DeletePostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
@@ -240,25 +240,25 @@ func (p *PostsGrpcServerHandler) DeletePosts(
 	// Create command
 	cmd, err := deletePostsCommand.NewDeletePostsCommandWithValidation(req)
 	if err != nil {
-		p.logger.Errorf("[PostService] Invalid delete posts command: %v", err)
+		p.logger.Errorf("[PostService] Invalid delete posts command: %s", err.Error())
 		return nil, err
 	}
 
 	// Handle command
 	res, err := p.deletePostsHandler.Handle(ctx, cmd)
 	if err != nil {
-		p.logger.Errorf("[PostService] Failed to delete posts: %v", err)
+		p.logger.Errorf("[PostService] Failed to delete posts: %s", err.Error())
 		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(res, pb.DeletePostsResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(res, &pb.DeletePostsResponse{}, p.logger)
 }
 
 func (p *PostsGrpcServerHandler) IncrementPostViews(
 	ctx context.Context,
 	req *pb.IncrementPostViewsRequest,
 ) (*pb.IncrementPostViewsResponse, error) {
-	p.logger.Info("[PostService] Handle increment post views command", "post_id", req.GetId())
+	p.logger.Info("[PostService] Handle increment post views command for: %s", req.GetId())
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "IncrementPostViews"))
 	// p.postMetrics.IncrementPostViewsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
@@ -266,25 +266,25 @@ func (p *PostsGrpcServerHandler) IncrementPostViews(
 	// Create command
 	cmd, err := incrementPostViewsCommand.NewIncrementPostViewsCommandWithValidation(req)
 	if err != nil {
-		p.logger.Errorf("[PostService] Invalid increment post views command: %v", err)
+		p.logger.Errorf("[PostService] Invalid increment post views command: %s", err.Error())
 		return nil, err
 	}
 
 	// Handle command
 	res, err := p.incrementPostViews.Handle(ctx, cmd)
 	if err != nil {
-		p.logger.Errorf("[PostService] Failed to increment post views: %v", err)
+		p.logger.Errorf("[PostService] Failed to increment post views: %s", err.Error())
 		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(res, pb.IncrementPostViewsResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(res, &pb.IncrementPostViewsResponse{}, p.logger)
 }
 
 func (p *PostsGrpcServerHandler) IncrementPostLikes(
 	ctx context.Context,
 	req *pb.IncrementPostLikesRequest,
 ) (*pb.IncrementPostLikesResponse, error) {
-	p.logger.Info("[PostService] Handle increment post likes command", "post_id", req.GetId())
+	p.logger.Infof("[PostService] Handle increment post likes command for: %s", req.GetId())
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "IncrementPostLikes"))
 	// p.postMetrics.IncrementPostLikesGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
@@ -292,18 +292,18 @@ func (p *PostsGrpcServerHandler) IncrementPostLikes(
 	// Create command
 	cmd, err := incrementPostLikesCommand.NewIncrementPostLikesCommandWithValidation(req)
 	if err != nil {
-		p.logger.Errorf("[PostService] Invalid increment post likes command: %v", err)
+		p.logger.Errorf("[PostService] Invalid increment post likes command: %s", err.Error())
 		return nil, err
 	}
 
 	// Handle command
 	res, err := p.incrementPostLikes.Handle(ctx, cmd)
 	if err != nil {
-		p.logger.Errorf("[PostService] Failed to increment post likes: %v", err)
+		p.logger.Errorf("[PostService] Failed to increment post likes: %s", err.Error())
 		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(res, pb.IncrementPostLikesResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(res, &pb.IncrementPostLikesResponse{}, p.logger)
 }
 
 // ============================================================
@@ -314,7 +314,7 @@ func (p *PostsGrpcServerHandler) GetPost(
 	ctx context.Context,
 	req *pb.GetPostRequest,
 ) (*pb.GetPostResponse, error) {
-	p.logger.Info("[PostService] Handle get post query", "post_id", req.GetId())
+	p.logger.Infof("[PostService] Handle get post query: %+v", req)
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "GetPost"))
 	// p.postMetrics.GetPostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
@@ -322,81 +322,70 @@ func (p *PostsGrpcServerHandler) GetPost(
 	query, err := getPostQuery.NewGetPostQueryWithValidation(req)
 	if err != nil {
 		p.logger.Error("[PostService] Invalid get post query", "error", err)
-		return &pb.GetPostResponse{Data: nil}, nil
+		return nil, err
 	}
 
 	data, err := p.getPostHandler.Handle(ctx, query)
 	if err != nil {
-		p.logger.Error("[PostService] Failed to handle get post query", "error", err)
-		return &pb.GetPostResponse{Data: nil}, nil
+		p.logger.Errorf("[PostService] Failed to handle get post query: %s", err.Error())
+		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(data, pb.GetPostResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(data, &pb.GetPostResponse{}, p.logger)
 }
 
 func (p *PostsGrpcServerHandler) GetPublishedPosts(
 	ctx context.Context,
 	req *pb.GetPublishedPostsRequest,
 ) (*pb.GetPublishedPostsResponse, error) {
+	p.logger.Infof("[PostService] Handle get published posts query: %+v", req)
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "GetPublishedPosts"))
 	// p.postMetrics.GetPublishedPostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	query, err := getPublishedPostsQuery.NewGetPublishedPostsQueryWithValidation(req)
 	if err != nil {
-		p.logger.Error("[PostService] Invalid get published posts query", "error", err)
-		return &pb.GetPublishedPostsResponse{
-			Data:       nil,
-			Pagination: nil,
-		}, nil
+		p.logger.Errorf("[PostService] Invalid get published posts query: %s", err.Error())
+		return nil, err
 	}
 	data, err := p.getPublishedPostsHandler.Handle(ctx, query)
 	if err != nil {
-		p.logger.Error("[PostService] Failed to handle get published posts query", "error", err)
-		return &pb.GetPublishedPostsResponse{
-			Data:       nil,
-			Pagination: nil,
-		}, nil
+		p.logger.Errorf("[PostService] Failed to handle get published posts query: %s", err.Error())
+		return nil, err
 	}
-	p.logger.Warnf("[PostService] Get published posts query result %+v", data)
 
-	return dtoUtil.ValidateStruct(data, pb.GetPublishedPostsResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(data, &pb.GetPublishedPostsResponse{}, p.logger)
 }
 
 func (p *PostsGrpcServerHandler) GetAllPosts(
 	ctx context.Context,
 	req *pb.GetAllPostsRequest,
 ) (*pb.GetAllPostsResponse, error) {
-	p.logger.Info("[PostService] Handle get all posts query", "page", req.GetPage(), "limit", req.GetLimit())
+	p.logger.Infof("[PostService] Handle get all posts query: %+v", req)
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "GetAllPosts"))
 	// p.postMetrics.ListPostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	query, err := getAllPostsQuery.NewGetAllPostsQueryWithValidation(req)
 	if err != nil {
-		p.logger.Error("[PostService] Invalid get all posts query", "error", err)
-		return &pb.GetAllPostsResponse{
-			Data:       nil,
-			Pagination: nil,
-		}, nil
+		p.logger.Errorf("[PostService] Invalid get all posts query: %s", err.Error())
+		return nil, err
 	}
 
 	data, err := p.getAllPostsHandler.Handle(ctx, query)
 	if err != nil {
-		p.logger.Error("[PostService] Failed to handle get all posts query", "error", err)
-		return &pb.GetAllPostsResponse{
-			Data:       nil,
-			Pagination: nil,
-		}, nil
+		p.logger.Errorf("[PostService] Failed to handle get all posts query: %s", err.Error())
+		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(data, pb.GetAllPostsResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(data, &pb.GetAllPostsResponse{}, p.logger)
 }
 
 func (p *PostsGrpcServerHandler) GetPostsByCategory(
 	ctx context.Context,
 	req *pb.GetPostsByCategoryRequest,
 ) (*pb.GetPostsByCategoryResponse, error) {
+	p.logger.Infof("[PostService] Handle get posts by category query: %+v", req)
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "GetPostsByCategory"))
 	// p.postMetrics.GetPostsByCategoryGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
@@ -411,6 +400,7 @@ func (p *PostsGrpcServerHandler) GetPostsByAuthor(
 	ctx context.Context,
 	req *pb.GetPostsByAuthorRequest,
 ) (*pb.GetPostsByAuthorResponse, error) {
+	p.logger.Infof("[PostService] Handle get posts by author query: %+v", req)
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "GetPostsByAuthor"))
 	// p.postMetrics.GetPostsByAuthorGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
@@ -425,26 +415,22 @@ func (p *PostsGrpcServerHandler) GetPopularPosts(
 	ctx context.Context,
 	req *pb.GetPopularPostsRequest,
 ) (*pb.GetPopularPostsResponse, error) {
-	p.logger.Info("[PostService] Handle get popular posts query", "limit", req.GetLimit(), "days_ago", req.GetDaysAgo())
+	p.logger.Infof("[PostService] Handle get popular posts query: %+v", req)
 	span := trace.SpanFromContext(ctx)
 	span.SetAttributes(attribute.String("rpc.method", "GetPopularPosts"))
 	// p.postMetrics.GetPopularPostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	query, err := getPopularPostsQuery.NewGetPopularPostsQueryWithValidation(req)
 	if err != nil {
-		p.logger.Error("[PostService] Invalid get popular posts query", "error", err)
-		return &pb.GetPopularPostsResponse{
-			Data: nil,
-		}, nil
+		p.logger.Errorf("[PostService] Invalid get popular posts query: %s", err.Error())
+		return nil, err
 	}
 
 	data, err := p.getPopularPostsHandler.Handle(ctx, query)
 	if err != nil {
-		p.logger.Error("[PostService] Failed to handle get popular posts query", "error", err)
-		return &pb.GetPopularPostsResponse{
-			Data: nil,
-		}, nil
+		p.logger.Errorf("[PostService] Failed to handle get popular posts query: %s", err.Error())
+		return nil, err
 	}
 
-	return dtoUtil.ValidateStruct(data, pb.GetPopularPostsResponse{}, p.logger)
+	return grpcUtils.UnmarshalProtoMessage(data, &pb.GetPopularPostsResponse{}, p.logger)
 }

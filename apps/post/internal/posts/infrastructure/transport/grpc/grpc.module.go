@@ -14,11 +14,12 @@ var Module = fx.Module(
 	fx.Provide(
 		NewPostsGrpcServerHandler,
 	),
-	// fx.Provide(fx.Annotate(repositories.NewMongoPostReadRepository)),
+
+	// Register the gRPC server and its routes
 	fx.Invoke(
-		func(postsGrpcServer grpcServer.GrpcServer, postGrpcService *PostsGrpcServerHandler) error {
+		func(postsGrpcServer grpcServer.GrpcServer, postGrpcServiceHandlers *PostsGrpcServerHandler) error {
 			postsGrpcServer.GrpcServiceBuilder().RegisterRoutes(func(server *googleGrpc.Server) {
-				postsService.RegisterPostsServiceServer(server, postGrpcService)
+				postsService.RegisterPostsServiceServer(server, postGrpcServiceHandlers)
 			})
 			return nil
 		},

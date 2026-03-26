@@ -18,8 +18,14 @@ import { RmqModule } from '@phanhotboy/nsv-common';
             package: POST_SERVICE_PACKAGE_NAME,
             url: GRPC_SERVICE.POST.URL,
             protoPath: GRPC_SERVICE.POST.PROTO_PATH,
+            // Ref: https://github.com/grpc/grpc-node/blob/master/packages/proto-loader/README.md
             loader: {
+              // includes imported proto files
               includeDirs: [GRPC_SERVICE.MAIN_PROTO_PATH],
+              // since Unmarshal removes falsy values, we need to set default values back to avoid losing data, like empty array, false, etc.
+              defaults: true,
+              // The type to use to represent long (int64) values. Instead of Long object by default.
+              longs: Number,
             },
           },
         }),

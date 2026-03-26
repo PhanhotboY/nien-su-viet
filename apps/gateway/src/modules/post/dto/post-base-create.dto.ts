@@ -23,21 +23,9 @@ export class PostBaseCreateDto extends OmitType(PostBaseDto, [
 
   @Expose()
   @IsOptional()
-  @IsInt({ message: 'Ngày xuất bản không hợp lệ' })
-  publishedAt?: PostBaseDto['publishedAt'];
-
-  @Expose()
-  @IsOptional()
   @IsBoolean({ message: 'Trạng thái xuất bản không hợp lệ' })
   published?: PostBaseDto['published'];
 }
 
 @Exclude()
-export class PostBaseCreateGrpcDto extends OmitType(PostBaseCreateDto, [
-  'publishedAt',
-]) {
-  @Expose()
-  @IsOptional()
-  @Transform(({ value }) => TimestampUtil.toTimestamp(value))
-  publishedAt?: TimestampDto;
-}
+export class PostBaseCreateGrpcDto extends OmitType(PostBaseCreateDto, []) {}

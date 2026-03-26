@@ -8,9 +8,9 @@ import (
 )
 
 type PostListQueryDto struct {
-	Page          int `json:"page" validate:"gte=1"`
-	Limit         int `json:"limit" validate:"gte=1,lte=100"`
-	Published     bool
+	Page          uint32 `json:"page" validate:"gte=1"`
+	Limit         uint32 `json:"limit" validate:"gte=1,lte=100"`
+	Published     *bool  `json:"published,omitempty"`
 	Search        string
 	SortBy        string
 	SortOrder     string

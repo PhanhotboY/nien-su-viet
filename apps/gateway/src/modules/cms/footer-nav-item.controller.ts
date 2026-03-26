@@ -39,7 +39,7 @@ export class FooterNavItemController {
   @Public()
   // @Serialize(FooterNavItemDto)
   proxyRequest(@Req() req: Request): Promise<FooterNavItemDto> {
-    return this.cmsProxy.proxyRequest<FooterNavItemDto>(req);
+    return this.cmsProxy.makeRequest<FooterNavItemDto>(req);
   }
 
   @Post()
@@ -51,7 +51,7 @@ export class FooterNavItemController {
     @Body() body: FooterNavItemCreateDto,
   ) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 
   @Put(':id')
@@ -63,7 +63,7 @@ export class FooterNavItemController {
     @Body() body: FooterNavItemUpdateDto,
   ) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 
   @Delete(':id')
@@ -72,6 +72,6 @@ export class FooterNavItemController {
   @Serialize(OperationMetadataDto)
   async proxyDeleteRequest(@Req() req: Request) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 }

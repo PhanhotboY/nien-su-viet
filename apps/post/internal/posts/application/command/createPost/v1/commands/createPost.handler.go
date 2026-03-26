@@ -39,7 +39,5 @@ func (h CreatePostHandler) Handle(
 		return nil, err
 	}
 
-	h.log.Infof("post created successfully with id: %s", id)
-
 	return dto.NewCreatePostResponse(id, true, "Post created successfully"), nil
 }

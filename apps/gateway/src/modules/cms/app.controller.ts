@@ -25,7 +25,7 @@ export class AppController {
   @Public()
   @Serialize(AppDto)
   async proxyRequest(@Req() req: Request): Promise<AppDto> {
-    const res = await this.cmsProxy.proxyRequest<AppDto>(req);
+    const res = await this.cmsProxy.makeRequest<AppDto>(req);
     return res as AppDto;
   }
 
@@ -35,6 +35,6 @@ export class AppController {
   @Serialize(OperationMetadataDto)
   async proxyPutRequest(@Req() req: Request, @Body() body: AppUpdateDto) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 }

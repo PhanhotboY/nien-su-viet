@@ -2,25 +2,25 @@ package dto
 
 import (
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/entity"
-	"google.golang.org/protobuf/types/known/timestamppb"
+	grpcUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/utils"
 )
 
 // GetPostRes represents the response DTO for getting a single post
 type PostDetailDto struct {
-	ID          string                 `json:"id"`
-	Title       string                 `json:"title"`
-	Slug        string                 `json:"slug"`
-	Content     string                 `json:"content"`
-	Summary     *string                `json:"summary,omitempty"`
-	Thumbnail   *string                `json:"thumbnail,omitempty"`
-	AuthorID    string                 `json:"author_id"`
-	CategoryID  *string                `json:"category_id,omitempty"`
-	Views       int                    `json:"views"`
-	Likes       int                    `json:"likes"`
-	Published   bool                   `json:"published"`
-	PublishedAt *timestamppb.Timestamp `json:"published_at,omitempty"`
-	CreatedAt   timestamppb.Timestamp  `json:"created_at"`
-	UpdatedAt   timestamppb.Timestamp  `json:"updated_at"`
+	ID          string  `json:"id"`
+	Title       string  `json:"title"`
+	Slug        string  `json:"slug"`
+	Content     string  `json:"content"`
+	Summary     *string `json:"summary,omitempty"`
+	Thumbnail   *string `json:"thumbnail,omitempty"`
+	AuthorID    string  `json:"author_id"`
+	CategoryID  *string `json:"category_id,omitempty"`
+	Views       int     `json:"views"`
+	Likes       int     `json:"likes"`
+	Published   bool    `json:"published"`
+	PublishedAt *string `json:"published_at,omitempty"`
+	CreatedAt   string  `json:"created_at"`
+	UpdatedAt   string  `json:"updated_at"`
 }
 
 func (p *PostDetailDto) FromEntity(post *entity.Post) {
@@ -46,8 +46,9 @@ func (p *PostDetailDto) FromEntity(post *entity.Post) {
 	p.Published = post.Published
 
 	if post.PublishedAt != nil {
-		p.PublishedAt = timestamppb.New(*post.PublishedAt)
+		timeStr := grpcUtils.TimeToString(*post.PublishedAt)
+		p.PublishedAt = &timeStr
 	}
-	p.CreatedAt = *timestamppb.New(post.CreatedAt)
-	p.UpdatedAt = *timestamppb.New(post.UpdatedAt)
+	p.CreatedAt = grpcUtils.TimeToString(post.CreatedAt)
+	p.UpdatedAt = grpcUtils.TimeToString(post.UpdatedAt)
 }

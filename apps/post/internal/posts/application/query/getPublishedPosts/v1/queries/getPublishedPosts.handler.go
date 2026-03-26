@@ -42,7 +42,11 @@ func (c GetPublishedPostsHandler) Handle(
 		c.log.Errorf("failed to get published posts: %v", err)
 		return nil, err
 	}
-	c.log.Warnf("[PostService] Get published posts query result %+v", posts)
+	total, err := c.postRepo.CountPosts(ctx, query.MapToQuery())
+	if err != nil {
+		c.log.Errorf("failed to count published posts: %v", err)
+		return nil, err
+	}
 
 	postBriefs := make([]postDto.PostBriefDto, 0)
 	for _, post := range posts {
@@ -53,6 +57,6 @@ func (c GetPublishedPostsHandler) Handle(
 
 	return dto.NewGetPublishedPostsRes(
 		postBriefs,
-		*sharedDto.NewPaginationDto(query.Page, query.Limit, 10, 1),
+		*sharedDto.NewPaginationDto(query.Page, query.Limit, total),
 	), nil
 }

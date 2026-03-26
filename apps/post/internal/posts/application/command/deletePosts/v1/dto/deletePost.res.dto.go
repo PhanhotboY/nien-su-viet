@@ -6,7 +6,7 @@ import (
 
 // DeletePostResponse is the response DTO for deleting a post (single or multiple)
 type DeletePostsResponse struct {
-	Data sharedDto.OperationResponse
+	Data sharedDto.OperationResponse `json:"data"`
 }
 
 func NewDeletePostsResponse(id string, success bool, message string) *DeletePostsResponse {

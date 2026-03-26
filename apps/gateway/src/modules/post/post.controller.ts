@@ -52,9 +52,7 @@ export class PostController {
   @Serialize(PostBriefResponseDto)
   @ApiOkSerializedPaginatedResponse(PostBriefResponseDto)
   async getPublishedPosts(@Query() query: PostQueryDto) {
-    console.log('Querying posts with parameters:', query);
     const res = await this.postService.getPublishedPosts(query);
-    console.log('Retrieved posts:', res);
     return res;
   }
 
@@ -62,8 +60,9 @@ export class PostController {
   @Permissions({ post: ['read'] })
   @Serialize(PostBriefResponseDto)
   @ApiOkSerializedPaginatedResponse(PostBriefResponseDto)
-  getAllPosts(@Query() query: PostQueryDto) {
-    return this.postService.getAllPosts(query);
+  async getAllPosts(@Query() query: PostQueryDto) {
+    const res = await this.postService.getAllPosts(query);
+    return res;
   }
 
   @Get(':id')

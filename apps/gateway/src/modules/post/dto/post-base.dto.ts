@@ -79,11 +79,11 @@ export class PostBaseDto
 
   @Expose()
   @IsOptional()
-  publishedAt!: number;
+  publishedAt!: string;
 
   @Expose()
-  createdAt!: number;
+  createdAt!: string;
 
   @Expose()
-  updatedAt!: number;
+  updatedAt!: string;
 }

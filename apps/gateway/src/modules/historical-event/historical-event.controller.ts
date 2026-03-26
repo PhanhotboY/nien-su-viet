@@ -29,6 +29,8 @@ import {
   ApiOkSerializedResponse,
   ApiOkSerializedPaginatedResponse,
   ApiOkSerializedOperationResponse,
+  OperationMetadataDto,
+  ApiCreatedSerializedResponse,
 } from '@phanhotboy/nsv-common';
 import { RATE_LIMIT } from '@gateway/config';
 import { Public, Permissions, CurrentUser } from '@gateway/common/decorators';
@@ -70,11 +72,11 @@ export class HistoricalEventController {
   @Post()
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ historicalEvent: ['create'] })
-  @ApiOkSerializedOperationResponse()
+  @ApiCreatedSerializedResponse()
   async createHistoricalEvent(
     @Body() event: HistoricalEventBaseCreateDto,
     @CurrentUser('id') authorId: string,
-  ) {
+  ): Promise<OperationMetadataDto> {
     await this.redis.mdel(this.routePath);
     return this.historicalEventService.createEvent(authorId, event);
   }
@@ -86,7 +88,7 @@ export class HistoricalEventController {
   async updateHistoricalEvent(
     @Param('id') id: string,
     @Body() event: HistoricalEventBaseUpdateDto,
-  ) {
+  ): Promise<OperationMetadataDto> {
     await this.redis.mdel(this.routePath);
     return this.historicalEventService.updateEvent(id, event);
   }
@@ -98,7 +100,7 @@ export class HistoricalEventController {
   async deleteHistoricalEvent(
     @Param('id') id: string,
     @CurrentUser('id') authorId: string,
-  ) {
+  ): Promise<OperationMetadataDto> {
     await this.redis.mdel(this.routePath);
     return this.historicalEventService.deleteEvent(id, authorId);
   }

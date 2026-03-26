@@ -1,6 +1,36 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/api/v1/auth/users/{id}": {
+      "get": {
+        "operationId": "AuthController_getUserInfo",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/api/v1/auth/sign-in/email": {
       "post": {
         "operationId": "AuthController_forwardSignInEmail",
@@ -980,8 +1010,8 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "The serialized result of OperationMetadataDto",
+          "201": {
+            "description": "The serialized result of Creation result",
             "content": {
               "application/json": {
                 "schema": {
@@ -997,16 +1027,6 @@
                       }
                     }
                   ]
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
                 }
               }
             }
@@ -1089,11 +1109,18 @@
             }
           },
           {
+            "name": "published",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "createdAtFrom",
             "required": false,
             "in": "query",
             "schema": {
-              "format": "date-time",
               "type": "string"
             }
           },
@@ -1102,7 +1129,6 @@
             "required": false,
             "in": "query",
             "schema": {
-              "format": "date-time",
               "type": "string"
             }
           },
@@ -1111,7 +1137,6 @@
             "required": false,
             "in": "query",
             "schema": {
-              "format": "date-time",
               "type": "string"
             }
           },
@@ -1120,7 +1145,6 @@
             "required": false,
             "in": "query",
             "schema": {
-              "format": "date-time",
               "type": "string"
             }
           }
@@ -1268,11 +1292,18 @@
             }
           },
           {
+            "name": "published",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "createdAtFrom",
             "required": false,
             "in": "query",
             "schema": {
-              "format": "date-time",
               "type": "string"
             }
           },
@@ -1281,7 +1312,6 @@
             "required": false,
             "in": "query",
             "schema": {
-              "format": "date-time",
               "type": "string"
             }
           },
@@ -1290,7 +1320,6 @@
             "required": false,
             "in": "query",
             "schema": {
-              "format": "date-time",
               "type": "string"
             }
           },
@@ -1299,7 +1328,6 @@
             "required": false,
             "in": "query",
             "schema": {
-              "format": "date-time",
               "type": "string"
             }
           }
@@ -1990,7 +2018,7 @@
           "timestamp"
         ]
       },
-      "UserBaseResponseDto": {
+      "UserBriefResponseDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -2000,10 +2028,6 @@
             "type": "string",
             "minLength": 1
           },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
           "image": {
             "type": "string",
             "nullable": true
@@ -2011,8 +2035,7 @@
         },
         "required": [
           "id",
-          "name",
-          "email"
+          "name"
         ]
       },
       "HistoricalEventPreviewResponseDto": {
@@ -2028,7 +2051,7 @@
             "type": "string"
           },
           "author": {
-            "$ref": "#/components/schemas/UserBaseResponseDto"
+            "$ref": "#/components/schemas/UserBriefResponseDto"
           },
           "id": {
             "type": "string",
@@ -2163,7 +2186,7 @@
             "format": "uri"
           },
           "author": {
-            "$ref": "#/components/schemas/UserBaseResponseDto"
+            "$ref": "#/components/schemas/UserBriefResponseDto"
           },
           "categories": {
             "type": "array",
@@ -2187,7 +2210,7 @@
         "type": "object",
         "properties": {
           "author": {
-            "$ref": "#/components/schemas/UserBaseResponseDto"
+            "$ref": "#/components/schemas/UserBriefResponseDto"
           },
           "id": {
             "type": "string",
@@ -2436,8 +2459,11 @@
       "PostBriefResponseDto": {
         "type": "object",
         "properties": {
-          "author": {
-            "$ref": "#/components/schemas/UserBaseResponseDto"
+          "updatedAt": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
           },
           "id": {
             "type": "string",
@@ -2464,21 +2490,29 @@
           },
           "published": {
             "type": "boolean"
+          },
+          "authorId": {
+            "type": "string"
           }
         },
         "required": [
-          "author",
+          "updatedAt",
+          "createdAt",
           "id",
           "title",
           "slug",
-          "published"
+          "published",
+          "authorId"
         ]
       },
       "PostDetailResponseDto": {
         "type": "object",
         "properties": {
-          "author": {
-            "$ref": "#/components/schemas/UserBaseResponseDto"
+          "updatedAt": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
           },
           "id": {
             "type": "string",
@@ -2505,17 +2539,22 @@
           },
           "published": {
             "type": "boolean"
+          },
+          "authorId": {
+            "type": "string"
           },
           "content": {
             "type": "string"
           }
         },
         "required": [
-          "author",
+          "updatedAt",
+          "createdAt",
           "id",
           "title",
           "slug",
           "published",
+          "authorId",
           "content"
         ]
       },
@@ -2524,9 +2563,6 @@
         "properties": {
           "authorId": {
             "type": "string"
-          },
-          "publishedAt": {
-            "type": "number"
           },
           "published": {
             "type": "boolean"
@@ -2568,6 +2604,9 @@
       "PostBaseUpdateDto": {
         "type": "object",
         "properties": {
+          "publishedAt": {
+            "type": "string"
+          },
           "title": {
             "type": "string",
             "minLength": 1,
@@ -2597,9 +2636,6 @@
           },
           "authorId": {
             "type": "string"
-          },
-          "publishedAt": {
-            "type": "number"
           },
           "published": {
             "type": "boolean"

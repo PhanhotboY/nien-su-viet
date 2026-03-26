@@ -4,6 +4,22 @@
  */
 
 export interface paths {
+    "/api/v1/auth/users/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AuthController_getUserInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/auth/sign-in/email": {
         parameters: {
             query?: never;
@@ -427,7 +443,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["PostController_getAllPosts"];
+        get: operations["PostController_getPublishedPosts"];
         put?: never;
         post: operations["PostController_createPost"];
         delete?: never;
@@ -443,7 +459,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["PostController_getPosts"];
+        get: operations["PostController_getAllPosts"];
         put?: never;
         post?: never;
         delete?: never;
@@ -609,17 +625,15 @@ export interface components {
             statusCode: number;
             timestamp: string;
         };
-        UserBaseResponseDto: {
+        UserBriefResponseDto: {
             id: string;
             name: string;
-            /** Format: email */
-            email: string;
             image?: string | null;
         };
         HistoricalEventPreviewResponseDto: {
             categories: Record<string, never>[];
             excerpt: string;
-            author: components["schemas"]["UserBaseResponseDto"];
+            author: components["schemas"]["UserBriefResponseDto"];
             /** Format: uuid */
             id: string;
             name: string;
@@ -653,11 +667,11 @@ export interface components {
             toYear?: number | null;
             /** Format: uri */
             thumbnail?: string;
-            author: components["schemas"]["UserBaseResponseDto"];
+            author: components["schemas"]["UserBriefResponseDto"];
             categories: Record<string, never>[];
         };
         HistoricalEventBriefResponseDto: {
-            author: components["schemas"]["UserBaseResponseDto"];
+            author: components["schemas"]["UserBriefResponseDto"];
             /** Format: uuid */
             id: string;
             name: string;
@@ -721,7 +735,8 @@ export interface components {
             authorId?: string;
         };
         PostBriefResponseDto: {
-            author: components["schemas"]["UserBaseResponseDto"];
+            updatedAt: string;
+            createdAt: string;
             /** Format: uuid */
             id: string;
             /** Format: uri */
@@ -730,9 +745,11 @@ export interface components {
             slug: string;
             summary?: string;
             published: boolean;
+            authorId: string;
         };
         PostDetailResponseDto: {
-            author: components["schemas"]["UserBaseResponseDto"];
+            updatedAt: string;
+            createdAt: string;
             /** Format: uuid */
             id: string;
             /** Format: uri */
@@ -741,11 +758,11 @@ export interface components {
             slug: string;
             summary?: string;
             published: boolean;
+            authorId: string;
             content: string;
         };
         PostBaseCreateDto: {
             authorId?: string;
-            publishedAt?: number;
             published?: boolean;
             title: string;
             slug: string;
@@ -757,6 +774,7 @@ export interface components {
             categoryId?: string;
         };
         PostBaseUpdateDto: {
+            publishedAt?: string;
             title?: string;
             slug?: string;
             content?: string;
@@ -766,7 +784,6 @@ export interface components {
             /** Format: uuid */
             categoryId?: string;
             authorId?: string;
-            publishedAt?: number;
             published?: boolean;
         };
         EventCategoryBriefResponseDto: {
@@ -807,6 +824,27 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    AuthController_getUserInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+        };
+    };
     AuthController_forwardSignInEmail: {
         parameters: {
             query?: never;
@@ -1582,8 +1620,8 @@ export interface operations {
             };
         };
         responses: {
-            /** @description The serialized result of OperationMetadataDto */
-            200: {
+            /** @description The serialized result of Creation result */
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1593,17 +1631,9 @@ export interface operations {
                     };
                 };
             };
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": Record<string, never>;
-                };
-            };
         };
     };
-    PostController_getAllPosts: {
+    PostController_getPublishedPosts: {
         parameters: {
             query: {
                 page?: number;
@@ -1613,6 +1643,7 @@ export interface operations {
                 sortOrder?: "asc" | "desc";
                 authorId?: string;
                 categoryIds: string[];
+                published?: string;
                 createdAtFrom?: string;
                 createdAtTo?: string;
                 updatedAtFrom?: string;
@@ -1664,7 +1695,7 @@ export interface operations {
             };
         };
     };
-    PostController_getPosts: {
+    PostController_getAllPosts: {
         parameters: {
             query: {
                 page?: number;
@@ -1674,6 +1705,7 @@ export interface operations {
                 sortOrder?: "asc" | "desc";
                 authorId?: string;
                 categoryIds: string[];
+                published?: string;
                 createdAtFrom?: string;
                 createdAtTo?: string;
                 updatedAtFrom?: string;

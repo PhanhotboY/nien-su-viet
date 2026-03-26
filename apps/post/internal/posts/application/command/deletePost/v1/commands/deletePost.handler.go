@@ -36,16 +36,12 @@ func (h DeletePostHandler) Handle(
 	ctx context.Context,
 	cmd *DeletePostCommand,
 ) (*dto.DeletePostResponse, error) {
-	h.log.Info("handling delete post command", "post_id", cmd.ID)
-
 	// Delete the post from repository
 	id, err := h.postRepo.DeletePost(ctx, cmd.ID)
 	if err != nil {
 		h.log.Errorf("failed to delete post: %v", err)
 		return nil, err
 	}
-
-	h.log.Infof("post deleted successfully with id: %s", id)
 
 	return dto.NewDeletePostResponse(id, true, "Post deleted successfully"), nil
 }

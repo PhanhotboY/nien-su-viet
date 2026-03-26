@@ -39,7 +39,7 @@ export class HeaderNavItemController {
   @Public()
   @Serialize(HeaderNavItemDto)
   async proxyRequest(@Req() req: Request): Promise<HeaderNavItemDto> {
-    return await this.cmsProxy.proxyRequest<HeaderNavItemDto>(req);
+    return await this.cmsProxy.makeRequest<HeaderNavItemDto>(req);
   }
 
   @Post()
@@ -51,7 +51,7 @@ export class HeaderNavItemController {
     @Body() body: HeaderNavItemCreateDto,
   ) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 
   @Put(':id')
@@ -63,7 +63,7 @@ export class HeaderNavItemController {
     @Body() body: HeaderNavItemUpdateDto,
   ) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 
   @Delete(':id')
@@ -72,6 +72,6 @@ export class HeaderNavItemController {
   @Serialize(OperationMetadataDto)
   async proxyDeleteRequest(@Req() req: Request) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 }

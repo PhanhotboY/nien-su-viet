@@ -10,7 +10,8 @@ type GetPublicPostsQueryReq struct {
 }
 
 func (g *GetPublicPostsQueryReq) MapToQuery() repository.PostQuery {
-	g.Published = true
+	trueValue := true
+	g.Published = &trueValue
 	return g.PostListQueryDto.MapToQuery()
 }
 

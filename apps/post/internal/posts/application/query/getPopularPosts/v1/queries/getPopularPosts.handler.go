@@ -36,13 +36,14 @@ func (c GetPopularPostsHandler) Handle(
 	ctx context.Context,
 	query *GetPopularPostsQuery,
 ) (*dto.GetPopularPostsRes, error) {
-	c.log.Info("handling get popular posts query")
-
-	c.log.Infof("query data: %v", query.Limit)
-
 	posts, err := c.postRepo.GetPosts(ctx, query.MapToQuery(), query.MapToPagination())
 	if err != nil {
 		c.log.Errorf("failed to get popular posts: %v", err)
+		return nil, err
+	}
+	total, err := c.postRepo.CountPosts(ctx, query.MapToQuery())
+	if err != nil {
+		c.log.Errorf("failed to count popular posts: %v", err)
 		return nil, err
 	}
 
@@ -53,5 +54,5 @@ func (c GetPopularPostsHandler) Handle(
 		postBriefs = append(postBriefs, postBrief)
 	}
 
-	return dto.NewGetPopularPostsRes(postBriefs, *sharedDto.NewPaginationDto(query.Page, query.Limit, 1, 1)), nil
+	return dto.NewGetPopularPostsRes(postBriefs, *sharedDto.NewPaginationDto(query.Page, query.Limit, total)), nil
 }
