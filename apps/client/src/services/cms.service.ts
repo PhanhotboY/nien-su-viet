@@ -16,7 +16,7 @@ async function getAppInfo(
 
 async function updateApp(
   app: Partial<components['schemas']['AppUpdateDto']>,
-): Promise<IApiResponse<components['schemas']['OperationResponse']>> {
+): Promise<IApiResponse<components['schemas']['SerializedResponseDto']>> {
   const response = await retryFetcher(`/app`, {
     method: 'PUT',
     body: JSON.stringify(app),
@@ -35,7 +35,7 @@ async function getHeaderNavItems(): Promise<
 async function updateHeaderNavItem(
   id: string,
   item: Partial<components['schemas']['HeaderNavItemUpdateDto']>,
-): Promise<IApiResponse<components['schemas']['OperationResponse']>> {
+): Promise<components['schemas']['OperationMetadataDto']> {
   const response = await retryFetcher(`/header-nav-items/${id}`, {
     method: 'PUT',
     body: JSON.stringify(item),
@@ -54,7 +54,7 @@ async function getFooterNavItems(): Promise<
 async function updateFooterNavItem(
   id: string,
   item: Partial<components['schemas']['FooterNavItemCreateDto']>,
-): Promise<IApiResponse<components['schemas']['OperationResponse']>> {
+): Promise<IApiResponse<components['schemas']['OperationMetadataDto']>> {
   const response = await retryFetcher(`/footer-nav-items/${id}`, {
     method: 'PUT',
     body: JSON.stringify(item),
@@ -64,7 +64,7 @@ async function updateFooterNavItem(
 
 async function createHeaderNavItem(
   item: components['schemas']['HeaderNavItemCreateDto'],
-): Promise<IApiResponse<components['schemas']['OperationResponse']>> {
+): Promise<components['schemas']['OperationMetadataDto']> {
   const response = await retryFetcher(`/header-nav-items`, {
     method: 'POST',
     body: JSON.stringify(item),
@@ -74,7 +74,7 @@ async function createHeaderNavItem(
 
 async function deleteHeaderNavItem(
   id: string,
-): Promise<IApiResponse<components['schemas']['OperationResponse']>> {
+): Promise<components['schemas']['OperationMetadataDto']> {
   const response = await retryFetcher(`/header-nav-items/${id}`, {
     method: 'DELETE',
   });
@@ -83,7 +83,7 @@ async function deleteHeaderNavItem(
 
 async function createFooterNavItem(
   item: components['schemas']['FooterNavItemCreateDto'],
-): Promise<IApiResponse<components['schemas']['OperationResponse']>> {
+): Promise<IApiResponse<components['schemas']['OperationMetadataDto']>> {
   const response = await retryFetcher(`/footer-nav-items`, {
     method: 'POST',
     body: JSON.stringify(item),
@@ -93,7 +93,7 @@ async function createFooterNavItem(
 
 async function deleteFooterNavItem(
   id: string,
-): Promise<IApiResponse<components['schemas']['OperationResponse']>> {
+): Promise<IApiResponse<components['schemas']['OperationMetadataDto']>> {
   const response = await retryFetcher(`/footer-nav-items/${id}`, {
     method: 'DELETE',
   });

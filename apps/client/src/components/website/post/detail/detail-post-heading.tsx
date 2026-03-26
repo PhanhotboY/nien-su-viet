@@ -1,17 +1,16 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getAvatarFallback, getMinutes, shimmer, toBase64 } from '@/lib/utils';
+import { getMinutes, shimmer, toBase64 } from '@/lib/utils';
 import { ArchiveIcon, CalendarIcon, ClockIcon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import { FC } from 'react';
 import { ReadTimeResults } from 'reading-time';
+import AuthorInfo from '../author-info';
 
 interface DetailPostHeadingProps {
   id: string;
   title: string;
   thumbnail: string;
-  authorImage?: string;
-  authorName: string;
+  authorId: string;
   date: string;
   // category: string;
   readTime: ReadTimeResults;
@@ -22,8 +21,7 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
   id,
   title,
   thumbnail,
-  authorName,
-  authorImage,
+  authorId,
   date,
   // category,
   readTime,
@@ -54,13 +52,7 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
         <div className="mb-5 grid grid-cols-2 gap-2 rounded-md border border-gray-100 px-3 py-2.5 sm:hidden">
           {/* Author */}
           <div className="inline-flex items-start justify-start">
-            <Avatar>
-              <AvatarImage src={authorImage} />
-              <AvatarFallback>{getAvatarFallback(authorName)}</AvatarFallback>
-            </Avatar>
-            <div className="ml-2 flex flex-col">
-              <span className="text-md flex font-semibold">{authorName}</span>
-            </div>
+            <AuthorInfo authorId={authorId} />
           </div>
 
           {/* Date */}
@@ -91,18 +83,13 @@ const DetailPostHeading: FC<DetailPostHeadingProps> = async ({
         </div>
 
         {/* Desktop view */}
-        <div className="mb-7 hidden justify-start text-card-foreground sm:flex sm:flex-row">
-          <Avatar>
-            <AvatarImage src={authorImage} />
-            <AvatarFallback>{getAvatarFallback(authorName)}</AvatarFallback>
-          </Avatar>
-          {/* Author */}
-          <div className="mb-5 flex flex-row items-center justify-start pr-3.5 md:mb-0">
-            <div className="ml-2 flex flex-col">
-              <span className="text-md flex font-semibold">{authorName}</span>
-            </div>
-          </div>
+        <div className="mb-7 hidden items-center justify-start text-card-foreground sm:flex sm:flex-row">
           <div className="flex flex-row items-center">
+            {/* Author */}
+            <div className="flex items-center pl-0 pr-3.5">
+              <AuthorInfo authorId={authorId} />
+            </div>
+
             {/* Date */}
             <div className="flex space-x-2 border-gray-400 border-opacity-50 pl-0 pr-3.5 md:border-l md:pl-3.5">
               <p className="mt-0.5 opacity-80">

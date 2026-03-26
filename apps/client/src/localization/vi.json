@@ -466,6 +466,7 @@
   },
   "Shared": {
     "author": "Tác giả",
+    "unknown-author": "Không rõ tác giả",
     "period": "Thời gian",
     "period-from": "Bắt đầu",
     "period-to": "Kết thúc",
