@@ -12,6 +12,7 @@ import {
   PanelTop,
   Route,
   Newspaper,
+  Image,
 } from 'lucide-react';
 import { authClient } from '@/lib/auth-client';
 
@@ -47,6 +48,11 @@ const sidebarNavItems = [
     href: '/cmsdesk/posts',
     icon: Newspaper,
     label: 'Posts',
+  },
+  {
+    href: '/cmsdesk/images',
+    icon: Image,
+    label: 'Images',
   },
 ];
 

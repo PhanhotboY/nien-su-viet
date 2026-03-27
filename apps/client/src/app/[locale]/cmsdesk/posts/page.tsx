@@ -37,10 +37,11 @@ async function findPostsHandler(query: any) {
 
 const PostsPage: FC<PostsPageProps> = async ({ searchParams }) => {
   const resolvedSearchParams = await searchParams;
-  const posts = await findPostsHandler(resolvedSearchParams);
+  let posts = await findPostsHandler(resolvedSearchParams);
 
   if (!posts) {
-    notFound();
+    // notFound();
+    posts = [];
   }
   return (
     <>
