@@ -15,8 +15,7 @@ export default async function AuthorInfo({
   showAuthorLabel,
 }: AuthorInfoProps) {
   const tshared = await getTranslations('Shared');
-  let { data: author, ...data } = await getUserById(authorId);
-  console.log('Author data:', data);
+  let { data: author } = await getUserById(authorId);
   if (!author) {
     author = {
       id: '',

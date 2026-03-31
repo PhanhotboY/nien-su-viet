@@ -1,4 +1,4 @@
-import { UploadedImage } from './image.service';
+import { IImage } from '@/types/image';
 
 export async function uploadImagesClient(formData: FormData) {
   const response = await fetch('/api/images/upload', {
@@ -12,5 +12,5 @@ export async function uploadImagesClient(formData: FormData) {
   }
 
   const data = await response.json();
-  return data.images as UploadedImage[];
+  return data.images as IImage[];
 }
