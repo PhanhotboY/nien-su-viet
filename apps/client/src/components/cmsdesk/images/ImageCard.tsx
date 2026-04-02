@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,6 +15,8 @@ import {
   Trash2,
   Edit2,
   ExternalLink,
+  Code,
+  Check,
 } from 'lucide-react';
 import type { IImage } from '@/types/image';
 
@@ -26,6 +28,8 @@ interface ImageCardProps {
 
 export function ImageCard({ image, onEdit, onDelete }: ImageCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isCopying, setIsCopying] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this image?')) return;
@@ -40,6 +44,26 @@ export function ImageCard({ image, onEdit, onDelete }: ImageCardProps) {
       setIsDeleting(false);
     }
   };
+
+  const handleCopyUrl = async () => {
+    setIsCopying(true);
+    try {
+      await navigator.clipboard.writeText(image.img_url);
+      setIsCopied(true);
+    } catch (error) {
+      console.error('Failed to copy URL:', error);
+      alert('Failed to copy URL');
+    } finally {
+      setIsCopying(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isCopied) {
+      const timer = setTimeout(() => setIsCopied(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isCopied]);
 
   const formatBytes = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
@@ -63,6 +87,15 @@ export function ImageCard({ image, onEdit, onDelete }: ImageCardProps) {
 
         {/* Quick Actions Overlay */}
         <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/40 opacity-0 transition-opacity hover:opacity-100">
+          <Button
+            variant="outline"
+            onClick={handleCopyUrl}
+            disabled={isDeleting}
+            className="absolute top-4 right-4 aspect-square"
+          >
+            {isCopied ? <Check className="h-4" /> : <Code className="h-4" />}
+          </Button>
+
           <Button
             variant="destructive"
             onClick={handleDelete}

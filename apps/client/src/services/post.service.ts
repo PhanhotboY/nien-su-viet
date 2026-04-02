@@ -37,6 +37,7 @@ export async function getPost(id: string) {
     method: 'GET',
     isPublicRoute: true,
   });
+  console.log('get post response:', response);
 
   return response;
 }
