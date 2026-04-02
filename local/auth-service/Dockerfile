@@ -6,9 +6,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --legacy-peer-deps
 
-COPY . .
+COPY ./*.* .
+COPY ./apps/auth ./apps/auth
+COPY ./libs ./libs
+COPY ./api ./api
 RUN npm run build auth
-
 
 # ---------- Production ----------
 FROM node:24-slim AS production

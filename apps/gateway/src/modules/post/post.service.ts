@@ -41,8 +41,8 @@ export class PostService implements OnModuleInit {
         firstValueFrom(
           this.postService
             .createPost({
-              authorId,
               ...plainToInstance(PostBaseCreateGrpcDto, payload),
+              authorId,
             })
             .pipe(
               timeout(10000),

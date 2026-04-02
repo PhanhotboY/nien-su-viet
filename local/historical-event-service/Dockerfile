@@ -6,9 +6,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --legacy-peer-deps
 
-COPY . .
+COPY ./*.* .
+COPY ./apps/historical-event ./apps/historical-event
+COPY ./libs ./libs
+COPY ./api ./api
 RUN npm run build historical-event
-
 
 # ---------- Production ----------
 FROM node:24-slim AS production
