@@ -2,14 +2,14 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v7.34.0
-// source: posts.proto
+// source: post_service/posts.proto
 
 package posts_service
 
 import (
+	common "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/emptypb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -29,23 +29,24 @@ type Post struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	Slug          string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
-	CategoryId    string                 `protobuf:"bytes,4,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
-	Thumbnail     string                 `protobuf:"bytes,5,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`
-	AuthorId      string                 `protobuf:"bytes,6,opt,name=author_id,json=authorId,proto3" json:"author_id,omitempty"`
-	Content       string                 `protobuf:"bytes,7,opt,name=content,proto3" json:"content,omitempty"`
-	Summary       string                 `protobuf:"bytes,8,opt,name=summary,proto3" json:"summary,omitempty"`
+	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
+	Summary       *string                `protobuf:"bytes,5,opt,name=summary,proto3,oneof" json:"summary,omitempty"`
+	Thumbnail     *string                `protobuf:"bytes,6,opt,name=thumbnail,proto3,oneof" json:"thumbnail,omitempty"`
+	AuthorId      string                 `protobuf:"bytes,7,opt,name=author_id,json=authorId,proto3" json:"author_id,omitempty"`
+	CategoryId    *string                `protobuf:"bytes,8,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
 	Views         int32                  `protobuf:"varint,9,opt,name=views,proto3" json:"views,omitempty"`
 	Likes         int32                  `protobuf:"varint,10,opt,name=likes,proto3" json:"likes,omitempty"`
 	Published     bool                   `protobuf:"varint,11,opt,name=published,proto3" json:"published,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	PublishedAt   *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=published_at,json=publishedAt,proto3,oneof" json:"published_at,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Post) Reset() {
 	*x = Post{}
-	mi := &file_posts_proto_msgTypes[0]
+	mi := &file_post_service_posts_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -57,7 +58,7 @@ func (x *Post) String() string {
 func (*Post) ProtoMessage() {}
 
 func (x *Post) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[0]
+	mi := &file_post_service_posts_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -70,7 +71,7 @@ func (x *Post) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Post.ProtoReflect.Descriptor instead.
 func (*Post) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{0}
+	return file_post_service_posts_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Post) GetId() string {
@@ -94,16 +95,23 @@ func (x *Post) GetSlug() string {
 	return ""
 }
 
-func (x *Post) GetCategoryId() string {
+func (x *Post) GetContent() string {
 	if x != nil {
-		return x.CategoryId
+		return x.Content
+	}
+	return ""
+}
+
+func (x *Post) GetSummary() string {
+	if x != nil && x.Summary != nil {
+		return *x.Summary
 	}
 	return ""
 }
 
 func (x *Post) GetThumbnail() string {
-	if x != nil {
-		return x.Thumbnail
+	if x != nil && x.Thumbnail != nil {
+		return *x.Thumbnail
 	}
 	return ""
 }
@@ -115,16 +123,9 @@ func (x *Post) GetAuthorId() string {
 	return ""
 }
 
-func (x *Post) GetContent() string {
-	if x != nil {
-		return x.Content
-	}
-	return ""
-}
-
-func (x *Post) GetSummary() string {
-	if x != nil {
-		return x.Summary
+func (x *Post) GetCategoryId() string {
+	if x != nil && x.CategoryId != nil {
+		return *x.CategoryId
 	}
 	return ""
 }
@@ -150,6 +151,13 @@ func (x *Post) GetPublished() bool {
 	return false
 }
 
+func (x *Post) GetPublishedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.PublishedAt
+	}
+	return nil
+}
+
 func (x *Post) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
@@ -164,105 +172,37 @@ func (x *Post) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-// Pagination represents pagination information
-type Pagination struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	Limit         int32                  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
-	Total         int64                  `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
-	TotalPages    int32                  `protobuf:"varint,4,opt,name=total_pages,json=totalPages,proto3" json:"total_pages,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Pagination) Reset() {
-	*x = Pagination{}
-	mi := &file_posts_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Pagination) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Pagination) ProtoMessage() {}
-
-func (x *Pagination) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Pagination.ProtoReflect.Descriptor instead.
-func (*Pagination) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *Pagination) GetPage() int32 {
-	if x != nil {
-		return x.Page
-	}
-	return 0
-}
-
-func (x *Pagination) GetLimit() int32 {
-	if x != nil {
-		return x.Limit
-	}
-	return 0
-}
-
-func (x *Pagination) GetTotal() int64 {
-	if x != nil {
-		return x.Total
-	}
-	return 0
-}
-
-func (x *Pagination) GetTotalPages() int32 {
-	if x != nil {
-		return x.TotalPages
-	}
-	return 0
-}
-
-// CreatePostCommand represents a command to create a new post
-type CreatePostCommand struct {
+// CreatePostRequest represents a  to create a new post
+type CreatePostRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
 	Slug          string                 `protobuf:"bytes,2,opt,name=slug,proto3" json:"slug,omitempty"`
-	CategoryId    string                 `protobuf:"bytes,3,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
-	Thumbnail     string                 `protobuf:"bytes,4,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`
-	AuthorId      string                 `protobuf:"bytes,5,opt,name=author_id,json=authorId,proto3" json:"author_id,omitempty"`
-	Content       string                 `protobuf:"bytes,6,opt,name=content,proto3" json:"content,omitempty"`
-	Summary       string                 `protobuf:"bytes,7,opt,name=summary,proto3" json:"summary,omitempty"`
-	Published     bool                   `protobuf:"varint,8,opt,name=published,proto3" json:"published,omitempty"`
+	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	Summary       *string                `protobuf:"bytes,4,opt,name=summary,proto3,oneof" json:"summary,omitempty"`
+	Thumbnail     *string                `protobuf:"bytes,5,opt,name=thumbnail,proto3,oneof" json:"thumbnail,omitempty"`
+	CategoryId    *string                `protobuf:"bytes,6,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
+	AuthorId      *string                `protobuf:"bytes,7,opt,name=author_id,json=authorId,proto3,oneof" json:"author_id,omitempty"`
+	Published     *bool                  `protobuf:"varint,8,opt,name=published,proto3,oneof" json:"published,omitempty"`
+	PublishedAt   *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=published_at,json=publishedAt,proto3,oneof" json:"published_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreatePostCommand) Reset() {
-	*x = CreatePostCommand{}
-	mi := &file_posts_proto_msgTypes[2]
+func (x *CreatePostRequest) Reset() {
+	*x = CreatePostRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreatePostCommand) String() string {
+func (x *CreatePostRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreatePostCommand) ProtoMessage() {}
+func (*CreatePostRequest) ProtoMessage() {}
 
-func (x *CreatePostCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[2]
+func (x *CreatePostRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -273,885 +213,96 @@ func (x *CreatePostCommand) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreatePostCommand.ProtoReflect.Descriptor instead.
-func (*CreatePostCommand) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{2}
+// Deprecated: Use CreatePostRequest.ProtoReflect.Descriptor instead.
+func (*CreatePostRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *CreatePostCommand) GetTitle() string {
+func (x *CreatePostRequest) GetTitle() string {
 	if x != nil {
 		return x.Title
 	}
 	return ""
 }
 
-func (x *CreatePostCommand) GetSlug() string {
+func (x *CreatePostRequest) GetSlug() string {
 	if x != nil {
 		return x.Slug
 	}
 	return ""
 }
 
-func (x *CreatePostCommand) GetCategoryId() string {
-	if x != nil {
-		return x.CategoryId
-	}
-	return ""
-}
-
-func (x *CreatePostCommand) GetThumbnail() string {
-	if x != nil {
-		return x.Thumbnail
-	}
-	return ""
-}
-
-func (x *CreatePostCommand) GetAuthorId() string {
-	if x != nil {
-		return x.AuthorId
-	}
-	return ""
-}
-
-func (x *CreatePostCommand) GetContent() string {
+func (x *CreatePostRequest) GetContent() string {
 	if x != nil {
 		return x.Content
 	}
 	return ""
 }
 
-func (x *CreatePostCommand) GetSummary() string {
-	if x != nil {
-		return x.Summary
+func (x *CreatePostRequest) GetSummary() string {
+	if x != nil && x.Summary != nil {
+		return *x.Summary
 	}
 	return ""
 }
 
-func (x *CreatePostCommand) GetPublished() bool {
-	if x != nil {
-		return x.Published
+func (x *CreatePostRequest) GetThumbnail() string {
+	if x != nil && x.Thumbnail != nil {
+		return *x.Thumbnail
+	}
+	return ""
+}
+
+func (x *CreatePostRequest) GetCategoryId() string {
+	if x != nil && x.CategoryId != nil {
+		return *x.CategoryId
+	}
+	return ""
+}
+
+func (x *CreatePostRequest) GetAuthorId() string {
+	if x != nil && x.AuthorId != nil {
+		return *x.AuthorId
+	}
+	return ""
+}
+
+func (x *CreatePostRequest) GetPublished() bool {
+	if x != nil && x.Published != nil {
+		return *x.Published
 	}
 	return false
 }
 
-type CreatePostCommandResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Message       string                 `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *CreatePostCommandResponse) Reset() {
-	*x = CreatePostCommandResponse{}
-	mi := &file_posts_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *CreatePostCommandResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*CreatePostCommandResponse) ProtoMessage() {}
-
-func (x *CreatePostCommandResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[3]
+func (x *CreatePostRequest) GetPublishedAt() *timestamppb.Timestamp {
 	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use CreatePostCommandResponse.ProtoReflect.Descriptor instead.
-func (*CreatePostCommandResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *CreatePostCommandResponse) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *CreatePostCommandResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *CreatePostCommandResponse) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
-// UpdatePostCommand represents a command to update an existing post
-type UpdatePostCommand struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Slug          string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
-	CategoryId    string                 `protobuf:"bytes,4,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
-	Thumbnail     string                 `protobuf:"bytes,5,opt,name=thumbnail,proto3" json:"thumbnail,omitempty"`
-	Content       string                 `protobuf:"bytes,6,opt,name=content,proto3" json:"content,omitempty"`
-	Summary       string                 `protobuf:"bytes,7,opt,name=summary,proto3" json:"summary,omitempty"`
-	Published     bool                   `protobuf:"varint,8,opt,name=published,proto3" json:"published,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdatePostCommand) Reset() {
-	*x = UpdatePostCommand{}
-	mi := &file_posts_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdatePostCommand) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdatePostCommand) ProtoMessage() {}
-
-func (x *UpdatePostCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdatePostCommand.ProtoReflect.Descriptor instead.
-func (*UpdatePostCommand) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *UpdatePostCommand) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-func (x *UpdatePostCommand) GetTitle() string {
-	if x != nil {
-		return x.Title
-	}
-	return ""
-}
-
-func (x *UpdatePostCommand) GetSlug() string {
-	if x != nil {
-		return x.Slug
-	}
-	return ""
-}
-
-func (x *UpdatePostCommand) GetCategoryId() string {
-	if x != nil {
-		return x.CategoryId
-	}
-	return ""
-}
-
-func (x *UpdatePostCommand) GetThumbnail() string {
-	if x != nil {
-		return x.Thumbnail
-	}
-	return ""
-}
-
-func (x *UpdatePostCommand) GetContent() string {
-	if x != nil {
-		return x.Content
-	}
-	return ""
-}
-
-func (x *UpdatePostCommand) GetSummary() string {
-	if x != nil {
-		return x.Summary
-	}
-	return ""
-}
-
-func (x *UpdatePostCommand) GetPublished() bool {
-	if x != nil {
-		return x.Published
-	}
-	return false
-}
-
-type UpdatePostCommandResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UpdatePostCommandResponse) Reset() {
-	*x = UpdatePostCommandResponse{}
-	mi := &file_posts_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UpdatePostCommandResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UpdatePostCommandResponse) ProtoMessage() {}
-
-func (x *UpdatePostCommandResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UpdatePostCommandResponse.ProtoReflect.Descriptor instead.
-func (*UpdatePostCommandResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *UpdatePostCommandResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *UpdatePostCommandResponse) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
-// PublishPostCommand represents a command to publish a post
-type PublishPostCommand struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PublishPostCommand) Reset() {
-	*x = PublishPostCommand{}
-	mi := &file_posts_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PublishPostCommand) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PublishPostCommand) ProtoMessage() {}
-
-func (x *PublishPostCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PublishPostCommand.ProtoReflect.Descriptor instead.
-func (*PublishPostCommand) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{6}
-}
-
-func (x *PublishPostCommand) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-type PublishPostCommandResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *PublishPostCommandResponse) Reset() {
-	*x = PublishPostCommandResponse{}
-	mi := &file_posts_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *PublishPostCommandResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*PublishPostCommandResponse) ProtoMessage() {}
-
-func (x *PublishPostCommandResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use PublishPostCommandResponse.ProtoReflect.Descriptor instead.
-func (*PublishPostCommandResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *PublishPostCommandResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *PublishPostCommandResponse) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
-// UnpublishPostCommand represents a command to unpublish a post
-type UnpublishPostCommand struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UnpublishPostCommand) Reset() {
-	*x = UnpublishPostCommand{}
-	mi := &file_posts_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UnpublishPostCommand) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UnpublishPostCommand) ProtoMessage() {}
-
-func (x *UnpublishPostCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UnpublishPostCommand.ProtoReflect.Descriptor instead.
-func (*UnpublishPostCommand) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{8}
-}
-
-func (x *UnpublishPostCommand) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-type UnpublishPostCommandResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *UnpublishPostCommandResponse) Reset() {
-	*x = UnpublishPostCommandResponse{}
-	mi := &file_posts_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *UnpublishPostCommandResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*UnpublishPostCommandResponse) ProtoMessage() {}
-
-func (x *UnpublishPostCommandResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use UnpublishPostCommandResponse.ProtoReflect.Descriptor instead.
-func (*UnpublishPostCommandResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *UnpublishPostCommandResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *UnpublishPostCommandResponse) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
-// DeletePostCommand represents a command to delete a post
-type DeletePostCommand struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DeletePostCommand) Reset() {
-	*x = DeletePostCommand{}
-	mi := &file_posts_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DeletePostCommand) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DeletePostCommand) ProtoMessage() {}
-
-func (x *DeletePostCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DeletePostCommand.ProtoReflect.Descriptor instead.
-func (*DeletePostCommand) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *DeletePostCommand) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-type DeletePostCommandResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *DeletePostCommandResponse) Reset() {
-	*x = DeletePostCommandResponse{}
-	mi := &file_posts_proto_msgTypes[11]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *DeletePostCommandResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*DeletePostCommandResponse) ProtoMessage() {}
-
-func (x *DeletePostCommandResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[11]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use DeletePostCommandResponse.ProtoReflect.Descriptor instead.
-func (*DeletePostCommandResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{11}
-}
-
-func (x *DeletePostCommandResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-func (x *DeletePostCommandResponse) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
-
-// IncrementPostViewsCommand represents a command to increment post views
-type IncrementPostViewsCommand struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *IncrementPostViewsCommand) Reset() {
-	*x = IncrementPostViewsCommand{}
-	mi := &file_posts_proto_msgTypes[12]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *IncrementPostViewsCommand) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*IncrementPostViewsCommand) ProtoMessage() {}
-
-func (x *IncrementPostViewsCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[12]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use IncrementPostViewsCommand.ProtoReflect.Descriptor instead.
-func (*IncrementPostViewsCommand) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{12}
-}
-
-func (x *IncrementPostViewsCommand) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-type IncrementPostViewsCommandResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Views         int32                  `protobuf:"varint,1,opt,name=views,proto3" json:"views,omitempty"`
-	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *IncrementPostViewsCommandResponse) Reset() {
-	*x = IncrementPostViewsCommandResponse{}
-	mi := &file_posts_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *IncrementPostViewsCommandResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*IncrementPostViewsCommandResponse) ProtoMessage() {}
-
-func (x *IncrementPostViewsCommandResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use IncrementPostViewsCommandResponse.ProtoReflect.Descriptor instead.
-func (*IncrementPostViewsCommandResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{13}
-}
-
-func (x *IncrementPostViewsCommandResponse) GetViews() int32 {
-	if x != nil {
-		return x.Views
-	}
-	return 0
-}
-
-func (x *IncrementPostViewsCommandResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-// IncrementPostLikesCommand represents a command to increment post likes
-type IncrementPostLikesCommand struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *IncrementPostLikesCommand) Reset() {
-	*x = IncrementPostLikesCommand{}
-	mi := &file_posts_proto_msgTypes[14]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *IncrementPostLikesCommand) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*IncrementPostLikesCommand) ProtoMessage() {}
-
-func (x *IncrementPostLikesCommand) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[14]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use IncrementPostLikesCommand.ProtoReflect.Descriptor instead.
-func (*IncrementPostLikesCommand) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{14}
-}
-
-func (x *IncrementPostLikesCommand) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-type IncrementPostLikesCommandResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Likes         int32                  `protobuf:"varint,1,opt,name=likes,proto3" json:"likes,omitempty"`
-	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *IncrementPostLikesCommandResponse) Reset() {
-	*x = IncrementPostLikesCommandResponse{}
-	mi := &file_posts_proto_msgTypes[15]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *IncrementPostLikesCommandResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*IncrementPostLikesCommandResponse) ProtoMessage() {}
-
-func (x *IncrementPostLikesCommandResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[15]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use IncrementPostLikesCommandResponse.ProtoReflect.Descriptor instead.
-func (*IncrementPostLikesCommandResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{15}
-}
-
-func (x *IncrementPostLikesCommandResponse) GetLikes() int32 {
-	if x != nil {
-		return x.Likes
-	}
-	return 0
-}
-
-func (x *IncrementPostLikesCommandResponse) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
-
-// GetPostQuery represents a query to get a single post by ID
-type GetPostQuery struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetPostQuery) Reset() {
-	*x = GetPostQuery{}
-	mi := &file_posts_proto_msgTypes[16]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetPostQuery) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetPostQuery) ProtoMessage() {}
-
-func (x *GetPostQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[16]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetPostQuery.ProtoReflect.Descriptor instead.
-func (*GetPostQuery) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{16}
-}
-
-func (x *GetPostQuery) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
-type GetPostQueryResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Post          *Post                  `protobuf:"bytes,1,opt,name=post,proto3" json:"post,omitempty"`
-	Found         bool                   `protobuf:"varint,2,opt,name=found,proto3" json:"found,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetPostQueryResponse) Reset() {
-	*x = GetPostQueryResponse{}
-	mi := &file_posts_proto_msgTypes[17]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetPostQueryResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetPostQueryResponse) ProtoMessage() {}
-
-func (x *GetPostQueryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[17]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetPostQueryResponse.ProtoReflect.Descriptor instead.
-func (*GetPostQueryResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{17}
-}
-
-func (x *GetPostQueryResponse) GetPost() *Post {
-	if x != nil {
-		return x.Post
+		return x.PublishedAt
 	}
 	return nil
 }
 
-func (x *GetPostQueryResponse) GetFound() bool {
-	if x != nil {
-		return x.Found
-	}
-	return false
-}
-
-// GetPostBySlugQuery represents a query to get a post by slug
-type GetPostBySlugQuery struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Slug          string                 `protobuf:"bytes,1,opt,name=slug,proto3" json:"slug,omitempty"`
+type CreatePostResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetPostBySlugQuery) Reset() {
-	*x = GetPostBySlugQuery{}
-	mi := &file_posts_proto_msgTypes[18]
+func (x *CreatePostResponse) Reset() {
+	*x = CreatePostResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetPostBySlugQuery) String() string {
+func (x *CreatePostResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetPostBySlugQuery) ProtoMessage() {}
+func (*CreatePostResponse) ProtoMessage() {}
 
-func (x *GetPostBySlugQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[18]
+func (x *CreatePostResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1162,98 +313,49 @@ func (x *GetPostBySlugQuery) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetPostBySlugQuery.ProtoReflect.Descriptor instead.
-func (*GetPostBySlugQuery) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{18}
+// Deprecated: Use CreatePostResponse.ProtoReflect.Descriptor instead.
+func (*CreatePostResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetPostBySlugQuery) GetSlug() string {
+func (x *CreatePostResponse) GetData() *common.OperationMetadata {
 	if x != nil {
-		return x.Slug
-	}
-	return ""
-}
-
-type GetPostBySlugQueryResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Post          *Post                  `protobuf:"bytes,1,opt,name=post,proto3" json:"post,omitempty"`
-	Found         bool                   `protobuf:"varint,2,opt,name=found,proto3" json:"found,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GetPostBySlugQueryResponse) Reset() {
-	*x = GetPostBySlugQueryResponse{}
-	mi := &file_posts_proto_msgTypes[19]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GetPostBySlugQueryResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GetPostBySlugQueryResponse) ProtoMessage() {}
-
-func (x *GetPostBySlugQueryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[19]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GetPostBySlugQueryResponse.ProtoReflect.Descriptor instead.
-func (*GetPostBySlugQueryResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{19}
-}
-
-func (x *GetPostBySlugQueryResponse) GetPost() *Post {
-	if x != nil {
-		return x.Post
+		return x.Data
 	}
 	return nil
 }
 
-func (x *GetPostBySlugQueryResponse) GetFound() bool {
-	if x != nil {
-		return x.Found
-	}
-	return false
-}
-
-// ListPostsQuery represents a query to list posts with pagination and filtering
-type ListPostsQuery struct {
+// UpdatePostRequest represents a command to update an existing post
+type UpdatePostRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Page          int32                  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
-	Limit         int32                  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
-	CategoryId    string                 `protobuf:"bytes,3,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
-	AuthorId      string                 `protobuf:"bytes,4,opt,name=author_id,json=authorId,proto3" json:"author_id,omitempty"`
-	PublishedOnly bool                   `protobuf:"varint,5,opt,name=published_only,json=publishedOnly,proto3" json:"published_only,omitempty"`
-	Search        string                 `protobuf:"bytes,6,opt,name=search,proto3" json:"search,omitempty"` // Search in title and content
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title         *string                `protobuf:"bytes,2,opt,name=title,proto3,oneof" json:"title,omitempty"`
+	Slug          *string                `protobuf:"bytes,3,opt,name=slug,proto3,oneof" json:"slug,omitempty"`
+	Content       *string                `protobuf:"bytes,4,opt,name=content,proto3,oneof" json:"content,omitempty"`
+	Summary       *string                `protobuf:"bytes,5,opt,name=summary,proto3,oneof" json:"summary,omitempty"`
+	Thumbnail     *string                `protobuf:"bytes,6,opt,name=thumbnail,proto3,oneof" json:"thumbnail,omitempty"`
+	CategoryId    *string                `protobuf:"bytes,7,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
+	Published     *bool                  `protobuf:"varint,8,opt,name=published,proto3,oneof" json:"published,omitempty"`
+	PublishedAt   *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=published_at,json=publishedAt,proto3,oneof" json:"published_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListPostsQuery) Reset() {
-	*x = ListPostsQuery{}
-	mi := &file_posts_proto_msgTypes[20]
+func (x *UpdatePostRequest) Reset() {
+	*x = UpdatePostRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListPostsQuery) String() string {
+func (x *UpdatePostRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListPostsQuery) ProtoMessage() {}
+func (*UpdatePostRequest) ProtoMessage() {}
 
-func (x *ListPostsQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[20]
+func (x *UpdatePostRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1264,130 +366,943 @@ func (x *ListPostsQuery) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListPostsQuery.ProtoReflect.Descriptor instead.
-func (*ListPostsQuery) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{20}
+// Deprecated: Use UpdatePostRequest.ProtoReflect.Descriptor instead.
+func (*UpdatePostRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ListPostsQuery) GetPage() int32 {
+func (x *UpdatePostRequest) GetId() string {
 	if x != nil {
-		return x.Page
-	}
-	return 0
-}
-
-func (x *ListPostsQuery) GetLimit() int32 {
-	if x != nil {
-		return x.Limit
-	}
-	return 0
-}
-
-func (x *ListPostsQuery) GetCategoryId() string {
-	if x != nil {
-		return x.CategoryId
+		return x.Id
 	}
 	return ""
 }
 
-func (x *ListPostsQuery) GetAuthorId() string {
-	if x != nil {
-		return x.AuthorId
+func (x *UpdatePostRequest) GetTitle() string {
+	if x != nil && x.Title != nil {
+		return *x.Title
 	}
 	return ""
 }
 
-func (x *ListPostsQuery) GetPublishedOnly() bool {
-	if x != nil {
-		return x.PublishedOnly
+func (x *UpdatePostRequest) GetSlug() string {
+	if x != nil && x.Slug != nil {
+		return *x.Slug
+	}
+	return ""
+}
+
+func (x *UpdatePostRequest) GetContent() string {
+	if x != nil && x.Content != nil {
+		return *x.Content
+	}
+	return ""
+}
+
+func (x *UpdatePostRequest) GetSummary() string {
+	if x != nil && x.Summary != nil {
+		return *x.Summary
+	}
+	return ""
+}
+
+func (x *UpdatePostRequest) GetThumbnail() string {
+	if x != nil && x.Thumbnail != nil {
+		return *x.Thumbnail
+	}
+	return ""
+}
+
+func (x *UpdatePostRequest) GetCategoryId() string {
+	if x != nil && x.CategoryId != nil {
+		return *x.CategoryId
+	}
+	return ""
+}
+
+func (x *UpdatePostRequest) GetPublished() bool {
+	if x != nil && x.Published != nil {
+		return *x.Published
 	}
 	return false
 }
 
-func (x *ListPostsQuery) GetSearch() string {
+func (x *UpdatePostRequest) GetPublishedAt() *timestamppb.Timestamp {
 	if x != nil {
-		return x.Search
-	}
-	return ""
-}
-
-type ListPostsQueryResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Posts         []*Post                `protobuf:"bytes,1,rep,name=posts,proto3" json:"posts,omitempty"`
-	Pagination    *Pagination            `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ListPostsQueryResponse) Reset() {
-	*x = ListPostsQueryResponse{}
-	mi := &file_posts_proto_msgTypes[21]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ListPostsQueryResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ListPostsQueryResponse) ProtoMessage() {}
-
-func (x *ListPostsQueryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[21]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ListPostsQueryResponse.ProtoReflect.Descriptor instead.
-func (*ListPostsQueryResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{21}
-}
-
-func (x *ListPostsQueryResponse) GetPosts() []*Post {
-	if x != nil {
-		return x.Posts
+		return x.PublishedAt
 	}
 	return nil
 }
 
-func (x *ListPostsQueryResponse) GetPagination() *Pagination {
+type UpdatePostResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdatePostResponse) Reset() {
+	*x = UpdatePostResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdatePostResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdatePostResponse) ProtoMessage() {}
+
+func (x *UpdatePostResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdatePostResponse.ProtoReflect.Descriptor instead.
+func (*UpdatePostResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *UpdatePostResponse) GetData() *common.OperationMetadata {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+// PublishPostRequest represents a command to publish a post
+type PublishPostRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PublishPostRequest) Reset() {
+	*x = PublishPostRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PublishPostRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PublishPostRequest) ProtoMessage() {}
+
+func (x *PublishPostRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PublishPostRequest.ProtoReflect.Descriptor instead.
+func (*PublishPostRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *PublishPostRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type PublishPostResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PublishPostResponse) Reset() {
+	*x = PublishPostResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PublishPostResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PublishPostResponse) ProtoMessage() {}
+
+func (x *PublishPostResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PublishPostResponse.ProtoReflect.Descriptor instead.
+func (*PublishPostResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PublishPostResponse) GetData() *common.OperationMetadata {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+// UnpublishPostRequest represents a command to unpublish a post
+type UnpublishPostRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UnpublishPostRequest) Reset() {
+	*x = UnpublishPostRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UnpublishPostRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnpublishPostRequest) ProtoMessage() {}
+
+func (x *UnpublishPostRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnpublishPostRequest.ProtoReflect.Descriptor instead.
+func (*UnpublishPostRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UnpublishPostRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type UnpublishPostResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UnpublishPostResponse) Reset() {
+	*x = UnpublishPostResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UnpublishPostResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnpublishPostResponse) ProtoMessage() {}
+
+func (x *UnpublishPostResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnpublishPostResponse.ProtoReflect.Descriptor instead.
+func (*UnpublishPostResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *UnpublishPostResponse) GetData() *common.OperationMetadata {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+// DeletePostRequest represents a command to delete a post
+type DeletePostRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletePostRequest) Reset() {
+	*x = DeletePostRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletePostRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletePostRequest) ProtoMessage() {}
+
+func (x *DeletePostRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletePostRequest.ProtoReflect.Descriptor instead.
+func (*DeletePostRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *DeletePostRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type DeletePostResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletePostResponse) Reset() {
+	*x = DeletePostResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletePostResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletePostResponse) ProtoMessage() {}
+
+func (x *DeletePostResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletePostResponse.ProtoReflect.Descriptor instead.
+func (*DeletePostResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *DeletePostResponse) GetData() *common.OperationMetadata {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+// DeletePostsRequest represents a command to delete multiple posts
+type DeletePostsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PostIds       []string               `protobuf:"bytes,1,rep,name=post_ids,json=postIds,proto3" json:"post_ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletePostsRequest) Reset() {
+	*x = DeletePostsRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletePostsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletePostsRequest) ProtoMessage() {}
+
+func (x *DeletePostsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletePostsRequest.ProtoReflect.Descriptor instead.
+func (*DeletePostsRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *DeletePostsRequest) GetPostIds() []string {
+	if x != nil {
+		return x.PostIds
+	}
+	return nil
+}
+
+type DeletePostsResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletePostsResponse) Reset() {
+	*x = DeletePostsResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletePostsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletePostsResponse) ProtoMessage() {}
+
+func (x *DeletePostsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletePostsResponse.ProtoReflect.Descriptor instead.
+func (*DeletePostsResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *DeletePostsResponse) GetData() *common.OperationMetadata {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+// IncrementPostViewsRequest represents a command to increment post views
+type IncrementPostViewsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IncrementPostViewsRequest) Reset() {
+	*x = IncrementPostViewsRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IncrementPostViewsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IncrementPostViewsRequest) ProtoMessage() {}
+
+func (x *IncrementPostViewsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IncrementPostViewsRequest.ProtoReflect.Descriptor instead.
+func (*IncrementPostViewsRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *IncrementPostViewsRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type IncrementPostViewsResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IncrementPostViewsResponse) Reset() {
+	*x = IncrementPostViewsResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IncrementPostViewsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IncrementPostViewsResponse) ProtoMessage() {}
+
+func (x *IncrementPostViewsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IncrementPostViewsResponse.ProtoReflect.Descriptor instead.
+func (*IncrementPostViewsResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *IncrementPostViewsResponse) GetData() *common.OperationMetadata {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+// IncrementPostLikesRequest represents a command to increment post likes
+type IncrementPostLikesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IncrementPostLikesRequest) Reset() {
+	*x = IncrementPostLikesRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IncrementPostLikesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IncrementPostLikesRequest) ProtoMessage() {}
+
+func (x *IncrementPostLikesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IncrementPostLikesRequest.ProtoReflect.Descriptor instead.
+func (*IncrementPostLikesRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *IncrementPostLikesRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type IncrementPostLikesResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IncrementPostLikesResponse) Reset() {
+	*x = IncrementPostLikesResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IncrementPostLikesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IncrementPostLikesResponse) ProtoMessage() {}
+
+func (x *IncrementPostLikesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IncrementPostLikesResponse.ProtoReflect.Descriptor instead.
+func (*IncrementPostLikesResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *IncrementPostLikesResponse) GetData() *common.OperationMetadata {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+// GetPostRequest represents a query to get a single post by ID
+type GetPostRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPostRequest) Reset() {
+	*x = GetPostRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPostRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPostRequest) ProtoMessage() {}
+
+func (x *GetPostRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPostRequest.ProtoReflect.Descriptor instead.
+func (*GetPostRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *GetPostRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type GetPostResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          *Post                  `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPostResponse) Reset() {
+	*x = GetPostResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPostResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPostResponse) ProtoMessage() {}
+
+func (x *GetPostResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPostResponse.ProtoReflect.Descriptor instead.
+func (*GetPostResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *GetPostResponse) GetData() *Post {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+// GetPublishedPostsRequest represents a query to list posts with pagination and filtering
+type GetPublishedPostsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Page          *int32                 `protobuf:"varint,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
+	Limit         *int32                 `protobuf:"varint,2,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	Search        *string                `protobuf:"bytes,3,opt,name=search,proto3,oneof" json:"search,omitempty"`
+	SortBy        *string                `protobuf:"bytes,4,opt,name=sort_by,json=sortBy,proto3,oneof" json:"sort_by,omitempty"`
+	SortOrder     *string                `protobuf:"bytes,5,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"` // "asc" or "desc"
+	AuthorId      *string                `protobuf:"bytes,6,opt,name=author_id,json=authorId,proto3,oneof" json:"author_id,omitempty"`
+	CategoryIds   []string               `protobuf:"bytes,7,rep,name=category_ids,json=categoryIds,proto3" json:"category_ids,omitempty"`
+	CreatedAtFrom *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at_from,json=createdAtFrom,proto3,oneof" json:"created_at_from,omitempty"`
+	CreatedAtTo   *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at_to,json=createdAtTo,proto3,oneof" json:"created_at_to,omitempty"`
+	UpdatedAtFrom *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at_from,json=updatedAtFrom,proto3,oneof" json:"updated_at_from,omitempty"`
+	UpdatedAtTo   *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at_to,json=updatedAtTo,proto3,oneof" json:"updated_at_to,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPublishedPostsRequest) Reset() {
+	*x = GetPublishedPostsRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPublishedPostsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPublishedPostsRequest) ProtoMessage() {}
+
+func (x *GetPublishedPostsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPublishedPostsRequest.ProtoReflect.Descriptor instead.
+func (*GetPublishedPostsRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *GetPublishedPostsRequest) GetPage() int32 {
+	if x != nil && x.Page != nil {
+		return *x.Page
+	}
+	return 0
+}
+
+func (x *GetPublishedPostsRequest) GetLimit() int32 {
+	if x != nil && x.Limit != nil {
+		return *x.Limit
+	}
+	return 0
+}
+
+func (x *GetPublishedPostsRequest) GetSearch() string {
+	if x != nil && x.Search != nil {
+		return *x.Search
+	}
+	return ""
+}
+
+func (x *GetPublishedPostsRequest) GetSortBy() string {
+	if x != nil && x.SortBy != nil {
+		return *x.SortBy
+	}
+	return ""
+}
+
+func (x *GetPublishedPostsRequest) GetSortOrder() string {
+	if x != nil && x.SortOrder != nil {
+		return *x.SortOrder
+	}
+	return ""
+}
+
+func (x *GetPublishedPostsRequest) GetAuthorId() string {
+	if x != nil && x.AuthorId != nil {
+		return *x.AuthorId
+	}
+	return ""
+}
+
+func (x *GetPublishedPostsRequest) GetCategoryIds() []string {
+	if x != nil {
+		return x.CategoryIds
+	}
+	return nil
+}
+
+func (x *GetPublishedPostsRequest) GetCreatedAtFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAtFrom
+	}
+	return nil
+}
+
+func (x *GetPublishedPostsRequest) GetCreatedAtTo() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAtTo
+	}
+	return nil
+}
+
+func (x *GetPublishedPostsRequest) GetUpdatedAtFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAtFrom
+	}
+	return nil
+}
+
+func (x *GetPublishedPostsRequest) GetUpdatedAtTo() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAtTo
+	}
+	return nil
+}
+
+type GetPublishedPostsResponse struct {
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Data          []*Post                    `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPublishedPostsResponse) Reset() {
+	*x = GetPublishedPostsResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPublishedPostsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPublishedPostsResponse) ProtoMessage() {}
+
+func (x *GetPublishedPostsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPublishedPostsResponse.ProtoReflect.Descriptor instead.
+func (*GetPublishedPostsResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *GetPublishedPostsResponse) GetData() []*Post {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *GetPublishedPostsResponse) GetPagination() *common.PaginationMetadata {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-// GetPostsByCategoryQuery represents a query to get posts by category
-type GetPostsByCategoryQuery struct {
+// GetPostsByCategoryRequest represents a query to get posts by category
+type GetPostsByCategoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CategoryId    string                 `protobuf:"bytes,1,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
-	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	Limit         int32                  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
+	Page          *int32                 `protobuf:"varint,2,opt,name=page,proto3,oneof" json:"page,omitempty"`
+	Limit         *int32                 `protobuf:"varint,3,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetPostsByCategoryQuery) Reset() {
-	*x = GetPostsByCategoryQuery{}
-	mi := &file_posts_proto_msgTypes[22]
+func (x *GetPostsByCategoryRequest) Reset() {
+	*x = GetPostsByCategoryRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetPostsByCategoryQuery) String() string {
+func (x *GetPostsByCategoryRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetPostsByCategoryQuery) ProtoMessage() {}
+func (*GetPostsByCategoryRequest) ProtoMessage() {}
 
-func (x *GetPostsByCategoryQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[22]
+func (x *GetPostsByCategoryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1398,55 +1313,55 @@ func (x *GetPostsByCategoryQuery) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetPostsByCategoryQuery.ProtoReflect.Descriptor instead.
-func (*GetPostsByCategoryQuery) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{22}
+// Deprecated: Use GetPostsByCategoryRequest.ProtoReflect.Descriptor instead.
+func (*GetPostsByCategoryRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{21}
 }
 
-func (x *GetPostsByCategoryQuery) GetCategoryId() string {
+func (x *GetPostsByCategoryRequest) GetCategoryId() string {
 	if x != nil {
 		return x.CategoryId
 	}
 	return ""
 }
 
-func (x *GetPostsByCategoryQuery) GetPage() int32 {
-	if x != nil {
-		return x.Page
+func (x *GetPostsByCategoryRequest) GetPage() int32 {
+	if x != nil && x.Page != nil {
+		return *x.Page
 	}
 	return 0
 }
 
-func (x *GetPostsByCategoryQuery) GetLimit() int32 {
-	if x != nil {
-		return x.Limit
+func (x *GetPostsByCategoryRequest) GetLimit() int32 {
+	if x != nil && x.Limit != nil {
+		return *x.Limit
 	}
 	return 0
 }
 
-type GetPostsByCategoryQueryResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Posts         []*Post                `protobuf:"bytes,1,rep,name=posts,proto3" json:"posts,omitempty"`
-	Pagination    *Pagination            `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+type GetPostsByCategoryResponse struct {
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Data          []*Post                    `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetPostsByCategoryQueryResponse) Reset() {
-	*x = GetPostsByCategoryQueryResponse{}
-	mi := &file_posts_proto_msgTypes[23]
+func (x *GetPostsByCategoryResponse) Reset() {
+	*x = GetPostsByCategoryResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetPostsByCategoryQueryResponse) String() string {
+func (x *GetPostsByCategoryResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetPostsByCategoryQueryResponse) ProtoMessage() {}
+func (*GetPostsByCategoryResponse) ProtoMessage() {}
 
-func (x *GetPostsByCategoryQueryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[23]
+func (x *GetPostsByCategoryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1457,50 +1372,50 @@ func (x *GetPostsByCategoryQueryResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetPostsByCategoryQueryResponse.ProtoReflect.Descriptor instead.
-func (*GetPostsByCategoryQueryResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{23}
+// Deprecated: Use GetPostsByCategoryResponse.ProtoReflect.Descriptor instead.
+func (*GetPostsByCategoryResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{22}
 }
 
-func (x *GetPostsByCategoryQueryResponse) GetPosts() []*Post {
+func (x *GetPostsByCategoryResponse) GetData() []*Post {
 	if x != nil {
-		return x.Posts
+		return x.Data
 	}
 	return nil
 }
 
-func (x *GetPostsByCategoryQueryResponse) GetPagination() *Pagination {
+func (x *GetPostsByCategoryResponse) GetPagination() *common.PaginationMetadata {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-// GetPostsByAuthorQuery represents a query to get posts by author
-type GetPostsByAuthorQuery struct {
+// GetPostsByAuthorRequest represents a query to get posts by author
+type GetPostsByAuthorRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AuthorId      string                 `protobuf:"bytes,1,opt,name=author_id,json=authorId,proto3" json:"author_id,omitempty"`
-	Page          int32                  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	Limit         int32                  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
+	Page          *int32                 `protobuf:"varint,2,opt,name=page,proto3,oneof" json:"page,omitempty"`
+	Limit         *int32                 `protobuf:"varint,3,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetPostsByAuthorQuery) Reset() {
-	*x = GetPostsByAuthorQuery{}
-	mi := &file_posts_proto_msgTypes[24]
+func (x *GetPostsByAuthorRequest) Reset() {
+	*x = GetPostsByAuthorRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetPostsByAuthorQuery) String() string {
+func (x *GetPostsByAuthorRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetPostsByAuthorQuery) ProtoMessage() {}
+func (*GetPostsByAuthorRequest) ProtoMessage() {}
 
-func (x *GetPostsByAuthorQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[24]
+func (x *GetPostsByAuthorRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1511,55 +1426,55 @@ func (x *GetPostsByAuthorQuery) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetPostsByAuthorQuery.ProtoReflect.Descriptor instead.
-func (*GetPostsByAuthorQuery) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{24}
+// Deprecated: Use GetPostsByAuthorRequest.ProtoReflect.Descriptor instead.
+func (*GetPostsByAuthorRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{23}
 }
 
-func (x *GetPostsByAuthorQuery) GetAuthorId() string {
+func (x *GetPostsByAuthorRequest) GetAuthorId() string {
 	if x != nil {
 		return x.AuthorId
 	}
 	return ""
 }
 
-func (x *GetPostsByAuthorQuery) GetPage() int32 {
-	if x != nil {
-		return x.Page
+func (x *GetPostsByAuthorRequest) GetPage() int32 {
+	if x != nil && x.Page != nil {
+		return *x.Page
 	}
 	return 0
 }
 
-func (x *GetPostsByAuthorQuery) GetLimit() int32 {
-	if x != nil {
-		return x.Limit
+func (x *GetPostsByAuthorRequest) GetLimit() int32 {
+	if x != nil && x.Limit != nil {
+		return *x.Limit
 	}
 	return 0
 }
 
-type GetPostsByAuthorQueryResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Posts         []*Post                `protobuf:"bytes,1,rep,name=posts,proto3" json:"posts,omitempty"`
-	Pagination    *Pagination            `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+type GetPostsByAuthorResponse struct {
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Data          []*Post                    `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetPostsByAuthorQueryResponse) Reset() {
-	*x = GetPostsByAuthorQueryResponse{}
-	mi := &file_posts_proto_msgTypes[25]
+func (x *GetPostsByAuthorResponse) Reset() {
+	*x = GetPostsByAuthorResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetPostsByAuthorQueryResponse) String() string {
+func (x *GetPostsByAuthorResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetPostsByAuthorQueryResponse) ProtoMessage() {}
+func (*GetPostsByAuthorResponse) ProtoMessage() {}
 
-func (x *GetPostsByAuthorQueryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[25]
+func (x *GetPostsByAuthorResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1570,49 +1485,49 @@ func (x *GetPostsByAuthorQueryResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetPostsByAuthorQueryResponse.ProtoReflect.Descriptor instead.
-func (*GetPostsByAuthorQueryResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{25}
+// Deprecated: Use GetPostsByAuthorResponse.ProtoReflect.Descriptor instead.
+func (*GetPostsByAuthorResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{24}
 }
 
-func (x *GetPostsByAuthorQueryResponse) GetPosts() []*Post {
+func (x *GetPostsByAuthorResponse) GetData() []*Post {
 	if x != nil {
-		return x.Posts
+		return x.Data
 	}
 	return nil
 }
 
-func (x *GetPostsByAuthorQueryResponse) GetPagination() *Pagination {
+func (x *GetPostsByAuthorResponse) GetPagination() *common.PaginationMetadata {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-// GetPopularPostsQuery represents a query to get popular posts by views
-type GetPopularPostsQuery struct {
+// GetPopularPostsRequest represents a query to get popular posts by views
+type GetPopularPostsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Limit         int32                  `protobuf:"varint,1,opt,name=limit,proto3" json:"limit,omitempty"`
-	DaysAgo       int32                  `protobuf:"varint,2,opt,name=days_ago,json=daysAgo,proto3" json:"days_ago,omitempty"` // Optional: get posts from last N days
+	DaysAgo       *int32                 `protobuf:"varint,2,opt,name=days_ago,json=daysAgo,proto3,oneof" json:"days_ago,omitempty"` // Optional: get posts from last N days
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetPopularPostsQuery) Reset() {
-	*x = GetPopularPostsQuery{}
-	mi := &file_posts_proto_msgTypes[26]
+func (x *GetPopularPostsRequest) Reset() {
+	*x = GetPopularPostsRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetPopularPostsQuery) String() string {
+func (x *GetPopularPostsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetPopularPostsQuery) ProtoMessage() {}
+func (*GetPopularPostsRequest) ProtoMessage() {}
 
-func (x *GetPopularPostsQuery) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[26]
+func (x *GetPopularPostsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1623,47 +1538,47 @@ func (x *GetPopularPostsQuery) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetPopularPostsQuery.ProtoReflect.Descriptor instead.
-func (*GetPopularPostsQuery) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{26}
+// Deprecated: Use GetPopularPostsRequest.ProtoReflect.Descriptor instead.
+func (*GetPopularPostsRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{25}
 }
 
-func (x *GetPopularPostsQuery) GetLimit() int32 {
+func (x *GetPopularPostsRequest) GetLimit() int32 {
 	if x != nil {
 		return x.Limit
 	}
 	return 0
 }
 
-func (x *GetPopularPostsQuery) GetDaysAgo() int32 {
-	if x != nil {
-		return x.DaysAgo
+func (x *GetPopularPostsRequest) GetDaysAgo() int32 {
+	if x != nil && x.DaysAgo != nil {
+		return *x.DaysAgo
 	}
 	return 0
 }
 
-type GetPopularPostsQueryResponse struct {
+type GetPopularPostsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Posts         []*Post                `protobuf:"bytes,1,rep,name=posts,proto3" json:"posts,omitempty"`
+	Data          []*Post                `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetPopularPostsQueryResponse) Reset() {
-	*x = GetPopularPostsQueryResponse{}
-	mi := &file_posts_proto_msgTypes[27]
+func (x *GetPopularPostsResponse) Reset() {
+	*x = GetPopularPostsResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetPopularPostsQueryResponse) String() string {
+func (x *GetPopularPostsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetPopularPostsQueryResponse) ProtoMessage() {}
+func (*GetPopularPostsResponse) ProtoMessage() {}
 
-func (x *GetPopularPostsQueryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[27]
+func (x *GetPopularPostsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1674,20 +1589,197 @@ func (x *GetPopularPostsQueryResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetPopularPostsQueryResponse.ProtoReflect.Descriptor instead.
-func (*GetPopularPostsQueryResponse) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{27}
+// Deprecated: Use GetPopularPostsResponse.ProtoReflect.Descriptor instead.
+func (*GetPopularPostsResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{26}
 }
 
-func (x *GetPopularPostsQueryResponse) GetPosts() []*Post {
+func (x *GetPopularPostsResponse) GetData() []*Post {
 	if x != nil {
-		return x.Posts
+		return x.Data
 	}
 	return nil
 }
 
-// PostCreatedEvent represents an event when a post is created
-type PostCreatedEvent struct {
+// GetAllPostsRequest
+type GetAllPostsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Page          *int32                 `protobuf:"varint,1,opt,name=page,proto3,oneof" json:"page,omitempty"`
+	Limit         *int32                 `protobuf:"varint,2,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	Search        *string                `protobuf:"bytes,3,opt,name=search,proto3,oneof" json:"search,omitempty"`
+	SortBy        *string                `protobuf:"bytes,4,opt,name=sort_by,json=sortBy,proto3,oneof" json:"sort_by,omitempty"`
+	SortOrder     *string                `protobuf:"bytes,5,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"` // "asc" or "desc"
+	AuthorId      *string                `protobuf:"bytes,6,opt,name=author_id,json=authorId,proto3,oneof" json:"author_id,omitempty"`
+	CategoryIds   []string               `protobuf:"bytes,7,rep,name=category_ids,json=categoryIds,proto3" json:"category_ids,omitempty"`
+	CreatedAtFrom *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at_from,json=createdAtFrom,proto3,oneof" json:"created_at_from,omitempty"`
+	CreatedAtTo   *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at_to,json=createdAtTo,proto3,oneof" json:"created_at_to,omitempty"`
+	UpdatedAtFrom *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at_from,json=updatedAtFrom,proto3,oneof" json:"updated_at_from,omitempty"`
+	UpdatedAtTo   *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at_to,json=updatedAtTo,proto3,oneof" json:"updated_at_to,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAllPostsRequest) Reset() {
+	*x = GetAllPostsRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAllPostsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAllPostsRequest) ProtoMessage() {}
+
+func (x *GetAllPostsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAllPostsRequest.ProtoReflect.Descriptor instead.
+func (*GetAllPostsRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *GetAllPostsRequest) GetPage() int32 {
+	if x != nil && x.Page != nil {
+		return *x.Page
+	}
+	return 0
+}
+
+func (x *GetAllPostsRequest) GetLimit() int32 {
+	if x != nil && x.Limit != nil {
+		return *x.Limit
+	}
+	return 0
+}
+
+func (x *GetAllPostsRequest) GetSearch() string {
+	if x != nil && x.Search != nil {
+		return *x.Search
+	}
+	return ""
+}
+
+func (x *GetAllPostsRequest) GetSortBy() string {
+	if x != nil && x.SortBy != nil {
+		return *x.SortBy
+	}
+	return ""
+}
+
+func (x *GetAllPostsRequest) GetSortOrder() string {
+	if x != nil && x.SortOrder != nil {
+		return *x.SortOrder
+	}
+	return ""
+}
+
+func (x *GetAllPostsRequest) GetAuthorId() string {
+	if x != nil && x.AuthorId != nil {
+		return *x.AuthorId
+	}
+	return ""
+}
+
+func (x *GetAllPostsRequest) GetCategoryIds() []string {
+	if x != nil {
+		return x.CategoryIds
+	}
+	return nil
+}
+
+func (x *GetAllPostsRequest) GetCreatedAtFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAtFrom
+	}
+	return nil
+}
+
+func (x *GetAllPostsRequest) GetCreatedAtTo() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAtTo
+	}
+	return nil
+}
+
+func (x *GetAllPostsRequest) GetUpdatedAtFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAtFrom
+	}
+	return nil
+}
+
+func (x *GetAllPostsRequest) GetUpdatedAtTo() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAtTo
+	}
+	return nil
+}
+
+type GetAllPostsResponse struct {
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Data          []*Post                    `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAllPostsResponse) Reset() {
+	*x = GetAllPostsResponse{}
+	mi := &file_post_service_posts_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAllPostsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAllPostsResponse) ProtoMessage() {}
+
+func (x *GetAllPostsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAllPostsResponse.ProtoReflect.Descriptor instead.
+func (*GetAllPostsResponse) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *GetAllPostsResponse) GetData() []*Post {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *GetAllPostsResponse) GetPagination() *common.PaginationMetadata {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+// PostCreatedEventRequest represents an event when a post is created
+type PostCreatedEventRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
@@ -1698,21 +1790,21 @@ type PostCreatedEvent struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PostCreatedEvent) Reset() {
-	*x = PostCreatedEvent{}
-	mi := &file_posts_proto_msgTypes[28]
+func (x *PostCreatedEventRequest) Reset() {
+	*x = PostCreatedEventRequest{}
+	mi := &file_post_service_posts_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PostCreatedEvent) String() string {
+func (x *PostCreatedEventRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PostCreatedEvent) ProtoMessage() {}
+func (*PostCreatedEventRequest) ProtoMessage() {}
 
-func (x *PostCreatedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[28]
+func (x *PostCreatedEventRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_post_service_posts_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1723,40 +1815,40 @@ func (x *PostCreatedEvent) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PostCreatedEvent.ProtoReflect.Descriptor instead.
-func (*PostCreatedEvent) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{28}
+// Deprecated: Use PostCreatedEventRequest.ProtoReflect.Descriptor instead.
+func (*PostCreatedEventRequest) Descriptor() ([]byte, []int) {
+	return file_post_service_posts_proto_rawDescGZIP(), []int{29}
 }
 
-func (x *PostCreatedEvent) GetId() string {
+func (x *PostCreatedEventRequest) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *PostCreatedEvent) GetTitle() string {
+func (x *PostCreatedEventRequest) GetTitle() string {
 	if x != nil {
 		return x.Title
 	}
 	return ""
 }
 
-func (x *PostCreatedEvent) GetSlug() string {
+func (x *PostCreatedEventRequest) GetSlug() string {
 	if x != nil {
 		return x.Slug
 	}
 	return ""
 }
 
-func (x *PostCreatedEvent) GetAuthorId() string {
+func (x *PostCreatedEventRequest) GetAuthorId() string {
 	if x != nil {
 		return x.AuthorId
 	}
 	return ""
 }
 
-func (x *PostCreatedEvent) GetCreatedAt() *timestamppb.Timestamp {
+func (x *PostCreatedEventRequest) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
@@ -1776,7 +1868,7 @@ type PostUpdatedEvent struct {
 
 func (x *PostUpdatedEvent) Reset() {
 	*x = PostUpdatedEvent{}
-	mi := &file_posts_proto_msgTypes[29]
+	mi := &file_post_service_posts_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1788,7 +1880,7 @@ func (x *PostUpdatedEvent) String() string {
 func (*PostUpdatedEvent) ProtoMessage() {}
 
 func (x *PostUpdatedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[29]
+	mi := &file_post_service_posts_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1801,7 +1893,7 @@ func (x *PostUpdatedEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PostUpdatedEvent.ProtoReflect.Descriptor instead.
 func (*PostUpdatedEvent) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{29}
+	return file_post_service_posts_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *PostUpdatedEvent) GetId() string {
@@ -1844,7 +1936,7 @@ type PostPublishedEvent struct {
 
 func (x *PostPublishedEvent) Reset() {
 	*x = PostPublishedEvent{}
-	mi := &file_posts_proto_msgTypes[30]
+	mi := &file_post_service_posts_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1856,7 +1948,7 @@ func (x *PostPublishedEvent) String() string {
 func (*PostPublishedEvent) ProtoMessage() {}
 
 func (x *PostPublishedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[30]
+	mi := &file_post_service_posts_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1869,7 +1961,7 @@ func (x *PostPublishedEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PostPublishedEvent.ProtoReflect.Descriptor instead.
 func (*PostPublishedEvent) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{30}
+	return file_post_service_posts_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *PostPublishedEvent) GetId() string {
@@ -1904,7 +1996,7 @@ type PostUnpublishedEvent struct {
 
 func (x *PostUnpublishedEvent) Reset() {
 	*x = PostUnpublishedEvent{}
-	mi := &file_posts_proto_msgTypes[31]
+	mi := &file_post_service_posts_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1916,7 +2008,7 @@ func (x *PostUnpublishedEvent) String() string {
 func (*PostUnpublishedEvent) ProtoMessage() {}
 
 func (x *PostUnpublishedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[31]
+	mi := &file_post_service_posts_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1929,7 +2021,7 @@ func (x *PostUnpublishedEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PostUnpublishedEvent.ProtoReflect.Descriptor instead.
 func (*PostUnpublishedEvent) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{31}
+	return file_post_service_posts_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *PostUnpublishedEvent) GetId() string {
@@ -1958,7 +2050,7 @@ type PostDeletedEvent struct {
 
 func (x *PostDeletedEvent) Reset() {
 	*x = PostDeletedEvent{}
-	mi := &file_posts_proto_msgTypes[32]
+	mi := &file_post_service_posts_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1970,7 +2062,7 @@ func (x *PostDeletedEvent) String() string {
 func (*PostDeletedEvent) ProtoMessage() {}
 
 func (x *PostDeletedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[32]
+	mi := &file_post_service_posts_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1983,7 +2075,7 @@ func (x *PostDeletedEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PostDeletedEvent.ProtoReflect.Descriptor instead.
 func (*PostDeletedEvent) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{32}
+	return file_post_service_posts_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *PostDeletedEvent) GetId() string {
@@ -2019,7 +2111,7 @@ type PostViewsIncrementedEvent struct {
 
 func (x *PostViewsIncrementedEvent) Reset() {
 	*x = PostViewsIncrementedEvent{}
-	mi := &file_posts_proto_msgTypes[33]
+	mi := &file_post_service_posts_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2031,7 +2123,7 @@ func (x *PostViewsIncrementedEvent) String() string {
 func (*PostViewsIncrementedEvent) ProtoMessage() {}
 
 func (x *PostViewsIncrementedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[33]
+	mi := &file_post_service_posts_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2044,7 +2136,7 @@ func (x *PostViewsIncrementedEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PostViewsIncrementedEvent.ProtoReflect.Descriptor instead.
 func (*PostViewsIncrementedEvent) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{33}
+	return file_post_service_posts_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *PostViewsIncrementedEvent) GetId() string {
@@ -2080,7 +2172,7 @@ type PostLikesIncrementedEvent struct {
 
 func (x *PostLikesIncrementedEvent) Reset() {
 	*x = PostLikesIncrementedEvent{}
-	mi := &file_posts_proto_msgTypes[34]
+	mi := &file_post_service_posts_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2092,7 +2184,7 @@ func (x *PostLikesIncrementedEvent) String() string {
 func (*PostLikesIncrementedEvent) ProtoMessage() {}
 
 func (x *PostLikesIncrementedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_posts_proto_msgTypes[34]
+	mi := &file_post_service_posts_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2105,7 +2197,7 @@ func (x *PostLikesIncrementedEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PostLikesIncrementedEvent.ProtoReflect.Descriptor instead.
 func (*PostLikesIncrementedEvent) Descriptor() ([]byte, []int) {
-	return file_posts_proto_rawDescGZIP(), []int{34}
+	return file_post_service_posts_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *PostLikesIncrementedEvent) GetId() string {
@@ -2129,136 +2221,204 @@ func (x *PostLikesIncrementedEvent) GetIncrementedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-var File_posts_proto protoreflect.FileDescriptor
+var File_post_service_posts_proto protoreflect.FileDescriptor
 
-const file_posts_proto_rawDesc = "" +
+const file_post_service_posts_proto_rawDesc = "" +
 	"\n" +
-	"\vposts.proto\x12\apost.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1bgoogle/protobuf/empty.proto\"\x90\x03\n" +
+	"\x18post_service/posts.proto\x12\fpost_service\x1a\x17common/pagination.proto\x1a\x15common/response.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9e\x04\n" +
 	"\x04Post\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x12\n" +
-	"\x04slug\x18\x03 \x01(\tR\x04slug\x12\x1f\n" +
-	"\vcategory_id\x18\x04 \x01(\tR\n" +
-	"categoryId\x12\x1c\n" +
-	"\tthumbnail\x18\x05 \x01(\tR\tthumbnail\x12\x1b\n" +
-	"\tauthor_id\x18\x06 \x01(\tR\bauthorId\x12\x18\n" +
-	"\acontent\x18\a \x01(\tR\acontent\x12\x18\n" +
-	"\asummary\x18\b \x01(\tR\asummary\x12\x14\n" +
+	"\x04slug\x18\x03 \x01(\tR\x04slug\x12\x18\n" +
+	"\acontent\x18\x04 \x01(\tR\acontent\x12\x1d\n" +
+	"\asummary\x18\x05 \x01(\tH\x00R\asummary\x88\x01\x01\x12!\n" +
+	"\tthumbnail\x18\x06 \x01(\tH\x01R\tthumbnail\x88\x01\x01\x12\x1b\n" +
+	"\tauthor_id\x18\a \x01(\tR\bauthorId\x12$\n" +
+	"\vcategory_id\x18\b \x01(\tH\x02R\n" +
+	"categoryId\x88\x01\x01\x12\x14\n" +
 	"\x05views\x18\t \x01(\x05R\x05views\x12\x14\n" +
 	"\x05likes\x18\n" +
 	" \x01(\x05R\x05likes\x12\x1c\n" +
-	"\tpublished\x18\v \x01(\bR\tpublished\x129\n" +
+	"\tpublished\x18\v \x01(\bR\tpublished\x12B\n" +
+	"\fpublished_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampH\x03R\vpublishedAt\x88\x01\x01\x129\n" +
 	"\n" +
-	"created_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"created_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"m\n" +
+	"updated_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAtB\n" +
 	"\n" +
-	"Pagination\x12\x12\n" +
-	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x14\n" +
-	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x14\n" +
-	"\x05total\x18\x03 \x01(\x03R\x05total\x12\x1f\n" +
-	"\vtotal_pages\x18\x04 \x01(\x05R\n" +
-	"totalPages\"\xeb\x01\n" +
-	"\x11CreatePostCommand\x12\x14\n" +
+	"\b_summaryB\f\n" +
+	"\n" +
+	"_thumbnailB\x0e\n" +
+	"\f_category_idB\x0f\n" +
+	"\r_published_at\"\x9f\x03\n" +
+	"\x11CreatePostRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12\x12\n" +
-	"\x04slug\x18\x02 \x01(\tR\x04slug\x12\x1f\n" +
-	"\vcategory_id\x18\x03 \x01(\tR\n" +
-	"categoryId\x12\x1c\n" +
-	"\tthumbnail\x18\x04 \x01(\tR\tthumbnail\x12\x1b\n" +
-	"\tauthor_id\x18\x05 \x01(\tR\bauthorId\x12\x18\n" +
-	"\acontent\x18\x06 \x01(\tR\acontent\x12\x18\n" +
-	"\asummary\x18\a \x01(\tR\asummary\x12\x1c\n" +
-	"\tpublished\x18\b \x01(\bR\tpublished\"_\n" +
-	"\x19CreatePostCommandResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
-	"\asuccess\x18\x02 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x03 \x01(\tR\amessage\"\xde\x01\n" +
-	"\x11UpdatePostCommand\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
-	"\x05title\x18\x02 \x01(\tR\x05title\x12\x12\n" +
-	"\x04slug\x18\x03 \x01(\tR\x04slug\x12\x1f\n" +
-	"\vcategory_id\x18\x04 \x01(\tR\n" +
-	"categoryId\x12\x1c\n" +
-	"\tthumbnail\x18\x05 \x01(\tR\tthumbnail\x12\x18\n" +
-	"\acontent\x18\x06 \x01(\tR\acontent\x12\x18\n" +
-	"\asummary\x18\a \x01(\tR\asummary\x12\x1c\n" +
-	"\tpublished\x18\b \x01(\bR\tpublished\"O\n" +
-	"\x19UpdatePostCommandResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"$\n" +
-	"\x12PublishPostCommand\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"P\n" +
-	"\x1aPublishPostCommandResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"&\n" +
-	"\x14UnpublishPostCommand\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"R\n" +
-	"\x1cUnpublishPostCommandResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"#\n" +
-	"\x11DeletePostCommand\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"O\n" +
-	"\x19DeletePostCommandResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"+\n" +
-	"\x19IncrementPostViewsCommand\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"S\n" +
-	"!IncrementPostViewsCommandResponse\x12\x14\n" +
-	"\x05views\x18\x01 \x01(\x05R\x05views\x12\x18\n" +
-	"\asuccess\x18\x02 \x01(\bR\asuccess\"+\n" +
-	"\x19IncrementPostLikesCommand\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"S\n" +
-	"!IncrementPostLikesCommandResponse\x12\x14\n" +
-	"\x05likes\x18\x01 \x01(\x05R\x05likes\x12\x18\n" +
-	"\asuccess\x18\x02 \x01(\bR\asuccess\"\x1e\n" +
-	"\fGetPostQuery\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"O\n" +
-	"\x14GetPostQueryResponse\x12!\n" +
-	"\x04post\x18\x01 \x01(\v2\r.post.v1.PostR\x04post\x12\x14\n" +
-	"\x05found\x18\x02 \x01(\bR\x05found\"(\n" +
-	"\x12GetPostBySlugQuery\x12\x12\n" +
-	"\x04slug\x18\x01 \x01(\tR\x04slug\"U\n" +
-	"\x1aGetPostBySlugQueryResponse\x12!\n" +
-	"\x04post\x18\x01 \x01(\v2\r.post.v1.PostR\x04post\x12\x14\n" +
-	"\x05found\x18\x02 \x01(\bR\x05found\"\xb7\x01\n" +
-	"\x0eListPostsQuery\x12\x12\n" +
-	"\x04page\x18\x01 \x01(\x05R\x04page\x12\x14\n" +
-	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x1f\n" +
-	"\vcategory_id\x18\x03 \x01(\tR\n" +
-	"categoryId\x12\x1b\n" +
-	"\tauthor_id\x18\x04 \x01(\tR\bauthorId\x12%\n" +
-	"\x0epublished_only\x18\x05 \x01(\bR\rpublishedOnly\x12\x16\n" +
-	"\x06search\x18\x06 \x01(\tR\x06search\"r\n" +
-	"\x16ListPostsQueryResponse\x12#\n" +
-	"\x05posts\x18\x01 \x03(\v2\r.post.v1.PostR\x05posts\x123\n" +
+	"\x04slug\x18\x02 \x01(\tR\x04slug\x12\x18\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\x12\x1d\n" +
+	"\asummary\x18\x04 \x01(\tH\x00R\asummary\x88\x01\x01\x12!\n" +
+	"\tthumbnail\x18\x05 \x01(\tH\x01R\tthumbnail\x88\x01\x01\x12$\n" +
+	"\vcategory_id\x18\x06 \x01(\tH\x02R\n" +
+	"categoryId\x88\x01\x01\x12 \n" +
+	"\tauthor_id\x18\a \x01(\tH\x03R\bauthorId\x88\x01\x01\x12!\n" +
+	"\tpublished\x18\b \x01(\bH\x04R\tpublished\x88\x01\x01\x12B\n" +
+	"\fpublished_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\x05R\vpublishedAt\x88\x01\x01B\n" +
 	"\n" +
-	"pagination\x18\x02 \x01(\v2\x13.post.v1.PaginationR\n" +
-	"pagination\"d\n" +
-	"\x17GetPostsByCategoryQuery\x12\x1f\n" +
+	"\b_summaryB\f\n" +
+	"\n" +
+	"_thumbnailB\x0e\n" +
+	"\f_category_idB\f\n" +
+	"\n" +
+	"_author_idB\f\n" +
+	"\n" +
+	"_publishedB\x0f\n" +
+	"\r_published_at\"C\n" +
+	"\x12CreatePostResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"\xad\x03\n" +
+	"\x11UpdatePostRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x19\n" +
+	"\x05title\x18\x02 \x01(\tH\x00R\x05title\x88\x01\x01\x12\x17\n" +
+	"\x04slug\x18\x03 \x01(\tH\x01R\x04slug\x88\x01\x01\x12\x1d\n" +
+	"\acontent\x18\x04 \x01(\tH\x02R\acontent\x88\x01\x01\x12\x1d\n" +
+	"\asummary\x18\x05 \x01(\tH\x03R\asummary\x88\x01\x01\x12!\n" +
+	"\tthumbnail\x18\x06 \x01(\tH\x04R\tthumbnail\x88\x01\x01\x12$\n" +
+	"\vcategory_id\x18\a \x01(\tH\x05R\n" +
+	"categoryId\x88\x01\x01\x12!\n" +
+	"\tpublished\x18\b \x01(\bH\x06R\tpublished\x88\x01\x01\x12B\n" +
+	"\fpublished_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\aR\vpublishedAt\x88\x01\x01B\b\n" +
+	"\x06_titleB\a\n" +
+	"\x05_slugB\n" +
+	"\n" +
+	"\b_contentB\n" +
+	"\n" +
+	"\b_summaryB\f\n" +
+	"\n" +
+	"_thumbnailB\x0e\n" +
+	"\f_category_idB\f\n" +
+	"\n" +
+	"_publishedB\x0f\n" +
+	"\r_published_at\"C\n" +
+	"\x12UpdatePostResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"$\n" +
+	"\x12PublishPostRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"D\n" +
+	"\x13PublishPostResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"&\n" +
+	"\x14UnpublishPostRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"F\n" +
+	"\x15UnpublishPostResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"#\n" +
+	"\x11DeletePostRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"C\n" +
+	"\x12DeletePostResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"/\n" +
+	"\x12DeletePostsRequest\x12\x19\n" +
+	"\bpost_ids\x18\x01 \x03(\tR\apostIds\"D\n" +
+	"\x13DeletePostsResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"+\n" +
+	"\x19IncrementPostViewsRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"K\n" +
+	"\x1aIncrementPostViewsResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"+\n" +
+	"\x19IncrementPostLikesRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"K\n" +
+	"\x1aIncrementPostLikesResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\" \n" +
+	"\x0eGetPostRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"9\n" +
+	"\x0fGetPostResponse\x12&\n" +
+	"\x04data\x18\x01 \x01(\v2\x12.post_service.PostR\x04data\"\xa1\x05\n" +
+	"\x18GetPublishedPostsRequest\x12\x17\n" +
+	"\x04page\x18\x01 \x01(\x05H\x00R\x04page\x88\x01\x01\x12\x19\n" +
+	"\x05limit\x18\x02 \x01(\x05H\x01R\x05limit\x88\x01\x01\x12\x1b\n" +
+	"\x06search\x18\x03 \x01(\tH\x02R\x06search\x88\x01\x01\x12\x1c\n" +
+	"\asort_by\x18\x04 \x01(\tH\x03R\x06sortBy\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"sort_order\x18\x05 \x01(\tH\x04R\tsortOrder\x88\x01\x01\x12 \n" +
+	"\tauthor_id\x18\x06 \x01(\tH\x05R\bauthorId\x88\x01\x01\x12!\n" +
+	"\fcategory_ids\x18\a \x03(\tR\vcategoryIds\x12G\n" +
+	"\x0fcreated_at_from\x18\b \x01(\v2\x1a.google.protobuf.TimestampH\x06R\rcreatedAtFrom\x88\x01\x01\x12C\n" +
+	"\rcreated_at_to\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\aR\vcreatedAtTo\x88\x01\x01\x12G\n" +
+	"\x0fupdated_at_from\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampH\bR\rupdatedAtFrom\x88\x01\x01\x12C\n" +
+	"\rupdated_at_to\x18\v \x01(\v2\x1a.google.protobuf.TimestampH\tR\vupdatedAtTo\x88\x01\x01B\a\n" +
+	"\x05_pageB\b\n" +
+	"\x06_limitB\t\n" +
+	"\a_searchB\n" +
+	"\n" +
+	"\b_sort_byB\r\n" +
+	"\v_sort_orderB\f\n" +
+	"\n" +
+	"_author_idB\x12\n" +
+	"\x10_created_at_fromB\x10\n" +
+	"\x0e_created_at_toB\x12\n" +
+	"\x10_updated_at_fromB\x10\n" +
+	"\x0e_updated_at_to\"\x7f\n" +
+	"\x19GetPublishedPostsResponse\x12&\n" +
+	"\x04data\x18\x01 \x03(\v2\x12.post_service.PostR\x04data\x12:\n" +
+	"\n" +
+	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
+	"pagination\"\x83\x01\n" +
+	"\x19GetPostsByCategoryRequest\x12\x1f\n" +
 	"\vcategory_id\x18\x01 \x01(\tR\n" +
-	"categoryId\x12\x12\n" +
-	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x14\n" +
-	"\x05limit\x18\x03 \x01(\x05R\x05limit\"{\n" +
-	"\x1fGetPostsByCategoryQueryResponse\x12#\n" +
-	"\x05posts\x18\x01 \x03(\v2\r.post.v1.PostR\x05posts\x123\n" +
+	"categoryId\x12\x17\n" +
+	"\x04page\x18\x02 \x01(\x05H\x00R\x04page\x88\x01\x01\x12\x19\n" +
+	"\x05limit\x18\x03 \x01(\x05H\x01R\x05limit\x88\x01\x01B\a\n" +
+	"\x05_pageB\b\n" +
+	"\x06_limit\"\x80\x01\n" +
+	"\x1aGetPostsByCategoryResponse\x12&\n" +
+	"\x04data\x18\x01 \x03(\v2\x12.post_service.PostR\x04data\x12:\n" +
 	"\n" +
-	"pagination\x18\x02 \x01(\v2\x13.post.v1.PaginationR\n" +
-	"pagination\"^\n" +
-	"\x15GetPostsByAuthorQuery\x12\x1b\n" +
-	"\tauthor_id\x18\x01 \x01(\tR\bauthorId\x12\x12\n" +
-	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x14\n" +
-	"\x05limit\x18\x03 \x01(\x05R\x05limit\"y\n" +
-	"\x1dGetPostsByAuthorQueryResponse\x12#\n" +
-	"\x05posts\x18\x01 \x03(\v2\r.post.v1.PostR\x05posts\x123\n" +
+	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
+	"pagination\"}\n" +
+	"\x17GetPostsByAuthorRequest\x12\x1b\n" +
+	"\tauthor_id\x18\x01 \x01(\tR\bauthorId\x12\x17\n" +
+	"\x04page\x18\x02 \x01(\x05H\x00R\x04page\x88\x01\x01\x12\x19\n" +
+	"\x05limit\x18\x03 \x01(\x05H\x01R\x05limit\x88\x01\x01B\a\n" +
+	"\x05_pageB\b\n" +
+	"\x06_limit\"~\n" +
+	"\x18GetPostsByAuthorResponse\x12&\n" +
+	"\x04data\x18\x01 \x03(\v2\x12.post_service.PostR\x04data\x12:\n" +
 	"\n" +
-	"pagination\x18\x02 \x01(\v2\x13.post.v1.PaginationR\n" +
-	"pagination\"G\n" +
-	"\x14GetPopularPostsQuery\x12\x14\n" +
-	"\x05limit\x18\x01 \x01(\x05R\x05limit\x12\x19\n" +
-	"\bdays_ago\x18\x02 \x01(\x05R\adaysAgo\"C\n" +
-	"\x1cGetPopularPostsQueryResponse\x12#\n" +
-	"\x05posts\x18\x01 \x03(\v2\r.post.v1.PostR\x05posts\"\xa4\x01\n" +
-	"\x10PostCreatedEvent\x12\x0e\n" +
+	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
+	"pagination\"[\n" +
+	"\x16GetPopularPostsRequest\x12\x14\n" +
+	"\x05limit\x18\x01 \x01(\x05R\x05limit\x12\x1e\n" +
+	"\bdays_ago\x18\x02 \x01(\x05H\x00R\adaysAgo\x88\x01\x01B\v\n" +
+	"\t_days_ago\"A\n" +
+	"\x17GetPopularPostsResponse\x12&\n" +
+	"\x04data\x18\x01 \x03(\v2\x12.post_service.PostR\x04data\"\x9b\x05\n" +
+	"\x12GetAllPostsRequest\x12\x17\n" +
+	"\x04page\x18\x01 \x01(\x05H\x00R\x04page\x88\x01\x01\x12\x19\n" +
+	"\x05limit\x18\x02 \x01(\x05H\x01R\x05limit\x88\x01\x01\x12\x1b\n" +
+	"\x06search\x18\x03 \x01(\tH\x02R\x06search\x88\x01\x01\x12\x1c\n" +
+	"\asort_by\x18\x04 \x01(\tH\x03R\x06sortBy\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"sort_order\x18\x05 \x01(\tH\x04R\tsortOrder\x88\x01\x01\x12 \n" +
+	"\tauthor_id\x18\x06 \x01(\tH\x05R\bauthorId\x88\x01\x01\x12!\n" +
+	"\fcategory_ids\x18\a \x03(\tR\vcategoryIds\x12G\n" +
+	"\x0fcreated_at_from\x18\b \x01(\v2\x1a.google.protobuf.TimestampH\x06R\rcreatedAtFrom\x88\x01\x01\x12C\n" +
+	"\rcreated_at_to\x18\t \x01(\v2\x1a.google.protobuf.TimestampH\aR\vcreatedAtTo\x88\x01\x01\x12G\n" +
+	"\x0fupdated_at_from\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampH\bR\rupdatedAtFrom\x88\x01\x01\x12C\n" +
+	"\rupdated_at_to\x18\v \x01(\v2\x1a.google.protobuf.TimestampH\tR\vupdatedAtTo\x88\x01\x01B\a\n" +
+	"\x05_pageB\b\n" +
+	"\x06_limitB\t\n" +
+	"\a_searchB\n" +
+	"\n" +
+	"\b_sort_byB\r\n" +
+	"\v_sort_orderB\f\n" +
+	"\n" +
+	"_author_idB\x12\n" +
+	"\x10_created_at_fromB\x10\n" +
+	"\x0e_created_at_toB\x12\n" +
+	"\x10_updated_at_fromB\x10\n" +
+	"\x0e_updated_at_to\"y\n" +
+	"\x13GetAllPostsResponse\x12&\n" +
+	"\x04data\x18\x01 \x03(\v2\x12.post_service.PostR\x04data\x12:\n" +
+	"\n" +
+	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
+	"pagination\"\xab\x01\n" +
+	"\x17PostCreatedEventRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x12\n" +
 	"\x04slug\x18\x03 \x01(\tR\x04slug\x12\x1b\n" +
@@ -2290,148 +2450,183 @@ const file_posts_proto_rawDesc = "" +
 	"\x19PostLikesIncrementedEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05likes\x18\x02 \x01(\x05R\x05likes\x12A\n" +
-	"\x0eincremented_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\rincrementedAt2\xde\b\n" +
-	"\fPostsService\x12L\n" +
+	"\x0eincremented_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\rincrementedAt2\x83\n" +
 	"\n" +
-	"CreatePost\x12\x1a.post.v1.CreatePostCommand\x1a\".post.v1.CreatePostCommandResponse\x12L\n" +
+	"\fPostsService\x12O\n" +
 	"\n" +
-	"UpdatePost\x12\x1a.post.v1.UpdatePostCommand\x1a\".post.v1.UpdatePostCommandResponse\x12O\n" +
-	"\vPublishPost\x12\x1b.post.v1.PublishPostCommand\x1a#.post.v1.PublishPostCommandResponse\x12U\n" +
-	"\rUnpublishPost\x12\x1d.post.v1.UnpublishPostCommand\x1a%.post.v1.UnpublishPostCommandResponse\x12L\n" +
+	"CreatePost\x12\x1f.post_service.CreatePostRequest\x1a .post_service.CreatePostResponse\x12O\n" +
 	"\n" +
-	"DeletePost\x12\x1a.post.v1.DeletePostCommand\x1a\".post.v1.DeletePostCommandResponse\x12d\n" +
-	"\x12IncrementPostViews\x12\".post.v1.IncrementPostViewsCommand\x1a*.post.v1.IncrementPostViewsCommandResponse\x12d\n" +
-	"\x12IncrementPostLikes\x12\".post.v1.IncrementPostLikesCommand\x1a*.post.v1.IncrementPostLikesCommandResponse\x12?\n" +
-	"\aGetPost\x12\x15.post.v1.GetPostQuery\x1a\x1d.post.v1.GetPostQueryResponse\x12Q\n" +
-	"\rGetPostBySlug\x12\x1b.post.v1.GetPostBySlugQuery\x1a#.post.v1.GetPostBySlugQueryResponse\x12E\n" +
-	"\tListPosts\x12\x17.post.v1.ListPostsQuery\x1a\x1f.post.v1.ListPostsQueryResponse\x12`\n" +
-	"\x12GetPostsByCategory\x12 .post.v1.GetPostsByCategoryQuery\x1a(.post.v1.GetPostsByCategoryQueryResponse\x12Z\n" +
-	"\x10GetPostsByAuthor\x12\x1e.post.v1.GetPostsByAuthorQuery\x1a&.post.v1.GetPostsByAuthorQueryResponse\x12W\n" +
-	"\x0fGetPopularPosts\x12\x1d.post.v1.GetPopularPostsQuery\x1a%.post.v1.GetPopularPostsQueryResponseB\x12Z\x10./;posts_serviceb\x06proto3"
+	"UpdatePost\x12\x1f.post_service.UpdatePostRequest\x1a .post_service.UpdatePostResponse\x12R\n" +
+	"\vPublishPost\x12 .post_service.PublishPostRequest\x1a!.post_service.PublishPostResponse\x12X\n" +
+	"\rUnpublishPost\x12\".post_service.UnpublishPostRequest\x1a#.post_service.UnpublishPostResponse\x12O\n" +
+	"\n" +
+	"DeletePost\x12\x1f.post_service.DeletePostRequest\x1a .post_service.DeletePostResponse\x12R\n" +
+	"\vDeletePosts\x12 .post_service.DeletePostsRequest\x1a!.post_service.DeletePostsResponse\x12g\n" +
+	"\x12IncrementPostViews\x12'.post_service.IncrementPostViewsRequest\x1a(.post_service.IncrementPostViewsResponse\x12g\n" +
+	"\x12IncrementPostLikes\x12'.post_service.IncrementPostLikesRequest\x1a(.post_service.IncrementPostLikesResponse\x12F\n" +
+	"\aGetPost\x12\x1c.post_service.GetPostRequest\x1a\x1d.post_service.GetPostResponse\x12d\n" +
+	"\x11GetPublishedPosts\x12&.post_service.GetPublishedPostsRequest\x1a'.post_service.GetPublishedPostsResponse\x12R\n" +
+	"\vGetAllPosts\x12 .post_service.GetAllPostsRequest\x1a!.post_service.GetAllPostsResponse\x12g\n" +
+	"\x12GetPostsByCategory\x12'.post_service.GetPostsByCategoryRequest\x1a(.post_service.GetPostsByCategoryResponse\x12a\n" +
+	"\x10GetPostsByAuthor\x12%.post_service.GetPostsByAuthorRequest\x1a&.post_service.GetPostsByAuthorResponse\x12^\n" +
+	"\x0fGetPopularPosts\x12$.post_service.GetPopularPostsRequest\x1a%.post_service.GetPopularPostsResponseBZZXgithub.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto;posts_serviceb\x06proto3"
 
 var (
-	file_posts_proto_rawDescOnce sync.Once
-	file_posts_proto_rawDescData []byte
+	file_post_service_posts_proto_rawDescOnce sync.Once
+	file_post_service_posts_proto_rawDescData []byte
 )
 
-func file_posts_proto_rawDescGZIP() []byte {
-	file_posts_proto_rawDescOnce.Do(func() {
-		file_posts_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_posts_proto_rawDesc), len(file_posts_proto_rawDesc)))
+func file_post_service_posts_proto_rawDescGZIP() []byte {
+	file_post_service_posts_proto_rawDescOnce.Do(func() {
+		file_post_service_posts_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_post_service_posts_proto_rawDesc), len(file_post_service_posts_proto_rawDesc)))
 	})
-	return file_posts_proto_rawDescData
+	return file_post_service_posts_proto_rawDescData
 }
 
-var file_posts_proto_msgTypes = make([]protoimpl.MessageInfo, 35)
-var file_posts_proto_goTypes = []any{
-	(*Post)(nil),                              // 0: post.v1.Post
-	(*Pagination)(nil),                        // 1: post.v1.Pagination
-	(*CreatePostCommand)(nil),                 // 2: post.v1.CreatePostCommand
-	(*CreatePostCommandResponse)(nil),         // 3: post.v1.CreatePostCommandResponse
-	(*UpdatePostCommand)(nil),                 // 4: post.v1.UpdatePostCommand
-	(*UpdatePostCommandResponse)(nil),         // 5: post.v1.UpdatePostCommandResponse
-	(*PublishPostCommand)(nil),                // 6: post.v1.PublishPostCommand
-	(*PublishPostCommandResponse)(nil),        // 7: post.v1.PublishPostCommandResponse
-	(*UnpublishPostCommand)(nil),              // 8: post.v1.UnpublishPostCommand
-	(*UnpublishPostCommandResponse)(nil),      // 9: post.v1.UnpublishPostCommandResponse
-	(*DeletePostCommand)(nil),                 // 10: post.v1.DeletePostCommand
-	(*DeletePostCommandResponse)(nil),         // 11: post.v1.DeletePostCommandResponse
-	(*IncrementPostViewsCommand)(nil),         // 12: post.v1.IncrementPostViewsCommand
-	(*IncrementPostViewsCommandResponse)(nil), // 13: post.v1.IncrementPostViewsCommandResponse
-	(*IncrementPostLikesCommand)(nil),         // 14: post.v1.IncrementPostLikesCommand
-	(*IncrementPostLikesCommandResponse)(nil), // 15: post.v1.IncrementPostLikesCommandResponse
-	(*GetPostQuery)(nil),                      // 16: post.v1.GetPostQuery
-	(*GetPostQueryResponse)(nil),              // 17: post.v1.GetPostQueryResponse
-	(*GetPostBySlugQuery)(nil),                // 18: post.v1.GetPostBySlugQuery
-	(*GetPostBySlugQueryResponse)(nil),        // 19: post.v1.GetPostBySlugQueryResponse
-	(*ListPostsQuery)(nil),                    // 20: post.v1.ListPostsQuery
-	(*ListPostsQueryResponse)(nil),            // 21: post.v1.ListPostsQueryResponse
-	(*GetPostsByCategoryQuery)(nil),           // 22: post.v1.GetPostsByCategoryQuery
-	(*GetPostsByCategoryQueryResponse)(nil),   // 23: post.v1.GetPostsByCategoryQueryResponse
-	(*GetPostsByAuthorQuery)(nil),             // 24: post.v1.GetPostsByAuthorQuery
-	(*GetPostsByAuthorQueryResponse)(nil),     // 25: post.v1.GetPostsByAuthorQueryResponse
-	(*GetPopularPostsQuery)(nil),              // 26: post.v1.GetPopularPostsQuery
-	(*GetPopularPostsQueryResponse)(nil),      // 27: post.v1.GetPopularPostsQueryResponse
-	(*PostCreatedEvent)(nil),                  // 28: post.v1.PostCreatedEvent
-	(*PostUpdatedEvent)(nil),                  // 29: post.v1.PostUpdatedEvent
-	(*PostPublishedEvent)(nil),                // 30: post.v1.PostPublishedEvent
-	(*PostUnpublishedEvent)(nil),              // 31: post.v1.PostUnpublishedEvent
-	(*PostDeletedEvent)(nil),                  // 32: post.v1.PostDeletedEvent
-	(*PostViewsIncrementedEvent)(nil),         // 33: post.v1.PostViewsIncrementedEvent
-	(*PostLikesIncrementedEvent)(nil),         // 34: post.v1.PostLikesIncrementedEvent
-	(*timestamppb.Timestamp)(nil),             // 35: google.protobuf.Timestamp
+var file_post_service_posts_proto_msgTypes = make([]protoimpl.MessageInfo, 36)
+var file_post_service_posts_proto_goTypes = []any{
+	(*Post)(nil),                       // 0: post_service.Post
+	(*CreatePostRequest)(nil),          // 1: post_service.CreatePostRequest
+	(*CreatePostResponse)(nil),         // 2: post_service.CreatePostResponse
+	(*UpdatePostRequest)(nil),          // 3: post_service.UpdatePostRequest
+	(*UpdatePostResponse)(nil),         // 4: post_service.UpdatePostResponse
+	(*PublishPostRequest)(nil),         // 5: post_service.PublishPostRequest
+	(*PublishPostResponse)(nil),        // 6: post_service.PublishPostResponse
+	(*UnpublishPostRequest)(nil),       // 7: post_service.UnpublishPostRequest
+	(*UnpublishPostResponse)(nil),      // 8: post_service.UnpublishPostResponse
+	(*DeletePostRequest)(nil),          // 9: post_service.DeletePostRequest
+	(*DeletePostResponse)(nil),         // 10: post_service.DeletePostResponse
+	(*DeletePostsRequest)(nil),         // 11: post_service.DeletePostsRequest
+	(*DeletePostsResponse)(nil),        // 12: post_service.DeletePostsResponse
+	(*IncrementPostViewsRequest)(nil),  // 13: post_service.IncrementPostViewsRequest
+	(*IncrementPostViewsResponse)(nil), // 14: post_service.IncrementPostViewsResponse
+	(*IncrementPostLikesRequest)(nil),  // 15: post_service.IncrementPostLikesRequest
+	(*IncrementPostLikesResponse)(nil), // 16: post_service.IncrementPostLikesResponse
+	(*GetPostRequest)(nil),             // 17: post_service.GetPostRequest
+	(*GetPostResponse)(nil),            // 18: post_service.GetPostResponse
+	(*GetPublishedPostsRequest)(nil),   // 19: post_service.GetPublishedPostsRequest
+	(*GetPublishedPostsResponse)(nil),  // 20: post_service.GetPublishedPostsResponse
+	(*GetPostsByCategoryRequest)(nil),  // 21: post_service.GetPostsByCategoryRequest
+	(*GetPostsByCategoryResponse)(nil), // 22: post_service.GetPostsByCategoryResponse
+	(*GetPostsByAuthorRequest)(nil),    // 23: post_service.GetPostsByAuthorRequest
+	(*GetPostsByAuthorResponse)(nil),   // 24: post_service.GetPostsByAuthorResponse
+	(*GetPopularPostsRequest)(nil),     // 25: post_service.GetPopularPostsRequest
+	(*GetPopularPostsResponse)(nil),    // 26: post_service.GetPopularPostsResponse
+	(*GetAllPostsRequest)(nil),         // 27: post_service.GetAllPostsRequest
+	(*GetAllPostsResponse)(nil),        // 28: post_service.GetAllPostsResponse
+	(*PostCreatedEventRequest)(nil),    // 29: post_service.PostCreatedEventRequest
+	(*PostUpdatedEvent)(nil),           // 30: post_service.PostUpdatedEvent
+	(*PostPublishedEvent)(nil),         // 31: post_service.PostPublishedEvent
+	(*PostUnpublishedEvent)(nil),       // 32: post_service.PostUnpublishedEvent
+	(*PostDeletedEvent)(nil),           // 33: post_service.PostDeletedEvent
+	(*PostViewsIncrementedEvent)(nil),  // 34: post_service.PostViewsIncrementedEvent
+	(*PostLikesIncrementedEvent)(nil),  // 35: post_service.PostLikesIncrementedEvent
+	(*timestamppb.Timestamp)(nil),      // 36: google.protobuf.Timestamp
+	(*common.OperationMetadata)(nil),   // 37: common.OperationMetadata
+	(*common.PaginationMetadata)(nil),  // 38: common.PaginationMetadata
 }
-var file_posts_proto_depIdxs = []int32{
-	35, // 0: post.v1.Post.created_at:type_name -> google.protobuf.Timestamp
-	35, // 1: post.v1.Post.updated_at:type_name -> google.protobuf.Timestamp
-	0,  // 2: post.v1.GetPostQueryResponse.post:type_name -> post.v1.Post
-	0,  // 3: post.v1.GetPostBySlugQueryResponse.post:type_name -> post.v1.Post
-	0,  // 4: post.v1.ListPostsQueryResponse.posts:type_name -> post.v1.Post
-	1,  // 5: post.v1.ListPostsQueryResponse.pagination:type_name -> post.v1.Pagination
-	0,  // 6: post.v1.GetPostsByCategoryQueryResponse.posts:type_name -> post.v1.Post
-	1,  // 7: post.v1.GetPostsByCategoryQueryResponse.pagination:type_name -> post.v1.Pagination
-	0,  // 8: post.v1.GetPostsByAuthorQueryResponse.posts:type_name -> post.v1.Post
-	1,  // 9: post.v1.GetPostsByAuthorQueryResponse.pagination:type_name -> post.v1.Pagination
-	0,  // 10: post.v1.GetPopularPostsQueryResponse.posts:type_name -> post.v1.Post
-	35, // 11: post.v1.PostCreatedEvent.created_at:type_name -> google.protobuf.Timestamp
-	35, // 12: post.v1.PostUpdatedEvent.updated_at:type_name -> google.protobuf.Timestamp
-	35, // 13: post.v1.PostPublishedEvent.published_at:type_name -> google.protobuf.Timestamp
-	35, // 14: post.v1.PostUnpublishedEvent.unpublished_at:type_name -> google.protobuf.Timestamp
-	35, // 15: post.v1.PostDeletedEvent.deleted_at:type_name -> google.protobuf.Timestamp
-	35, // 16: post.v1.PostViewsIncrementedEvent.incremented_at:type_name -> google.protobuf.Timestamp
-	35, // 17: post.v1.PostLikesIncrementedEvent.incremented_at:type_name -> google.protobuf.Timestamp
-	2,  // 18: post.v1.PostsService.CreatePost:input_type -> post.v1.CreatePostCommand
-	4,  // 19: post.v1.PostsService.UpdatePost:input_type -> post.v1.UpdatePostCommand
-	6,  // 20: post.v1.PostsService.PublishPost:input_type -> post.v1.PublishPostCommand
-	8,  // 21: post.v1.PostsService.UnpublishPost:input_type -> post.v1.UnpublishPostCommand
-	10, // 22: post.v1.PostsService.DeletePost:input_type -> post.v1.DeletePostCommand
-	12, // 23: post.v1.PostsService.IncrementPostViews:input_type -> post.v1.IncrementPostViewsCommand
-	14, // 24: post.v1.PostsService.IncrementPostLikes:input_type -> post.v1.IncrementPostLikesCommand
-	16, // 25: post.v1.PostsService.GetPost:input_type -> post.v1.GetPostQuery
-	18, // 26: post.v1.PostsService.GetPostBySlug:input_type -> post.v1.GetPostBySlugQuery
-	20, // 27: post.v1.PostsService.ListPosts:input_type -> post.v1.ListPostsQuery
-	22, // 28: post.v1.PostsService.GetPostsByCategory:input_type -> post.v1.GetPostsByCategoryQuery
-	24, // 29: post.v1.PostsService.GetPostsByAuthor:input_type -> post.v1.GetPostsByAuthorQuery
-	26, // 30: post.v1.PostsService.GetPopularPosts:input_type -> post.v1.GetPopularPostsQuery
-	3,  // 31: post.v1.PostsService.CreatePost:output_type -> post.v1.CreatePostCommandResponse
-	5,  // 32: post.v1.PostsService.UpdatePost:output_type -> post.v1.UpdatePostCommandResponse
-	7,  // 33: post.v1.PostsService.PublishPost:output_type -> post.v1.PublishPostCommandResponse
-	9,  // 34: post.v1.PostsService.UnpublishPost:output_type -> post.v1.UnpublishPostCommandResponse
-	11, // 35: post.v1.PostsService.DeletePost:output_type -> post.v1.DeletePostCommandResponse
-	13, // 36: post.v1.PostsService.IncrementPostViews:output_type -> post.v1.IncrementPostViewsCommandResponse
-	15, // 37: post.v1.PostsService.IncrementPostLikes:output_type -> post.v1.IncrementPostLikesCommandResponse
-	17, // 38: post.v1.PostsService.GetPost:output_type -> post.v1.GetPostQueryResponse
-	19, // 39: post.v1.PostsService.GetPostBySlug:output_type -> post.v1.GetPostBySlugQueryResponse
-	21, // 40: post.v1.PostsService.ListPosts:output_type -> post.v1.ListPostsQueryResponse
-	23, // 41: post.v1.PostsService.GetPostsByCategory:output_type -> post.v1.GetPostsByCategoryQueryResponse
-	25, // 42: post.v1.PostsService.GetPostsByAuthor:output_type -> post.v1.GetPostsByAuthorQueryResponse
-	27, // 43: post.v1.PostsService.GetPopularPosts:output_type -> post.v1.GetPopularPostsQueryResponse
-	31, // [31:44] is the sub-list for method output_type
-	18, // [18:31] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+var file_post_service_posts_proto_depIdxs = []int32{
+	36, // 0: post_service.Post.published_at:type_name -> google.protobuf.Timestamp
+	36, // 1: post_service.Post.created_at:type_name -> google.protobuf.Timestamp
+	36, // 2: post_service.Post.updated_at:type_name -> google.protobuf.Timestamp
+	36, // 3: post_service.CreatePostRequest.published_at:type_name -> google.protobuf.Timestamp
+	37, // 4: post_service.CreatePostResponse.data:type_name -> common.OperationMetadata
+	36, // 5: post_service.UpdatePostRequest.published_at:type_name -> google.protobuf.Timestamp
+	37, // 6: post_service.UpdatePostResponse.data:type_name -> common.OperationMetadata
+	37, // 7: post_service.PublishPostResponse.data:type_name -> common.OperationMetadata
+	37, // 8: post_service.UnpublishPostResponse.data:type_name -> common.OperationMetadata
+	37, // 9: post_service.DeletePostResponse.data:type_name -> common.OperationMetadata
+	37, // 10: post_service.DeletePostsResponse.data:type_name -> common.OperationMetadata
+	37, // 11: post_service.IncrementPostViewsResponse.data:type_name -> common.OperationMetadata
+	37, // 12: post_service.IncrementPostLikesResponse.data:type_name -> common.OperationMetadata
+	0,  // 13: post_service.GetPostResponse.data:type_name -> post_service.Post
+	36, // 14: post_service.GetPublishedPostsRequest.created_at_from:type_name -> google.protobuf.Timestamp
+	36, // 15: post_service.GetPublishedPostsRequest.created_at_to:type_name -> google.protobuf.Timestamp
+	36, // 16: post_service.GetPublishedPostsRequest.updated_at_from:type_name -> google.protobuf.Timestamp
+	36, // 17: post_service.GetPublishedPostsRequest.updated_at_to:type_name -> google.protobuf.Timestamp
+	0,  // 18: post_service.GetPublishedPostsResponse.data:type_name -> post_service.Post
+	38, // 19: post_service.GetPublishedPostsResponse.pagination:type_name -> common.PaginationMetadata
+	0,  // 20: post_service.GetPostsByCategoryResponse.data:type_name -> post_service.Post
+	38, // 21: post_service.GetPostsByCategoryResponse.pagination:type_name -> common.PaginationMetadata
+	0,  // 22: post_service.GetPostsByAuthorResponse.data:type_name -> post_service.Post
+	38, // 23: post_service.GetPostsByAuthorResponse.pagination:type_name -> common.PaginationMetadata
+	0,  // 24: post_service.GetPopularPostsResponse.data:type_name -> post_service.Post
+	36, // 25: post_service.GetAllPostsRequest.created_at_from:type_name -> google.protobuf.Timestamp
+	36, // 26: post_service.GetAllPostsRequest.created_at_to:type_name -> google.protobuf.Timestamp
+	36, // 27: post_service.GetAllPostsRequest.updated_at_from:type_name -> google.protobuf.Timestamp
+	36, // 28: post_service.GetAllPostsRequest.updated_at_to:type_name -> google.protobuf.Timestamp
+	0,  // 29: post_service.GetAllPostsResponse.data:type_name -> post_service.Post
+	38, // 30: post_service.GetAllPostsResponse.pagination:type_name -> common.PaginationMetadata
+	36, // 31: post_service.PostCreatedEventRequest.created_at:type_name -> google.protobuf.Timestamp
+	36, // 32: post_service.PostUpdatedEvent.updated_at:type_name -> google.protobuf.Timestamp
+	36, // 33: post_service.PostPublishedEvent.published_at:type_name -> google.protobuf.Timestamp
+	36, // 34: post_service.PostUnpublishedEvent.unpublished_at:type_name -> google.protobuf.Timestamp
+	36, // 35: post_service.PostDeletedEvent.deleted_at:type_name -> google.protobuf.Timestamp
+	36, // 36: post_service.PostViewsIncrementedEvent.incremented_at:type_name -> google.protobuf.Timestamp
+	36, // 37: post_service.PostLikesIncrementedEvent.incremented_at:type_name -> google.protobuf.Timestamp
+	1,  // 38: post_service.PostsService.CreatePost:input_type -> post_service.CreatePostRequest
+	3,  // 39: post_service.PostsService.UpdatePost:input_type -> post_service.UpdatePostRequest
+	5,  // 40: post_service.PostsService.PublishPost:input_type -> post_service.PublishPostRequest
+	7,  // 41: post_service.PostsService.UnpublishPost:input_type -> post_service.UnpublishPostRequest
+	9,  // 42: post_service.PostsService.DeletePost:input_type -> post_service.DeletePostRequest
+	11, // 43: post_service.PostsService.DeletePosts:input_type -> post_service.DeletePostsRequest
+	13, // 44: post_service.PostsService.IncrementPostViews:input_type -> post_service.IncrementPostViewsRequest
+	15, // 45: post_service.PostsService.IncrementPostLikes:input_type -> post_service.IncrementPostLikesRequest
+	17, // 46: post_service.PostsService.GetPost:input_type -> post_service.GetPostRequest
+	19, // 47: post_service.PostsService.GetPublishedPosts:input_type -> post_service.GetPublishedPostsRequest
+	27, // 48: post_service.PostsService.GetAllPosts:input_type -> post_service.GetAllPostsRequest
+	21, // 49: post_service.PostsService.GetPostsByCategory:input_type -> post_service.GetPostsByCategoryRequest
+	23, // 50: post_service.PostsService.GetPostsByAuthor:input_type -> post_service.GetPostsByAuthorRequest
+	25, // 51: post_service.PostsService.GetPopularPosts:input_type -> post_service.GetPopularPostsRequest
+	2,  // 52: post_service.PostsService.CreatePost:output_type -> post_service.CreatePostResponse
+	4,  // 53: post_service.PostsService.UpdatePost:output_type -> post_service.UpdatePostResponse
+	6,  // 54: post_service.PostsService.PublishPost:output_type -> post_service.PublishPostResponse
+	8,  // 55: post_service.PostsService.UnpublishPost:output_type -> post_service.UnpublishPostResponse
+	10, // 56: post_service.PostsService.DeletePost:output_type -> post_service.DeletePostResponse
+	12, // 57: post_service.PostsService.DeletePosts:output_type -> post_service.DeletePostsResponse
+	14, // 58: post_service.PostsService.IncrementPostViews:output_type -> post_service.IncrementPostViewsResponse
+	16, // 59: post_service.PostsService.IncrementPostLikes:output_type -> post_service.IncrementPostLikesResponse
+	18, // 60: post_service.PostsService.GetPost:output_type -> post_service.GetPostResponse
+	20, // 61: post_service.PostsService.GetPublishedPosts:output_type -> post_service.GetPublishedPostsResponse
+	28, // 62: post_service.PostsService.GetAllPosts:output_type -> post_service.GetAllPostsResponse
+	22, // 63: post_service.PostsService.GetPostsByCategory:output_type -> post_service.GetPostsByCategoryResponse
+	24, // 64: post_service.PostsService.GetPostsByAuthor:output_type -> post_service.GetPostsByAuthorResponse
+	26, // 65: post_service.PostsService.GetPopularPosts:output_type -> post_service.GetPopularPostsResponse
+	52, // [52:66] is the sub-list for method output_type
+	38, // [38:52] is the sub-list for method input_type
+	38, // [38:38] is the sub-list for extension type_name
+	38, // [38:38] is the sub-list for extension extendee
+	0,  // [0:38] is the sub-list for field type_name
 }
 
-func init() { file_posts_proto_init() }
-func file_posts_proto_init() {
-	if File_posts_proto != nil {
+func init() { file_post_service_posts_proto_init() }
+func file_post_service_posts_proto_init() {
+	if File_post_service_posts_proto != nil {
 		return
 	}
+	file_post_service_posts_proto_msgTypes[0].OneofWrappers = []any{}
+	file_post_service_posts_proto_msgTypes[1].OneofWrappers = []any{}
+	file_post_service_posts_proto_msgTypes[3].OneofWrappers = []any{}
+	file_post_service_posts_proto_msgTypes[19].OneofWrappers = []any{}
+	file_post_service_posts_proto_msgTypes[21].OneofWrappers = []any{}
+	file_post_service_posts_proto_msgTypes[23].OneofWrappers = []any{}
+	file_post_service_posts_proto_msgTypes[25].OneofWrappers = []any{}
+	file_post_service_posts_proto_msgTypes[27].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_posts_proto_rawDesc), len(file_posts_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_post_service_posts_proto_rawDesc), len(file_post_service_posts_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   35,
+			NumMessages:   36,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_posts_proto_goTypes,
-		DependencyIndexes: file_posts_proto_depIdxs,
-		MessageInfos:      file_posts_proto_msgTypes,
+		GoTypes:           file_post_service_posts_proto_goTypes,
+		DependencyIndexes: file_post_service_posts_proto_depIdxs,
+		MessageInfos:      file_post_service_posts_proto_msgTypes,
 	}.Build()
-	File_posts_proto = out.File
-	file_posts_proto_goTypes = nil
-	file_posts_proto_depIdxs = nil
+	File_post_service_posts_proto = out.File
+	file_post_service_posts_proto_goTypes = nil
+	file_post_service_posts_proto_depIdxs = nil
 }

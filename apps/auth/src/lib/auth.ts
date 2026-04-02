@@ -50,7 +50,6 @@ export function createBetterAuthInstance(
         adminRoles: ['admin'],
         defaultRole: 'user',
       }),
-      openAPI(),
     ],
     databaseHooks: {
       user: {

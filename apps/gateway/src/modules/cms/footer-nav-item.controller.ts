@@ -24,7 +24,7 @@ import {
   FooterNavItemDto,
   FooterNavItemUpdateDto,
 } from './dto';
-import { OperationResponseDto } from '@phanhotboy/nsv-common/dto/response/operation-response.dto';
+import { OperationMetadataDto } from '@phanhotboy/nsv-common/dto/response';
 
 // ref: apps/cms/internal/footerNavItem/controller/http/footerNavItem.router.go
 @Controller('footer-nav-items')
@@ -39,39 +39,39 @@ export class FooterNavItemController {
   @Public()
   // @Serialize(FooterNavItemDto)
   proxyRequest(@Req() req: Request): Promise<FooterNavItemDto> {
-    return this.cmsProxy.proxyRequest<FooterNavItemDto>(req);
+    return this.cmsProxy.makeRequest<FooterNavItemDto>(req);
   }
 
   @Post()
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ footerNavItem: ['create'] })
-  @Serialize(OperationResponseDto)
+  @Serialize(OperationMetadataDto)
   async proxyPostRequest(
     @Req() req: Request,
     @Body() body: FooterNavItemCreateDto,
-  ): Promise<OperationResponseDto> {
+  ) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 
   @Put(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ footerNavItem: ['update'] })
-  @Serialize(OperationResponseDto)
+  @Serialize(OperationMetadataDto)
   async proxyPutRequest(
     @Req() req: Request,
     @Body() body: FooterNavItemUpdateDto,
-  ): Promise<OperationResponseDto> {
+  ) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 
   @Delete(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ footerNavItem: ['delete'] })
-  @Serialize(OperationResponseDto)
-  async proxyDeleteRequest(@Req() req: Request): Promise<OperationResponseDto> {
+  @Serialize(OperationMetadataDto)
+  async proxyDeleteRequest(@Req() req: Request) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 }

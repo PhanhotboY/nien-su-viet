@@ -3,7 +3,7 @@ package grpc
 import (
 	"context"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/config"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"go.uber.org/fx"
 )
@@ -21,7 +21,6 @@ var (
 	// - provide can have parameter and will resolve if registered
 	// - execute its func only if it requested
 	grpcProviders = fx.Options(fx.Provide( //nolint:gochecknoglobals
-		config.ProvideConfig,
 		// https://uber-go.github.io/fx/value-groups/consume.html#with-annotated-functions
 		// https://uber-go.github.io/fx/annotate.html
 		fx.Annotate(
@@ -44,7 +43,7 @@ func registerHooks(
 	grpcServer GrpcServer,
 	grpcClient GrpcClient,
 	logger logger.Logger,
-	options *config.GrpcOptions,
+	cfg settings.Config,
 ) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
@@ -63,9 +62,9 @@ func registerHooks(
 			}()
 			logger.Infof(
 				"%s is listening on Host:{%s} Grpc PORT: {%s}",
-				options.Name,
-				options.Host,
-				options.Port,
+				cfg.Grpc.Name,
+				cfg.Grpc.Host,
+				cfg.Grpc.Port,
 			)
 
 			return nil

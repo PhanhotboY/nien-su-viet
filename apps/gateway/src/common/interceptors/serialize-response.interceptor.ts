@@ -4,6 +4,10 @@ import {
   ExecutionContext,
   CallHandler,
 } from '@nestjs/common';
+import {
+  PaginationMetadataDto,
+  SerializedResponseDto,
+} from '@phanhotboy/nsv-common';
 import { Observable, of, pipe } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -19,7 +23,11 @@ export class SerializeResponseInterceptor implements NestInterceptor {
       .pipe(tap(() => console.log(`After... ${Date.now() - now}ms`)))
       .pipe(
         map((data) => {
-          function commonizedResponse(data: Record<string, any>) {
+          function commonizedResponse(
+            data: Record<string, any>,
+          ): SerializedResponseDto<any> & {
+            pagination: PaginationMetadataDto;
+          } {
             return {
               data: data.data,
               pagination: data.pagination,
@@ -56,7 +64,7 @@ export class SerializeResponseInterceptor implements NestInterceptor {
 
           const errStatus = err?.status || 500;
 
-          return of({
+          return of<SerializedResponseDto<any>>({
             data: null,
             statusCode: errStatus,
             message: errMessage,

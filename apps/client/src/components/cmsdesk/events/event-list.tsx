@@ -37,7 +37,7 @@ type ViewMode = 'grid' | 'list';
 export default function EventList({
   handleDelete,
 }: {
-  handleDelete: (eventId: string) => Promise<void>;
+  handleDelete: (eventId: string) => Promise<any>;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();

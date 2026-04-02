@@ -4,13 +4,14 @@
 set -e
 
 readonly service="$1"
-readonly outPath="./apps/gateway/grpc/genproto/$service-service"
+readonly outPath="./libs/nsv-interfaces/grpc/genproto"
 
 mkdir -p "$outPath"
+rm -rf "$outPath/*"
 
 protoc \
     --plugin=./node_modules/.bin/protoc-gen-ts_proto \
-    --proto_path="api/protobuf/$service-service" \
+    --proto_path="api/proto" \
     --ts_proto_opt=nestJs=true \
     --ts_proto_out="$outPath" \
-    api/protobuf/$service-service/*.proto
+    api/proto/${service}_service/*.proto

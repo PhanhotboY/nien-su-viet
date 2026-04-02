@@ -1,0 +1,284 @@
+syntax = "proto3";
+
+package post_service;
+
+import "common/pagination.proto";
+import "common/response.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto;posts_service";
+
+// ============================================================
+// Common Message Types
+// ============================================================
+
+// Post represents a post entity
+message Post {
+  string id = 1;
+  string title = 2;
+  string slug = 3;
+  string content = 4;
+  optional string summary = 5;
+  optional string thumbnail = 6;
+  string author_id = 7;
+  optional string category_id = 8;
+  int32 views = 9;
+  int32 likes = 10;
+  bool published = 11;
+  optional google.protobuf.Timestamp published_at = 12;
+  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp updated_at = 14;
+}
+
+// CreatePostRequest represents a  to create a new post
+message CreatePostRequest {
+  string title = 1;
+  string slug = 2;
+  string content = 3;
+  optional string summary = 4;
+  optional string thumbnail = 5;
+  optional string category_id = 6;
+  optional string author_id = 7;
+  optional bool published = 8;
+  optional google.protobuf.Timestamp published_at = 9;
+}
+
+message CreatePostResponse {
+  common.OperationMetadata data = 1;
+}
+
+// UpdatePostRequest represents a command to update an existing post
+message UpdatePostRequest {
+  string id = 1;
+  optional string title = 2;
+  optional string slug = 3;
+  optional string content = 4;
+  optional string summary = 5;
+  optional string thumbnail = 6;
+  optional string category_id = 7;
+  optional bool published = 8;
+  optional google.protobuf.Timestamp published_at = 9;
+}
+
+message UpdatePostResponse {
+  common.OperationMetadata data = 1;
+}
+
+// PublishPostRequest represents a command to publish a post
+message PublishPostRequest {
+  string id = 1;
+}
+
+message PublishPostResponse {
+  common.OperationMetadata data = 1;
+}
+
+// UnpublishPostRequest represents a command to unpublish a post
+message UnpublishPostRequest {
+  string id = 1;
+}
+
+message UnpublishPostResponse {
+  common.OperationMetadata data = 1;
+}
+
+// DeletePostRequest represents a command to delete a post
+message DeletePostRequest {
+  string id = 1;
+}
+
+message DeletePostResponse {
+  common.OperationMetadata data = 1;
+}
+
+// DeletePostsRequest represents a command to delete multiple posts
+message DeletePostsRequest {
+  repeated string post_ids = 1;
+}
+
+message DeletePostsResponse {
+  common.OperationMetadata data = 1;
+}
+
+// IncrementPostViewsRequest represents a command to increment post views
+message IncrementPostViewsRequest {
+  string id = 1;
+}
+
+message IncrementPostViewsResponse {
+  common.OperationMetadata data = 1;
+}
+
+// IncrementPostLikesRequest represents a command to increment post likes
+message IncrementPostLikesRequest {
+  string id = 1;
+}
+
+message IncrementPostLikesResponse {
+  common.OperationMetadata data = 1;
+}
+
+// ============================================================
+// QUERIES - Read Operations
+// ============================================================
+
+// GetPostRequest represents a query to get a single post by ID
+message GetPostRequest {
+  string id = 1;
+}
+
+message GetPostResponse {
+  Post data = 1;
+}
+
+// GetPublishedPostsRequest represents a query to list posts with pagination and filtering
+message GetPublishedPostsRequest {
+  optional int32 page = 1;
+  optional int32 limit = 2;
+  optional string search = 3;
+  optional string sort_by = 4;
+  optional string sort_order = 5; // "asc" or "desc"
+  optional string author_id = 6;
+  repeated string category_ids = 7;
+  optional google.protobuf.Timestamp created_at_from = 8;
+  optional google.protobuf.Timestamp created_at_to = 9;
+  optional google.protobuf.Timestamp updated_at_from = 10;
+  optional google.protobuf.Timestamp updated_at_to = 11;
+}
+
+message GetPublishedPostsResponse {
+  repeated Post data = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+// GetPostsByCategoryRequest represents a query to get posts by category
+message GetPostsByCategoryRequest {
+  string category_id = 1;
+  optional int32 page = 2;
+  optional int32 limit = 3;
+}
+
+message GetPostsByCategoryResponse {
+  repeated Post data = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+// GetPostsByAuthorRequest represents a query to get posts by author
+message GetPostsByAuthorRequest {
+  string author_id = 1;
+  optional int32 page = 2;
+  optional int32 limit = 3;
+}
+
+message GetPostsByAuthorResponse {
+  repeated Post data = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+// GetPopularPostsRequest represents a query to get popular posts by views
+message GetPopularPostsRequest {
+  int32 limit = 1;
+  optional int32 days_ago = 2; // Optional: get posts from last N days
+}
+
+message GetPopularPostsResponse {
+  repeated Post data = 1;
+}
+
+// GetAllPostsRequest
+message GetAllPostsRequest {
+  optional int32 page = 1;
+  optional int32 limit = 2;
+  optional string search = 3;
+  optional string sort_by = 4;
+  optional string sort_order = 5; // "asc" or "desc"
+  optional string author_id = 6;
+  repeated string category_ids = 7;
+  optional google.protobuf.Timestamp created_at_from = 8;
+  optional google.protobuf.Timestamp created_at_to = 9;
+  optional google.protobuf.Timestamp updated_at_from = 10;
+  optional google.protobuf.Timestamp updated_at_to = 11;
+}
+
+message GetAllPostsResponse {
+  repeated Post data = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+// ============================================================
+// EVENTS - Domain Events
+// ============================================================
+
+// PostCreatedEventRequest represents an event when a post is created
+message PostCreatedEventRequest {
+  string id = 1;
+  string title = 2;
+  string slug = 3;
+  string author_id = 4;
+  google.protobuf.Timestamp created_at = 5;
+}
+
+// PostUpdatedEvent represents an event when a post is updated
+message PostUpdatedEvent {
+  string id = 1;
+  string title = 2;
+  string slug = 3;
+  google.protobuf.Timestamp updated_at = 4;
+}
+
+// PostPublishedEvent represents an event when a post is published
+message PostPublishedEvent {
+  string id = 1;
+  string title = 2;
+  google.protobuf.Timestamp published_at = 3;
+}
+
+// PostUnpublishedEvent represents an event when a post is unpublished
+message PostUnpublishedEvent {
+  string id = 1;
+  google.protobuf.Timestamp unpublished_at = 2;
+}
+
+// PostDeletedEvent represents an event when a post is deleted
+message PostDeletedEvent {
+  string id = 1;
+  string title = 2;
+  google.protobuf.Timestamp deleted_at = 3;
+}
+
+// PostViewsIncrementedEvent represents an event when post views are incremented
+message PostViewsIncrementedEvent {
+  string id = 1;
+  int32 views = 2;
+  google.protobuf.Timestamp incremented_at = 3;
+}
+
+// PostLikesIncrementedEvent represents an event when post likes are incremented
+message PostLikesIncrementedEvent {
+  string id = 1;
+  int32 likes = 2;
+  google.protobuf.Timestamp incremented_at = 3;
+}
+
+// ============================================================
+// SERVICE DEFINITIONS - CQRS Pattern
+// ============================================================
+
+// PostsService handlers
+service PostsService {
+  rpc CreatePost(CreatePostRequest) returns (CreatePostResponse);
+  rpc UpdatePost(UpdatePostRequest) returns (UpdatePostResponse);
+  rpc PublishPost(PublishPostRequest) returns (PublishPostResponse);
+  rpc UnpublishPost(UnpublishPostRequest) returns (UnpublishPostResponse);
+  rpc DeletePost(DeletePostRequest) returns (DeletePostResponse);
+  rpc DeletePosts(DeletePostsRequest) returns (DeletePostsResponse);
+  rpc IncrementPostViews(IncrementPostViewsRequest) returns (IncrementPostViewsResponse);
+  rpc IncrementPostLikes(IncrementPostLikesRequest) returns (IncrementPostLikesResponse);
+
+  rpc GetPost(GetPostRequest) returns (GetPostResponse);
+  rpc GetPublishedPosts(GetPublishedPostsRequest) returns (GetPublishedPostsResponse);
+  rpc GetAllPosts(GetAllPostsRequest) returns (GetAllPostsResponse);
+  rpc GetPostsByCategory(GetPostsByCategoryRequest) returns (GetPostsByCategoryResponse);
+  rpc GetPostsByAuthor(GetPostsByAuthorRequest) returns (GetPostsByAuthorResponse);
+  rpc GetPopularPosts(GetPopularPostsRequest) returns (GetPopularPostsResponse);
+}

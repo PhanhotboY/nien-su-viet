@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { sharedPagingConfig } from "@/config/shared";
-import { cn } from "@/lib/utils";
+import { sharedPagingConfig } from '@/config/shared';
+import { cn } from '@/lib/utils';
 import {
   ArrowLongLeftIcon,
   ArrowLongRightIcon,
-} from "@heroicons/react/20/solid";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { default as SharedPager } from "./shared-pager";
+} from '@heroicons/react/20/solid';
+import { useRouter } from 'next/navigation';
+import React from 'react';
+import { default as SharedPager } from './shared-pager';
 
 interface SharedPaginationProps {
   page: number;
@@ -48,9 +48,9 @@ const SharedPagination: React.FC<SharedPaginationProps> = ({
           }}
           className={cn(
             {
-              "pointer-events-none opacity-50": page === 1,
+              'pointer-events-none opacity-50': page === 1,
             },
-            "inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
+            'inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700',
           )}
         >
           <ArrowLongLeftIcon
@@ -84,8 +84,8 @@ const SharedPagination: React.FC<SharedPaginationProps> = ({
             router.refresh();
           }}
           className={cn(
-            "inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700",
-            { "pointer-events-none opacity-50": page >= totalPages },
+            'inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700',
+            { 'pointer-events-none opacity-50': page >= totalPages },
           )}
         >
           {sharedPagingConfig.next}

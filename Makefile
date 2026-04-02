@@ -10,7 +10,11 @@ generate-%:
 setup-%:
 	bun --cwd apps/$* setup/index.ts
 
-OPENAPI_DIR = openapi
+.PHONY: dev-%
+dev-%:
+	@./cli/dcp.sh dev $*
+
+OPENAPI_DIR = api/openapi
 OUTPUT_DIR = libs/nsv-interfaces
 
 JSONS := $(wildcard $(OPENAPI_DIR)/*.json)

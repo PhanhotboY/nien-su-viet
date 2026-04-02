@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package common;
+
+option go_package = "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto/common;common";
+
+message PaginationMetadata {
+  int32 total = 1;
+  int32 page = 2;
+  int32 limit = 3;
+  int32 total_pages = 4;
+}

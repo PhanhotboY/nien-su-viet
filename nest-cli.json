@@ -11,7 +11,9 @@
     "webpack": true,
     "tsConfigPath": "tsconfig.build.json",
     "webpackConfigPath": "webpack.config.js",
-    "plugins": ["@nestjs/swagger"]
+    "plugins": ["@nestjs/swagger"],
+    "assets": ["**/*.proto"],
+    "watchAssets": true
   },
   "monorepo": true,
   "root": "apps",

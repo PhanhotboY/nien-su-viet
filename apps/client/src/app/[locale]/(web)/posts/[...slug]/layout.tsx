@@ -1,4 +1,4 @@
-import { DetailPostHeader } from '@/components/detail/post';
+import { DetailPostHeader } from '@/components/website/post/detail';
 import { getPost, getPublicPosts } from '@/services/post.service';
 import { notFound } from 'next/navigation';
 

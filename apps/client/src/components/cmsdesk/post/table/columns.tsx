@@ -53,13 +53,13 @@ export const columns: ColumnDef<PostBriefResponseDto>[] = [
     },
   },
   {
-    accessorKey: 'created_at',
+    accessorKey: 'createdAt',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created" />
     ),
     cell: ({ row }) => {
       const date = format(
-        new Date(row.getValue('created_at') || Date.now()),
+        new Date(row.getValue('createdAt') || Date.now()),
         'MM/dd/yyyy',
       );
 

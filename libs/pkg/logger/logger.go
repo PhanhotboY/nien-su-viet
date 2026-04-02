@@ -2,8 +2,6 @@ package logger
 
 import (
 	"time"
-
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/models"
 )
 
 type Fields map[string]interface{}
@@ -13,7 +11,6 @@ type Logger interface {
 	Debug(args ...interface{})
 	Debugf(template string, args ...interface{})
 	Debugw(msg string, fields Fields)
-	LogType() models.LogType
 	Info(args ...interface{})
 	Infof(template string, args ...interface{})
 	Infow(msg string, fields Fields)

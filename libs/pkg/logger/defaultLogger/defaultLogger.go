@@ -3,10 +3,8 @@ package defaultLogger
 import (
 	"os"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/constants"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/config"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/models"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/zap"
 )
 
@@ -19,8 +17,7 @@ func initLogger() {
 	case "Zap", "":
 	default:
 		l = zap.NewZapLogger(
-			&config.LogOptions{LogType: models.Zap, CallerEnabled: false},
-			constants.Dev,
+			settings.LoadConfig(),
 		)
 		break
 		// case "Logrus":

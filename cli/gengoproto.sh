@@ -4,15 +4,19 @@
 set -e
 
 readonly service="$1"
-readonly outPath="./apps/$service/internal/shared/grpc/genproto"
+readonly modulePath="github.com/phanhotboy/nien-su-viet/apps/$service"
+readonly outPath="./apps/${service}"
 
-mkdir -p "$outPath"
+mkdir -p "./apps/$service/internal/shared/grpc/genproto"
 
 # https://stackoverflow.com/questions/13616033/install-protocol-buffers-on-windows
 # https://dev.to/techschoolguru/how-to-define-a-protobuf-message-and-generate-go-code-4g4e
 protoc \
-  --proto_path="api/protobuf/$service-service" \
+  --proto_path="api/proto" \
   --go_out="$outPath" \
+  --go_opt=module="$modulePath" \
   --go-grpc_out="$outPath" \
+  --go-grpc_opt=module="$modulePath" \
   --go-grpc_opt=require_unimplemented_servers=false \
-    api/protobuf/$service-service/*.proto
+    api/proto/common/*.proto \
+    api/proto/${service}_service/*.proto

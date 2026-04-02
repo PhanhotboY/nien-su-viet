@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
-	loggerConfig "github.com/phanhotboy/nien-su-viet/libs/pkg/logger/config"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/external/fxlog"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/zap"
 
@@ -28,19 +27,13 @@ func CreateAppModule(
 		app.options...,
 	)
 
-	var logModule fx.Option
-	logOption, err := loggerConfig.ProvideLogConfig(app.environment)
-
-	if err != nil || logOption == nil {
-		panic("Failed to load log configuration")
-	}
-	logModule = zap.ModuleFunc(app.logger)
+	var logModule = zap.ModuleFunc(app.logger)
 	duration := 30 * time.Second
 
 	// build phase of container will do in this stage, containing provides and invokes but app not started yet and will be started in the future with `fxApp.Register`
 	fxApp := fx.New(
 		fx.StartTimeout(duration),
-		config.ModuleFunc(app.environment),
+		config.Module,
 		logModule,
 		fxlog.FxLogger,
 		fx.ErrorHook(NewFxErrorHandler(app.logger)),

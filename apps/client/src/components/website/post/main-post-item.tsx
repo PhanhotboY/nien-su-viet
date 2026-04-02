@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Link from '@/i18n/navigation';
 import React from 'react';
 import readingTime from 'reading-time';
+import AuthorInfo from './author-info';
 
 // async function getPublicImageUrl(postId: string, fileName: string) {
 
@@ -125,21 +126,8 @@ const MainPostItem: React.FC<MainPostItemProps> = async ({ post, locale }) => {
             </div>
 
             <div className="mt-3 flex border-t border-gray-900/5 pt-2">
-              <div className="relative flex items-center gap-x-2">
-                <Avatar>
-                  <AvatarImage
-                    src={post.author.image!}
-                    alt={post.author.name}
-                  />
-
-                  <AvatarFallback>
-                    {getAvatarFallback(post.author.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="text-sm">
-                  <p className="font-semibold">{post.author.name}</p>
-                  <p className="">{tshared('author')}</p>
-                </div>
+              <div className="relative flex items-center">
+                <AuthorInfo authorId={post.authorId} showAuthorLabel />
               </div>
             </div>
           </div>

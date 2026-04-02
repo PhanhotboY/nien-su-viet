@@ -25,12 +25,12 @@ export function initSwagger({
   });
 
   // Save OpenAPI JSON into monorepo
-  if (existsSync('openapi') === false) {
+  if (existsSync('api/openapi') === false) {
     // Create the directory if it does not exist
-    mkdirSync('openapi');
+    mkdirSync('api/openapi', { recursive: true });
   }
   writeFileSync(
-    `openapi/${name.split(' ').join('-').toLowerCase()}.json`,
+    `api/openapi/${name.split(' ').join('-').toLowerCase()}.json`,
     JSON.stringify(document, null, 2),
   );
   if (isStartEndpoint) {

@@ -24,7 +24,7 @@ import {
   HeaderNavItemDto,
   HeaderNavItemUpdateDto,
 } from './dto';
-import { OperationResponseDto } from '@phanhotboy/nsv-common/dto/response/operation-response.dto';
+import { OperationMetadataDto } from '@phanhotboy/nsv-common/dto/response';
 
 // ref: apps/cms/internal/headerNavItem/controller/http/headerNavItem.router.go
 @Controller('header-nav-items')
@@ -39,39 +39,39 @@ export class HeaderNavItemController {
   @Public()
   @Serialize(HeaderNavItemDto)
   async proxyRequest(@Req() req: Request): Promise<HeaderNavItemDto> {
-    return await this.cmsProxy.proxyRequest<HeaderNavItemDto>(req);
+    return await this.cmsProxy.makeRequest<HeaderNavItemDto>(req);
   }
 
   @Post()
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ headerNavItem: ['create'] })
-  @Serialize(OperationResponseDto)
+  @Serialize(OperationMetadataDto)
   async proxyPostRequest(
     @Req() req: Request,
     @Body() body: HeaderNavItemCreateDto,
-  ): Promise<OperationResponseDto> {
+  ) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 
   @Put(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ headerNavItem: ['update'] })
-  @Serialize(OperationResponseDto)
+  @Serialize(OperationMetadataDto)
   async proxyPutRequest(
     @Req() req: Request,
     @Body() body: HeaderNavItemUpdateDto,
-  ): Promise<OperationResponseDto> {
+  ) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 
   @Delete(':id')
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ headerNavItem: ['delete'] })
-  @Serialize(OperationResponseDto)
-  async proxyDeleteRequest(@Req() req: Request): Promise<OperationResponseDto> {
+  @Serialize(OperationMetadataDto)
+  async proxyDeleteRequest(@Req() req: Request) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 }

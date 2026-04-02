@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 
 	"go.uber.org/fx"
 )
@@ -10,16 +10,6 @@ import (
 // https://uber-go.github.io/fx/modules.html
 var Module = fx.Module(
 	"configModule",
-	fx.Provide(func() environment.Environment {
-		return environment.ConfigAppEnv()
-	}),
+	fx.Provide(settings.LoadConfig),
+	fx.Supply(settings.GetEnv),
 )
-
-var ModuleFunc = func(e environment.Environment) fx.Option {
-	return fx.Module(
-		"configModule",
-		fx.Provide(func() environment.Environment {
-			return environment.ConfigAppEnv(e)
-		}),
-	)
-}

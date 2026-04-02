@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RmqOptions, Transport } from '@nestjs/microservices';
+import { RmqContext, RmqOptions, Transport } from '@nestjs/microservices';
 import { ConfigService } from '../providers';
 
 export const RABBITMQ_OPTIONS = 'RABBITMQ_OPTIONS';
@@ -37,9 +37,19 @@ export class RmqService {
     };
   }
 
-  ack(context: any) {
+  ack(context: RmqContext) {
     const channel = context.getChannelRef();
     const originalMsg = context.getMessage();
     channel.ack(originalMsg);
+  }
+
+  publish(ctx: RmqContext) {
+    const channel = ctx.getChannelRef();
+    const originalMsg = ctx.getMessage();
+    const exchange = originalMsg.fields.exchange;
+    const routingKey = originalMsg.fields.routingKey;
+    const content = originalMsg.content;
+
+    channel.publish(exchange, routingKey, content);
   }
 }
