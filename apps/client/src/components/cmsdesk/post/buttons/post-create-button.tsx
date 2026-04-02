@@ -29,7 +29,6 @@ const PostCreateButton = () => {
     if (session?.user.id) {
       const post: components['schemas']['PostBaseCreateDto'] = {
         title: protectedPostConfig.untitled,
-        authorId: session?.user.id,
         slug: `untitled-${Math.random().toString(36).substring(2, 8)}`,
         content: '{"blocks": []}',
         published: false,

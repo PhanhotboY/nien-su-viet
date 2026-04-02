@@ -31,7 +31,6 @@ async function findPostsHandler(query: any) {
     return data;
   } catch (error) {
     console.error(error);
-    throw error;
   }
 }
 
@@ -44,19 +43,17 @@ const PostsPage: FC<PostsPageProps> = async ({ searchParams }) => {
     posts = [];
   }
   return (
-    <>
-      <div className="container p-4 sm:p-6 lg:p-8">
-        {posts?.length && posts?.length > 0 ? (
-          <>
-            <PostTableTitle />
-            <DataTable data={posts ? posts : []} columns={columns} />
-          </>
-        ) : (
-          <PostTableEmpty />
-        )}
-        <PostRefreshOnce />
-      </div>
-    </>
+    <div className="container p-4 sm:p-6 lg:p-8">
+      {posts?.length && posts?.length > 0 ? (
+        <>
+          <PostTableTitle />
+          <DataTable data={posts ? posts : []} columns={columns} />
+        </>
+      ) : (
+        <PostTableEmpty />
+      )}
+      <PostRefreshOnce />
+    </div>
   );
 };
 

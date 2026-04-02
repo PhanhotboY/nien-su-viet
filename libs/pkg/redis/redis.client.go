@@ -31,6 +31,7 @@ func NewRedisClient(s settings.Config) RedisClientWithExpire {
 	cfg := s.Redis
 	universalClient := redis.NewClient(&redis.Options{
 		Addr:            fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+		Username:        cfg.Username,
 		Password:        cfg.Password,
 		DB:              cfg.Database,
 		MaxRetries:      maxRetries,

@@ -94,29 +94,41 @@ export const retryFetcher = async <T = any>(
     });
   }
 
-  const data = (await response.json()) as {
-    data: T;
-    message: string;
-    path: string;
-    statusCode: number;
-    timestamp: string;
-  };
+  try {
+    const data = (await response.json()) as {
+      data: T;
+      message: string;
+      path: string;
+      statusCode: number;
+      timestamp: string;
+    };
 
-  if (response.ok && response.status < 400) {
-    console.log(
-      '%s %s \x1b[32m%s\x1b[0m',
-      options?.method || 'GET',
-      url,
-      response.status,
+    if (response.ok && response.status < 400) {
+      console.log(
+        '%s %s \x1b[32m%s\x1b[0m',
+        options?.method || 'GET',
+        url,
+        response.status,
+      );
+    } else {
+      console.log(
+        '%s %s \x1b[31m%s\x1b[0m',
+        options?.method || 'GET',
+        url,
+        response.status,
+      );
+      throw new Error(data.message || 'Lỗi hệ thống');
+    }
+    return data;
+  } catch (error) {
+    console.log('fetch error');
+    console.error(error);
+
+    throw new Response(
+      error instanceof Error ? error.message : 'Lỗi hệ thống',
+      {
+        status: 500,
+      },
     );
-  } else {
-    console.log(
-      '%s %s \x1b[31m%s\x1b[0m',
-      options?.method || 'GET',
-      url,
-      response.status,
-    );
-    throw new Error(data.message || 'Lỗi hệ thống');
   }
-  return data;
 };
