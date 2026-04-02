@@ -6,7 +6,6 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { configuration, loggerOptions, RATE_LIMIT } from './config';
 import { AuthModule } from './modules/auth/auth.module';
-import { CmsModule } from './modules/cms/cms.module';
 import { HistoricalEventModule } from './modules/historical-event/historical-event.module';
 import { PostModule } from './modules/post/post.module';
 import { CommonModule } from '@phanhotboy/nsv-common';
@@ -24,7 +23,6 @@ import { MicroserviceExceptionFilter } from '@phanhotboy/nsv-common/filters/rpc-
     }),
     ThrottlerModule.forRoot(Object.values(RATE_LIMIT.DEFAULT)),
     AuthModule,
-    CmsModule,
     HistoricalEventModule,
     PostModule,
   ],

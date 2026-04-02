@@ -44,7 +44,6 @@ export class PostController {
     private readonly postService: PostService,
     @Inject(RedisService) private readonly redis: RedisServiceType,
     private readonly config: ConfigService,
-    @Inject(RMQ.TOPIC_EVENTS_EXCHANGE) private readonly clientRmq: ClientRMQ,
   ) {}
 
   @Get()

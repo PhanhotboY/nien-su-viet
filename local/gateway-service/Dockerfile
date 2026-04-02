@@ -6,9 +6,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --legacy-peer-deps
 
-COPY . .
+COPY ./*.* .
+COPY ./apps/gateway ./apps/gateway
+COPY ./libs ./libs
+COPY ./api ./api
 RUN npm run build gateway
-
 
 # ---------- Production ----------
 FROM node:24-slim AS production
@@ -21,6 +23,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev --legacy-peer-deps && npm cache clean --force
 
 COPY --from=builder /app/dist ./dist
+COPY ./api ./api
 
 EXPOSE 8080
 

@@ -3,7 +3,7 @@ export const config = {
   env: process.env.NODE_ENV,
   trustedOrigins: process.env.ALLOWED_ORIGINS?.split(',') || [],
   authServiceEndpoint: process.env.AUTH_SERVICE_ENDPOINT,
-  cmsServiceEndpoint: process.env.CMS_SERVICE_ENDPOINT,
+  postServiceEndpoint: process.env.POST_SERVICE_ENDPOINT,
   historicalEventServiceHost: process.env.HISTORICAL_EVENT_SERVICE_HOST,
   betterAuth: {
     secret: process.env.BETTER_AUTH_SECRET || '',

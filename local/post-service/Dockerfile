@@ -1,8 +1,10 @@
 FROM golang:alpine AS builder
 
 # Set working directory
-WORKDIR /app/
+WORKDIR /github.com/phanhotboy/nien-su-viet/apps/post
+COPY go.work ../..
 COPY apps/post/ .
+COPY libs/pkg/ ../../libs/pkg/
 
 # Build the Go application
 RUN go mod tidy
@@ -14,7 +16,7 @@ WORKDIR /app
 
 ENV APP_ENV=production
 
-COPY --from=builder /app/bin/post-service ./post-service
+COPY --from=builder /github.com/phanhotboy/nien-su-viet/apps/post/bin/post-service ./post-service
 
 EXPOSE 8084
 
