@@ -48,39 +48,45 @@ export async function getEventPreview(
 
 export async function createEvent(
   eventData: components['schemas']['HistoricalEventBaseCreateDto'],
-): Promise<components['schemas']['HistoricalEventDetailResponseDto']> {
+): Promise<IApiResponse<components['schemas']['OperationMetadataDto']>> {
   const response = await retryFetcher<
-    components['schemas']['HistoricalEventDetailResponseDto']
+    components['schemas']['OperationMetadataDto']
   >(`/historical-events`, {
     method: 'POST',
     body: JSON.stringify(eventData),
   });
 
-  return response.data;
+  return response;
 }
 
 export async function updateEvent(
   id: string,
   eventData: Partial<components['schemas']['HistoricalEventBaseCreateDto']>,
-): Promise<components['schemas']['HistoricalEventDetailResponseDto']> {
+): Promise<IApiResponse<components['schemas']['OperationMetadataDto']>> {
   const response = await retryFetcher(`/historical-events/${id}`, {
     method: 'PUT',
     body: JSON.stringify(eventData),
   });
-  return response.data;
+  return response;
 }
 
-export async function deleteEvent(id: string): Promise<void> {
+export async function deleteEvent(
+  id: string,
+): Promise<IApiResponse<components['schemas']['OperationMetadataDto']>> {
   const response = await retryFetcher(`/historical-events/${id}`, {
     method: 'DELETE',
   });
-  return response.data;
+  return response;
 }
 
 export async function getCategories(): Promise<
-  components['schemas']['EventCategoryBriefResponseDto'][]
+  IPaginatedResponse<components['schemas']['EventCategoryBriefResponseDto'][]>
 > {
-  const response = await retryFetcher(`/event-categories`);
+  const response = (await retryFetcher(
+    `/event-categories`,
+  )) as IPaginatedResponse<
+    components['schemas']['EventCategoryBriefResponseDto'][]
+  >;
 
-  return response.data;
+  return response;
 }

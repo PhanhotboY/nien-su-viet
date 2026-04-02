@@ -9,6 +9,6 @@ export class PingController {
 
   @Get('100')
   proxyRequest(@Req() req: Request) {
-    return this.cmsProxy.proxyRequest(req);
+    return this.cmsProxy.makeRequest(req);
   }
 }

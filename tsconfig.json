@@ -32,6 +32,7 @@
       "@phanhotboy/constants/*": ["libs/constants/*"],
       "@phanhotboy/nsv-common": ["libs/nsv-common/src"],
       "@phanhotboy/nsv-common/*": ["libs/nsv-common/src/*"],
+      "@phanhotboy/genproto/*": ["libs/nsv-interfaces/grpc/genproto/*"],
     },
   },
 }

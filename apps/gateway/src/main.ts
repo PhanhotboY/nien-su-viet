@@ -2,9 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { GatewayModule } from './gateway.module';
 import { middleware } from './gateway.middleware';
 import { initSwagger } from '@phanhotboy/nsv-common/swagger';
-import { HistoricalEventBriefResponseDto } from './modules/historical-event/dto';
-import { PaginatedResponseDto } from '@phanhotboy/nsv-common';
-import { AppDto } from './modules/cms/dto';
+import {
+  OperationMetadataDto,
+  PaginationMetadataDto,
+} from '@phanhotboy/nsv-common';
 
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule, { bodyParser: false });
@@ -19,7 +20,7 @@ async function bootstrap() {
     app,
     name: 'NSV API Documentation',
     isStartEndpoint: true,
-    extraModels: [PaginatedResponseDto],
+    extraModels: [OperationMetadataDto, PaginationMetadataDto],
   });
 
   app.enableShutdownHooks();

@@ -1,6 +1,10 @@
+import { OmitType } from '@nestjs/swagger';
+import { TimestampDto } from '@phanhotboy/nsv-common';
+import { TimestampUtil } from '@phanhotboy/nsv-common/util/grpc.util';
 import { Transform, Type } from 'class-transformer';
 import {
   IsArray,
+  IsBooleanString,
   IsDateString,
   IsIn,
   IsInt,
@@ -50,31 +54,59 @@ export class PostQueryDto {
     if (typeof value === 'string') {
       return value.split(',').map((v) => v.trim());
     }
-    return Array.isArray(value) ? value : undefined;
+    return Array.isArray(value) ? value : [];
   })
   @IsArray({ message: 'Danh sách danh mục phải là mảng' })
   @IsUUID('4', { message: 'ID danh mục không hợp lệ' })
-  categoryIds?: string[];
+  categoryIds: string[];
+
+  @IsOptional()
+  @IsBooleanString({ message: 'Trạng thái xuất bản phải là true hoặc false' })
+  published?: string;
 
   // Filter by created date range
   @IsOptional()
   @IsDateString({}, { message: 'Ngày tạo từ không hợp lệ' })
-  @Transform(({ value }: any) => (value ? new Date(value) : undefined))
-  createdAtFrom?: Date;
+  createdAtFrom?: string;
 
   @IsOptional()
   @IsDateString({}, { message: 'Ngày tạo đến không hợp lệ' })
-  @Transform(({ value }: any) => (value ? new Date(value) : undefined))
-  createdAtTo?: Date;
+  createdAtTo?: string;
 
   // Filter by updated date range
   @IsOptional()
   @IsDateString({}, { message: 'Ngày cập nhật từ không hợp lệ' })
-  @Transform(({ value }: any) => (value ? new Date(value) : undefined))
-  updatedAtFrom?: Date;
+  updatedAtFrom?: string;
 
   @IsOptional()
   @IsDateString({}, { message: 'Ngày cập nhật đến không hợp lệ' })
-  @Transform(({ value }: any) => (value ? new Date(value) : undefined))
-  updatedAtTo?: Date;
+  updatedAtTo?: string;
+}
+
+export class PostQueryGrpcDto extends OmitType(PostQueryDto, [
+  'createdAtFrom',
+  'createdAtTo',
+  'updatedAtFrom',
+  'updatedAtTo',
+  'published',
+]) {
+  @IsOptional()
+  @Transform(({ value }) => Boolean(value))
+  published?: boolean;
+
+  @IsOptional()
+  @Transform(({ value }) => TimestampUtil.toTimestamp(value))
+  createdAtFrom?: TimestampDto;
+
+  @IsOptional()
+  @Transform(({ value }) => TimestampUtil.toTimestamp(value))
+  createdAtTo?: TimestampDto;
+
+  @IsOptional()
+  @Transform(({ value }) => TimestampUtil.toTimestamp(value))
+  updatedAtFrom?: TimestampDto;
+
+  @IsOptional()
+  @Transform(({ value }) => TimestampUtil.toTimestamp(value))
+  updatedAtTo?: TimestampDto;
 }

@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    turbopackUseSystemTlsCerts: true, // how many times Next.js will retry failed page generation attempts
+    // turbopackUseSystemTlsCerts: true, // how many times Next.js will retry failed page generation attempts
     // before failing the build
     staticGenerationRetryCount: 1,
     // how many pages will be processed per worker

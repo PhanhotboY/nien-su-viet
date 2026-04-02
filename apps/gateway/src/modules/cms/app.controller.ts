@@ -11,7 +11,7 @@ import {
   type RedisServiceType,
 } from '@phanhotboy/nsv-common';
 import { AppDto, AppUpdateDto } from './dto';
-import { OperationResponseDto } from '@phanhotboy/nsv-common/dto/response/operation-response.dto';
+import { OperationMetadataDto } from '@phanhotboy/nsv-common/dto/response';
 
 @Controller('app')
 export class AppController {
@@ -25,19 +25,16 @@ export class AppController {
   @Public()
   @Serialize(AppDto)
   async proxyRequest(@Req() req: Request): Promise<AppDto> {
-    const res = await this.cmsProxy.proxyRequest<AppDto>(req);
+    const res = await this.cmsProxy.makeRequest<AppDto>(req);
     return res as AppDto;
   }
 
   @Put()
   @Throttle(RATE_LIMIT.INTERNAL)
   @Permissions({ app: ['update'] })
-  @Serialize(OperationResponseDto)
-  async proxyPutRequest(
-    @Req() req: Request,
-    @Body() body: AppUpdateDto,
-  ): Promise<OperationResponseDto> {
+  @Serialize(OperationMetadataDto)
+  async proxyPutRequest(@Req() req: Request, @Body() body: AppUpdateDto) {
     await this.redis.mdel(this.routePath);
-    return await this.cmsProxy.proxyRequest(req);
+    return await this.cmsProxy.makeRequest(req);
   }
 }

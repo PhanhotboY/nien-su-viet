@@ -10,6 +10,7 @@ import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import Link from '@/i18n/navigation';
 import readingTime from 'reading-time';
+import AuthorInfo from '../post/author-info';
 
 interface FeaturedPostProps {
   post: PostBriefResponseDto;
@@ -84,21 +85,12 @@ export default async function FeaturedPost({
             </div>
 
             {/* Author */}
-            <div className="flex items-center gap-3 border-t border-border pt-4">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={post.author.image!} alt={post.author.name} />
-                <AvatarFallback>
-                  {getAvatarFallback(post.author.name)}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-semibold text-foreground">
-                  {post.author.name}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {tshared('author')}
-                </p>
-              </div>
+            <div className="flex items-center border-t border-border pt-4">
+              <AuthorInfo
+                authorId={post.authorId}
+                className="h-10 w-10"
+                showAuthorLabel
+              />
             </div>
 
             {/* Read More Link */}

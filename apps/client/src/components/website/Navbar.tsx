@@ -199,11 +199,11 @@ export const Navbar = ({
               </DropdownMenu>
             </SignedIn>
 
-            <SignedOut>
+            {/*<SignedOut>
               <Button asChild>
                 <Link href="/auth/sign-in">{t('Auth.sign-in')}</Link>
               </Button>
-            </SignedOut>
+            </SignedOut>*/}
 
             <LanguageSwitcher />
 

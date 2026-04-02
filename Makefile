@@ -10,7 +10,11 @@ generate-%:
 setup-%:
 	bun --cwd apps/$* setup/index.ts
 
-OPENAPI_DIR = openapi
+.PHONY: dev-%
+dev-%:
+	@./cli/dcp.sh dev $*
+
+OPENAPI_DIR = api/openapi
 OUTPUT_DIR = libs/nsv-interfaces
 
 JSONS := $(wildcard $(OPENAPI_DIR)/*.json)
@@ -39,3 +43,18 @@ swagger2openapi:
 	done
 
 .PHONY: gen-types clean-types
+
+.PHONY: gengoproto
+gengoproto:
+	@./cli/gengoproto.sh post
+
+.PHONY: gentsproto
+gentsproto:
+	@./cli/gentsproto.sh post
+
+.PHONY: genproto
+genproto:
+	@echo "Generating protobuf files for Go"
+	@make gengoproto
+	@echo "Generating protobuf files for TypeScript"
+	@make gentsproto

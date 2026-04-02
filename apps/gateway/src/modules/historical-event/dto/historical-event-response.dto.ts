@@ -1,9 +1,9 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import { OmitType, PickType } from '@nestjs/swagger';
 import { HistoricalEventBaseDto } from './historical-event-base.dto';
-import { UserBaseResponseDto } from '@gateway/modules/auth/dto';
 import { EventCategoriesBriefResponseDto } from '@phanhotboy/nsv-common/dto/event-categories';
 import { IsString } from 'class-validator';
+import { UserBriefResponseDto } from '@gateway/modules/auth/dto';
 
 // DTO for response historical event
 @Exclude()
@@ -24,8 +24,8 @@ export class HistoricalEventBriefResponseDto extends PickType(
   ],
 ) {
   @Expose()
-  @Type(() => UserBaseResponseDto)
-  author!: UserBaseResponseDto;
+  @Type(() => UserBriefResponseDto)
+  author!: UserBriefResponseDto;
 }
 
 @Exclude()

@@ -12,7 +12,7 @@ func ExportOpenAPI(api huma.API) error {
 	if err != nil {
 		return err
 	}
-	outDir := "../../openapi"
+	outDir := "../../api/openapi"
 	err = os.Mkdir(outDir, 0755)
 	if err != nil && !os.IsExist(err) {
 		return err

@@ -2,8 +2,20 @@
 
 import { IPaginatedResponse } from '@/interfaces/response.interface';
 import type { components, operations } from '@nsv-interfaces/auth-service';
+import type { components as gatewayComponents } from '@nsv-interfaces/nsv-api-documentation';
 import { headers } from 'next/headers';
 import { retryFetcher } from '.';
+
+async function getUserById(userId: string) {
+  const res = await retryFetcher<
+    gatewayComponents['schemas']['UserBriefResponseDto']
+  >(`/auth/users/${userId}`, {
+    method: 'GET',
+    isPublicRoute: true,
+  });
+
+  return res;
+}
 
 async function getUsers(
   options: Record<string, string>,
@@ -123,4 +135,4 @@ async function updateUserRole(userId: string, newRole: string) {
   return;
 }
 
-export { getUsers, createUser, deleteUser, updateUserRole };
+export { getUsers, createUser, deleteUser, updateUserRole, getUserById };

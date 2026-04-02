@@ -8,3 +8,4 @@ export * from './historical-event.message-pattern';
 export * from './post.message-pattern';
 export * from './tcp-service.constant';
 export * from './user.event.constant';
+export * from './grpc-service.constant';

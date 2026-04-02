@@ -6,7 +6,7 @@ import { vi, enUS } from 'date-fns/locale';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import readingTime, { ReadTimeResults } from 'reading-time';
-import DetailPostHeading from '@/components/detail/post/detail-post-heading';
+import DetailPostHeading from '@/components/website/post/detail/detail-post-heading';
 import { Card, CardContent } from '@/components/ui/card';
 import { CLIENT_HOST } from '@/lib/config';
 import { genMetadata } from '@/lib/metadata.lib';
@@ -104,8 +104,7 @@ export default async function PostPage({ params }: PostPageProps) {
               id={post.id}
               title={post.title as string}
               thumbnail={post.thumbnail || '/assets/image/not-found.webp'}
-              authorName={post.author.name}
-              authorImage={post.author.image!}
+              authorId={post.authorId}
               date={format(
                 parseISO(post.createdAt as any),
                 locale === 'vi' ? 'dd MMMM, yyyy' : 'MMMM dd, yyyy',

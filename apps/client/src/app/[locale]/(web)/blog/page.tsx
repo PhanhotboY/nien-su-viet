@@ -17,7 +17,7 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 interface BlogPageProps {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
   params: Promise<{ locale: string }>;
 }
 
@@ -40,14 +40,17 @@ export default async function HomePage({
   params,
 }: BlogPageProps) {
   const resolvedSearchParams = await searchParams;
+  const urlSearchParams = new URLSearchParams(
+    resolvedSearchParams as Record<string, string>,
+  );
   const { locale } = await params;
 
   // Fetch posts
   const { data, pagination } = await getPublicPosts({
-    page: (resolvedSearchParams.page as string) || '1',
-    limit: (resolvedSearchParams.limit as string) || '10',
-    ...(resolvedSearchParams.q
-      ? { search: resolvedSearchParams.q as string }
+    page: urlSearchParams.get('page') || '1',
+    limit: urlSearchParams.get('limit') || '10',
+    ...(urlSearchParams.get('q')
+      ? { search: urlSearchParams.get('q') as string }
       : {}),
   });
   const { data: recentPosts } = await getPublicPosts({
@@ -68,6 +71,7 @@ export default async function HomePage({
   const featuredPost =
     isFirstPage && !hasSearchQuery && data.length > 0 ? data[0] : null;
   const regularPosts = featuredPost ? data.slice(1) : data;
+  urlSearchParams.delete('page'); // Remove page param for pagination links
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/50">
@@ -125,8 +129,8 @@ export default async function HomePage({
                     <SharedPagination
                       page={pagination.page}
                       totalPages={pagination.totalPages}
-                      baseUrl="/blog"
-                      pageUrl="?page="
+                      baseUrl={`/${locale}/blog${urlSearchParams?.toString() ? '?' + urlSearchParams?.toString() : ''}`}
+                      pageUrl={urlSearchParams?.size == 0 ? '&page=' : '?page='}
                     />
                   </div>
                 )}

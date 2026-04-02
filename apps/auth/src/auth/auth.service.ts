@@ -1,5 +1,5 @@
 import { ClientProxy } from '@nestjs/microservices';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { ConfigService } from '@phanhotboy/nsv-common';
 import { createBetterAuthInstance } from '@auth/lib/auth';
@@ -24,5 +24,20 @@ export class AuthService {
   }
   get instance() {
     return this.auth;
+  }
+
+  async userInfo(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        image: true,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 }
