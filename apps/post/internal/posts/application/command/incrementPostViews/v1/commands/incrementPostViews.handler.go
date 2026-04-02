@@ -10,8 +10,9 @@ import (
 )
 
 type IncrementPostViewsHandler struct {
-	log      logger.Logger
-	postRepo repository.PostRepository
+	log       logger.Logger
+	postRepo  repository.PostRepository
+	cacheRepo repository.PostCacheRepository
 }
 
 type IIncrementPostViewsHandler interface {
@@ -21,10 +22,12 @@ type IIncrementPostViewsHandler interface {
 func NewIncrementPostViewsHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
+	cacheRepo repository.PostCacheRepository,
 ) IncrementPostViewsHandler {
 	return IncrementPostViewsHandler{
-		log:      log,
-		postRepo: postRepo,
+		log:       log,
+		postRepo:  postRepo,
+		cacheRepo: cacheRepo,
 	}
 }
 
@@ -32,8 +35,6 @@ func (h IncrementPostViewsHandler) Handle(
 	ctx context.Context,
 	cmd *IncrementPostViewsCommand,
 ) (*dto.IncrementPostViewsResponse, error) {
-	h.log.Info("handling increment post views command", "post_id", cmd.IncrementPostViewsRequest.ID)
-
 	// Get existing post
 	post, err := h.postRepo.GetPostByID(ctx, cmd.IncrementPostViewsRequest.ID)
 	if err != nil {
@@ -51,7 +52,10 @@ func (h IncrementPostViewsHandler) Handle(
 		return nil, err
 	}
 
-	h.log.Infof("post views incremented successfully with id: %s, views: %d", cmd.IncrementPostViewsRequest.ID, post.Views)
+	err = h.cacheRepo.DeleteAllPosts(ctx)
+	if err != nil {
+		h.log.Warnf("failed to delete all posts cache after incrementing post views: %v", err)
+	}
 
 	return dto.NewIncrementPostViewsResponse(id, true, "Post views incremented successfully", post.Views), nil
 }

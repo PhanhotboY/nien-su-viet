@@ -14,8 +14,9 @@ import (
 // ============================================================
 
 type UpdatePostHandler struct {
-	log      logger.Logger
-	postRepo repository.PostRepository
+	log       logger.Logger
+	postRepo  repository.PostRepository
+	cacheRepo repository.PostCacheRepository
 }
 
 type IUpdatePostHandler interface {
@@ -25,10 +26,12 @@ type IUpdatePostHandler interface {
 func NewUpdatePostHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
+	cacheRepo repository.PostCacheRepository,
 ) UpdatePostHandler {
 	return UpdatePostHandler{
-		log:      log,
-		postRepo: postRepo,
+		log:       log,
+		postRepo:  postRepo,
+		cacheRepo: cacheRepo,
 	}
 }
 
@@ -36,8 +39,6 @@ func (h UpdatePostHandler) Handle(
 	ctx context.Context,
 	cmd *UpdatePostCommand,
 ) (*dto.UpdatePostResponse, error) {
-	h.log.Info("handling update post command", "post_id", cmd.ID)
-
 	// Update in repository
 	id, err := h.postRepo.UpdatePost(ctx, cmd.ID, cmd.MapToEntity())
 	if err != nil {
@@ -45,7 +46,10 @@ func (h UpdatePostHandler) Handle(
 		return nil, err
 	}
 
-	h.log.Infof("post updated successfully with id: %s", id)
+	err = h.cacheRepo.DeleteAllPosts(ctx)
+	if err != nil {
+		h.log.Warnf("failed to delete all posts cache after updating post: %v", err)
+	}
 
 	return dto.NewUpdatePostResponse(id, true, "Post updated successfully"), nil
 }

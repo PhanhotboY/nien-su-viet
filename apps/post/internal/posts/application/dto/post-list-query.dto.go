@@ -52,12 +52,9 @@ func (g PostListQueryDto) MapToQuery() repository.PostQuery {
 		CreatedAtTo:   createdAtTo,
 		UpdatedAtFrom: updatedAtFrom,
 		UpdatedAtTo:   updatedAtTo,
-	}
-}
-
-func (g PostListQueryDto) MapToPagination() repository.PostPagination {
-	return repository.PostPagination{
-		Limit:  g.Limit,
-		Offset: g.Limit * (g.Page - 1),
+		PostPagination: repository.PostPagination{
+			Limit:  g.Limit,
+			Offset: g.Limit * (g.Page - 1),
+		},
 	}
 }

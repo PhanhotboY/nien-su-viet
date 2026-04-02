@@ -17,6 +17,7 @@ import (
 	getPostQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPost/v1/queries"
 	getPublishedPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPublishedPosts/v1/queries"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/entity"
+	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/cache"
 	rmqConsumer "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/messaging/rmq/consumer"
 
 	// rmqProvider	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/messaging/rmq"
@@ -41,6 +42,7 @@ var Module = fx.Module(
 	fx.Provide(
 		// Outbound Infrastructure
 		persistence.NewPostRepository,
+		cache.NewPostCacheRepository,
 
 		// Application Query
 		getPublishedPostsQuery.NewGetPublishedPostsHandler,

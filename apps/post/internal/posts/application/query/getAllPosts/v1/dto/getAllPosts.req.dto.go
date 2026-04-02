@@ -13,7 +13,3 @@ type GetAllPostsQueryReq struct {
 func (g GetAllPostsQueryReq) MapToQuery() repository.PostQuery {
 	return g.PostListQueryDto.MapToQuery()
 }
-
-func (g GetAllPostsQueryReq) MapToPagination() repository.PostPagination {
-	return g.PostListQueryDto.MapToPagination()
-}

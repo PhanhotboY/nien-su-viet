@@ -1,4 +1,4 @@
-package dto
+package utils
 
 type OperationResponse struct {
 	ID      string `json:"id"`

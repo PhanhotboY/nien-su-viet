@@ -11,8 +11,9 @@ import (
 )
 
 type PublishPostHandler struct {
-	log      logger.Logger
-	postRepo repository.PostRepository
+	log       logger.Logger
+	postRepo  repository.PostRepository
+	cacheRepo repository.PostCacheRepository
 }
 
 type IPublishPostHandler interface {
@@ -22,10 +23,12 @@ type IPublishPostHandler interface {
 func NewPublishPostHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
+	cacheRepo repository.PostCacheRepository,
 ) PublishPostHandler {
 	return PublishPostHandler{
-		log:      log,
-		postRepo: postRepo,
+		log:       log,
+		postRepo:  postRepo,
+		cacheRepo: cacheRepo,
 	}
 }
 
@@ -33,8 +36,6 @@ func (h PublishPostHandler) Handle(
 	ctx context.Context,
 	cmd *PublishPostCommand,
 ) (*dto.PublishPostResponse, error) {
-	h.log.Info("handling publish post command", "post_id", cmd.ID)
-
 	// Get existing post
 	post, err := h.postRepo.GetPostByID(ctx, cmd.ID)
 	if err != nil {
@@ -54,7 +55,10 @@ func (h PublishPostHandler) Handle(
 		return nil, err
 	}
 
-	h.log.Infof("post published successfully with id: %s", cmd.ID)
+	err = h.cacheRepo.DeleteAllPosts(ctx)
+	if err != nil {
+		h.log.Warnf("failed to delete all posts cache after publishing post: %v", err)
+	}
 
 	return dto.NewPublishPostResponse(id, true, "Post published successfully"), nil
 }

@@ -27,8 +27,8 @@ func (br *postRepository) UpdatePost(ctx context.Context, postId string, post *e
 	return postId, nil
 }
 
-func (br *postRepository) GetPosts(ctx context.Context, query repository.PostQuery, pagination repository.PostPagination) ([]*entity.PostBrief, error) {
-	var posts []*entity.PostBrief
+func (br *postRepository) GetPosts(ctx context.Context, query repository.PostQuery) ([]entity.PostBrief, error) {
+	var posts []entity.PostBrief
 
 	db := br.db.WithContext(ctx).Model(&entity.Post{})
 
@@ -39,7 +39,7 @@ func (br *postRepository) GetPosts(ctx context.Context, query repository.PostQue
 	db = br.applySorting(db, query)
 
 	// Apply pagination
-	db = db.Limit(int(pagination.Limit)).Offset(int(pagination.Offset))
+	db = db.Limit(int(query.Limit)).Offset(int(query.Offset))
 
 	result := db.Find(&posts)
 	if result.Error != nil {

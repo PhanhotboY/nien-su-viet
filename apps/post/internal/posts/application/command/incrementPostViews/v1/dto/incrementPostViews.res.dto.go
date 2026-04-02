@@ -1,12 +1,10 @@
 package dto
 
-import (
-	sharedDto "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/dto"
-)
+import "github.com/phanhotboy/nien-su-viet/libs/pkg/utils"
 
 type Data struct {
-	Views                       int `json:"views"`
-	sharedDto.OperationResponse `json:"operation_response"`
+	Views                   int `json:"views"`
+	utils.OperationResponse `json:"operation_response"`
 }
 
 // IncrementPostViewsResponse is the response DTO for incrementing post views
@@ -18,7 +16,7 @@ func NewIncrementPostViewsResponse(id string, success bool, message string, view
 	return &IncrementPostViewsResponse{
 		Data: Data{
 			Views:             views,
-			OperationResponse: *sharedDto.NewOperationResponse(id, success, message),
+			OperationResponse: *utils.NewOperationResponse(id, success, message),
 		},
 	}
 }

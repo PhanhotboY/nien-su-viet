@@ -1,16 +1,14 @@
 package dto
 
-import (
-	sharedDto "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/dto"
-)
+import "github.com/phanhotboy/nien-su-viet/libs/pkg/utils"
 
 // DeletePostResponse is the response DTO for deleting a post (single or multiple)
 type DeletePostsResponse struct {
-	Data sharedDto.OperationResponse `json:"data"`
+	Data utils.OperationResponse `json:"data"`
 }
 
 func NewDeletePostsResponse(id string, success bool, message string) *DeletePostsResponse {
 	return &DeletePostsResponse{
-		Data: *sharedDto.NewOperationResponse(id, success, message),
+		Data: *utils.NewOperationResponse(id, success, message),
 	}
 }

@@ -10,8 +10,9 @@ import (
 )
 
 type CreatePostHandler struct {
-	log      logger.Logger
-	postRepo repository.PostRepository
+	log       logger.Logger
+	postRepo  repository.PostRepository
+	cacheRepo repository.PostCacheRepository
 }
 
 type ICreatePostHandler interface {
@@ -21,10 +22,12 @@ type ICreatePostHandler interface {
 func NewCreatePostHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
+	cacheRepo repository.PostCacheRepository,
 ) CreatePostHandler {
 	return CreatePostHandler{
-		log:      log,
-		postRepo: postRepo,
+		log:       log,
+		postRepo:  postRepo,
+		cacheRepo: cacheRepo,
 	}
 }
 
@@ -37,6 +40,11 @@ func (h CreatePostHandler) Handle(
 	if err != nil {
 		h.log.Errorf("failed to create post: %v", err)
 		return nil, err
+	}
+
+	err = h.cacheRepo.DeleteAllPosts(ctx)
+	if err != nil {
+		h.log.Warnf("failed to delete all posts cache after creating post: %v", err)
 	}
 
 	return dto.NewCreatePostResponse(id, true, "Post created successfully"), nil

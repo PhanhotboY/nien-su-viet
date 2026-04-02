@@ -1,16 +1,14 @@
 package dto
 
-import (
-	sharedDto "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/dto"
-)
+import "github.com/phanhotboy/nien-su-viet/libs/pkg/utils"
 
 // CreatePostResponse is the response DTO for creating a post
 type CreatePostResponse struct {
-	Data sharedDto.OperationResponse `json:"data"`
+	Data utils.OperationResponse `json:"data"`
 }
 
 func NewCreatePostResponse(id string, success bool, message string) *CreatePostResponse {
 	return &CreatePostResponse{
-		Data: *sharedDto.NewOperationResponse(id, success, message),
+		Data: *utils.NewOperationResponse(id, success, message),
 	}
 }

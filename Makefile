@@ -10,6 +10,10 @@ generate-%:
 setup-%:
 	bun --cwd apps/$* setup/index.ts
 
+.PHONY: dev-%
+dev-%:
+	@./cli/dcp.sh dev $*
+
 OPENAPI_DIR = api/openapi
 OUTPUT_DIR = libs/nsv-interfaces
 

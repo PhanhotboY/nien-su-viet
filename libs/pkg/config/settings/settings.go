@@ -19,6 +19,7 @@ type Config struct {
 	Rmq        RmqConfig        `mapstructure:"rmq"`
 	Grpc       GrpcConfig       `mapstructure:"grpc"`
 	Logger     LoggerConfig     `mapstructure:"logger"`
+	Redis      RedisOptions     `mapstructure:"redis"`
 }
 
 type ServerConfig struct {

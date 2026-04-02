@@ -22,10 +22,11 @@ type PostQuery struct {
 	CreatedAtTo   *time.Time
 	UpdatedAtFrom *time.Time
 	UpdatedAtTo   *time.Time
+	PostPagination
 }
 
 type PostRepository interface {
-	GetPosts(ctx context.Context, query PostQuery, pagination PostPagination) ([]*entity.PostBrief, error)
+	GetPosts(ctx context.Context, query PostQuery) ([]entity.PostBrief, error)
 	GetPostByID(ctx context.Context, postId string) (*entity.Post, error)
 	GetPostBySlug(ctx context.Context, slug string) (*entity.Post, error)
 	CountPosts(ctx context.Context, query PostQuery) (uint32, error)

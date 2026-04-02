@@ -18,7 +18,7 @@ import (
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/rabbitmq/consumer/configurations"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/rabbitmq/rabbitmqErrors"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/rabbitmq/types"
-	errorutils "github.com/phanhotboy/nien-su-viet/libs/pkg/utils"
+	errorutils "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/error"
 
 	"emperror.dev/errors"
 	"github.com/ahmetb/go-linq/v3"

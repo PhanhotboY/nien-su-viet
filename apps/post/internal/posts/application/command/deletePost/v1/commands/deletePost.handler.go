@@ -14,8 +14,9 @@ import (
 // ============================================================
 
 type DeletePostHandler struct {
-	log      logger.Logger
-	postRepo repository.PostRepository
+	log       logger.Logger
+	postRepo  repository.PostRepository
+	cacheRepo repository.PostCacheRepository
 }
 
 type IDeletePostHandler interface {
@@ -25,10 +26,12 @@ type IDeletePostHandler interface {
 func NewDeletePostHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
+	cacheRepo repository.PostCacheRepository,
 ) DeletePostHandler {
 	return DeletePostHandler{
-		log:      log,
-		postRepo: postRepo,
+		log:       log,
+		postRepo:  postRepo,
+		cacheRepo: cacheRepo,
 	}
 }
 
@@ -41,6 +44,11 @@ func (h DeletePostHandler) Handle(
 	if err != nil {
 		h.log.Errorf("failed to delete post: %v", err)
 		return nil, err
+	}
+
+	err = h.cacheRepo.DeleteAllPosts(ctx)
+	if err != nil {
+		h.log.Warnf("failed to delete all posts cache after deleting post: %v", err)
 	}
 
 	return dto.NewDeletePostResponse(id, true, "Post deleted successfully"), nil

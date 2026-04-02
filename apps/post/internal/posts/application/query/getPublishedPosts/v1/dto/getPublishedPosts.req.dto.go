@@ -14,7 +14,3 @@ func (g *GetPublicPostsQueryReq) MapToQuery() repository.PostQuery {
 	g.Published = &trueValue
 	return g.PostListQueryDto.MapToQuery()
 }
-
-func (g *GetPublicPostsQueryReq) MapToPagination() repository.PostPagination {
-	return g.PostListQueryDto.MapToPagination()
-}

@@ -16,7 +16,3 @@ func (g GetPopularPostsQueryReq) MapToQuery() repository.PostQuery {
 	g.SortOrder = "desc"
 	return g.PostListQueryDto.MapToQuery()
 }
-
-func (g GetPopularPostsQueryReq) MapToPagination() repository.PostPagination {
-	return g.PostListQueryDto.MapToPagination()
-}

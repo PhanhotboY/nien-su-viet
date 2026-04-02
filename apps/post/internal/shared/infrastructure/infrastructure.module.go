@@ -6,6 +6,7 @@ import (
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc"
 	postgres "github.com/phanhotboy/nien-su-viet/libs/pkg/postgresql"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/rabbitmq"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/redis"
 	"go.uber.org/fx"
 )
 
@@ -18,6 +19,7 @@ var Module = fx.Module(
 	grpc.Module,
 	rabbitmq.Module,
 	postgres.Module,
+	redis.Module,
 
 	// Other provides
 	fx.Provide(validator.New),

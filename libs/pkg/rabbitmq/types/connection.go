@@ -7,7 +7,7 @@ import (
 	// errorUtils "github.com/mehdihadeli/go-food-delivery-microservices/internal/pkg/utils/errorutils"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/defaultLogger"
-	errorUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/utils"
+	errorUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/error"
 
 	"emperror.dev/errors"
 	"github.com/rabbitmq/amqp091-go"

@@ -1,12 +1,10 @@
 package dto
 
-import (
-	sharedDto "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/dto"
-)
+import "github.com/phanhotboy/nien-su-viet/libs/pkg/utils"
 
 type Data struct {
-	Likes                       int `json:"likes"`
-	sharedDto.OperationResponse `json:"operation_response"`
+	Likes                   int `json:"likes"`
+	utils.OperationResponse `json:"operation_response"`
 }
 
 // IncrementPostLikesResponse is the response DTO for incrementing post likes
@@ -18,7 +16,7 @@ func NewIncrementPostLikesResponse(id string, success bool, message string, like
 	return &IncrementPostLikesResponse{
 		Data: Data{
 			Likes:             likes,
-			OperationResponse: *sharedDto.NewOperationResponse(id, success, message),
+			OperationResponse: *utils.NewOperationResponse(id, success, message),
 		},
 	}
 }

@@ -10,8 +10,9 @@ import (
 )
 
 type IncrementPostLikesHandler struct {
-	log      logger.Logger
-	postRepo repository.PostRepository
+	log       logger.Logger
+	postRepo  repository.PostRepository
+	cacheRepo repository.PostCacheRepository
 }
 
 type IIncrementPostLikesHandler interface {
@@ -21,10 +22,12 @@ type IIncrementPostLikesHandler interface {
 func NewIncrementPostLikesHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
+	cacheRepo repository.PostCacheRepository,
 ) IncrementPostLikesHandler {
 	return IncrementPostLikesHandler{
-		log:      log,
-		postRepo: postRepo,
+		log:       log,
+		postRepo:  postRepo,
+		cacheRepo: cacheRepo,
 	}
 }
 
@@ -32,8 +35,6 @@ func (h IncrementPostLikesHandler) Handle(
 	ctx context.Context,
 	cmd *IncrementPostLikesCommand,
 ) (*dto.IncrementPostLikesResponse, error) {
-	h.log.Info("handling increment post likes command", "post_id", cmd.IncrementPostLikesRequest.ID)
-
 	// Get existing post
 	post, err := h.postRepo.GetPostByID(ctx, cmd.IncrementPostLikesRequest.ID)
 	if err != nil {
@@ -51,7 +52,10 @@ func (h IncrementPostLikesHandler) Handle(
 		return nil, err
 	}
 
-	h.log.Infof("post likes incremented successfully with id: %s, likes: %d", cmd.IncrementPostLikesRequest.ID, post.Likes)
+	err = h.cacheRepo.DeleteAllPosts(ctx)
+	if err != nil {
+		h.log.Warnf("failed to delete all posts cache after incrementing post likes: %v", err)
+	}
 
 	return dto.NewIncrementPostLikesResponse(id, true, "Post likes incremented successfully", post.Likes), nil
 }

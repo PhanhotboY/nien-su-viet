@@ -11,8 +11,9 @@ import (
 )
 
 type GetPostHandler struct {
-	log      logger.Logger
-	postRepo repository.PostRepository
+	log       logger.Logger
+	postRepo  repository.PostRepository
+	cacheRepo repository.PostCacheRepository
 }
 
 type IGetPostHandler interface {
@@ -22,10 +23,12 @@ type IGetPostHandler interface {
 func NewGetPostHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
+	cacheRepo repository.PostCacheRepository,
 ) GetPostHandler {
 	return GetPostHandler{
-		log:      log,
-		postRepo: postRepo,
+		log:       log,
+		postRepo:  postRepo,
+		cacheRepo: cacheRepo,
 	}
 }
 
@@ -33,22 +36,34 @@ func (c GetPostHandler) Handle(
 	ctx context.Context,
 	query *GetPostQuery,
 ) (*dto.GetPostRes, error) {
-	c.log.Info("handling get post query")
-
 	var post *entity.Post
 	var err error
 
-	if query.IsValidUUID() {
-		c.log.Infof("fetching post by id: %s", query.IDOrSlug)
-		post, err = c.postRepo.GetPostByID(ctx, query.IDOrSlug)
-	} else {
-		c.log.Infof("fetching post by slug: %s", query.IDOrSlug)
-		post, err = c.postRepo.GetPostBySlug(ctx, query.IDOrSlug)
+	// Try to get post from cache
+	post, err = c.cacheRepo.GetPost(ctx, query.IDOrSlug)
+	if err != nil {
+		c.log.Warnf("failed to get post from cache: %v, fallback to db", err)
 	}
 
-	if err != nil {
-		c.log.Errorf("failed to get post: %v", err)
-		return nil, err
+	// If not in cache, fetch from database
+	if post == nil {
+		if query.IsValidUUID() {
+			c.log.Infof("fetching post by id: %s", query.IDOrSlug)
+			post, err = c.postRepo.GetPostByID(ctx, query.IDOrSlug)
+		} else {
+			c.log.Infof("fetching post by slug: %s", query.IDOrSlug)
+			post, err = c.postRepo.GetPostBySlug(ctx, query.IDOrSlug)
+		}
+
+		if err != nil {
+			c.log.Errorf("failed to get post: %v", err)
+			return nil, err
+		}
+
+		// Cache the result
+		if err := c.cacheRepo.PutPost(ctx, query.IDOrSlug, post); err != nil {
+			c.log.Warnf("failed to cache post: %v", err)
+		}
 	}
 
 	res := &dto.GetPostRes{}
