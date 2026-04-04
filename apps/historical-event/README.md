@@ -8,7 +8,6 @@ The Historical Event Service manages all historical events and timelines for the
 
 - Event storage and retrieval
 - Timeline management
-- TCP-based real-time event updates
 - Event categorization and tagging
 - Full-text search across events
 
@@ -33,9 +32,6 @@ The Historical Event Service manages all historical events and timelines for the
 ```bash
 # From project root
 bun install
-
-# Install service-specific dependencies
-cd apps/historical-event
 ```
 
 ### Configuration
@@ -48,9 +44,8 @@ cp .env.example .env
 
 Key variables:
 
-- `DATABASE_URL` - PostgreSQL connection string (port 5434)
-- `PORT` - HTTP server port (default: 3002)
-- `TCP_PORT` - TCP server port for real-time events (default: 5000)
+- `DATABASE_URL` - PostgreSQL connection string (port 5433)
+- `NODE_PORT` - TCP server port (default: 8082)
 
 ### Running
 
@@ -63,47 +58,32 @@ bun run build
 bun run start
 ```
 
-Service will start on `http://localhost:3002` (HTTP) and `:5000` (TCP)
-
 ## Architecture
 
 ### Project Structure
 
 ```
 apps/historical-event/
-├── src/
-│   ├── events/               # Events module
-│   │   ├── controllers/      # HTTP endpoints
-│   │   ├── services/         # Business logic
-│   │   ├── entities/         # Database models
-│   │   └── dto/              # Request/response DTOs
-│   ├── timelines/            # Timeline management
-│   │   ├── controllers/
-│   │   ├── services/
-│   │   └── entities/
-│   ├── categories/           # Event categories
-│   ├── tcp/                  # TCP server for real-time events
-│   │   ├── tcp.gateway.ts    # TCP gateway
-│   │   └── event.handler.ts  # Message handling
-│   ├── config/               # Configuration
-│   ├── app.module.ts         # Root module
-│   └── main.ts               # Entry point
-├── prisma/
-│   ├── schema.prisma         # Database schema
-│   └── migrations/           # Database migrations
-├── test/                     # Tests
-├── .env                      # Environment variables
-├── package.json
-└── tsconfig.json
+├── generated
+│   └── prisma          # Generated Prisma assets
+├── prisma
+│   ├── migrations      # Database migrations
+│   └── schema.prisma   # Database schema
+├── setup               # Set up scripts
+├── src
+│   ├── config          # Load config from .env
+│   ├── database        # Prisma client module
+│   ├── modules         # App logic modules
+│   ├── app.module.ts   # Root module
+│   └── main.ts         # Entry point
+├── README.md
+├── prisma.config.ts    # Prisma config
+└── tsconfig.app.json   # Extended TS config
 ```
 
 ---
 
 ## Development
-
-### Hot Reload
-
-Changes to `src/` automatically reload while service runs:
 
 ```bash
 bun dev historical-event
@@ -130,7 +110,7 @@ LOG_LEVEL=debug
 
 For issues:
 
-1. Check service logs: `docker logs historical-event-service`
+1. Check service logs
 2. Verify database: `psql $DATABASE_URL`
 3. Test TCP: `nc -zv localhost 5000`
 4. Open GitHub issue

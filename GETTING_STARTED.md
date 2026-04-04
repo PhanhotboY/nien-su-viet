@@ -42,105 +42,6 @@ cd nien-su-viet
 chmod +x ./cli/*.sh
 ```
 
-### Service Credentials (Development)
-
-| Service            | Host                   | Port | Username | Password |
-| ------------------ | ---------------------- | ---- | -------- | -------- |
-| PostgreSQL (Auth)  | localhost              | 5432 | postgres | password |
-| PostgreSQL (Post)  | localhost              | 5433 | postgres | password |
-| PostgreSQL (Event) | localhost              | 5434 | postgres | password |
-| Redis              | localhost              | 6379 | -        | -        |
-| RabbitMQ           | localhost              | 5672 | guest    | guest    |
-| RabbitMQ UI        | http://localhost:15672 | -    | guest    | guest    |
-
-### Stop Infrastructure
-
-```bash
-./cli/dcp.sh dev stop
-```
-
----
-
-## Running Services
-
-### Setup: Install Dependencies
-
-Before running any service, install shared dependencies:
-
-```bash
-bun install
-```
-
-**Terminal 1: Start Infrastructure**
-
-```bash
-# Start all infrastructure services
-./cli/dcp.sh dev start
-
-# This will:
-# - Pull required Docker images
-# - Start 3 PostgreSQL containers
-# - Start 1 Redis container
-# - Start 1 RabbitMQ container
-# - Create necessary networks and volumes
-```
-
-**Terminal 2: Gateway API**
-
-```bash
-bun dev gateway
-
-# Gateway will be available at http://localhost:3000
-```
-
-**Terminal 3: Auth Service**
-
-```bash
-bun dev auth
-
-# Auth Service runs on http://localhost:3001
-```
-
-**Terminal 4: Historical Event Service**
-
-```bash
-bun dev historical-event
-
-# Event Service runs on http://localhost:3002
-```
-
-**Terminal 5: Post Service**
-
-```bash
-cd apps/post
-go mod tidy
-make run
-
-# Post Service runs on configured port (check main.go)
-```
-
-**Terminal 6: Frontend Client**
-
-```bash
-cd apps/client
-bun dev
-
-# Frontend available at http://localhost:3000
-# (Note: You may need to adjust port if Gateway is on 3000)
-```
-
-### Service Ports (Default Development)
-
-| Service          | Port   | URL                    |
-| ---------------- | ------ | ---------------------- |
-| Gateway API      | 3000   | http://localhost:3000  |
-| Auth Service     | 3001   | http://localhost:3001  |
-| Historical Event | 3002   | http://localhost:3002  |
-| Frontend         | 3000\* | http://localhost:3000  |
-| RabbitMQ UI      | 15672  | http://localhost:15672 |
-
-\*Frontend will use a different port if 3000 is occupied
-
 ---
 
 ## Code Generation
@@ -171,22 +72,109 @@ Both scripts:
 
 - `api/proto/common/` - Shared definitions
 - `api/proto/post_service/` - Post service gRPC
-- `api/proto/search_service/` - Search service gRPC
+
+### Generate Prisma
+
+**For Auth Service:**
+
+```bash
+make generate-auth
+```
+
+**For Histroical Event Service:**
+
+```bash
+make generate-historical-event
+```
 
 ---
 
 ## Environment Configuration
 
-Create `.env` files by copying from `.env.example` and editing values:
+Create `.env` files by copying from `.env.example`, keep as is if want to use values from [infrastructure services](#terminal-1-start-infrastructure).
+
+For more detailed, see individual service READMEs.
+
+---
+
+## Running Services
+
+### Setup: Install Dependencies
+
+Before running any service, install shared dependencies:
 
 ```bash
-cd apps/auth && cp .env.example .env && nano .env
-cd ../historical-event && cp .env.example .env && nano .env
-cd ../post && cp .env.example .env && nano .env
-cd ../gateway && cp .env.example .env && nano .env
+bun install
 ```
 
-See individual service READMEs for environment variable descriptions.
+#### Terminal 1: Start Infrastructure
+
+```bash
+# Start all infrastructure services
+./cli/dcp.sh dev start
+
+# This will:
+# - Pull required Docker images
+# - Start 3 PostgreSQL containers
+# - Start 1 Redis container
+# - Start 1 RabbitMQ container
+# - Create necessary networks and volumes
+```
+
+_Infrastructure Credentials (Development)_
+
+| Service            | Port  | Username      | Password        |
+| ------------------ | ----- | ------------- | --------------- |
+| PostgreSQL (Auth)  | 5432  | nsv_auth_user | secure_password |
+| PostgreSQL (Event) | 5433  | nsv_auth_user | secure_password |
+| PostgreSQL (Post)  | 5434  | nsv_auth_user | secure_password |
+| Redis              | 6379  | -             | -               |
+| RabbitMQ           | 5672  | nsv_rmq_user  | secure_password |
+| RabbitMQ UI        | 15672 | nsv_rmq_user  | secure_password |
+
+#### Terminal 2: Gateway API
+
+```bash
+bun dev gateway
+```
+
+#### Terminal 3: Auth Service
+
+```bash
+bun dev auth
+```
+
+#### Terminal 4: Historical Event Service
+
+```bash
+bun dev historical-event
+```
+
+#### Terminal 5: Post Service
+
+```bash
+cd apps/post
+go mod tidy
+make run
+```
+
+#### Terminal 6: Frontend Client
+
+```bash
+cd apps/client
+bun dev
+```
+
+### Service Ports (Default Development)
+
+| Service          | Port  | Method |
+| ---------------- | ----- | ------ |
+| Gateway API      | 8080  | HTTP   |
+| Auth Service     | 8081  | HTTP   |
+| Historical Event | 8082  | TCP    |
+| Post Service     | 8082  | gRPC   |
+| Frontend         | 3000  | HTTP   |
+| RabbitMQ UI      | 15672 | HTTP   |
 
 ---
 

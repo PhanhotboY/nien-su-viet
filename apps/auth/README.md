@@ -33,10 +33,6 @@ The Auth Service handles all authentication and authorization logic for the Nien
 ```bash
 # From project root
 bun install
-
-# Or from service directory
-cd apps/auth
-bun install
 ```
 
 ### Configuration
@@ -65,35 +61,29 @@ bun run build
 bun run start
 ```
 
-Service will start on `http://localhost:3001`
-
 ## Architecture
 
 ### Project Structure
 
 ```
 apps/auth/
-├── src/
-│   ├── auth/              # Auth module
-│   │   ├── controllers/   # HTTP endpoints
-│   │   ├── services/      # Business logic
-│   │   ├── strategies/    # Auth strategies (JWT, etc)
-│   │   └── guards/        # Auth guards
-│   ├── users/             # Users module
-│   │   ├── model/         # Entity definitions
-│   │   └── services/      # User business logic
-│   ├── roles/             # Role management
-│   ├── permissions/       # Permission management
-│   ├── config/            # Configuration
-│   ├── app.module.ts      # Root module
-│   └── main.ts            # Entry point
-├── prisma/
-│   ├── schema.prisma      # Database schema
-│   └── migrations/        # Database migrations
-├── test/                  # Tests
-├── .env                   # Environment variables
-├── package.json
-└── tsconfig.json
+├── generated           # Generated Prisma assets
+├── prisma
+│   ├── migrations      # Database migrations
+│   └── schema.prisma   # Database schema
+├── setup               # Set up scripts
+├── src
+│   ├── auth            # Auth module
+│   ├── config          # Load config from .env
+│   ├── database        # Prisma client module
+│   ├── lib
+│   │   └── auth.ts     # Better-Auth server setup
+│   ├── mail            # Mail module
+│   ├── app.module.ts   # Root module
+│   └── main.ts         # Entry point
+├── README.md
+├── prisma.config.ts    # Prisma config
+└── tsconfig.app.json   # Extended TS config
 ```
 
 ### Token Structure
@@ -128,6 +118,6 @@ apps/auth/
 
 For issues or questions:
 
-1. Review service logs: `docker logs auth-service`
+1. Review service logs
 2. Open an issue on GitHub
 3. Check existing issues and discussions

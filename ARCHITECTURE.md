@@ -189,27 +189,6 @@ This project is a **microservices-based monorepo** designed to provide an intera
 
 ---
 
-## External Communication Protocols
-
-### REST API
-
-- **Used by:** Frontend ↔ Gateway API
-- **Format:** JSON
-- **Authentication:** JWT Bearer tokens
-
-### gRPC
-
-- **Used by:** Service-to-service communication
-- **Format:** Protocol Buffers
-- **Location:** [api/proto/](./api/proto)
-
-### TCP
-
-- **Used by:** Historical Event Service for real-time events
-- **Format:** Binary protocol
-
----
-
 ## Data Persistence
 
 ### PostgreSQL Databases
@@ -300,12 +279,6 @@ This project is a **microservices-based monorepo** designed to provide an intera
 - Bounded contexts and aggregates
 - Ubiquitous language
 
-### 6. CQRS (Post Service)
-
-- Separate models for read and write
-- Optimized queries
-- Event sourcing benefits
-
 ---
 
 ## Running the System
@@ -323,6 +296,8 @@ bun dev historical-event
 cd apps/post && make run
 cd apps/client && bun dev
 ```
+
+👉 **[Read the complete setup guide →](./GETTING_STARTED.md)**
 
 ### Service Dependencies
 
@@ -360,8 +335,6 @@ Infrastructure
 2. **Authorization:** Role-based access control (RBAC) at Gateway
 3. **CORS:** Configured per environment
 4. **Input Validation:** All inputs validated before processing
-5. **HTTPS:** Enforced in production
-6. **Environment Variables:** Sensitive configuration externalized
 
 ---
 
