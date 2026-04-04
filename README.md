@@ -118,20 +118,11 @@ Required services (started via `./cli/dcp.sh dev start`):
 
 ### Running Services
 
-**Method 1: All services at once (terminal)**
-
 ```sh
+# Terminal 1:
+# Start Infrastructure
 ./cli/dcp.sh dev start
-bun i && bun dev  # Runs Gateway, Auth, Historical Event in watch mode
-```
-
-**Method 2: Individual services**
-
-```sh
-# Terminal 1: Infrastructure
-./cli/dcp.sh dev start
-
-# Terminal 2: Gateway API
+# Gateway API
 bun i && bun dev gateway
 
 # Terminal 3: Auth Service
@@ -180,6 +171,4 @@ The application is in **active development**. Contributions are welcome! Please:
 
 ## License
 
-[View LICENSE](./LICENSE)
-
-The project is under [MIT license](http://github.com/phanhotboy/nien-su-viet/blob/master/LICENSE).
+The project is under [MIT license](./LICENSE).

@@ -62,8 +62,6 @@ bun run build
 bun run start
 ```
 
-Gateway will start on `http://localhost:3000`
-
 ---
 
 ## Architecture
@@ -97,32 +95,16 @@ Gateway will start on `http://localhost:3000`
 
 ```
 apps/gateway/
-├── src/
-│   ├── auth/                 # Auth guard & strategies
-│   │   ├── guards/
-│   │   ├── strategies/
-│   │   └── decorators/
-│   ├── filters/              # Exception filters
-│   ├── interceptors/         # Response interceptors
-│   │   ├── compression.ts    # GZIP compression
-│   │   ├── serialization.ts  # Response formatting
-│   │   └── timeout.ts        # Request timeout
-│   ├── middleware/           # Custom middleware
-│   │   ├── cors.ts
-│   │   ├── rate-limit.ts
-│   │   └── logging.ts
-│   ├── pipes/                # Validation pipes
-│   ├── modules/              # Feature modules
-│   │   ├── auth.module.ts
-│   │   ├── posts.module.ts
-│   │   └── events.module.ts
-│   ├── config/               # Configuration
-│   ├── app.module.ts         # Root module
-│   └── main.ts               # Entry point
-├── test/
-├── .env
-├── package.json
-└── tsconfig.json
+├── src
+│   ├── common                     # Shared decorators, filters, guards, interceptors,...
+│   ├── config                     # Load config from .env
+│   ├── gateway.middleware.ts      # Inject midlewares
+│   ├── gateway.module.ts          # Root module
+│   ├── modules                    # Service modules
+│   ├── utils
+│   └── main.ts                    # Entry point
+├── README.md
+└── tsconfig.app.json              # Extended TS config
 ```
 
 ---
@@ -142,8 +124,6 @@ apps/gateway/
 
 For issues:
 
-1. Check logs: `docker logs gateway`
-2. Verify services running: `docker ps`
-3. Test connectivity: `curl -I http://localhost:3000/health`
-4. Review configuration: `cat .env`
-5. Open GitHub issue
+1. Check logs
+2. Review configuration
+3. Open GitHub issue
