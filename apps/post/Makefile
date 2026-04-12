@@ -13,10 +13,10 @@ build: clean
 	@echo "Building post service..."
 	@go build -o bin/server cmd/server/main.go
 
-.PHONY: test
-test:
+.PHONY: test-integration
+test-integration:
 	@echo "Running tests for post service..."
-	@POST_SERVER_ENV=test go test -v ./... -cover -coverprofile=coverage.out -coverpkg=./internal/...
+	@POST_SERVER_ENV=test go test -tags=integration -v ./... -cover -coverprofile=coverage.out -coverpkg=./internal/...
 	@make open-coverage
 
 test-%:
