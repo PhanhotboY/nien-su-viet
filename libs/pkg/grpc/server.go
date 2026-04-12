@@ -48,12 +48,12 @@ func NewGrpcServer(
 	logger logger.Logger,
 ) GrpcServer {
 	unaryServerInterceptors := []googleGrpc.UnaryServerInterceptor{
-		interceptors.UnaryServerInterceptor(),
+		interceptors.UnaryServerErrorInterceptor(),
 		grpcCtxTags.UnaryServerInterceptor(),
 		grpcRecovery.UnaryServerInterceptor(),
 	}
 	streamServerInterceptors := []googleGrpc.StreamServerInterceptor{
-		interceptors.StreamServerInterceptor(),
+		interceptors.StreamServerErrorInterceptor(),
 	}
 
 	s := googleGrpc.NewServer(

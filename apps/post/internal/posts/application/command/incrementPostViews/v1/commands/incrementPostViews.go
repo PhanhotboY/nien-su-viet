@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/incrementPostViews/v1/dto"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	dtoUtil "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/dto"
 )
 
@@ -10,20 +11,14 @@ type IncrementPostViewsCommand struct {
 }
 
 func NewIncrementPostViewsCommand(
-	req *dto.IncrementPostViewsRequest,
-) *IncrementPostViewsCommand {
-	return &IncrementPostViewsCommand{
-		IncrementPostViewsRequest: req,
-	}
-}
-
-func NewIncrementPostViewsCommandWithValidation(
 	req any,
 ) (*IncrementPostViewsCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.IncrementPostViewsRequest{}, nil)
+	typedReq, err := dtoUtil.ValidateStruct(req, dto.IncrementPostViewsRequest{})
 	if err != nil {
-		return nil, err
+		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewIncrementPostViewsCommand")
 	}
 
-	return NewIncrementPostViewsCommand(typedReq), nil
+	return &IncrementPostViewsCommand{
+		IncrementPostViewsRequest: typedReq,
+	}, nil
 }

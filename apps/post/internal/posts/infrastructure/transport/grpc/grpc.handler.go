@@ -108,7 +108,7 @@ func (p *PostsGrpcServerHandler) CreatePost(
 	// p.postMetrics.CreatePostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	// Create command
-	cmd, err := createPostCommand.NewCreatePostCommandWithValidation(req)
+	cmd, err := createPostCommand.NewCreatePostCommand(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid create post command: %s", err.Error())
 		return nil, err
@@ -134,7 +134,7 @@ func (p *PostsGrpcServerHandler) UpdatePost(
 	// p.postMetrics.UpdatePostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	// Create command
-	cmd, err := updatePostCommand.NewUpdatePostCommandWithValidation(req)
+	cmd, err := updatePostCommand.NewUpdatePostCommand(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid update post command: %s", err.Error())
 		return nil, err
@@ -160,7 +160,7 @@ func (p *PostsGrpcServerHandler) PublishPost(
 	// p.postMetrics.PublishPostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	// Create command
-	cmd, err := publishPostCommand.NewPublishPostCommandWithValidation(req)
+	cmd, err := publishPostCommand.NewPublishPostCommand(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid publish post command: %s", err.Error())
 		return nil, err
@@ -186,7 +186,7 @@ func (p *PostsGrpcServerHandler) UnpublishPost(
 	// p.postMetrics.UnpublishPostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	// Create command
-	cmd, err := unpublishPostCommand.NewUnpublishPostCommandWithValidation(req)
+	cmd, err := unpublishPostCommand.NewUnpublishPostCommand(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid unpublish post command: %s", err.Error())
 		return nil, err
@@ -212,7 +212,7 @@ func (p *PostsGrpcServerHandler) DeletePost(
 	// p.postMetrics.DeletePostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	// Create command
-	cmd, err := deletePostCommand.NewDeletePostCommandWithValidation(req)
+	cmd, err := deletePostCommand.NewDeletePostCommand(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid delete post command: %v", err)
 		return nil, err
@@ -238,7 +238,7 @@ func (p *PostsGrpcServerHandler) DeletePosts(
 	// p.postMetrics.DeletePostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	// Create command
-	cmd, err := deletePostsCommand.NewDeletePostsCommandWithValidation(req)
+	cmd, err := deletePostsCommand.NewDeletePostsCommand(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid delete posts command: %s", err.Error())
 		return nil, err
@@ -264,7 +264,7 @@ func (p *PostsGrpcServerHandler) IncrementPostViews(
 	// p.postMetrics.IncrementPostViewsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	// Create command
-	cmd, err := incrementPostViewsCommand.NewIncrementPostViewsCommandWithValidation(req)
+	cmd, err := incrementPostViewsCommand.NewIncrementPostViewsCommand(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid increment post views command: %s", err.Error())
 		return nil, err
@@ -290,7 +290,7 @@ func (p *PostsGrpcServerHandler) IncrementPostLikes(
 	// p.postMetrics.IncrementPostLikesGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	// Create command
-	cmd, err := incrementPostLikesCommand.NewIncrementPostLikesCommandWithValidation(req)
+	cmd, err := incrementPostLikesCommand.NewIncrementPostLikesCommand(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid increment post likes command: %s", err.Error())
 		return nil, err
@@ -319,7 +319,7 @@ func (p *PostsGrpcServerHandler) GetPost(
 	span.SetAttributes(attribute.String("rpc.method", "GetPost"))
 	// p.postMetrics.GetPostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
-	query, err := getPostQuery.NewGetPostQueryWithValidation(req)
+	query, err := getPostQuery.NewGetPostQuery(req)
 	if err != nil {
 		p.logger.Error("[PostService] Invalid get post query", "error", err)
 		return nil, err
@@ -343,7 +343,7 @@ func (p *PostsGrpcServerHandler) GetPublishedPosts(
 	span.SetAttributes(attribute.String("rpc.method", "GetPublishedPosts"))
 	// p.postMetrics.GetPublishedPostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
-	query, err := getPublishedPostsQuery.NewGetPublishedPostsQueryWithValidation(req)
+	query, err := getPublishedPostsQuery.NewGetPublishedPostsQuery(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid get published posts query: %s", err.Error())
 		return nil, err
@@ -366,7 +366,7 @@ func (p *PostsGrpcServerHandler) GetAllPosts(
 	span.SetAttributes(attribute.String("rpc.method", "GetAllPosts"))
 	// p.postMetrics.ListPostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
-	query, err := getAllPostsQuery.NewGetAllPostsQueryWithValidation(req)
+	query, err := getAllPostsQuery.NewGetAllPostsQuery(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid get all posts query: %s", err.Error())
 		return nil, err
@@ -420,7 +420,7 @@ func (p *PostsGrpcServerHandler) GetPopularPosts(
 	span.SetAttributes(attribute.String("rpc.method", "GetPopularPosts"))
 	// p.postMetrics.GetPopularPostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
-	query, err := getPopularPostsQuery.NewGetPopularPostsQueryWithValidation(req)
+	query, err := getPopularPostsQuery.NewGetPopularPostsQuery(req)
 	if err != nil {
 		p.logger.Errorf("[PostService] Invalid get popular posts query: %s", err.Error())
 		return nil, err

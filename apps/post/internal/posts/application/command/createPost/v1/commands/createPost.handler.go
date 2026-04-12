@@ -5,6 +5,7 @@ import (
 
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/createPost/v1/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/repository"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 )
@@ -39,7 +40,7 @@ func (h CreatePostHandler) Handle(
 	id, err := h.postRepo.CreatePost(ctx, cmd.MapToEntity())
 	if err != nil {
 		h.log.Errorf("failed to create post: %v", err)
-		return nil, err
+		return nil, grpcerrors.ParseError(err)
 	}
 
 	err = h.cacheRepo.DeleteAllPosts(ctx)

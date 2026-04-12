@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/publishPost/v1/dto"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	dtoUtil "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/dto"
 )
 
@@ -10,20 +11,14 @@ type PublishPostCommand struct {
 }
 
 func NewPublishPostCommand(
-	req *dto.PublishPostRequest,
-) *PublishPostCommand {
-	return &PublishPostCommand{
-		PublishPostRequest: req,
-	}
-}
-
-func NewPublishPostCommandWithValidation(
 	req any,
 ) (*PublishPostCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.PublishPostRequest{}, nil)
+	typedReq, err := dtoUtil.ValidateStruct(req, dto.PublishPostRequest{})
 	if err != nil {
-		return nil, err
+		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewPublishPostCommand")
 	}
 
-	return NewPublishPostCommand(typedReq), nil
+	return &PublishPostCommand{
+		PublishPostRequest: typedReq,
+	}, nil
 }

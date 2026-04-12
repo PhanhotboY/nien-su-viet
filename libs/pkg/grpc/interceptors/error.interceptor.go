@@ -2,13 +2,14 @@ package interceptors
 
 import (
 	"context"
+	"errors"
 
 	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	"google.golang.org/grpc"
 )
 
 // UnaryServerInterceptor returns a problem-detail error to client
-func UnaryServerInterceptor() grpc.UnaryServerInterceptor {
+func UnaryServerErrorInterceptor() grpc.UnaryServerInterceptor {
 	return func(
 		ctx context.Context,
 		req interface{},
@@ -20,9 +21,9 @@ func UnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		var grpcErr grpcerrors.GrpcErr
 
 		// if error was not `grpcErr` we will convert the error to a `grpcErr`
-		// if ok := errors.As(err, &grpcErr); !ok {
-		// 	grpcErr = grpcerrors.ParseError(err)
-		// }
+		if ok := errors.As(err, &grpcErr); !ok {
+			grpcErr = grpcerrors.ParseError(err)
+		}
 
 		if grpcErr != nil {
 			return nil, grpcErr.ToGrpcResponseErr()
@@ -33,7 +34,7 @@ func UnaryServerInterceptor() grpc.UnaryServerInterceptor {
 }
 
 // StreamServerInterceptor returns a problem-detail error to client.
-func StreamServerInterceptor() grpc.StreamServerInterceptor {
+func StreamServerErrorInterceptor() grpc.StreamServerInterceptor {
 	return func(
 		srv interface{},
 		ss grpc.ServerStream,
@@ -45,9 +46,9 @@ func StreamServerInterceptor() grpc.StreamServerInterceptor {
 		var grpcErr grpcerrors.GrpcErr
 
 		// if error was not `grpcErr` we will convert the error to a `grpcErr`
-		// if ok := errors.As(err, &grpcErr); !ok {
-		// 	grpcErr = grpcerrors.ParseError(err)
-		// }
+		if ok := errors.As(err, &grpcErr); !ok {
+			grpcErr = grpcerrors.ParseError(err)
+		}
 
 		if grpcErr != nil {
 			return grpcErr.ToGrpcResponseErr()

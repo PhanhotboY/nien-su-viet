@@ -5,6 +5,7 @@ import (
 
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/unpublishPost/v1/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/repository"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 )
@@ -37,21 +38,23 @@ func (h UnpublishPostHandler) Handle(
 ) (*dto.UnpublishPostResponse, error) {
 
 	// Get existing post
-	post, err := h.postRepo.GetPostByID(ctx, cmd.UnpublishPostRequest.ID)
+	_, err := h.postRepo.GetPostByID(ctx, cmd.UnpublishPostRequest.ID)
 	if err != nil {
 		h.log.Errorf("failed to get post: %v", err)
-		return nil, err
+		return nil, grpcerrors.ParseError(err)
 	}
 
 	// Update published status and clear timestamp
-	post.Published = false
-	post.PublishedAt = nil
+	updates := map[string]interface{}{
+		"published":    false,
+		"published_at": nil,
+	}
 
 	// Save to repository
-	id, err := h.postRepo.UpdatePost(ctx, cmd.UnpublishPostRequest.ID, post)
+	id, err := h.postRepo.UpdatePost(ctx, cmd.UnpublishPostRequest.ID, updates)
 	if err != nil {
 		h.log.Errorf("failed to unpublish post: %v", err)
-		return nil, err
+		return nil, grpcerrors.ParseError(err)
 	}
 
 	err = h.cacheRepo.DeleteAllPosts(ctx)

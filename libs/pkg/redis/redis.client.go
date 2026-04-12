@@ -20,14 +20,19 @@ const (
 	writeTimeout    = 3 * time.Second
 	minIdleConns    = 20
 	poolTimeout     = 6 * time.Second
-	defaultTTL      = 15 * time.Minute
 )
+
+var defaultTTL = 15 * time.Minute
 
 type RedisClientWithExpire struct {
 	*redis.Client
 }
 
 func NewRedisClient(s settings.Config) RedisClientWithExpire {
+	if s.Server.Env.IsDevelopment() {
+		defaultTTL = 0
+	}
+
 	cfg := s.Redis
 	universalClient := redis.NewClient(&redis.Options{
 		Addr:            fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),

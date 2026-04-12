@@ -28,7 +28,7 @@ func NewGrpcClient(cfg settings.Config) (GrpcClient, error) {
 	// Grpc Client to call Grpc Server
 	// https://sahansera.dev/building-grpc-client-go/
 	// https://github.com/open-telemetry/opentelemetry-go-contrib/blob/df16f32df86b40077c9c90d06f33c4cdb6dd5afa/instrumentation/google.golang.org/grpc/otelgrpc/example_interceptor_test.go
-	conn, err := grpc.Dial(fmt.Sprintf("%s%s", cfg.Grpc.Host, cfg.Grpc.Port),
+	conn, err := grpc.NewClient(fmt.Sprintf("%s%s", cfg.Grpc.Host, cfg.Grpc.Port),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		// https://github.com/open-telemetry/opentelemetry-go-contrib/blob/main/instrumentation/google.golang.org/grpc/otelgrpc/example/client/main.go#L47C3-L47C52
 		// https://github.com/open-telemetry/opentelemetry-go-contrib/blob/main/instrumentation/google.golang.org/grpc/otelgrpc/doc.go
@@ -58,7 +58,7 @@ func (g *grpcClient) WaitForAvailableConnection() error {
 	}, timeout)
 
 	state := g.conn.GetState()
-	fmt.Println(fmt.Sprintf("grpc state is:%s", state))
+	fmt.Printf("grpc state is:%s\n", state)
 	return err
 }
 
@@ -82,7 +82,7 @@ func waitUntilConditionMet(
 		}
 		time.Sleep(time.Second * 2)
 		meet = conditionToMet()
-		timeOutExpired = time.Now().Sub(startTime) > timeOutTime
+		timeOutExpired = time.Since(startTime) > timeOutTime
 	}
 
 	return nil

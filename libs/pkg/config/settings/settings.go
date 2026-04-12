@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/fsnotify/fsnotify"
@@ -38,12 +39,19 @@ func (cfg *ServerConfig) GetMicroserviceName() string {
 }
 
 func LoadConfig() Config {
-	_ = gotenv.Load(".env")
+	env := os.Getenv("POST_SERVER_ENV")
+	wd, _ := os.Getwd()
+	envPath, _ := searchRootDirectory(wd)
+	configName := ".env"
+	if env == "test" {
+		configName = ".env.test"
+	}
+	gotenv.Load(filepath.Join(envPath, configName))
 
-	viper.SetEnvPrefix("post")
-	viper.SetConfigName(".env")
+	viper.AddConfigPath(envPath)
+	viper.SetConfigName(configName)
 	viper.SetConfigType("env")
-	viper.AddConfigPath(".")
+	viper.SetEnvPrefix("post")
 
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()

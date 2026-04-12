@@ -11,8 +11,10 @@ type GetPopularPostsQueryReq struct {
 
 func (g GetPopularPostsQueryReq) MapToQuery() repository.PostQuery {
 	trueValue := true
+	likesValue := "likes"
+	descValue := "desc"
 	g.Published = &trueValue
-	g.SortBy = "likes"
-	g.SortOrder = "desc"
+	g.SortBy = &likesValue
+	g.SortOrder = &descValue
 	return g.PostListQueryDto.MapToQuery()
 }

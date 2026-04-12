@@ -5,6 +5,7 @@ import (
 
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/deletePost/v1/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/repository"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 )
@@ -43,7 +44,7 @@ func (h DeletePostHandler) Handle(
 	id, err := h.postRepo.DeletePost(ctx, cmd.ID)
 	if err != nil {
 		h.log.Errorf("failed to delete post: %v", err)
-		return nil, err
+		return nil, grpcerrors.ParseError(err)
 	}
 
 	err = h.cacheRepo.DeleteAllPosts(ctx)

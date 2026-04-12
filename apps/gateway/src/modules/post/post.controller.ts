@@ -50,7 +50,7 @@ export class PostController {
   @Public()
   @Serialize(PostBriefResponseDto)
   @ApiOkSerializedPaginatedResponse(PostBriefResponseDto)
-  async getPublishedPosts(@Query() query: PostQueryDto) {
+  async getPublishedPosts(@Query() query: any) {
     const res = await this.postService.getPublishedPosts(query);
     return res;
   }

@@ -15,6 +15,7 @@ func initLogger() {
 
 	switch logType {
 	case "Zap", "":
+		fallthrough
 	default:
 		l = zap.NewZapLogger(
 			settings.LoadConfig(),
