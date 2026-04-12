@@ -7,7 +7,7 @@ import (
 	"go.uber.org/fx/fxtest"
 
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts"
-	"github.com/phanhotboy/nien-su-viet/apps/post/test/shared/infrastructure"
+	"github.com/phanhotboy/nien-su-viet/apps/post/test/integration/shared/infrastructure"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
