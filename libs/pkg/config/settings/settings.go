@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/go-viper/mapstructure/v2"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
 	"github.com/spf13/viper"
-	"github.com/subosito/gotenv"
 )
 
 type Config struct {
@@ -21,21 +19,7 @@ type Config struct {
 	Grpc       GrpcConfig       `mapstructure:"grpc"`
 	Logger     LoggerConfig     `mapstructure:"logger"`
 	Redis      RedisOptions     `mapstructure:"redis"`
-}
-
-type ServerConfig struct {
-	ServiceName string                  `mapstructure:"service.name"`
-	Host        string                  `mapstructure:"host"`
-	Port        string                  `mapstructure:"port"`
-	Env         environment.Environment `mapstructure:"env"`
-}
-
-func (cfg *ServerConfig) GetMicroserviceNameUpper() string {
-	return strings.ToUpper(cfg.ServiceName)
-}
-
-func (cfg *ServerConfig) GetMicroserviceName() string {
-	return cfg.ServiceName
+	Metrics    MetricsOptions   `mapstructure:"metrics"`
 }
 
 func LoadConfig() Config {
@@ -46,17 +30,19 @@ func LoadConfig() Config {
 	if env == "test" {
 		configName = ".env.test"
 	}
-	gotenv.Load(filepath.Join(envPath, configName))
 
-	viper.AddConfigPath(envPath)
-	viper.SetConfigName(configName)
-	viper.SetConfigType("env")
-	viper.SetEnvPrefix("post")
+	v := viper.New()
+	v.AddConfigPath(envPath)
+	v.SetConfigName(configName)
+	v.SetConfigType("env")
+	v.SetEnvPrefix("post")
 
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-	viper.AutomaticEnv()
+	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	v.AutomaticEnv()
+	BindEnvs(v, Config{}, "")
+	log.Printf("loading configuration from file: %s\n", v.AllKeys())
 
-	if err := viper.ReadInConfig(); err != nil {
+	if err := v.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 			log.Printf("config file not found: %s", err)
 			log.Println("proceeding with environment variables only")
@@ -66,28 +52,23 @@ func LoadConfig() Config {
 	}
 
 	// Watch for configuration changes and reload
-	viper.OnConfigChange(func(e fsnotify.Event) {
+	v.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("Config file changed:", e.Name)
 	})
-	viper.WatchConfig()
+	v.WatchConfig()
 
-	for _, key := range os.Environ() {
-		key = strings.SplitN(key, "=", 2)[0]
-		if key, ok := strings.CutPrefix(key, "POST_"); ok {
-			key = strings.ToLower(strings.ReplaceAll(key, "_", "."))
-			viper.BindEnv(key)
-		}
-	}
+	var cfg Config
 
-	cfg := Config{}
-
-	if err := viper.Unmarshal(&cfg, func(dc *mapstructure.DecoderConfig) {
+	if err := v.Unmarshal(&cfg, func(dc *mapstructure.DecoderConfig) {
 		dc.WeaklyTypedInput = true
+		dc.Squash = true
 	}); err != nil {
 		log.Fatalf("unable to decode config into struct: %s", err)
 	} else {
-		fmt.Printf("Configuration loaded for %s environment\n", viper.Get("server.env"))
+		fmt.Printf("Configuration loaded for %s environment\n", v.Get("server.env"))
 	}
+
+	fmt.Printf("--------------------------config: %+v\n\n\n\n", cfg)
 
 	return cfg
 }

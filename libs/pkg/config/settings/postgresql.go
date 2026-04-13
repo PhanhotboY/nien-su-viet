@@ -6,6 +6,6 @@ type PostgresqlConfig struct {
 	Username string `mapstructure:"username"`
 	Password string `mapstructure:"password"`
 	Database string `mapstructure:"database"`
-	LogLevel int    `mapstructure:"log.level"`
-	SSLMode  bool   `mapstructure:"ssl.mode"`
+	LogLevel int    `mapstructure:"log_level"`
+	SSLMode  bool   `mapstructure:"ssl_mode"`
 }

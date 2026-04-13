@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 
 	"emperror.dev/errors"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
+	"github.com/spf13/viper"
 )
 
 func searchForConfigFileDir(
@@ -85,4 +87,52 @@ func searchRootDirectory(
 	}
 
 	return searchRootDirectory(parentDir)
+}
+
+func BindEnvs(v *viper.Viper, iface interface{}, prefix string) {
+	t := reflect.TypeOf(iface)
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+
+		name, squash := parseTag(field.Tag.Get("mapstructure"), field.Name)
+
+		var key string
+		if prefix != "" && !squash {
+			key = prefix + "." + name
+		} else if squash {
+			key = prefix
+		} else {
+			key = name
+		}
+
+		// If nested struct → recurse
+		if field.Type.Kind() == reflect.Struct {
+			BindEnvs(v, reflect.New(field.Type).Elem().Interface(), key)
+			continue
+		}
+
+		v.SetDefault(key, nil) // registers key
+		v.BindEnv(key)
+	}
+}
+func parseTag(tag string, fieldName string) (name string, squash bool) {
+	if tag == "" {
+		return strings.ToLower(fieldName), false
+	}
+
+	parts := strings.Split(tag, ",")
+
+	name = parts[0]
+	if name == "" {
+		name = strings.ToLower(fieldName)
+	}
+
+	for _, opt := range parts[1:] {
+		if opt == "squash" {
+			squash = true
+		}
+	}
+
+	return
 }

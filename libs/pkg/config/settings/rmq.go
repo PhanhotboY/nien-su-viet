@@ -8,7 +8,7 @@ import (
 type RmqConfig struct {
 	RmqHostOptions `mapstructure:",squash"`
 
-	QueueName    string `mapstructure:"queue.name"`
+	QueueName    string `mapstructure:"queue_name"`
 	DeliveryMode uint8
 	Persisted    bool
 	AppId        string
@@ -17,9 +17,9 @@ type RmqConfig struct {
 }
 
 type RmqHostOptions struct {
-	Host       string    `mapstructure:"host"`
+	Host       string    `mapstructure:"hostname"`
 	Port       int       `mapstructure:"port"`
-	HttpPort   int       `mapstructure:"http.port"`
+	HttpPort   int       `mapstructure:"http_port"`
 	UserName   string    `mapstructure:"username"`
 	Password   string    `mapstructure:"password"`
 	RetryDelay time.Time `mapstructure:"retry_delay"`
