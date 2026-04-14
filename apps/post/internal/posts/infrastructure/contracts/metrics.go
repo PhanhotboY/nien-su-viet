@@ -5,9 +5,6 @@ import (
 )
 
 type PostsMetrics struct {
-	SuccessGrpcRequests metric.Int64Counter
-	FailedGrpcRequests  metric.Int64Counter
-
 	CreatePostGrpcRequests         metric.Int64Counter
 	UpdatePostGrpcRequests         metric.Int64Counter
 	DeletePostGrpcRequests         metric.Int64Counter

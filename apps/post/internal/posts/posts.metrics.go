@@ -19,12 +19,8 @@ func configPostsMetrics(
 	}
 
 	serverOptions := cfg.Server
-	fmt.Printf("---------------------server config: %+v\n\n\n\n", cfg)
 
 	metricsMap := map[string]metric.Int64Counter{
-		"success_grpc_requests": nil,
-		"failed_grpc_requests":  nil,
-
 		"create_post_grpc_requests":          nil,
 		"update_post_grpc_requests":          nil,
 		"delete_post_grpc_requests":          nil,
@@ -51,9 +47,6 @@ func configPostsMetrics(
 	}
 
 	return &contracts.PostsMetrics{
-		SuccessGrpcRequests: metricsMap["success_grpc_requests"],
-		FailedGrpcRequests:  metricsMap["failed_grpc_requests"],
-
 		CreatePostGrpcRequests:         metricsMap["create_post_grpc_requests"],
 		UpdatePostGrpcRequests:         metricsMap["update_post_grpc_requests"],
 		DeletePostGrpcRequests:         metricsMap["delete_post_grpc_requests"],

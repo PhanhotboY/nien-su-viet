@@ -68,8 +68,6 @@ func LoadConfig() Config {
 		fmt.Printf("Configuration loaded for %s environment\n", v.Get("server.env"))
 	}
 
-	fmt.Printf("--------------------------config: %+v\n\n\n\n", cfg)
-
 	return cfg
 }
 

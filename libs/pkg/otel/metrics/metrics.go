@@ -1,9 +1,5 @@
 package metrics
 
-// https://github.com/riferrei/otel-with-golang/blob/main/main.go
-// https://github.com/open-telemetry/opentelemetry-go/blob/main/example/prometheus/main.go
-// https://opentelemetry.io/docs/instrumentation/go/manual/#metrics
-
 import (
 	"context"
 	"time"
