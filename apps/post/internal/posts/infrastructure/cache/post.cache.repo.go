@@ -185,7 +185,7 @@ func (r *postCacheRepository) GetPost(
 
 	r.log.Infow(
 		fmt.Sprintf(
-			"Post with key '%s', prefix '%s' laoded",
+			"Post with key '%s', prefix '%s' loaded",
 			key,
 			r.getRedisPostPrefixKey(),
 		),
@@ -245,7 +245,7 @@ func (r *postCacheRepository) GetPosts(
 
 	r.log.Infow(
 		fmt.Sprintf(
-			"Posts with with key '%s', prefix '%s' laoded",
+			"Posts with with key '%s', prefix '%s' loaded",
 			key,
 			r.getRedisPostPrefixKey(),
 		),

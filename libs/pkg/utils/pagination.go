@@ -7,10 +7,10 @@ import (
 )
 
 type Pagination struct {
-	Limit      uint32 `json:"limit"`
-	Page       uint32 `json:"page"`
-	TotalPages uint32 `json:"total_pages"`
-	Total      uint32 `json:"total"`
+	Limit      uint32 `json:"limit" default:"10"`
+	Page       uint32 `json:"page" default:"1"`
+	TotalPages uint32 `json:"total_pages" default:"1"`
+	Total      uint32 `json:"total" default:"0"`
 }
 
 func NewPagination(page, limit, totalItems uint32) *Pagination {

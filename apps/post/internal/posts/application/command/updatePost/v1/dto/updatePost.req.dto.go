@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/entity"
 )
 
 // UpdatePostRequest is the request DTO for updating a post
@@ -20,53 +19,55 @@ type UpdatePostRequest struct {
 	PublishedAt *time.Time `json:"published_at"`
 }
 
-func (r *UpdatePostRequest) MapToEntity() *entity.Post {
-	post := &entity.Post{}
+func (r *UpdatePostRequest) ToUpdateMap() map[string]interface{} {
+	updates := make(map[string]interface{})
 	// Always set ID
 	if postID, err := uuid.Parse(r.ID); err == nil {
-		post.Id = postID
+		updates["id"] = postID
 	}
 
 	// Set optional fields if provided
 	if r.Title != nil {
-		post.Title = *r.Title
+		updates["title"] = *r.Title
 	}
 
 	if r.Slug != nil {
-		post.Slug = *r.Slug
+		updates["slug"] = *r.Slug
 	}
 
 	if r.Content != nil {
-		post.Content = *r.Content
+		updates["content"] = *r.Content
 	}
 
 	if r.Summary != nil {
-		post.Summary = r.Summary
+		updates["summary"] = *r.Summary
 	}
 
 	if r.Thumbnail != nil {
-		post.Thumbnail = r.Thumbnail
+		updates["thumbnail"] = *r.Thumbnail
 	}
 
 	if r.CategoryID != nil {
 		if categoryID, err := uuid.Parse(*r.CategoryID); err == nil {
-			post.CategoryId = &categoryID
+			updates["category_id"] = categoryID
 		}
 	}
 
 	// Handle published flag and timestamp
-	if r.Published != nil && *r.Published {
-		post.Published = true
-		if r.PublishedAt != nil {
-			post.PublishedAt = r.PublishedAt
+	if r.Published != nil {
+		if *r.Published {
+			updates["published"] = *r.Published
+			if r.PublishedAt != nil {
+				updates["published_at"] = r.PublishedAt
+			} else {
+				now := time.Now()
+				updates["published_at"] = &now
+			}
 		} else {
-			now := time.Now()
-			post.PublishedAt = &now
+			updates["published"] = false
+			updates["published_at"] = nil
 		}
-	} else if r.Published != nil && !*r.Published {
-		post.Published = false
-		post.PublishedAt = nil
 	}
 
-	return post
+	return updates
 }

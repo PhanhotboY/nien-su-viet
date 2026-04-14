@@ -15,9 +15,9 @@ type CreatePostRequest struct {
 	Summary     *string    `json:"summary" validate:"omitempty,max=500"`
 	Thumbnail   *string    `json:"thumbnail" validate:"omitempty,url"`
 	AuthorId    string     `json:"author_id" validate:"required"`
-	CategoryID  *string    `json:"category_id"`
-	Published   *bool      `json:"published"`
-	PublishedAt *time.Time `json:"published_at"`
+	CategoryID  *string    `json:"category_id" validate:"omitempty"`
+	Published   *bool      `json:"published" validate:"omitempty" default:"false"`
+	PublishedAt *time.Time `json:"published_at" validate:"omitempty"`
 }
 
 func (r *CreatePostRequest) MapToEntity() *entity.Post {

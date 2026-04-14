@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/incrementPostLikes/v1/dto"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	dtoUtil "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/dto"
 )
 
@@ -10,20 +11,14 @@ type IncrementPostLikesCommand struct {
 }
 
 func NewIncrementPostLikesCommand(
-	req *dto.IncrementPostLikesRequest,
-) *IncrementPostLikesCommand {
-	return &IncrementPostLikesCommand{
-		IncrementPostLikesRequest: req,
-	}
-}
-
-func NewIncrementPostLikesCommandWithValidation(
 	req any,
 ) (*IncrementPostLikesCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.IncrementPostLikesRequest{}, nil)
+	typedReq, err := dtoUtil.ValidateStruct(req, dto.IncrementPostLikesRequest{})
 	if err != nil {
-		return nil, err
+		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewIncrementPostLikesCommand")
 	}
 
-	return NewIncrementPostLikesCommand(typedReq), nil
+	return &IncrementPostLikesCommand{
+		IncrementPostLikesRequest: typedReq,
+	}, nil
 }

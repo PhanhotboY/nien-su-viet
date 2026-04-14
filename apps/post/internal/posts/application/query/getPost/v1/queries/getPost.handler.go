@@ -6,6 +6,7 @@ import (
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPost/v1/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/entity"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/repository"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 )
@@ -48,16 +49,13 @@ func (c GetPostHandler) Handle(
 	// If not in cache, fetch from database
 	if post == nil {
 		if query.IsValidUUID() {
-			c.log.Infof("fetching post by id: %s", query.IDOrSlug)
 			post, err = c.postRepo.GetPostByID(ctx, query.IDOrSlug)
 		} else {
-			c.log.Infof("fetching post by slug: %s", query.IDOrSlug)
 			post, err = c.postRepo.GetPostBySlug(ctx, query.IDOrSlug)
 		}
 
 		if err != nil {
-			c.log.Errorf("failed to get post: %v", err)
-			return nil, err
+			return nil, grpcerrors.ParseError(err)
 		}
 
 		// Cache the result

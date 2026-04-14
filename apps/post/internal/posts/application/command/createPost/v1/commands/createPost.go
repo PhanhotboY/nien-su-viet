@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/createPost/v1/dto"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	dtoUtil "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/dto"
 )
 
@@ -10,20 +11,14 @@ type CreatePostCommand struct {
 }
 
 func NewCreatePostCommand(
-	req *dto.CreatePostRequest,
-) *CreatePostCommand {
-	return &CreatePostCommand{
-		CreatePostRequest: req,
-	}
-}
-
-func NewCreatePostCommandWithValidation(
 	req any,
 ) (*CreatePostCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.CreatePostRequest{}, nil)
+	typedReq, err := dtoUtil.ValidateStruct(req, dto.CreatePostRequest{})
 	if err != nil {
-		return nil, err
+		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewCreatePostCommand")
 	}
 
-	return NewCreatePostCommand(typedReq), nil
+	return &CreatePostCommand{
+		CreatePostRequest: typedReq,
+	}, nil
 }

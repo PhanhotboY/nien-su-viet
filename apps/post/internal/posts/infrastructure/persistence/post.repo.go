@@ -2,7 +2,6 @@ package persistence
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/entity"
@@ -19,10 +18,13 @@ func NewPostRepository(db *gorm.DB) repository.PostRepository {
 }
 
 // UpdatePost implements repository.PostRepository.
-func (br *postRepository) UpdatePost(ctx context.Context, postId string, post *entity.Post) (string, error) {
-	result := br.db.WithContext(ctx).Model(&entity.Post{}).Where("id = ?", postId).Updates(post).Update("published", post.Published)
+func (br *postRepository) UpdatePost(ctx context.Context, postId string, updates map[string]interface{}) (string, error) {
+	result := br.db.WithContext(ctx).Model(&entity.Post{}).Where("id = ?", postId).Updates(updates)
 	if result.Error != nil {
-		return postId, fmt.Errorf("failed to update post: %w", result.Error)
+		return postId, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return postId, gorm.ErrRecordNotFound
 	}
 	return postId, nil
 }
@@ -43,7 +45,7 @@ func (br *postRepository) GetPosts(ctx context.Context, query repository.PostQue
 
 	result := db.Find(&posts)
 	if result.Error != nil {
-		return nil, fmt.Errorf("failed to fetch posts: %w", result.Error)
+		return nil, result.Error
 	}
 	return posts, nil
 }
@@ -125,7 +127,7 @@ func (br *postRepository) CreatePost(ctx context.Context, post *entity.Post) (st
 	}
 	result := br.db.WithContext(ctx).Model(&entity.Post{}).Create(post)
 	if result.Error != nil {
-		return post.Id.String(), fmt.Errorf("failed to create post: %w", result.Error)
+		return "", result.Error
 	}
 	return post.Id.String(), nil
 }
@@ -134,7 +136,7 @@ func (br *postRepository) GetPostByID(ctx context.Context, postId string) (*enti
 	var post entity.Post
 	result := br.db.WithContext(ctx).Model(&entity.Post{}).Where("id = ?", postId).First(&post)
 	if result.Error != nil {
-		return nil, fmt.Errorf("failed to fetch post by id: %w", result.Error)
+		return nil, result.Error
 	}
 	return &post, nil
 }
@@ -143,7 +145,7 @@ func (br *postRepository) GetPostBySlug(ctx context.Context, slug string) (*enti
 	var post entity.Post
 	result := br.db.WithContext(ctx).Model(&entity.Post{}).Where("slug = ? AND published = ?", slug, true).First(&post)
 	if result.Error != nil {
-		return nil, fmt.Errorf("failed to fetch post by slug: %w", result.Error)
+		return nil, result.Error
 	}
 	return &post, nil
 }
@@ -152,7 +154,10 @@ func (br *postRepository) DeletePost(ctx context.Context, postId string) (string
 	var post entity.Post
 	result := br.db.WithContext(ctx).Model(&entity.Post{}).Where("id = ?", postId).Delete(&post)
 	if result.Error != nil {
-		return postId, fmt.Errorf("failed to fetch post by id: %w", result.Error)
+		return postId, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return postId, gorm.ErrRecordNotFound
 	}
 	return postId, nil
 }
@@ -167,7 +172,7 @@ func (br *postRepository) CountPosts(ctx context.Context, query repository.PostQ
 
 	result := db.Count(&count)
 	if result.Error != nil {
-		return 0, fmt.Errorf("failed to count posts: %w", result.Error)
+		return 0, result.Error
 	}
 	return uint32(count), nil
 }

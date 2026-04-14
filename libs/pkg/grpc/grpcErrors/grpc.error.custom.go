@@ -15,7 +15,7 @@ type grpcErr struct {
 	Status     codes.Code `json:"status,omitempty"`
 	Title      string     `json:"title,omitempty"`
 	Detail     string     `json:"detail,omitempty"`
-	Timestamp  time.Time  `json:"timestamp,omitempty"`
+	Timestamp  time.Time  `json:"timestamp"`
 	StackTrace string     `json:"stackTrace,omitempty"`
 }
 
@@ -108,7 +108,7 @@ func (p *grpcErr) SetStackTrace(stackTrace string) GrpcErr {
 
 // ToGrpcResponseErr creates a gRPC error response to send grpc engine
 func (p *grpcErr) ToGrpcResponseErr() error {
-	return status.Error(p.GetStatus(), p.ToJson())
+	return status.Error(p.GetStatus(), p.GetDetail())
 }
 
 func (p *grpcErr) ToJson() string {
