@@ -5,6 +5,7 @@ import (
 
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/updatePost/v1/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/repository"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 )
@@ -40,10 +41,10 @@ func (h UpdatePostHandler) Handle(
 	cmd *UpdatePostCommand,
 ) (*dto.UpdatePostResponse, error) {
 	// Update in repository
-	id, err := h.postRepo.UpdatePost(ctx, cmd.ID, cmd.MapToEntity())
+	id, err := h.postRepo.UpdatePost(ctx, cmd.ID, cmd.ToUpdateMap())
 	if err != nil {
 		h.log.Errorf("failed to update post: %v", err)
-		return nil, err
+		return nil, grpcerrors.ParseError(err)
 	}
 
 	err = h.cacheRepo.DeleteAllPosts(ctx)

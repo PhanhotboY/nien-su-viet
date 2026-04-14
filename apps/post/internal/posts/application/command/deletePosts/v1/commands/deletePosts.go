@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/deletePosts/v1/dto"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	dtoUtil "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/dto"
 )
 
@@ -11,20 +12,14 @@ type DeletePostsCommand struct {
 }
 
 func NewDeletePostsCommand(
-	req *dto.DeletePostsRequest,
-) *DeletePostsCommand {
-	return &DeletePostsCommand{
-		DeletePostsRequest: req,
-	}
-}
-
-func NewDeletePostsCommandWithValidation(
 	req any,
 ) (*DeletePostsCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.DeletePostsRequest{}, nil)
+	typedReq, err := dtoUtil.ValidateStruct(req, dto.DeletePostsRequest{})
 	if err != nil {
-		return nil, err
+		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewDeletePostsCommand")
 	}
 
-	return NewDeletePostsCommand(typedReq), nil
+	return &DeletePostsCommand{
+		DeletePostsRequest: typedReq,
+	}, nil
 }

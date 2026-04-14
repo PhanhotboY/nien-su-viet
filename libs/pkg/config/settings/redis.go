@@ -6,6 +6,6 @@ type RedisOptions struct {
 	Username      string `mapstructure:"username"`
 	Password      string `mapstructure:"password"`
 	Database      int    `mapstructure:"database"`
-	PoolSize      int    `mapstructure:"pool.size"`
-	EnableTracing bool   `mapstructure:"enable.tracing" default:"true"`
+	PoolSize      int    `mapstructure:"pool_size"`
+	EnableTracing bool   `mapstructure:"enable_tracing" default:"true"`
 }

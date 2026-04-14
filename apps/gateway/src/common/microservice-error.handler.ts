@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { HttpException, Logger } from '@nestjs/common';
+import { mapGrpcCodeToHttpStatusCode } from '@gateway/helpers/grpc.helper';
+import {
+  cleanupErrorMessage,
+  mapErrorMessageToStatusCode,
+  mapErrorNameToStatusCode,
+} from '@gateway/helpers/error.helper';
 
 /**
  * Shared error handling utility for Gateway services
@@ -40,211 +46,60 @@ export class MicroserviceErrorHandler {
       return error.statusCode;
     }
 
-    // Priority 2: Legacy status property
+    // Priority 2: Go gRPC status code mapping
+    if (error.code && typeof error.code === 'number') {
+      return mapGrpcCodeToHttpStatusCode(error.code);
+    }
+
+    // Priority 3: Legacy status property
     if (error.status && typeof error.status === 'number') {
       return error.status;
     }
 
-    // Priority 3: Check error name for NestJS exception types
+    // Priority 4: Check error name for NestJS exception types
     if (error.name) {
-      switch (error.name) {
-        case 'ConflictException':
-        case 'RpcException.ConflictException':
-          return HttpStatus.CONFLICT; // 409
-        case 'NotFoundException':
-        case 'RpcException.NotFoundException':
-          return HttpStatus.NOT_FOUND; // 404
-        case 'BadRequestException':
-        case 'RpcException.BadRequestException':
-          return HttpStatus.BAD_REQUEST; // 400
-        case 'UnauthorizedException':
-        case 'RpcException.UnauthorizedException':
-          return HttpStatus.UNAUTHORIZED; // 401
-        case 'ForbiddenException':
-        case 'RpcException.ForbiddenException':
-          return HttpStatus.FORBIDDEN; // 403
-        case 'UnprocessableEntityException':
-        case 'RpcException.UnprocessableEntityException':
-          return HttpStatus.UNPROCESSABLE_ENTITY; // 422
-      }
+      return mapErrorNameToStatusCode(error.name);
     }
 
-    // Priority 4: Parse error message for common patterns
-    const errorMessage = (error.message || '').toLowerCase();
-
-    if (
-      errorMessage.includes('already exists') ||
-      errorMessage.includes('duplicate') ||
-      errorMessage.includes('unique constraint') ||
-      errorMessage.includes('UQ_')
-    ) {
-      return HttpStatus.CONFLICT; // 409
-    }
-
-    if (
-      errorMessage.includes('not found') ||
-      errorMessage.includes('does not exist')
-    ) {
-      return HttpStatus.NOT_FOUND; // 404
-    }
-
-    if (
-      errorMessage.includes('validation') ||
-      errorMessage.includes('invalid') ||
-      errorMessage.includes('required') ||
-      errorMessage.includes('must be') ||
-      errorMessage.includes('should not be empty')
-    ) {
-      return HttpStatus.BAD_REQUEST; // 400
-    }
-
-    if (
-      errorMessage.includes('timeout') ||
-      errorMessage.includes('connection') ||
-      errorMessage.includes('ETIMEDOUT')
-    ) {
-      return HttpStatus.REQUEST_TIMEOUT; // 408
-    }
-
-    if (
-      errorMessage.includes('unauthorized') ||
-      errorMessage.includes('access denied')
-    ) {
-      return HttpStatus.UNAUTHORIZED; // 401
-    }
-
-    if (errorMessage.includes('forbidden')) {
-      return HttpStatus.FORBIDDEN; // 403
-    }
-
-    if (
-      errorMessage.includes('insufficient') ||
-      errorMessage.includes('not enough')
-    ) {
-      return HttpStatus.UNPROCESSABLE_ENTITY; // 422
-    }
-
-    // Default to BAD_GATEWAY for microservice communication issues
-    return HttpStatus.BAD_GATEWAY; // 502
+    // Priority 5: Parse error message for common patterns
+    const errorMessage = this.extractErrorMessage(error).toLowerCase();
+    return mapErrorMessageToStatusCode(errorMessage);
   }
 
   /**
    * Extract meaningful error message from RpcException or error object
    */
   private static extractErrorMessage(error: any, operation?: string): string {
-    // Priority 1: Direct message from RpcException
-    if (error.message && typeof error.message === 'string') {
-      return this.cleanupErrorMessage(error.message);
+    // Priority 1: Go gRPC status.Error
+    if (error.details && typeof error.details === 'string') {
+      return cleanupErrorMessage(error.details);
     }
 
-    // Priority 2: Message array (for validation errors)
+    // Priority 2: Direct message from RpcException
+    if (error.message && typeof error.message === 'string') {
+      return cleanupErrorMessage(error.message);
+    }
+
+    // Priority 3: Message array (for validation errors)
     if (Array.isArray(error.message)) {
       return error.message.join(', ');
     }
 
-    // Priority 3: Error details from nested response
+    // Priority 4: Error details from nested response
     if (error.response && error.response.message) {
       if (Array.isArray(error.response.message)) {
         return error.response.message.join(', ');
       }
-      return this.cleanupErrorMessage(error.response.message);
+      return cleanupErrorMessage(error.response.message);
     }
 
-    // Priority 4: Error property
+    // Priority 5: Error property
     if (error.error && typeof error.error === 'string') {
       return error.error;
     }
 
-    // Priority 5: Default operation-specific message
+    // Priority 6: Default operation-specific message
     return 'Operation failed';
-  }
-
-  /**
-   * Clean up technical error messages to be user-friendly
-   */
-  private static cleanupErrorMessage(message: string): string {
-    // Handle TypeORM constraint errors
-    if (message.includes('unique constraint')) {
-      if (
-        message.includes('sku') ||
-        message.includes('UQ_5ec10f972b1fa4f1e60d66d28bc')
-      ) {
-        return 'Record with this SKU already exists';
-      }
-      if (message.includes('email')) {
-        return 'User with this email already exists';
-      }
-      if (message.includes('username')) {
-        return 'User with this username already exists';
-      }
-      if (message.includes('name')) {
-        return 'Record with this name already exists';
-      }
-      if (message.includes('phone')) {
-        return 'User with this phone number already exists';
-      }
-      if (message.includes('order_number')) {
-        return 'Order with this number already exists';
-      }
-      if (message.includes('transaction_id')) {
-        return 'Transaction with this ID already exists';
-      }
-      return 'Duplicate entry found';
-    }
-
-    // Handle common database errors
-    if (message.includes('QueryFailedError')) {
-      return 'Database operation failed';
-    }
-
-    if (message.includes('duplicate key value violates')) {
-      return 'Duplicate entry found';
-    }
-
-    // Handle validation errors
-    if (message.includes('should not be empty')) {
-      return message.replace(/\b\w+\b should not be empty/g, (match) => {
-        const field = match.split(' ')[0];
-        return `${field} is required`;
-      });
-    }
-
-    // Handle insufficient stock/points errors
-    if (message.includes('insufficient stock')) {
-      return 'Insufficient stock available';
-    }
-
-    if (message.includes('insufficient points')) {
-      return 'Insufficient points available';
-    }
-
-    if (message.includes('not enough stock')) {
-      return 'Not enough stock available';
-    }
-
-    if (message.includes('not enough points')) {
-      return 'Not enough points available';
-    }
-
-    // Remove technical prefixes
-    message = message.replace(
-      /^(Error: |QueryFailedError: |ValidationError: )/i,
-      '',
-    );
-
-    // Remove ip addresses
-    message = message.replaceAll(
-      /^((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]):([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/gm,
-      '',
-    );
-
-    // Remove url
-    message = message.replaceAll(
-      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*)/gm,
-      '',
-    );
-
-    return message;
   }
 
   /**

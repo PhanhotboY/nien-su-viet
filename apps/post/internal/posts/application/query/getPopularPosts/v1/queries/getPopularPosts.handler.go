@@ -7,6 +7,7 @@ import (
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPopularPosts/v1/dto"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/entity"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/repository"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/utils"
@@ -52,12 +53,12 @@ func (c GetPopularPostsHandler) Handle(
 		posts, err := c.postRepo.GetPosts(ctx, query.MapToQuery())
 		if err != nil {
 			c.log.Errorf("failed to get popular posts: %v", err)
-			return nil, err
+			return nil, grpcerrors.ParseError(err)
 		}
 		total, err := c.postRepo.CountPosts(ctx, query.MapToQuery())
 		if err != nil {
 			c.log.Errorf("failed to count popular posts: %v", err)
-			return nil, err
+			return nil, grpcerrors.ParseError(err)
 		}
 
 		cached = &utils.PaginatedResponse[entity.PostBrief]{

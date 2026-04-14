@@ -21,7 +21,7 @@ import (
 	rmqConsumer "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/messaging/rmq/consumer"
 
 	// rmqProvider	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/messaging/rmq"
-	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/metrics"
+
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/persistence"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/transport/grpc"
 )
@@ -29,8 +29,6 @@ import (
 var Module = fx.Module(
 	"postsModule",
 
-	// Infrastructure
-	fx.Supply(&metrics.PostsMetrics{}),
 	// Provide models for DB migration
 	fx.Provide(fx.Annotate(
 		func() any {
@@ -40,6 +38,8 @@ var Module = fx.Module(
 	)),
 
 	fx.Provide(
+		configPostsMetrics,
+
 		// Outbound Infrastructure
 		persistence.NewPostRepository,
 		cache.NewPostCacheRepository,

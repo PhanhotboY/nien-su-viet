@@ -32,6 +32,6 @@ type PostRepository interface {
 	CountPosts(ctx context.Context, query PostQuery) (uint32, error)
 
 	CreatePost(ctx context.Context, post *entity.Post) (string, error)
-	UpdatePost(ctx context.Context, postId string, post *entity.Post) (string, error)
+	UpdatePost(ctx context.Context, postId string, updates map[string]interface{}) (string, error)
 	DeletePost(ctx context.Context, postId string) (string, error)
 }

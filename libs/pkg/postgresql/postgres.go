@@ -36,16 +36,6 @@ func NewDb(s settings.Config, logger logger.Logger, params DBParams) (*gorm.DB, 
 	cfg := s.Postgresql
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", cfg.Host, cfg.Username, cfg.Password, cfg.Database, cfg.Port)
 
-	// newLogger := logger.New(
-	// 	log.New(os.Stdout, "\r\n", log.LstdFlags),
-	// 	logger.Config{
-	// 		SlowThreshold:             time.Second,
-	// 		LogLevel:                  logger.Info,
-	// 		IgnoreRecordNotFoundError: true,
-	// 		Colorful:                  true,
-	// 	},
-	// )
-
 	pg, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  dsn,
 		PreferSimpleProtocol: true,
@@ -55,7 +45,7 @@ func NewDb(s settings.Config, logger logger.Logger, params DBParams) (*gorm.DB, 
 		},
 		Logger: gormLogger.New(logger, gormLogger.Config{
 			SlowThreshold:             time.Second,
-			LogLevel:                  gormLogger.Info,
+			LogLevel:                  gormLogger.LogLevel(cfg.LogLevel),
 			IgnoreRecordNotFoundError: true,
 			Colorful:                  true,
 		}),
