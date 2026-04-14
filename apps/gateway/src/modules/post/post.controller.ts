@@ -22,7 +22,6 @@ import {
 import {
   RedisService,
   type RedisServiceType,
-  ConfigService,
   Serialize,
 } from '@phanhotboy/nsv-common';
 import { RATE_LIMIT } from '@gateway/config';
@@ -33,8 +32,6 @@ import {
   ApiOkSerializedPaginatedResponse,
   ApiOkSerializedResponse,
 } from '@phanhotboy/nsv-common/decorators';
-import { ClientRMQ } from '@nestjs/microservices';
-import { RMQ } from '@phanhotboy/constants';
 
 @Controller('posts')
 export class PostController {
@@ -43,14 +40,13 @@ export class PostController {
   constructor(
     private readonly postService: PostService,
     @Inject(RedisService) private readonly redis: RedisServiceType,
-    private readonly config: ConfigService,
   ) {}
 
   @Get()
   @Public()
   @Serialize(PostBriefResponseDto)
   @ApiOkSerializedPaginatedResponse(PostBriefResponseDto)
-  async getPublishedPosts(@Query() query: any) {
+  async getPublishedPosts(@Query() query: PostQueryDto) {
     const res = await this.postService.getPublishedPosts(query);
     return res;
   }
