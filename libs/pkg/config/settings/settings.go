@@ -40,7 +40,6 @@ func LoadConfig() Config {
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
 	BindEnvs(v, Config{}, "")
-	log.Printf("loading configuration from file: %s\n", v.AllKeys())
 
 	if err := v.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
