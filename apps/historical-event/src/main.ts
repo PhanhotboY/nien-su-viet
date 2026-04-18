@@ -11,13 +11,16 @@ async function bootstrap() {
 
   const rmqService = app.get(RmqService);
   app.connectMicroservice(rmqService.getOptions('historical_event_queue'));
-  app.connectMicroservice<TcpOptions>({
-    transport: Transport.TCP,
-    options: {
-      host: '0.0.0.0',
-      port: tcpPort,
+  app.connectMicroservice<TcpOptions>(
+    {
+      transport: Transport.TCP,
+      options: {
+        host: '0.0.0.0',
+        port: tcpPort,
+      },
     },
-  });
+    { inheritAppConfig: true },
+  );
 
   app.enableShutdownHooks();
   await app.startAllMicroservices();

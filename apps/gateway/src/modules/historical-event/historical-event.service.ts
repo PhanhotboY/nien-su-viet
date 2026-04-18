@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom, timeout, catchError, throwError } from 'rxjs';
 
@@ -18,14 +18,18 @@ import { PaginatedResponseDto } from '@phanhotboy/nsv-common';
 @Injectable()
 export class HistoricalEventService {
   private readonly serviceName = 'Historical Event Service';
+  private readonly microserviceErrorHandler: MicroserviceErrorHandler;
 
   constructor(
     @Inject(TCP_SERVICE.HISTORICAL_EVENT.NAME)
     private readonly heventClient: ClientProxy,
-  ) {}
+    private readonly logger: Logger,
+  ) {
+    this.microserviceErrorHandler = new MicroserviceErrorHandler(logger);
+  }
 
   async createEvent(authorId: string, payload: HistoricalEventBaseCreateDto) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.heventClient
@@ -46,7 +50,7 @@ export class HistoricalEventService {
   async getEvents(
     query: HistoricalEventQueryDto,
   ): Promise<PaginatedResponseDto<HistoricalEventBriefResponseDto>> {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.heventClient
@@ -62,7 +66,7 @@ export class HistoricalEventService {
   }
 
   async getEventById(id: string): Promise<HistoricalEventDetailResponseDto> {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.heventClient
@@ -80,7 +84,7 @@ export class HistoricalEventService {
   async getEventPreviewById(
     id: string,
   ): Promise<HistoricalEventPreviewResponseDto> {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.heventClient
@@ -98,7 +102,7 @@ export class HistoricalEventService {
   }
 
   async updateEvent(id: string, payload: HistoricalEventBaseUpdateDto) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.heventClient
@@ -117,7 +121,7 @@ export class HistoricalEventService {
   }
 
   async deleteEvent(id: string, authorId: string) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.heventClient

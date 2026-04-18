@@ -5,6 +5,7 @@ import {
   Controller,
   Get,
   Inject,
+  Logger,
   Param,
   Post,
   Req,
@@ -16,17 +17,20 @@ import { RATE_LIMIT } from '@gateway/config';
 import { Public } from '@gateway/common/decorators';
 import { UserBriefResponseDto } from './dto';
 import { HttpProxyService } from '@gateway/common/services/http-proxy.service';
-import { HttpService } from '@nestjs/axios';
 
 @Controller('auth')
 @Public() // Let Better Auth handle auth internally
 export class AuthController {
-  constructor(private readonly proxyService: HttpProxyService) {}
+  constructor(
+    private readonly proxyService: HttpProxyService,
+    private readonly logger: Logger,
+  ) {}
 
   @Get('users/:id')
   @Serialize(UserBriefResponseDto)
   @Throttle(RATE_LIMIT.INTERNAL)
   async getUserInfo(@Param('id') userId: string, @Req() req: Request) {
+    this.logger.debug(`Fetching info for user: ${userId}`);
     return await this.proxyService.makeRequest(req);
   }
 

@@ -3,13 +3,16 @@ import { CacheModule } from '@nestjs/cache-manager';
 
 import * as providers from './providers';
 import { ConfigModule } from '@nestjs/config';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import {
   ConfigurableModuleClass,
   MODULE_OPTIONS_TOKEN,
   OPTIONS_TYPE,
 } from './common.module-definition';
 import { createKeyv, RedisClientOptions } from '@keyv/redis';
+import { LoggerModule } from './logger';
+import { MetricsModule } from './metrics/metrics.module';
+import { MeterInterceptor } from './interceptors/meter.interceptor';
 
 const { ...prvds } = providers;
 const services = Object.values(prvds);
@@ -22,6 +25,7 @@ export class CommonModule extends ConfigurableModuleClass {
       ...super.forRoot(options),
       module: CommonModule,
       imports: [
+        LoggerModule,
         ConfigModule.forRoot({
           load: [options.configuration],
           cache: true,
@@ -39,6 +43,7 @@ export class CommonModule extends ConfigurableModuleClass {
           isGlobal: true,
           inject: [providers.ConfigService],
         }),
+        MetricsModule,
       ],
       providers: [
         { provide: MODULE_OPTIONS_TOKEN, useValue: options },
@@ -52,8 +57,12 @@ export class CommonModule extends ConfigurableModuleClass {
             forbidNonWhitelisted: true,
           }),
         },
+        {
+          provide: APP_INTERCEPTOR,
+          useClass: MeterInterceptor,
+        },
       ],
-      exports: [...services, ConfigModule],
+      exports: [...services, ConfigModule, LoggerModule, MetricsModule],
     };
   }
 }

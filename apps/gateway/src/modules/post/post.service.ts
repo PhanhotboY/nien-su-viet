@@ -1,12 +1,10 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import type { ClientGrpc } from '@nestjs/microservices';
 import { plainToInstance } from 'class-transformer';
 import { firstValueFrom, timeout, catchError, throwError } from 'rxjs';
 
 import {
   PostQueryDto,
-  PostBriefResponseDto,
-  PostDetailResponseDto,
   PostBaseCreateDto,
   PostBaseUpdateDto,
   PostBaseCreateGrpcDto,
@@ -24,11 +22,15 @@ import {
 export class PostService implements OnModuleInit {
   private readonly serviceName = 'Post Service';
   private postService: PostsServiceClient;
+  private microserviceErrorHandler: MicroserviceErrorHandler;
 
   constructor(
     @Inject(GRPC_SERVICE.POST.NAME)
     private readonly postClient: ClientGrpc,
-  ) {}
+    private readonly logger: Logger,
+  ) {
+    this.microserviceErrorHandler = new MicroserviceErrorHandler(this.logger);
+  }
 
   onModuleInit() {
     this.postService =
@@ -36,7 +38,7 @@ export class PostService implements OnModuleInit {
   }
 
   async createPost(authorId: string, payload: PostBaseCreateDto) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.postService
@@ -55,7 +57,7 @@ export class PostService implements OnModuleInit {
   }
 
   async getAllPosts(query: PostQueryDto) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.postService
@@ -71,7 +73,7 @@ export class PostService implements OnModuleInit {
   }
 
   async getPublishedPosts(query: PostQueryDto) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.postService
@@ -87,7 +89,7 @@ export class PostService implements OnModuleInit {
   }
 
   async findPostByIdOrSlug(id: string) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.postService.getPost({ id }).pipe(
@@ -101,7 +103,7 @@ export class PostService implements OnModuleInit {
   }
 
   async updatePost(id: string, payload: PostBaseUpdateDto) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.postService
@@ -120,7 +122,7 @@ export class PostService implements OnModuleInit {
   }
 
   async deletePost(id: string, authorId: string) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.postService
@@ -139,7 +141,7 @@ export class PostService implements OnModuleInit {
   }
 
   async publishPost(id: string) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.postService.publishPost({ id }).pipe(
@@ -153,7 +155,7 @@ export class PostService implements OnModuleInit {
   }
 
   async unpublishPost(id: string) {
-    return MicroserviceErrorHandler.handleAsyncCall(
+    return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.postService.unpublishPost({ id }).pipe(
