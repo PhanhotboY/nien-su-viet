@@ -6,6 +6,8 @@ export * from './providers';
 export * from './common.module';
 export * from './rmq';
 export * from './util';
+export * from './logger';
+export * from './metrics';
 
 declare global {
   type Values<T> = T[keyof T];

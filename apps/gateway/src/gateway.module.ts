@@ -1,10 +1,9 @@
-import { LoggerModule } from 'nestjs-pino';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ClassSerializerInterceptor, Module, Scope } from '@nestjs/common';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
-import { configuration, loggerOptions, RATE_LIMIT } from './config';
+import { configuration, RATE_LIMIT } from './config';
 import { AuthModule } from './modules/auth/auth.module';
 import { HistoricalEventModule } from './modules/historical-event/historical-event.module';
 import { PostModule } from './modules/post/post.module';
@@ -13,10 +12,10 @@ import { SerializeResponseInterceptor } from './common/interceptors';
 import { CatchEverythingFilter, HttpExceptionsFilter } from './common/filters';
 import { BetterAuthGuard, RolesGuard } from './common/guards';
 import { MicroserviceExceptionFilter } from '@phanhotboy/nsv-common/filters/rpc-exception.filter';
+import { GatewayMetrics } from './common/contracts';
 
 @Module({
   imports: [
-    LoggerModule.forRoot(loggerOptions),
     CommonModule.forRoot({
       cachePrefix: 'gateway',
       configuration,

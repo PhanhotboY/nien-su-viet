@@ -14,13 +14,10 @@ import { catchError, map, tap } from 'rxjs/operators';
 @Injectable()
 export class SerializeResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    console.log('Before...');
     const res = context.switchToHttp().getResponse();
 
-    const now = Date.now();
     return next
       .handle()
-      .pipe(tap(() => console.log(`After... ${Date.now() - now}ms`)))
       .pipe(
         map((data) => {
           function commonizedResponse(
@@ -49,7 +46,6 @@ export class SerializeResponseInterceptor implements NestInterceptor {
       )
       .pipe(
         catchError((err) => {
-          console.log(`After... ${Date.now() - now}ms`);
           console.log('Error occurred: ', err);
           let errMessage = '';
 

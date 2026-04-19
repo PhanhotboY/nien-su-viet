@@ -21,10 +21,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   try {
-    const [{ data: posts }, { data: events }] = await Promise.all([
-      getPublicPosts(),
-      getEvents({ page: '1', limit: '100' }),
-    ]);
+    // const [{ data: posts }, { data: events }] = await Promise.all([
+    //   getPublicPosts(),
+    //   getEvents({ page: '1', limit: '100' }),
+    // ]);
+    const { data: posts } = await getPublicPosts();
     const postRoutes = locales.map(
       (locale) =>
         posts?.map((post) =>
@@ -38,20 +39,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ) || [],
     );
 
-    const eventRoutes = locales.map(
-      (locale) =>
-        events?.map((event) =>
-          genSitemap({
-            path: `/su-kien/${event.id}`,
-            locale,
-            lastModified: new Date(),
-            changeFrequency: 'monthly' as const,
-            priority: 0.6,
-          }),
-        ) || [],
-    );
+    // const eventRoutes = locales.map(
+    //   (locale) =>
+    //     events?.map((event) =>
+    //       genSitemap({
+    //         path: `/su-kien/${event.id}`,
+    //         locale,
+    //         lastModified: new Date(),
+    //         changeFrequency: 'monthly' as const,
+    //         priority: 0.6,
+    //       }),
+    //     ) || [],
+    // );
 
-    return [...defaultRoutes, ...postRoutes, ...eventRoutes].flat();
+    return [...defaultRoutes, ...postRoutes].flat();
   } catch (e) {
     return defaultRoutes.flat();
   }

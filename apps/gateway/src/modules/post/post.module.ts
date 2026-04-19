@@ -6,6 +6,7 @@ import { GRPC_SERVICE } from '@phanhotboy/constants';
 import { POST_SERVICE_PACKAGE_NAME } from '@phanhotboy/genproto/post_service/posts';
 import { ConfigService } from '@phanhotboy/nsv-common';
 import { Config } from '@gateway/config';
+import { GatewayMetrics } from '@gateway/common/contracts';
 
 @Module({
   imports: [
@@ -34,7 +35,7 @@ import { Config } from '@gateway/config';
     ]),
   ],
   controllers: [PostController],
-  providers: [PostService],
+  providers: [PostService, GatewayMetrics],
   exports: [ClientsModule],
 })
 export class PostModule {}

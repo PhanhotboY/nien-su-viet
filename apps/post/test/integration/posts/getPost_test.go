@@ -20,7 +20,7 @@ import (
 	updatePostCmd "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/updatePost/v1/commands"
 	updatePostDto "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/updatePost/v1/dto"
 
-	testhelper "github.com/phanhotboy/nien-su-viet/apps/post/test/shared/helper"
+	testhelper "github.com/phanhotboy/nien-su-viet/apps/post/test/integration/shared/helper"
 )
 
 func TestGetPost(t *testing.T) {

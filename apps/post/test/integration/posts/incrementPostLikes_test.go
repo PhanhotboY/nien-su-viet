@@ -19,7 +19,7 @@ import (
 	getPostDto "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPost/v1/dto"
 	getPostQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPost/v1/queries"
 
-	testhelper "github.com/phanhotboy/nien-su-viet/apps/post/test/shared/helper"
+	testhelper "github.com/phanhotboy/nien-su-viet/apps/post/test/integration/shared/helper"
 )
 
 func TestIncrementPostLikes(t *testing.T) {

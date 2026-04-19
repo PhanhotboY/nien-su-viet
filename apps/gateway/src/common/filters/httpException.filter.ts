@@ -3,15 +3,15 @@ import {
   Catch,
   HttpException,
   HttpStatus,
-  Logger,
   ExceptionFilter,
+  Logger,
 } from '@nestjs/common';
 import { JsonWebTokenError } from '@nestjs/jwt';
 import { Response } from 'express';
 
 @Catch(HttpException)
 export class HttpExceptionsFilter implements ExceptionFilter {
-  private readonly logger: Logger = new Logger();
+  constructor(private readonly logger: Logger) {}
 
   public catch(exception: HttpException, host: ArgumentsHost) {
     const req = host.switchToHttp().getRequest<Request>();

@@ -2,6 +2,8 @@ package otel
 
 import (
 	"context"
+	"math"
+	"strconv"
 	"strings"
 	"time"
 
@@ -45,16 +47,18 @@ type gRPCContext struct {
 }
 
 type handler struct {
-	tracer             trace.Tracer
-	meter              metric.Meter
-	propagator         propagation.TextMapPropagator
-	rpcDuration        metric.Int64Histogram
-	rpcRequestSize     metric.Int64Histogram
-	rpcResponseSize    metric.Int64Histogram
-	rpcRequestsPerRPC  metric.Int64Histogram
-	rpcResponsesPerRPC metric.Int64Histogram
-	rpcTotalFailed     metric.Int64Counter
-	rpcTotalSuccess    metric.Int64Counter
+	tracer     trace.Tracer
+	meter      metric.Meter
+	propagator propagation.TextMapPropagator
+	// rpcDuration        metric.Int64Histogram
+	// rpcRequestSize     metric.Int64Histogram
+	// rpcResponseSize    metric.Int64Histogram
+	// rpcRequestsPerRPC  metric.Int64Histogram
+	// rpcResponsesPerRPC metric.Int64Histogram
+	// rpcTotalFailed     metric.Int64Counter
+	// rpcTotalSuccess    metric.Int64Counter
+	requestsTotal      metric.Int64Counter
+	requestsDurationMs metric.Float64Histogram
 	spanKind           trace.SpanKind
 	config             config
 }
@@ -68,92 +72,32 @@ func newHandler(spanKind trace.SpanKind, options []Option) (handler, error) {
 
 	meter := c.metricsProvider.Meter(c.instrumentationName)
 
-	prefix := "rpc.server"
-	if spanKind == trace.SpanKindClient {
-		prefix = "rpc.client"
-	}
-
-	// https://opentelemetry.io/docs/specs/otel/metrics/semantic_conventions/rpc-metrics/#rpc-server
-	rpcServerDuration, err := meter.Int64Histogram(prefix+".duration",
-		metric.WithDescription("Measures the duration of inbound RPC."),
-		metric.WithUnit("ms"))
-	if err != nil {
-		otel.Handle(err)
-	}
-
-	rpcRequestSize, err := meter.Int64Histogram(
-		prefix+".request.size",
-		metric.WithDescription(
-			"Measures size of RPC request messages (uncompressed).",
-		),
-		metric.WithUnit("bytes"),
+	requestsTotal, err := meter.Int64Counter(
+		"requests_total",
 	)
 	if err != nil {
 		return handler{}, err
 	}
 
-	rpcResponseSize, err := meter.Int64Histogram(
-		prefix+".response.size",
-		metric.WithDescription(
-			"Measures size of RPC response messages (uncompressed)",
-		),
-		metric.WithUnit("bytes"),
+	requestsDurationMs, err := meter.Float64Histogram(
+		"request_duration_ms",
+		metric.WithUnit("ms"),
 	)
-	if err != nil {
-		return handler{}, err
-	}
-
-	rpcRequestsPerRPC, err := meter.Int64Histogram(
-		prefix+".requests_per_rpc",
-		metric.WithDescription(
-			"Measures the number of messages received per RPC. Should be 1 for all non-streaming RPCs",
-		),
-		metric.WithUnit("count"),
-	)
-	if err != nil {
-		return handler{}, err
-	}
-
-	rpcResponsesPerRPC, err := meter.Int64Histogram(
-		prefix+".responses_per_rpc",
-		metric.WithDescription(
-			"Measures the number of messages sent per RPC. Should be 1 for all non-streaming RPCs",
-		),
-		metric.WithUnit("count"))
-	if err != nil {
-		return handler{}, err
-	}
-
-	rpcTotalFailed, err := meter.Int64Counter(
-		prefix+".rpc_error_total",
-		metric.WithDescription("The total number of error grpc requests"),
-		metric.WithUnit("count"),
-	)
-	if err != nil {
-		return handler{}, err
-	}
-
-	rpcTotalSuccess, err := meter.Int64Counter(
-		prefix+".rpc_success_total",
-		metric.WithDescription("The total number of success grpc requests"),
-		metric.WithUnit("count"),
-	)
-	if err != nil {
-		return handler{}, err
-	}
 
 	h := handler{
 		tracer:             c.tracerProvider.Tracer(c.instrumentationName),
 		meter:              meter,
 		spanKind:           spanKind,
 		config:             c,
-		rpcDuration:        rpcServerDuration,
-		rpcRequestSize:     rpcRequestSize,
-		rpcResponseSize:    rpcResponseSize,
-		rpcRequestsPerRPC:  rpcRequestsPerRPC,
-		rpcResponsesPerRPC: rpcResponsesPerRPC,
-		rpcTotalFailed:     rpcTotalFailed,
-		rpcTotalSuccess:    rpcTotalSuccess,
+		requestsTotal:      requestsTotal,
+		requestsDurationMs: requestsDurationMs,
+		// rpcDuration:        rpcServerDuration,
+		// rpcRequestSize:     rpcRequestSize,
+		// rpcResponseSize:    rpcResponseSize,
+		// rpcRequestsPerRPC:  rpcRequestsPerRPC,
+		// rpcResponsesPerRPC: rpcResponsesPerRPC,
+		// rpcTotalFailed:     rpcTotalFailed,
+		// rpcTotalSuccess:    rpcTotalSuccess,
 	}
 
 	return h, nil
@@ -188,52 +132,37 @@ func (h *handler) handleRPC(ctx context.Context, rs stats.RPCStats) {
 
 	switch rs := rs.(type) {
 	case *stats.Begin:
-	case *stats.InPayload:
-		if gctx != nil {
-			// https://github.com/open-telemetry/opentelemetry-go/blob/main/example/prometheus/main.go#L52
-			opt := metric.WithAttributes(gctx.attributes...)
-			h.rpcRequestSize.Record(ctx, int64(rs.Length), opt)
-		}
+	// case *stats.InPayload:
+	// 	if gctx != nil {
+	// 		// https://github.com/open-telemetry/opentelemetry-go/blob/main/example/prometheus/main.go#L52
+	// 		opt := metric.WithAttributes(gctx.attributes...)
+	// 		h.rpcRequestSize.Record(ctx, int64(rs.Length), opt)
+	// 	}
 
-	case *stats.OutPayload:
-		if gctx != nil {
-			// https://github.com/open-telemetry/opentelemetry-go/blob/main/example/prometheus/main.go#L52
-			opt := metric.WithAttributes(gctx.attributes...)
-			h.rpcResponseSize.Record(ctx, int64(rs.Length), opt)
-		}
+	// case *stats.OutPayload:
+	// 	if gctx != nil {
+	// 		// https://github.com/open-telemetry/opentelemetry-go/blob/main/example/prometheus/main.go#L52
+	// 		opt := metric.WithAttributes(gctx.attributes...)
+	// 		h.rpcResponseSize.Record(ctx, int64(rs.Length), opt)
+	// 	}
 	case *stats.End:
 		if rs.Error != nil {
 			s, _ := status.FromError(rs.Error)
 			gctx.attributes = append(gctx.attributes, statusCodeAttr(s.Code()))
-			opt := metric.WithAttributes(gctx.attributes...)
-
-			h.rpcTotalFailed.Add(ctx, 1, opt)
 		} else {
 			gctx.attributes = append(gctx.attributes, statusCodeAttr(codes.OK))
-			opt := metric.WithAttributes(gctx.attributes...)
 
-			h.rpcTotalSuccess.Add(ctx, 1, opt)
 		}
+		opt := metric.WithAttributes(gctx.attributes...)
+		h.requestsTotal.Add(ctx, 1, opt)
 
 		if gctx != nil {
-			duration := time.Since(gctx.startTime).Milliseconds()
+			duration := time.Since(gctx.startTime).Microseconds()
 			opt := metric.WithAttributes(gctx.attributes...)
 
-			h.rpcDuration.Record(
+			h.requestsDurationMs.Record(
 				ctx,
-				duration,
-				opt,
-			)
-
-			h.rpcRequestsPerRPC.Record(
-				ctx,
-				gctx.messagesReceived,
-				opt,
-			)
-
-			h.rpcResponsesPerRPC.Record(
-				ctx,
-				gctx.messagesSent,
+				float64(duration)/1000.0, // convert to ms
 				opt,
 			)
 		}
@@ -244,7 +173,7 @@ func (h *handler) handleRPC(ctx context.Context, rs stats.RPCStats) {
 }
 
 func statusCodeAttr(c codes.Code) attribute.KeyValue {
-	return semconv.RPCGRPCStatusCodeKey.Int(int(c))
+	return attribute.Key("status_class").String(strconv.Itoa(int(math.Floor(float64(mapGrpcCodeToHttpStatusCode(c))/100))) + "xx")
 }
 
 func NewServerHandler(options ...Option) stats.Handler {

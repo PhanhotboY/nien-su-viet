@@ -1,3 +1,5 @@
+file_format: yaml
+
 processors:
   resourcedetection:
     detectors: [env, system]
@@ -10,7 +12,9 @@ receivers:
   otlp:
     protocols:
       grpc:
+        endpoint: 0.0.0.0:4317
       http:
+        endpoint: 0.0.0.0:4318
   hostmetrics:
     scrapers:
       cpu:

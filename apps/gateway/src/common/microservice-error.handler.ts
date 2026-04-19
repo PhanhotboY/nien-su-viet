@@ -1,4 +1,5 @@
 import { HttpException, Logger } from '@nestjs/common';
+
 import { mapGrpcCodeToHttpStatusCode } from '@gateway/helpers/grpc.helper';
 import {
   cleanupErrorMessage,
@@ -11,13 +12,13 @@ import {
  * Properly handles RpcException from microservices and converts to HTTP exceptions
  */
 export class MicroserviceErrorHandler {
-  private static readonly logger = new Logger(MicroserviceErrorHandler.name);
+  constructor(private readonly logger: Logger) {}
 
   /**
    * Handle microservice errors and convert to appropriate HTTP exceptions
    * Properly handles RpcException from microservices
    */
-  static handleError(
+  handleError(
     error: any,
     operation: string,
     serviceName: string = 'Microservice',
@@ -40,7 +41,7 @@ export class MicroserviceErrorHandler {
   /**
    * Extract HTTP status code from RpcException or error object
    */
-  private static extractStatusCode(error: any): number {
+  extractStatusCode(error: any): number {
     // Priority 1: Direct statusCode from RpcException
     if (error.statusCode && typeof error.statusCode === 'number') {
       return error.statusCode;
@@ -69,7 +70,7 @@ export class MicroserviceErrorHandler {
   /**
    * Extract meaningful error message from RpcException or error object
    */
-  private static extractErrorMessage(error: any, operation?: string): string {
+  private extractErrorMessage(error: any, operation?: string): string {
     // Priority 1: Go gRPC status.Error
     if (error.details && typeof error.details === 'string') {
       return cleanupErrorMessage(error.details);
@@ -105,7 +106,7 @@ export class MicroserviceErrorHandler {
   /**
    * Async wrapper for handling microservice calls with error handling
    */
-  static async handleAsyncCall<T>(
+  async handleAsyncCall<T>(
     operation: () => Promise<T>,
     operationName: string,
     serviceName: string = 'Microservice',

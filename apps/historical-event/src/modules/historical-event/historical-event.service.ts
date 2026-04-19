@@ -19,6 +19,7 @@ import {
   HistoricalEventPreviewResponseDto,
 } from './dto';
 import { UserService } from '../user';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class HistoricalEventService {
@@ -136,6 +137,13 @@ export class HistoricalEventService {
   }
 
   async getEventById(id: string): Promise<HistoricalEventDetailResponseDto> {
+    if (isUUID(id, '4') === false) {
+      throw new RpcException({
+        message: 'ID không hợp lệ',
+        statusCode: 400,
+      });
+    }
+
     const options = {
       where: { id },
       include: {
