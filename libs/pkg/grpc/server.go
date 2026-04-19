@@ -62,7 +62,10 @@ func NewGrpcServer(
 		// https://github.com/open-telemetry/opentelemetry-go-contrib/blob/main/instrumentation/google.golang.org/grpc/otelgrpc/doc.go
 		// https://github.com/open-telemetry/opentelemetry-go-contrib/blob/main/instrumentation/google.golang.org/grpc/otelgrpc/example/server/main.go#L143C3-L143C50
 		googleGrpc.StatsHandler(otelgrpc.NewServerHandler()),
-		googleGrpc.StatsHandler(otel.NewServerHandler()),
+		googleGrpc.StatsHandler(otel.NewServerHandler(
+			otel.SetServiceName(cfg.Server.ServiceName),
+			otel.SetInstrumentationName(cfg.Metrics.InstrumentationName),
+		)),
 
 		googleGrpc.KeepaliveParams(keepalive.ServerParameters{
 			MaxConnectionIdle: maxConnectionIdle * time.Minute,
