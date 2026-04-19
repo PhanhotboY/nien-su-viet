@@ -50,10 +50,6 @@ export async function generateMetadata({
   }
 
   const event = response.data;
-  console.log(
-    'Event description for metadata:',
-    getExcerptStr(event.content, 160),
-  );
 
   return genMetadata({
     title:

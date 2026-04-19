@@ -51,7 +51,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
         userId: session?.user.id,
       };
       const response = await deletePost(myPostData.id);
-      console.log('Delete post response:', response);
+
       if (response.data?.success) {
         setIsDeleteLoading(false);
         toast.success(protectedPostConfig.successDelete);

@@ -13,7 +13,6 @@ interface PostEditorPageProps {
 async function getPostHandler(postId: string) {
   'use server';
   const res = await getPost(postId);
-  console.log('Post data : ', res.data.authorId);
 
   if (!res.data) {
     console.log('Error has occured while getting post data');
