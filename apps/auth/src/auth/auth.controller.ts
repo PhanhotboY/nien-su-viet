@@ -21,7 +21,7 @@ export class AuthController {
   }
 
   @All('*splat')
-  async andleAuthRequests(@Req() req: Request, @Res() res: Response) {
+  async handleAuthRequests(@Req() req: Request, @Res() res: Response) {
     const handler = toNodeHandler(this.authService.instance);
     await handler(req, res);
     return;
