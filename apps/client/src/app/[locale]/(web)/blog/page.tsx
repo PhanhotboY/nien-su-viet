@@ -7,6 +7,7 @@ import {
   EmptyState,
   FeaturedPost,
 } from '@/components/website/blog';
+import { PostsLayout } from '@/components/website/blog/posts-layout';
 import MainPostItem from '@/components/website/post/main-post-item';
 import MainPostItemLoading from '@/components/website/post/main-post-item-loading';
 import { genMetadata } from '@/lib/metadata.lib';
@@ -17,7 +18,6 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 interface BlogPageProps {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
   params: Promise<{ locale: string }>;
 }
 
@@ -35,43 +35,8 @@ export async function generateMetadata({
   });
 }
 
-export default async function HomePage({
-  searchParams,
-  params,
-}: BlogPageProps) {
-  const resolvedSearchParams = await searchParams;
-  const urlSearchParams = new URLSearchParams(
-    resolvedSearchParams as Record<string, string>,
-  );
+export default async function HomePage({ params }: BlogPageProps) {
   const { locale } = await params;
-
-  // Fetch posts
-  const { data, pagination } = await getPublicPosts({
-    page: urlSearchParams.get('page') || '1',
-    limit: urlSearchParams.get('limit') || '10',
-    ...(urlSearchParams.get('q')
-      ? { search: urlSearchParams.get('q') as string }
-      : {}),
-  });
-  const { data: recentPosts } = await getPublicPosts({
-    page: '1',
-    limit: '3',
-  });
-
-  if (!data) {
-    notFound();
-  }
-
-  const hasSearchQuery = !!resolvedSearchParams.q;
-  const hasNoPosts = data.length === 0;
-  const isFirstPage =
-    !resolvedSearchParams.page || resolvedSearchParams.page === '1';
-
-  // Featured post (show first post on first page if no search)
-  const featuredPost =
-    isFirstPage && !hasSearchQuery && data.length > 0 ? data[0] : null;
-  const regularPosts = featuredPost ? data.slice(1) : data;
-  urlSearchParams.delete('page'); // Remove page param for pagination links
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/50">
@@ -85,66 +50,7 @@ export default async function HomePage({
           <BlogSearch />
         </div>
 
-        {/* Featured Post - Only on first page without search */}
-        {featuredPost && (
-          <div className="mb-12">
-            <Suspense fallback={<MainPostItemLoading />}>
-              <FeaturedPost post={featuredPost} locale={locale} />
-            </Suspense>
-          </div>
-        )}
-
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-          {/* Main Content Area */}
-          <div className="lg:col-span-8">
-            {/* Stats and Filters */}
-            {!hasNoPosts && (
-              <div className="mb-8">
-                <BlogStats totalPosts={pagination.total} locale={locale} />
-              </div>
-            )}
-
-            {/* Posts Grid or Empty State */}
-            {hasNoPosts ? (
-              <EmptyState hasFilters={hasSearchQuery} locale={locale} />
-            ) : (
-              <>
-                <div className="space-y-8">
-                  {regularPosts?.map((post) => (
-                    <div
-                      key={post.id}
-                      className="transition-all duration-200 hover:scale-[1.01]"
-                    >
-                      <Suspense fallback={<MainPostItemLoading />}>
-                        <MainPostItem post={post} locale={locale} />
-                      </Suspense>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Pagination */}
-                {pagination.totalPages > 1 && (
-                  <div className="mt-12">
-                    <SharedPagination
-                      page={pagination.page}
-                      totalPages={pagination.totalPages}
-                      baseUrl={`/${locale}/blog${urlSearchParams?.toString() ? '?' + urlSearchParams?.toString() : ''}`}
-                      pageUrl={urlSearchParams?.size == 0 ? '&page=' : '?page='}
-                    />
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-4">
-            <div className="sticky top-4">
-              <BlogSidebar recentPosts={recentPosts} locale={locale} />
-            </div>
-          </div>
-        </div>
+        <PostsLayout />
       </div>
     </div>
   );

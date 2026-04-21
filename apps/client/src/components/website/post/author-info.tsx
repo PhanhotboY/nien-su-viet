@@ -1,7 +1,10 @@
+'use client';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn, getAvatarFallback } from '@/lib/utils';
 import { getUserById } from '@/services/user.service';
-import { getTranslations } from 'next-intl/server';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 
 interface AuthorInfoProps {
   authorId: string;
@@ -9,22 +12,36 @@ interface AuthorInfoProps {
   showAuthorLabel?: boolean;
 }
 
-export default async function AuthorInfo({
+export default function AuthorInfo({
   authorId,
   className,
   showAuthorLabel,
 }: AuthorInfoProps) {
-  const tshared = await getTranslations('Shared');
-  let { data: author } = await getUserById(authorId).catch((e) => {
-    console.error('Error fetching author:', e);
-    return { data: null };
+  const tshared = useTranslations('Shared');
+  const [author, setAuthor] = useState<
+    Awaited<ReturnType<typeof getUserById>>['data']
+  >({
+    id: '',
+    name: tshared('unknown-author'),
   });
-  if (!author) {
-    author = {
-      id: '',
-      name: tshared('unknown-author'),
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getUserById(authorId)
+      .then(({ data }) => {
+        if (isMounted && data) {
+          setAuthor(data);
+        }
+      })
+      .catch((e) => {
+        console.error('Error fetching author:', e);
+      });
+
+    return () => {
+      isMounted = false;
     };
-  }
+  }, [authorId, tshared]);
 
   return (
     <>
