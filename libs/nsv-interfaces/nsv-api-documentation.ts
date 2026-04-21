@@ -444,14 +444,14 @@ export interface components {
             name: string;
             /** @enum {string} */
             fromDateType: "EXACT" | "APPROXIMATE";
-            fromDay?: number | null;
-            fromMonth?: number | null;
+            fromDay?: number;
+            fromMonth?: number;
             fromYear: number;
             /** @enum {string} */
             toDateType: "EXACT" | "APPROXIMATE";
-            toDay?: number | null;
-            toMonth?: number | null;
-            toYear?: number | null;
+            toDay?: number;
+            toMonth?: number;
+            toYear?: number;
             /** Format: uri */
             thumbnail?: string;
         };
@@ -462,14 +462,14 @@ export interface components {
             name: string;
             /** @enum {string} */
             fromDateType: "EXACT" | "APPROXIMATE";
-            fromDay?: number | null;
-            fromMonth?: number | null;
+            fromDay?: number;
+            fromMonth?: number;
             fromYear: number;
             /** @enum {string} */
             toDateType: "EXACT" | "APPROXIMATE";
-            toDay?: number | null;
-            toMonth?: number | null;
-            toYear?: number | null;
+            toDay?: number;
+            toMonth?: number;
+            toYear?: number;
             /** Format: uri */
             thumbnail?: string;
             author: components["schemas"]["UserBriefResponseDto"];
@@ -482,14 +482,14 @@ export interface components {
             name: string;
             /** @enum {string} */
             fromDateType: "EXACT" | "APPROXIMATE";
-            fromDay?: number | null;
-            fromMonth?: number | null;
+            fromDay?: number;
+            fromMonth?: number;
             fromYear: number;
             /** @enum {string} */
             toDateType: "EXACT" | "APPROXIMATE";
-            toDay?: number | null;
-            toMonth?: number | null;
-            toYear?: number | null;
+            toDay?: number;
+            toMonth?: number;
+            toYear?: number;
             /** Format: uri */
             thumbnail?: string;
         };
@@ -511,14 +511,14 @@ export interface components {
             thumbnail?: string;
             /** @enum {string} */
             fromDateType: "EXACT" | "APPROXIMATE";
-            fromDay?: number | null;
-            fromMonth?: number | null;
+            fromDay?: number;
+            fromMonth?: number;
             fromYear: number;
             /** @enum {string} */
             toDateType: "EXACT" | "APPROXIMATE";
-            toDay?: number | null;
-            toMonth?: number | null;
-            toYear?: number | null;
+            toDay?: number;
+            toMonth?: number;
+            toYear?: number;
             content: string;
         };
         HistoricalEventBaseUpdateDto: {
@@ -527,14 +527,14 @@ export interface components {
             thumbnail?: string;
             /** @enum {string} */
             fromDateType?: "EXACT" | "APPROXIMATE";
-            fromDay?: number | null;
-            fromMonth?: number | null;
+            fromDay?: number;
+            fromMonth?: number;
             fromYear?: number;
             /** @enum {string} */
             toDateType?: "EXACT" | "APPROXIMATE";
-            toDay?: number | null;
-            toMonth?: number | null;
-            toYear?: number | null;
+            toDay?: number;
+            toMonth?: number;
+            toYear?: number;
             content?: string;
             /** Format: uuid */
             authorId?: string;
