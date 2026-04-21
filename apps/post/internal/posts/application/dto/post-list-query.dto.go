@@ -8,8 +8,8 @@ import (
 )
 
 type PostListQueryDto struct {
-	Page          uint32                 `json:"page" validate:"gte=1"`
-	Limit         uint32                 `json:"limit" validate:"gte=1,lte=100"`
+	Page          *uint32                `json:"page,omitempty" validate:"omitempty,gte=1"`
+	Limit         *uint32                `json:"limit,omitempty" validate:"omitempty,gte=1,lte=100"`
 	Published     *bool                  `json:"published,omitempty"`
 	Search        *string                `json:"search,omitempty" validate:"omitempty,max=255"`
 	SortBy        *string                `json:"sort_by,omitempty"`
@@ -59,12 +59,12 @@ func (g PostListQueryDto) MapToQuery() repository.PostQuery {
 		authorID = *g.AuthorID
 	}
 	var limit uint32 = 10
-	if g.Limit > 0 {
-		limit = g.Limit
+	if g.Limit != nil {
+		limit = *g.Limit
 	}
 	var offset uint32 = 10
-	if g.Page > 0 {
-		offset = limit * (g.Page - 1)
+	if g.Page != nil && *g.Page > 0 {
+		offset = limit * (*g.Page - 1)
 	}
 	return repository.PostQuery{
 		Published:     g.Published,
@@ -77,7 +77,7 @@ func (g PostListQueryDto) MapToQuery() repository.PostQuery {
 		UpdatedAtFrom: updatedAtFrom,
 		UpdatedAtTo:   updatedAtTo,
 		PostPagination: repository.PostPagination{
-			Limit:  g.Limit,
+			Limit:  limit,
 			Offset: offset,
 		},
 	}

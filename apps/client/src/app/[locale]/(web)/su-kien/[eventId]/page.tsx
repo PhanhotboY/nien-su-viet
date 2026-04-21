@@ -45,7 +45,7 @@ export async function generateMetadata({
 
   if (!response?.data) {
     return {
-      title: tshared('not-found'),
+      title: tevent('not-found'),
     };
   }
 

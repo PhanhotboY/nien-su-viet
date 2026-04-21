@@ -1,6 +1,6 @@
 export const TimestampUtil = {
   toTimestamp(date: Date | string | number) {
-    if (!date) return null;
+    if (!date) return undefined;
     if (typeof date === 'string' || typeof date === 'number') {
       date = new Date(date);
     }

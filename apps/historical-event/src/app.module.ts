@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
+import { configuration } from './config'; // Load configuration before importing CommonModule
 import { CommonModule } from '@phanhotboy/nsv-common';
-import { configuration } from './config';
 import { HistoricalEventModule } from './modules/historical-event/historical-event.module';
 import { PrismaModule } from './database';
 import { UserModule } from './modules/user';

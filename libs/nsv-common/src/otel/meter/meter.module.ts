@@ -1,9 +1,4 @@
 import { Module } from '@nestjs/common';
-import { resourceFromAttributes } from '@opentelemetry/resources';
-import {
-  ATTR_SERVICE_NAME,
-  ATTR_SERVICE_VERSION,
-} from '@opentelemetry/semantic-conventions';
 import { metrics } from '@opentelemetry/api';
 import {
   MeterProvider,
@@ -11,17 +6,18 @@ import {
 } from '@opentelemetry/sdk-metrics';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
 
-import { METRICS } from './metrics.constant';
+import { METER } from './meter.constant';
 import { ConfigService } from '@nestjs/config';
+import { createServiceResource } from '../resource/service';
 
 @Module({
   providers: [
     {
-      provide: METRICS.METER,
+      provide: METER.PROVIDER_TOKEN,
       useFactory: (config: ConfigService) => {
         const exporter = new OTLPMetricExporter({
           url:
-            config.get<string>('OTLP_EXPORTER_ENDPOINT') ||
+            config.get<string>('METRICS_OTLP_EXPORTER_ENDPOINT') ||
             'http://127.0.0.1:4318/v1/metrics',
         });
         const reader = new PeriodicExportingMetricReader({
@@ -29,12 +25,10 @@ import { ConfigService } from '@nestjs/config';
           exportIntervalMillis: 3000, // Export every 3 seconds
         });
         const meterProvider = new MeterProvider({
-          resource: resourceFromAttributes({
-            [ATTR_SERVICE_NAME]:
-              config.get<string>('SERVICE_NAME') || 'nsv-service',
-            [ATTR_SERVICE_VERSION]:
-              config.get<string>('SERVICE_VERSION') || 'latest',
-          }),
+          resource: createServiceResource(
+            config.get<string>('SERVICE_NAME'),
+            config.get<string>('SERVICE_VERSION'),
+          ),
           readers: [reader],
         });
         metrics.setGlobalMeterProvider(meterProvider);
@@ -47,6 +41,6 @@ import { ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     },
   ],
-  exports: [METRICS.METER],
+  exports: [METER.PROVIDER_TOKEN],
 })
-export class MetricsModule {}
+export class MeterModule {}

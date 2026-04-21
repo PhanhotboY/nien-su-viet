@@ -13,10 +13,12 @@ type Pagination struct {
 	Total      uint32 `json:"total" default:"0"`
 }
 
-func NewPagination(page, limit, totalItems uint32) *Pagination {
+func NewPagination(limit, offset, totalItems uint32) *Pagination {
 	totalPages := uint32(1)
+	page := uint32(1)
 	if limit > 0 {
 		totalPages = uint32(math.Ceil(float64(totalItems) / float64(limit)))
+		page = (offset / limit) + 1
 	}
 	return &Pagination{
 		Page:       page,

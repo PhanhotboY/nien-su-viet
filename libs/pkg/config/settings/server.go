@@ -7,10 +7,11 @@ import (
 )
 
 type ServerConfig struct {
-	ServiceName string                  `mapstructure:"service_name"`
-	Host        string                  `mapstructure:"host"`
-	Port        string                  `mapstructure:"port"`
-	Env         environment.Environment `mapstructure:"env"`
+	ServiceName string                  `mapstructure:"service_name"` // POST_SERVER_SERVICE_NAME
+	Version     string                  `mapstructure:"version"`      // POST_SERVER_VERSION
+	Host        string                  `mapstructure:"host"`         // POST_SERVER_HOST
+	Port        string                  `mapstructure:"port"`         // POST_SERVER_PORT
+	Env         environment.Environment `mapstructure:"env"`          // POST_SERVER_ENV
 }
 
 func (cfg *ServerConfig) GetMicroserviceNameUpper() string {

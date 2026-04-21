@@ -42,7 +42,8 @@ func (c GetAllPostsHandler) Handle(
 ) (*dto.GetAllPostsRes, error) {
 	var cached *utils.PaginatedResponse[entity.PostBrief]
 
-	queryKey, err := jsonUtils.MarshalToJsonString(query.MapToQuery())
+	queryEntity := query.MapToQuery()
+	queryKey, err := jsonUtils.MarshalToJsonString(queryEntity)
 	c.log.Warnf("getting cached all posts with query: %s", queryKey)
 	cached, err = c.cacheRepo.GetPosts(ctx, queryKey)
 	if err != nil {
@@ -50,7 +51,7 @@ func (c GetAllPostsHandler) Handle(
 	}
 
 	if cached == nil {
-		posts, err := c.postRepo.GetPosts(ctx, query.MapToQuery())
+		posts, err := c.postRepo.GetPosts(ctx, queryEntity)
 		if err != nil {
 			c.log.Errorf("failed to get all posts: %v", err)
 			return nil, grpcerrors.ParseError(err)
@@ -63,7 +64,7 @@ func (c GetAllPostsHandler) Handle(
 
 		cached = &utils.PaginatedResponse[entity.PostBrief]{
 			Data:       posts,
-			Pagination: utils.NewPagination(query.Page, query.Limit, total),
+			Pagination: utils.NewPagination(queryEntity.Limit, queryEntity.Offset, total),
 		}
 
 		if err := c.cacheRepo.PutPosts(ctx, queryKey, cached); err != nil {

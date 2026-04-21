@@ -11,8 +11,8 @@ import {
 } from './common.module-definition';
 import { createKeyv, RedisClientOptions } from '@keyv/redis';
 import { LoggerModule } from './logger';
-import { MetricsModule } from './metrics/metrics.module';
-import { MeterInterceptor } from './interceptors/meter.interceptor';
+import { MeterModule } from './otel';
+import { MetricsInterceptor, TracingInterceptor } from './interceptors';
 
 const { ...prvds } = providers;
 const services = Object.values(prvds);
@@ -43,7 +43,7 @@ export class CommonModule extends ConfigurableModuleClass {
           isGlobal: true,
           inject: [providers.ConfigService],
         }),
-        MetricsModule,
+        MeterModule,
       ],
       providers: [
         { provide: MODULE_OPTIONS_TOKEN, useValue: options },
@@ -59,10 +59,14 @@ export class CommonModule extends ConfigurableModuleClass {
         },
         {
           provide: APP_INTERCEPTOR,
-          useClass: MeterInterceptor,
+          useClass: MetricsInterceptor,
+        },
+        {
+          provide: APP_INTERCEPTOR,
+          useClass: TracingInterceptor,
         },
       ],
-      exports: [...services, ConfigModule, LoggerModule, MetricsModule],
+      exports: [...services, ConfigModule, LoggerModule, MeterModule],
     };
   }
 }

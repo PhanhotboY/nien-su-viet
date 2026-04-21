@@ -12,6 +12,7 @@ import (
 	"gorm.io/gorm"
 	gormLogger "gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+	"gorm.io/plugin/opentelemetry/tracing"
 
 	_ "github.com/doug-martin/goqu/v9/dialect/postgres"
 )
@@ -54,6 +55,9 @@ func NewDb(s settings.Config, logger logger.Logger, params DBParams) (*gorm.DB, 
 		return nil, fmt.Errorf("failed to connect database: %w", err)
 	}
 
+	pg.Use(tracing.NewPlugin(
+		tracing.WithoutQueryVariables(),
+	))
 	sqlDB, err := pg.DB()
 	if err != nil {
 		return nil, fmt.Errorf("failed to get database instance: %w", err)

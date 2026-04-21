@@ -1389,13 +1389,11 @@
           },
           "fromDay": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 31
           },
           "fromMonth": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 12
           },
@@ -1411,19 +1409,16 @@
           },
           "toDay": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 31
           },
           "toMonth": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 12
           },
           "toYear": {
-            "type": "number",
-            "nullable": true
+            "type": "number"
           },
           "thumbnail": {
             "type": "string",
@@ -1464,13 +1459,11 @@
           },
           "fromDay": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 31
           },
           "fromMonth": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 12
           },
@@ -1486,19 +1479,16 @@
           },
           "toDay": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 31
           },
           "toMonth": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 12
           },
           "toYear": {
-            "type": "number",
-            "nullable": true
+            "type": "number"
           },
           "thumbnail": {
             "type": "string",
@@ -1548,13 +1538,11 @@
           },
           "fromDay": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 31
           },
           "fromMonth": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 12
           },
@@ -1570,19 +1558,16 @@
           },
           "toDay": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 31
           },
           "toMonth": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 12
           },
           "toYear": {
-            "type": "number",
-            "nullable": true
+            "type": "number"
           },
           "thumbnail": {
             "type": "string",
@@ -1660,13 +1645,11 @@
           },
           "fromDay": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 31
           },
           "fromMonth": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 12
           },
@@ -1682,19 +1665,16 @@
           },
           "toDay": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 31
           },
           "toMonth": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 12
           },
           "toYear": {
-            "type": "number",
-            "nullable": true
+            "type": "number"
           },
           "content": {
             "type": "string",
@@ -1729,13 +1709,11 @@
           },
           "fromDay": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 31
           },
           "fromMonth": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 12
           },
@@ -1751,19 +1729,16 @@
           },
           "toDay": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 31
           },
           "toMonth": {
             "type": "number",
-            "nullable": true,
             "minimum": 1,
             "maximum": 12
           },
           "toYear": {
-            "type": "number",
-            "nullable": true
+            "type": "number"
           },
           "content": {
             "type": "string",

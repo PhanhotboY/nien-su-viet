@@ -64,7 +64,7 @@ type handler struct {
 }
 
 func newHandler(spanKind trace.SpanKind, options []Option) (handler, error) {
-	c := defualtConfig
+	c := defaultConfig
 
 	for _, o := range options {
 		o.apply(&c)
@@ -119,11 +119,16 @@ func (h *handler) tagRPC(
 	}
 
 	gctx := gRPCContext{attributes: attributes, startTime: time.Now()}
+	ctx, span := h.tracer.Start(ctx, info.FullMethodName, trace.WithSpanKind(h.spanKind))
+	span.SetAttributes(attributes...)
+	defer span.End()
 
-	return inject(
-		context.WithValue(ctx, gRPCContextKey{}, &gctx),
-		h.config.propagator,
-	)
+	return context.WithValue(ctx, gRPCContextKey{}, &gctx)
+
+	// return inject(
+	// 	context.WithValue(ctx, gRPCContextKey{}, &gctx),
+	// 	h.config.propagator,
+	// )
 }
 
 func (h *handler) handleRPC(ctx context.Context, rs stats.RPCStats) {
@@ -211,6 +216,7 @@ func (s *ServerHandler) TagRPC(
 
 // HandleRPC processes the RPC stats.
 func (s *ServerHandler) HandleRPC(ctx context.Context, rs stats.RPCStats) {
+
 	s.handler.handleRPC(ctx, rs)
 }
 

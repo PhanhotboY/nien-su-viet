@@ -33,7 +33,7 @@ export class MicroserviceErrorHandler {
     const message = this.extractErrorMessage(rpcError, operation);
 
     this.logger.debug(
-      `Throwing HttpException with status: ${statusCode}, message: ${message}`,
+      `Throwing RpcException with status: ${statusCode}, message: ${message}`,
     );
     throw new HttpException(message, statusCode);
   }

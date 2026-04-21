@@ -51,6 +51,7 @@ gengoproto:
 .PHONY: gentsproto
 gentsproto:
 	@./cli/gentsproto.sh post
+	@./cli/gentsproto.sh historical_event
 
 .PHONY: genproto
 genproto:

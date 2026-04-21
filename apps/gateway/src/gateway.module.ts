@@ -12,7 +12,6 @@ import { SerializeResponseInterceptor } from './common/interceptors';
 import { CatchEverythingFilter, HttpExceptionsFilter } from './common/filters';
 import { BetterAuthGuard, RolesGuard } from './common/guards';
 import { MicroserviceExceptionFilter } from '@phanhotboy/nsv-common/filters/rpc-exception.filter';
-import { GatewayMetrics } from './common/contracts';
 
 @Module({
   imports: [

@@ -9,10 +9,12 @@ import (
 	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
+	"go.opentelemetry.io/otel/trace"
 )
 
 type GetPostHandler struct {
 	log       logger.Logger
+	tracer    trace.Tracer
 	postRepo  repository.PostRepository
 	cacheRepo repository.PostCacheRepository
 }
@@ -25,9 +27,11 @@ func NewGetPostHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
 	cacheRepo repository.PostCacheRepository,
+	tracer trace.Tracer,
 ) GetPostHandler {
 	return GetPostHandler{
 		log:       log,
+		tracer:    tracer,
 		postRepo:  postRepo,
 		cacheRepo: cacheRepo,
 	}

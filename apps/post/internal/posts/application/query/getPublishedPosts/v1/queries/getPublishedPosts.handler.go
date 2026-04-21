@@ -43,19 +43,20 @@ func (c GetPublishedPostsHandler) Handle(
 ) (*dto.GetPublishedPostsRes, error) {
 	var cached *utils.PaginatedResponse[entity.PostBrief]
 
-	queryKey, err := jsonUtils.MarshalToJsonString(query.MapToQuery())
+	queryEntity := query.MapToQuery()
+	queryKey, err := jsonUtils.MarshalToJsonString(queryEntity)
 	cached, err = c.cacheRepo.GetPosts(ctx, queryKey)
 	if err != nil {
 		c.log.Warnf("failed to get published posts from cache: %v, fallback to db", err)
 	}
 
 	if cached == nil {
-		posts, err := c.postRepo.GetPosts(ctx, query.MapToQuery())
+		posts, err := c.postRepo.GetPosts(ctx, queryEntity)
 		if err != nil {
 			c.log.Errorf("failed to get published posts: %v", err)
 			return nil, grpcerrors.ParseError(err)
 		}
-		total, err := c.postRepo.CountPosts(ctx, query.MapToQuery())
+		total, err := c.postRepo.CountPosts(ctx, queryEntity)
 		if err != nil {
 			c.log.Errorf("failed to count published posts: %v", err)
 			return nil, grpcerrors.ParseError(err)
@@ -63,7 +64,7 @@ func (c GetPublishedPostsHandler) Handle(
 
 		cached = &utils.PaginatedResponse[entity.PostBrief]{
 			Data:       posts,
-			Pagination: utils.NewPagination(query.Page, query.Limit, total),
+			Pagination: utils.NewPagination(queryEntity.Limit, queryEntity.Offset, total),
 		}
 
 		if err := c.cacheRepo.PutPosts(ctx, queryKey, cached); err != nil {
