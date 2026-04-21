@@ -12,5 +12,6 @@ import { UserModule } from '../user';
   ],
   controllers: [HistoricalEventController],
   providers: [HistoricalEventService],
+  exports: [HistoricalEventService],
 })
-export class HistoricalEventModule {}
+export class HistoricalEventModule { }

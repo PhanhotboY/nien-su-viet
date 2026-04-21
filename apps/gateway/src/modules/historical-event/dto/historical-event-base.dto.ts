@@ -46,7 +46,7 @@ export class HistoricalEventBaseDto {
   @Min(1, { message: 'Ngày bắt đầu không hợp lệ' })
   @Max(31, { message: 'Ngày bắt đầu không hợp lệ' })
   @Transform(({ value }) => (value ? parseInt(value, 10) : null))
-  fromDay?: number | null;
+  fromDay?: number;
 
   @Expose()
   @IsOptional()
@@ -54,7 +54,7 @@ export class HistoricalEventBaseDto {
   @Min(1, { message: 'Tháng bắt đầu không hợp lệ' })
   @Max(12, { message: 'Tháng bắt đầu không hợp lệ' })
   @Transform(({ value }) => (value ? parseInt(value, 10) : null))
-  fromMonth?: number | null;
+  fromMonth?: number;
 
   @Expose()
   @IsInt({ message: 'Năm bắt đầu không hợp lệ' })
@@ -74,7 +74,7 @@ export class HistoricalEventBaseDto {
   @Min(1, { message: 'Ngày kết thúc không hợp lệ' })
   @Max(31, { message: 'Ngày kết thúc không hợp lệ' })
   @Transform(({ value }) => (value ? parseInt(value, 10) : null))
-  toDay?: number | null;
+  toDay?: number;
 
   @Expose()
   @IsOptional()
@@ -82,13 +82,13 @@ export class HistoricalEventBaseDto {
   @Min(1, { message: 'Tháng kết thúc không hợp lệ' })
   @Max(12, { message: 'Tháng kết thúc không hợp lệ' })
   @Transform(({ value }) => (value ? parseInt(value, 10) : null))
-  toMonth?: number | null;
+  toMonth?: number;
 
   @Expose()
   @IsOptional()
   @IsInt({ message: 'Năm kết thúc không hợp lệ' })
   @Transform(({ value }) => (value ? parseInt(value, 10) : null))
-  toYear?: number | null;
+  toYear?: number;
 
   @Expose()
   @IsString({ message: 'Nội dung không hợp lệ' })

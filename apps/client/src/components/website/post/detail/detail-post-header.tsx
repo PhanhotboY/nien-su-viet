@@ -3,6 +3,7 @@
 // import { LoginMenu } from "@/components/login";
 import { SharedBackButton } from '@/components/shared';
 import { useReadingProgress } from '@/hooks/use-reading-progress';
+import { useLocale } from 'next-intl';
 
 interface DetailPostHeaderProps {
   title: string;
@@ -10,6 +11,8 @@ interface DetailPostHeaderProps {
 
 const DetailPostHeader: React.FC<DetailPostHeaderProps> = ({ title }) => {
   const completion = useReadingProgress();
+  const locale = useLocale();
+
   return (
     <div className="border-y sticky top-0 z-40 border-black/5 bg-foreground/20 shadow-sm shadow-gray-300 backdrop-blur-lg">
       <nav
@@ -17,7 +20,7 @@ const DetailPostHeader: React.FC<DetailPostHeaderProps> = ({ title }) => {
         aria-label="Global"
       >
         <div className="flex flex-none items-center justify-start">
-          <SharedBackButton url="/blog" />
+          <SharedBackButton url={`/${locale}/blog`} />
         </div>
         <div className="flex w-full max-w-3xl">
           <h1 className="text-md justify-start px-4 font-semibold tracking-tight text-foreground sm:px-0 sm:text-xl">

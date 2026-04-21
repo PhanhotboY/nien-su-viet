@@ -20,6 +20,7 @@ type Config struct {
 	Logger     LoggerConfig     `mapstructure:"logger"`
 	Redis      RedisOptions     `mapstructure:"redis"`
 	Metrics    MetricsOptions   `mapstructure:"metrics"`
+	Tracing    TracingOptions   `mapstructure:"tracing"`
 }
 
 func LoadConfig() Config {

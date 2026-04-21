@@ -1,15 +1,17 @@
 import { Controller, Logger } from '@nestjs/common';
-import { MessagePattern, Payload, Transport } from '@nestjs/microservices';
+import { GrpcMethod } from '@nestjs/microservices';
 
 import { HistoricalEventService } from './historical-event.service';
-import {
-  HistoricalEventBaseCreateDto,
-  HistoricalEventBaseUpdateDto,
-  HistoricalEventQueryDto,
-} from './dto';
-import { HISTORICAL_EVENT_MESSAGE_PATTERN } from '@phanhotboy/constants/historical-event.message-pattern';
+import type {
+  CreateHistoricalEventRequest,
+  DeleteHistoricalEventRequest,
+  GetAllHistoricalEventsRequest,
+  GetHistoricalEventPreviewRequest,
+  GetHistoricalEventRequest,
+  UpdateHistoricalEventRequest,
+} from '@phanhotboy/genproto/historical_event_service/historical_events';
 
-@Controller('historical-events')
+@Controller()
 export class HistoricalEventController {
   private readonly logger = new Logger(HistoricalEventController.name);
 
@@ -17,48 +19,36 @@ export class HistoricalEventController {
     private readonly historicalEventService: HistoricalEventService,
   ) {}
 
-  @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_EVENT_PREVIEW_BY_ID)
-  getHistoricalEventPreviewById(@Payload('id') id: string) {
-    this.logger.log(`Getting historical event preview by id: ${id}`);
-    return this.historicalEventService.getEventPreviewById(id);
+  @GrpcMethod('HistoricalEventService', 'GetEventPreview')
+  getEventPreview(request: GetHistoricalEventPreviewRequest) {
+    this.logger.log(`Getting historical event preview by id: ${request.id}`);
+    return this.historicalEventService.getEventPreviewById(request);
   }
 
-  @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_EVENT_BY_ID)
-  getHistoricalEventById(@Payload('id') id: string) {
-    return this.historicalEventService.getEventById(id);
+  @GrpcMethod('HistoricalEventService', 'GetEvent')
+  getEvent(request: GetHistoricalEventRequest) {
+    this.logger.log(`Getting historical event by id: ${request.id}`);
+    return this.historicalEventService.getEventById(request);
   }
 
-  @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_ALL_EVENTS)
-  getAllHistoricalEvents(@Payload('query') query: HistoricalEventQueryDto) {
+  @GrpcMethod('HistoricalEventService', 'GetAllEvents')
+  getAllEvents(query: GetAllHistoricalEventsRequest) {
     return this.historicalEventService.getEvents(query);
   }
 
-  @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.CREATE_EVENT)
-  async createHistoricalEvent(
-    @Payload('authorId') authorId: string,
-    @Payload('payload') event: HistoricalEventBaseCreateDto,
-  ) {
-    return this.historicalEventService.createEvent(authorId, event);
+  @GrpcMethod('HistoricalEventService', 'CreateEvent')
+  createEvent(payload: CreateHistoricalEventRequest) {
+    return this.historicalEventService.createEvent(payload);
   }
 
-  @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.UPDATE_EVENT, {
-    transport: Transport.TCP,
-  })
-  async updateHistoricalEvent(
-    @Payload('id') id: string,
-    @Payload('payload') event: HistoricalEventBaseUpdateDto,
-  ) {
-    return this.historicalEventService.updateEvent(id, event);
+  @GrpcMethod('HistoricalEventService', 'UpdateEvent')
+  updateEvent(payload: UpdateHistoricalEventRequest) {
+    return this.historicalEventService.updateEvent(payload);
   }
 
-  @MessagePattern(HISTORICAL_EVENT_MESSAGE_PATTERN.DELETE_EVENT, {
-    transport: Transport.TCP,
-  })
-  async deleteHistoricalEvent(
-    @Payload('id') id: string,
-    @Payload('authorId') authorId: string,
-  ) {
-    this.logger.log(`Deleting historical event with id: ${id}`);
-    await this.historicalEventService.deleteEvent(id, authorId);
+  @GrpcMethod('HistoricalEventService', 'DeleteEvent')
+  deleteEvent(request: DeleteHistoricalEventRequest) {
+    this.logger.log(`Deleting historical event with id: ${request.id}`);
+    return this.historicalEventService.deleteEvent(request);
   }
 }

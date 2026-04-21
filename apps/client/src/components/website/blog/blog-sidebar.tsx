@@ -1,21 +1,23 @@
+'use client';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PostBriefResponseDto } from '@/types/collection';
 import { Calendar } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
 import Link from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 interface BlogSidebarProps {
   recentPosts: PostBriefResponseDto[];
-  locale: string;
   className?: string;
+  locale: string;
 }
 
-export default async function BlogSidebar({
+export default function BlogSidebar({
   recentPosts,
-  locale,
   className,
+  locale,
 }: BlogSidebarProps) {
-  const t = await getTranslations({ locale, namespace: 'BlogPage' });
+  const t = useTranslations('BlogPage');
 
   return (
     <aside className={className}>

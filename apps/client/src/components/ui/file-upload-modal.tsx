@@ -78,7 +78,6 @@ const FileUploadModal: FC<FileUploadModalProps> = ({
   };
 
   const handleUpload = async () => {
-    console.log('Uploading files:', files);
     if (files.length === 0) return;
 
     setIsUploading(true);

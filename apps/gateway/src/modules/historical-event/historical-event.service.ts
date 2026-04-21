@@ -1,31 +1,36 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import type { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom, timeout, catchError, throwError } from 'rxjs';
 
-import {
-  HistoricalEventQueryDto,
-  HistoricalEventBriefResponseDto,
-  HistoricalEventDetailResponseDto,
-  HistoricalEventBaseCreateDto,
-  HistoricalEventBaseUpdateDto,
-  HistoricalEventPreviewResponseDto,
-} from './dto';
-import { TCP_SERVICE } from '@phanhotboy/constants/tcp-service.constant';
-import { HISTORICAL_EVENT_MESSAGE_PATTERN } from '@phanhotboy/constants/historical-event.message-pattern';
 import { MicroserviceErrorHandler } from '@gateway/common/microservice-error.handler';
-import { PaginatedResponseDto } from '@phanhotboy/nsv-common';
+import {
+  HistoricalEventServiceClient,
+  EventDateType,
+} from '@phanhotboy/genproto/historical_event_service/historical_events';
+import {
+  HistoricalEventBaseCreateDto,
+  HistoricalEventBaseDto,
+  HistoricalEventBaseUpdateDto,
+  HistoricalEventQueryDto,
+} from './dto';
+import { TimestampUtil } from '@phanhotboy/nsv-common/util/grpc.util';
+import { HISTORICAL_EVENT } from '@phanhotboy/constants';
 
 @Injectable()
 export class HistoricalEventService {
   private readonly serviceName = 'Historical Event Service';
   private readonly microserviceErrorHandler: MicroserviceErrorHandler;
+  private heventClient: HistoricalEventServiceClient;
 
   constructor(
-    @Inject(TCP_SERVICE.HISTORICAL_EVENT.NAME)
-    private readonly heventClient: ClientProxy,
+    @Inject('HISTORICAL_EVENT_SERVICE')
+    private readonly client: ClientGrpc,
     private readonly logger: Logger,
   ) {
     this.microserviceErrorHandler = new MicroserviceErrorHandler(logger);
+    this.heventClient = this.client.getService<HistoricalEventServiceClient>(
+      'HistoricalEventService',
+    );
   }
 
   async createEvent(authorId: string, payload: HistoricalEventBaseCreateDto) {
@@ -33,9 +38,11 @@ export class HistoricalEventService {
       () =>
         firstValueFrom(
           this.heventClient
-            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.CREATE_EVENT, {
+            .createEvent({
+              ...payload,
               authorId,
-              payload,
+              fromDateType: toEventDateType(payload.fromDateType),
+              toDateType: toEventDateType(payload.toDateType),
             })
             .pipe(
               timeout(10000),
@@ -47,14 +54,46 @@ export class HistoricalEventService {
     );
   }
 
-  async getEvents(
-    query: HistoricalEventQueryDto,
-  ): Promise<PaginatedResponseDto<HistoricalEventBriefResponseDto>> {
+  async getEvents(query: HistoricalEventQueryDto) {
     return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
           this.heventClient
-            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_ALL_EVENTS, { query })
+            .getAllEvents({
+              page: query.page,
+              limit: query.limit,
+              search: query.search,
+              sortBy: query.sortBy,
+              /** "asc" or "desc" */
+              sortOrder: query.sortOrder,
+              authorId: query.authorId,
+              /** Filter by category */
+              categoryIds: query.categoryIds || [],
+              /** Filter by from date range */
+              fromYear: query.fromYear,
+              fromMonth: query.fromMonth,
+              fromDay: query.fromDay,
+              /** Filter by to date range */
+              toYear: query.toYear,
+              toMonth: query.toMonth,
+              toDay: query.toDay,
+              /** Search specific year */
+              searchYear: query.searchYear,
+              /** Filter by created date range */
+              createdAtFrom:
+                query.createdAtFrom &&
+                TimestampUtil.toTimestamp(query.createdAtFrom),
+              createdAtTo:
+                query.createdAtTo &&
+                TimestampUtil.toTimestamp(query.createdAtTo),
+              /** Filter by updated date range */
+              updatedAtFrom:
+                query.updatedAtFrom &&
+                TimestampUtil.toTimestamp(query.updatedAtFrom),
+              updatedAtTo:
+                query.updatedAtTo &&
+                TimestampUtil.toTimestamp(query.updatedAtTo),
+            })
             .pipe(
               timeout(10000),
               catchError((error) => throwError(() => error)),
@@ -65,36 +104,28 @@ export class HistoricalEventService {
     );
   }
 
-  async getEventById(id: string): Promise<HistoricalEventDetailResponseDto> {
+  async getEventById(id: string) {
     return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
-          this.heventClient
-            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_EVENT_BY_ID, { id })
-            .pipe(
-              timeout(10000),
-              catchError((error) => throwError(() => error)),
-            ),
+          this.heventClient.getEvent({ id }).pipe(
+            timeout(10000),
+            catchError((error) => throwError(() => error)),
+          ),
         ),
       'get event by id',
       this.serviceName,
     );
   }
 
-  async getEventPreviewById(
-    id: string,
-  ): Promise<HistoricalEventPreviewResponseDto> {
+  async getEventPreviewById(id: string) {
     return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
-          this.heventClient
-            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.GET_EVENT_PREVIEW_BY_ID, {
-              id,
-            })
-            .pipe(
-              timeout(10000),
-              catchError((error) => throwError(() => error)),
-            ),
+          this.heventClient.getEventPreview({ id }).pipe(
+            timeout(10000),
+            catchError((error) => throwError(() => error)),
+          ),
         ),
       'get event preview by id',
       this.serviceName,
@@ -106,9 +137,19 @@ export class HistoricalEventService {
       () =>
         firstValueFrom(
           this.heventClient
-            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.UPDATE_EVENT, {
+            .updateEvent({
               id,
-              payload,
+              name: payload.name,
+              thumbnail: payload.thumbnail,
+              fromDateType: toEventDateType(payload.fromDateType),
+              fromDay: payload.fromDay,
+              fromMonth: payload.fromMonth,
+              fromYear: payload.fromYear,
+              toDateType: toEventDateType(payload.toDateType),
+              toDay: payload.toDay,
+              toMonth: payload.toMonth,
+              toYear: payload.toYear,
+              content: payload.content,
             })
             .pipe(
               timeout(10000),
@@ -124,18 +165,26 @@ export class HistoricalEventService {
     return this.microserviceErrorHandler.handleAsyncCall(
       () =>
         firstValueFrom(
-          this.heventClient
-            .send(HISTORICAL_EVENT_MESSAGE_PATTERN.DELETE_EVENT, {
-              id,
-              authorId,
-            })
-            .pipe(
-              timeout(10000),
-              catchError((error) => throwError(() => error)),
-            ),
+          this.heventClient.deleteEvent({ id, authorId }).pipe(
+            timeout(10000),
+            catchError((error) => throwError(() => error)),
+          ),
         ),
       'delete event',
       this.serviceName,
     );
+  }
+}
+
+function toEventDateType(
+  dateType?: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>,
+): EventDateType {
+  switch (dateType) {
+    case HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT:
+      return EventDateType.EXACT;
+    case HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE:
+      return EventDateType.APPROXIMATE;
+    default:
+      return EventDateType.EVENT_DATE_TYPE_UNSPECIFIED;
   }
 }

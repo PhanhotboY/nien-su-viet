@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Counter, Histogram, type Meter } from '@opentelemetry/api';
-import { METRICS } from '@phanhotboy/nsv-common/metrics/metrics.constant';
+import { METER } from '@phanhotboy/nsv-common/otel/meter';
 
 @Injectable()
 export class GatewayMetrics {
@@ -10,7 +10,7 @@ export class GatewayMetrics {
   request_duration_ms: Histogram;
   db_query_duration_seconds: Histogram;
 
-  constructor(@Inject(METRICS.METER) private meter: Meter) {
+  constructor(@Inject(METER.PROVIDER_TOKEN) private meter: Meter) {
     this.requests_total = this.meter.createCounter('requests_total', {
       description: 'Total number of requests received by the gateway',
     });

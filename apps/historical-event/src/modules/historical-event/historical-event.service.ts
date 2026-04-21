@@ -1,26 +1,41 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
+import { context, Span, trace } from '@opentelemetry/api';
+import { isUUID } from 'class-validator';
 
 import { PrismaService } from '@historical-event/database';
 import {
   getExcerpt,
   RedisService,
   UtilService,
+  WithSpan,
+  addSpanAttributes,
+  recordOperationTiming,
   type RedisServiceType,
+  createSpan,
 } from '@phanhotboy/nsv-common';
-import { PaginatedResponseDto } from '@phanhotboy/nsv-common/dto/response';
 import { Prisma } from '@historical-event-prisma';
 import {
-  HistoricalEventQueryDto,
-  HistoricalEventBriefResponseDto,
-  HistoricalEventDetailResponseDto,
-  HistoricalEventBaseCreateDto,
-  HistoricalEventBaseUpdateDto,
-  HistoricalEventPreviewResponseDto,
-} from './dto';
+  type CreateHistoricalEventRequest,
+  CreateHistoricalEventResponse,
+  DeleteHistoricalEventRequest,
+  DeleteHistoricalEventResponse,
+  EventDateType,
+  type GetAllHistoricalEventsRequest,
+  GetAllHistoricalEventsResponse,
+  type GetHistoricalEventPreviewRequest,
+  GetHistoricalEventPreviewResponse,
+  type GetHistoricalEventRequest,
+  GetHistoricalEventResponse,
+  UpdateHistoricalEventRequest,
+  UpdateHistoricalEventResponse,
+} from '@phanhotboy/genproto/historical_event_service/historical_events';
 import { UserService } from '../user';
-import { isUUID } from 'class-validator';
+import { HistoricalEventBaseUpdateDto } from '@gateway/modules/historical-event/dto';
+import { HISTORICAL_EVENT } from '@phanhotboy/constants';
+import { TimestampUtil } from '@phanhotboy/nsv-common/util/grpc.util';
 
+const tracerName = 'historical-event-service';
 @Injectable()
 export class HistoricalEventService {
   private readonly cachePrefix = 'historical-event';
@@ -32,25 +47,37 @@ export class HistoricalEventService {
     @Inject(RedisService)
     private readonly redisService: RedisServiceType,
     private readonly userService: UserService,
+    private readonly logger: Logger,
   ) {
     this.cacheKey = this.util.genCacheKey(this.cachePrefix);
   }
 
-  async createEvent(authorId: string, payload: HistoricalEventBaseCreateDto) {
-    await this.userService.findUserById(authorId);
-    const event = await this.prisma.historicalEvent.create({
-      data: { ...payload, authorId },
-    });
+  @WithSpan(tracerName, 'historical_event.create', {
+    'operation.type': 'create',
+  })
+  async createEvent(
+    payload: CreateHistoricalEventRequest,
+  ): Promise<CreateHistoricalEventResponse> {
+    await this.userService.findUserById(payload.authorId);
+
+    const event = await recordOperationTiming(tracerName, 'prisma.create', () =>
+      this.prisma.historicalEvent.create({
+        data: payload as any,
+      }),
+    );
 
     // Clear cache
-    await this.redisService.del(this.cacheKey);
+    await recordOperationTiming(tracerName, 'redis.cache.delete', () =>
+      this.redisService.del(this.cacheKey),
+    );
 
-    return { success: true };
+    return { data: { id: event.id, success: true } };
   }
 
+  @WithSpan(tracerName, 'historical_event.list', { 'operation.type': 'list' })
   async getEvents(
-    query: HistoricalEventQueryDto,
-  ): Promise<PaginatedResponseDto<HistoricalEventBriefResponseDto>> {
+    query: GetAllHistoricalEventsRequest,
+  ): Promise<GetAllHistoricalEventsResponse> {
     const {
       page = 1,
       limit = 10,
@@ -89,6 +116,7 @@ export class HistoricalEventService {
     const hasToYear = toYear !== undefined;
     const hasToMonth = toMonth !== undefined;
     const hasToDay = toDay !== undefined;
+
     if (hasFromYear) {
       options!.where!.fromYear = fromYear;
     }
@@ -119,12 +147,16 @@ export class HistoricalEventService {
       },
       async () => {
         const [events, total] = await Promise.all([
-          this.prisma.historicalEvent.findMany(options),
-          this.prisma.historicalEvent.count({ where: options.where }),
+          recordOperationTiming(tracerName, 'prisma.findMany', () =>
+            this.prisma.historicalEvent.findMany(options),
+          ),
+          recordOperationTiming(tracerName, 'prisma.count', () =>
+            this.prisma.historicalEvent.count({ where: options.where }),
+          ),
         ]);
 
         return {
-          data: events,
+          data: events as any,
           pagination: {
             total,
             page,
@@ -136,12 +168,21 @@ export class HistoricalEventService {
     );
   }
 
-  async getEventById(id: string): Promise<HistoricalEventDetailResponseDto> {
+  @WithSpan(tracerName, 'historical_event.get_by_id', {
+    'operation.type': 'read',
+  })
+  async getEventById({
+    id,
+  }: GetHistoricalEventRequest): Promise<GetHistoricalEventResponse> {
+    const span = trace.getActiveSpan();
+
     if (isUUID(id, '4') === false) {
-      throw new RpcException({
+      const exception = new RpcException({
         message: 'ID không hợp lệ',
         statusCode: 400,
       });
+      span?.recordException(exception);
+      throw exception;
     }
 
     const options = {
@@ -158,25 +199,60 @@ export class HistoricalEventService {
         hashAttribute: options,
         notFoundMessage: 'Sự kiện lịch sử không tồn tại',
       },
-      () => this.prisma.historicalEvent.findUnique(options),
+      async () => {
+        const event = await recordOperationTiming(
+          tracerName,
+          'prisma.findUnique',
+          () => this.prisma.historicalEvent.findUnique(options),
+        );
+        return {
+          data: event
+            ? {
+                ...event,
+                thumbnail: event.thumbnail ?? undefined,
+                fromDateType: toEventDateType(event.fromDateType),
+                fromYear: event.fromYear ?? undefined,
+                fromMonth: event.fromMonth ?? undefined,
+                fromDay: event.fromDay ?? undefined,
+                toDateType: toEventDateType(event.toDateType),
+                toYear: event.toYear ?? undefined,
+                toMonth: event.toMonth ?? undefined,
+                toDay: event.toDay ?? undefined,
+                categories: [],
+                createdAt: TimestampUtil.toTimestamp(event.createdAt),
+                updatedAt: TimestampUtil.toTimestamp(event.updatedAt),
+              }
+            : undefined,
+        };
+      },
     );
   }
 
-  async getEventPreviewById(
-    id: string,
-  ): Promise<HistoricalEventPreviewResponseDto> {
-    const event = await this.getEventById(id);
+  @WithSpan(tracerName, 'historical_event.get_preview', {
+    'operation.type': 'read',
+  })
+  async getEventPreviewById({
+    id,
+  }: GetHistoricalEventPreviewRequest): Promise<GetHistoricalEventPreviewResponse> {
+    const { data: event } = await this.getEventById({ id });
+
+    const excerpt = getExcerpt(event!.content, 1000);
 
     return {
-      ...event,
-      excerpt: getExcerpt(event.content, 1000),
+      data: {
+        ...event!,
+        excerpt,
+      },
     };
   }
 
+  @WithSpan(tracerName, 'historical_event.get_by_id_and_author', {
+    'operation.type': 'read',
+  })
   async getAuthorEventById(
     id: string,
     authorId: string,
-  ): Promise<HistoricalEventDetailResponseDto> {
+  ): Promise<GetHistoricalEventResponse> {
     const options = {
       where: { id, authorId },
       include: {
@@ -193,31 +269,43 @@ export class HistoricalEventService {
         hashAttribute: options,
         notFoundMessage: 'Sự kiện lịch sử không tồn tại',
       },
-      () => this.prisma.historicalEvent.findUnique(options),
+      async () => {
+        const event = recordOperationTiming(
+          tracerName,
+          'prisma.findUnique.with.author',
+          () => this.prisma.historicalEvent.findUnique(options),
+        ) as any;
+        return { data: event ?? undefined };
+      },
     );
   }
 
-  async updateEvent(id: string, payload: HistoricalEventBaseUpdateDto) {
-    const found = await this.getEventById(id);
+  async updateEvent(
+    payload: UpdateHistoricalEventRequest,
+  ): Promise<UpdateHistoricalEventResponse> {
+    const found = await this.getEventById({ id: payload.id });
     const cleanPayload =
       this.util.removeNestedUndefined<HistoricalEventBaseUpdateDto>(payload);
     if (this.util.isEmptyObj(cleanPayload)) {
-      return found;
+      return { data: { id: payload.id, success: true } };
     }
 
     const updated = await this.prisma.historicalEvent.update({
-      where: { id },
+      where: { id: payload.id },
       data: cleanPayload,
     });
 
     // Clear cache
     await this.redisService.del(this.cacheKey);
 
-    return updated;
+    return { data: { id: updated.id, success: true } };
   }
 
-  async deleteEvent(id: string, userId: string) {
-    const event = await this.getAuthorEventById(id, userId);
+  async deleteEvent({
+    id,
+    authorId,
+  }: DeleteHistoricalEventRequest): Promise<DeleteHistoricalEventResponse> {
+    const { data: event } = await this.getAuthorEventById(id, authorId);
     if (!event) {
       throw new RpcException({
         message: 'Sự kiện lịch sử không tồn tại',
@@ -230,6 +318,19 @@ export class HistoricalEventService {
     // Clear cache
     await this.redisService.del(this.cacheKey);
 
-    return { success: true };
+    return { data: { id, success: true } };
+  }
+}
+
+function toEventDateType(
+  dateType?: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>,
+): EventDateType {
+  switch (dateType) {
+    case HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT:
+      return EventDateType.EXACT;
+    case HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE:
+      return EventDateType.APPROXIMATE;
+    default:
+      return EventDateType.EVENT_DATE_TYPE_UNSPECIFIED;
   }
 }

@@ -29,7 +29,7 @@ type config struct {
 	instrumentationName string
 }
 
-var defualtConfig = config{
+var defaultConfig = config{
 	metricsProvider:     otel.GetMeterProvider(),
 	tracerProvider:      otel.GetTracerProvider(),
 	propagator:          otel.GetTextMapPropagator(),

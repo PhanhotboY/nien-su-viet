@@ -74,7 +74,6 @@ const getExcerptStr = (content: string, excerptLenght: number): string => {
   for (let i = 0; i < blocks.length; i++) {
     const content = extractTextFromBlock(blocks[i]);
     if (!content) continue;
-    console.log('Extracted text content: ', content);
 
     if (
       text.length + content.length <=

@@ -78,7 +78,8 @@ export class HistoricalEventController {
     @CurrentUser('id') authorId: string,
   ): Promise<OperationMetadataDto> {
     await this.redis.mdel(this.routePath);
-    return this.historicalEventService.createEvent(authorId, event);
+    return (await this.historicalEventService.createEvent(authorId, event))
+      .data!;
   }
 
   @Put(':id')
@@ -90,7 +91,7 @@ export class HistoricalEventController {
     @Body() event: HistoricalEventBaseUpdateDto,
   ): Promise<OperationMetadataDto> {
     await this.redis.mdel(this.routePath);
-    return this.historicalEventService.updateEvent(id, event);
+    return (await this.historicalEventService.updateEvent(id, event)).data!;
   }
 
   @Delete(':id')
@@ -102,6 +103,6 @@ export class HistoricalEventController {
     @CurrentUser('id') authorId: string,
   ): Promise<OperationMetadataDto> {
     await this.redis.mdel(this.routePath);
-    return this.historicalEventService.deleteEvent(id, authorId);
+    return (await this.historicalEventService.deleteEvent(id, authorId)).data!;
   }
 }

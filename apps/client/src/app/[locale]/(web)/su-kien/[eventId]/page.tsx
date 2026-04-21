@@ -45,15 +45,11 @@ export async function generateMetadata({
 
   if (!response?.data) {
     return {
-      title: tshared('not-found'),
+      title: tevent('not-found'),
     };
   }
 
   const event = response.data;
-  console.log(
-    'Event description for metadata:',
-    getExcerptStr(event.content, 160),
-  );
 
   return genMetadata({
     title:

@@ -1,0 +1,230 @@
+syntax = "proto3";
+
+package historical_event_service;
+
+import "common/pagination.proto";
+import "common/response.proto";
+import "google/protobuf/timestamp.proto";
+
+// ============================================================
+// Enum Types
+// ============================================================
+
+enum EventDateType {
+  EXACT = 1;
+  APPROXIMATE = 2;
+}
+
+// ============================================================
+// Common Message Types
+// ============================================================
+
+// HistoricalEvent represents a historical event entity
+message HistoricalEvent {
+  string id = 1;
+  string name = 2;
+  optional string thumbnail = 3;
+  EventDateType from_date_type = 4;
+  optional int32 from_day = 5;
+  optional int32 from_month = 6;
+  int32 from_year = 7;
+  optional EventDateType to_date_type = 8;
+  optional int32 to_day = 9;
+  optional int32 to_month = 10;
+  optional int32 to_year = 11;
+  string content = 12;
+  string author_id = 13;
+  google.protobuf.Timestamp created_at = 14;
+  google.protobuf.Timestamp updated_at = 15;
+}
+
+// User represents a user entity (minimal info for author)
+message User {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  optional string avatar = 4;
+}
+
+// HistoricalEventBrief is a brief version with author info
+message HistoricalEventBrief {
+  string id = 1;
+  string name = 2;
+  optional string thumbnail = 3;
+  EventDateType from_date_type = 4;
+  optional int32 from_day = 5;
+  optional int32 from_month = 6;
+  int32 from_year = 7;
+  optional EventDateType to_date_type = 8;
+  optional int32 to_day = 9;
+  optional int32 to_month = 10;
+  optional int32 to_year = 11;
+  User author = 12;
+}
+
+// Category represents an event category
+message Category {
+  string id = 1;
+  string name = 2;
+}
+
+// HistoricalEventPreview includes an excerpt and categories
+message HistoricalEventPreview {
+  string id = 1;
+  string name = 2;
+  optional string thumbnail = 3;
+  EventDateType from_date_type = 4;
+  optional int32 from_day = 5;
+  optional int32 from_month = 6;
+  int32 from_year = 7;
+  optional EventDateType to_date_type = 8;
+  optional int32 to_day = 9;
+  optional int32 to_month = 10;
+  optional int32 to_year = 11;
+  User author = 12;
+  repeated Category categories = 13;
+  string excerpt = 14;
+}
+
+// HistoricalEventDetail includes full content and categories
+message HistoricalEventDetail {
+  string id = 1;
+  string name = 2;
+  optional string thumbnail = 3;
+  EventDateType from_date_type = 4;
+  optional int32 from_day = 5;
+  optional int32 from_month = 6;
+  int32 from_year = 7;
+  optional EventDateType to_date_type = 8;
+  optional int32 to_day = 9;
+  optional int32 to_month = 10;
+  optional int32 to_year = 11;
+  User author = 12;
+  repeated Category categories = 13;
+  string content = 14;
+  google.protobuf.Timestamp created_at = 15;
+  google.protobuf.Timestamp updated_at = 16;
+}
+
+// ============================================================
+// COMMANDS - Write Operations
+// ============================================================
+
+// CreateHistoricalEventRequest
+message CreateHistoricalEventRequest {
+  string author_id = 1;
+  string name = 2;
+  optional string thumbnail = 3;
+  EventDateType from_date_type = 4;
+  optional int32 from_day = 5;
+  optional int32 from_month = 6;
+  int32 from_year = 7;
+  optional EventDateType to_date_type = 8;
+  optional int32 to_day = 9;
+  optional int32 to_month = 10;
+  optional int32 to_year = 11;
+  string content = 12;
+}
+
+message CreateHistoricalEventResponse {
+  common.OperationMetadata data = 1;
+}
+
+// UpdateHistoricalEventRequest
+message UpdateHistoricalEventRequest {
+  string id = 1;
+  optional string name = 2;
+  optional string thumbnail = 3;
+  optional EventDateType from_date_type = 4;
+  optional int32 from_day = 5;
+  optional int32 from_month = 6;
+  optional int32 from_year = 7;
+  optional EventDateType to_date_type = 8;
+  optional int32 to_day = 9;
+  optional int32 to_month = 10;
+  optional int32 to_year = 11;
+  optional string content = 12;
+}
+
+message UpdateHistoricalEventResponse {
+  common.OperationMetadata data = 1;
+}
+
+// DeleteHistoricalEventRequest
+message DeleteHistoricalEventRequest {
+  string id = 1;
+  string author_id = 2;
+}
+
+message DeleteHistoricalEventResponse {
+  common.OperationMetadata data = 1;
+}
+
+// ============================================================
+// QUERIES - Read Operations
+// ============================================================
+
+// GetHistoricalEventRequest
+message GetHistoricalEventRequest {
+  string id = 1;
+}
+
+message GetHistoricalEventResponse {
+  HistoricalEventDetail data = 1;
+}
+
+// GetHistoricalEventPreviewRequest
+message GetHistoricalEventPreviewRequest {
+  string id = 1;
+}
+
+message GetHistoricalEventPreviewResponse {
+  HistoricalEventPreview data = 1;
+}
+
+// GetAllHistoricalEventsRequest
+message GetAllHistoricalEventsRequest {
+  optional int32 page = 1;
+  optional int32 limit = 2;
+  optional string search = 3;
+  optional string sort_by = 4;
+  optional string sort_order = 5; // "asc" or "desc"
+  optional string author_id = 6;
+  // Filter by category
+  repeated string category_ids = 7;
+  // Filter by from date range
+  optional int32 from_year = 8;
+  optional int32 from_month = 9;
+  optional int32 from_day = 10;
+  // Filter by to date range
+  optional int32 to_year = 11;
+  optional int32 to_month = 12;
+  optional int32 to_day = 13;
+  // Search specific year
+  optional int32 search_year = 14;
+  // Filter by created date range
+  optional google.protobuf.Timestamp created_at_from = 15;
+  optional google.protobuf.Timestamp created_at_to = 16;
+  // Filter by updated date range
+  optional google.protobuf.Timestamp updated_at_from = 17;
+  optional google.protobuf.Timestamp updated_at_to = 18;
+}
+
+message GetAllHistoricalEventsResponse {
+  repeated HistoricalEventBrief data = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+// ============================================================
+// SERVICE DEFINITIONS - gRPC
+// ============================================================
+
+service HistoricalEventService {
+  rpc CreateEvent(CreateHistoricalEventRequest) returns (CreateHistoricalEventResponse);
+  rpc UpdateEvent(UpdateHistoricalEventRequest) returns (UpdateHistoricalEventResponse);
+  rpc DeleteEvent(DeleteHistoricalEventRequest) returns (DeleteHistoricalEventResponse);
+
+  rpc GetEvent(GetHistoricalEventRequest) returns (GetHistoricalEventResponse);
+  rpc GetEventPreview(GetHistoricalEventPreviewRequest) returns (GetHistoricalEventPreviewResponse);
+  rpc GetAllEvents(GetAllHistoricalEventsRequest) returns (GetAllHistoricalEventsResponse);
+}

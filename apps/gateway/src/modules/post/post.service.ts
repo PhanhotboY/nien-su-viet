@@ -19,7 +19,7 @@ import {
 } from '@phanhotboy/genproto/post_service/posts';
 
 @Injectable()
-export class PostService implements OnModuleInit {
+export class PostService {
   private readonly serviceName = 'Post Service';
   private postService: PostsServiceClient;
   private microserviceErrorHandler: MicroserviceErrorHandler;
@@ -30,9 +30,6 @@ export class PostService implements OnModuleInit {
     private readonly logger: Logger,
   ) {
     this.microserviceErrorHandler = new MicroserviceErrorHandler(this.logger);
-  }
-
-  onModuleInit() {
     this.postService =
       this.postClient.getService<PostsServiceClient>(POSTS_SERVICE_NAME);
   }

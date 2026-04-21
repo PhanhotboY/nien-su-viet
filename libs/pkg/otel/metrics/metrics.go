@@ -20,6 +20,7 @@ import (
 
 type OtelMetrics struct {
 	serviceName string
+	version     string
 	config      settings.MetricsOptions
 	logger      logger.Logger
 	appMetrics  AppMetrics
@@ -34,6 +35,7 @@ func NewOtelMetrics(
 ) (*OtelMetrics, error) {
 	otelMetrics := &OtelMetrics{
 		serviceName: config.Server.ServiceName,
+		version:     config.Server.Version,
 		config:      config.Metrics,
 		logger:      logger,
 		environment: config.Server.Env,
@@ -69,7 +71,7 @@ func (o *OtelMetrics) newResource() (*resource.Resource, error) {
 		resource.WithSchemaURL(semconv.SchemaURL),
 		resource.WithAttributes(
 			semconv.ServiceName(o.serviceName),
-			semconv.ServiceVersion(o.config.Version),
+			semconv.ServiceVersion(o.version),
 			attribute.String("environment", o.environment.GetEnvironmentName()),
 			semconv.TelemetrySDKVersionKey.String("v1.40.0"), // semconv version
 			semconv.TelemetrySDKLanguageGo,
@@ -124,55 +126,52 @@ func (o *OtelMetrics) configExporters() ([]metric.Reader, error) {
 		otlpmetricgrpc.WithInsecure(),
 	}
 
-	if !o.config.UseOTLP { //nolint:nestif
-		if o.config.UseStdout {
-			console, err := stdoutmetric.New()
-			if err != nil {
-				return nil, errors.WrapIf(
-					err,
-					"error creating console exporter",
-				)
-			}
-
-			consoleMetricExporter := metric.NewPeriodicReader(
-				console,
-				// Default is 1m. Set to 3s for demonstrative purposes.
-				metric.WithInterval(3*time.Second))
-
-			exporters = append(exporters, consoleMetricExporter)
-			o.logger.Warn("otel collector exporter is disabled, no metrics will be sent to otel collector")
-		}
-	} else {
-		if o.config.OtelCollectorOptions.Enabled {
-			metricOpts = append(
-				metricOpts,
-				otlpmetricgrpc.WithEndpoint(
-					o.config.OtelCollectorOptions.OTLPEndpoint,
-				),
+	if o.config.UseStdout {
+		console, err := stdoutmetric.New()
+		if err != nil {
+			return nil, errors.WrapIf(
+				err,
+				"error creating console exporter",
 			)
+		}
 
-			o.logger.Infof(
-				"otel collector exporter is enabled, metrics will be sent to otel collector endpoint: %s",
+		consoleMetricExporter := metric.NewPeriodicReader(
+			console,
+			// Default is 1m. Set to 3s for demonstrative purposes.
+			metric.WithInterval(3*time.Second))
+
+		exporters = append(exporters, consoleMetricExporter)
+		o.logger.Warn("otel collector exporter is disabled, no metrics will be sent to otel collector")
+	}
+	if o.config.UseOTLP {
+		metricOpts = append(
+			metricOpts,
+			otlpmetricgrpc.WithEndpoint(
 				o.config.OtelCollectorOptions.OTLPEndpoint,
-			)
-			// send otel traces to otel collector endpoint
-			// https://opentelemetry.io/docs/collector/
-			exporter, err := otlpmetricgrpc.New(ctx, metricOpts...)
-			if err != nil {
-				return nil, errors.WrapIf(
-					err,
-					"failed to create otlpmetric exporter for otel collector",
-				)
-			}
+			),
+		)
 
-			otelCollectorExporter := metric.NewPeriodicReader(
-				exporter,
-				// Default is 1m. Set to 3s for demonstrative purposes.
-				metric.WithInterval(3*time.Second),
+		o.logger.Infof(
+			"otel collector exporter is enabled, metrics will be sent to otel collector endpoint: %s",
+			o.config.OtelCollectorOptions.OTLPEndpoint,
+		)
+		// send otel traces to otel collector endpoint
+		// https://opentelemetry.io/docs/collector/
+		exporter, err := otlpmetricgrpc.New(ctx, metricOpts...)
+		if err != nil {
+			return nil, errors.WrapIf(
+				err,
+				"failed to create otlpmetric exporter for otel collector",
 			)
-
-			exporters = append(exporters, otelCollectorExporter)
 		}
+
+		otelCollectorExporter := metric.NewPeriodicReader(
+			exporter,
+			// Default is 1m. Set to 3s for demonstrative purposes.
+			metric.WithInterval(3*time.Second),
+		)
+
+		exporters = append(exporters, otelCollectorExporter)
 	}
 
 	return exporters, nil

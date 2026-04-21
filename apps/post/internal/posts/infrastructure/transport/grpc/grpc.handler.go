@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-playground/validator"
 	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
 
 	createPostCommand "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/createPost/v1/commands"
 	deletePostCommand "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/deletePost/v1/commands"
@@ -19,16 +19,14 @@ import (
 	getPopularPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPopularPosts/v1/queries"
 	getPostQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPost/v1/queries"
 	getPublishedPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPublishedPosts/v1/queries"
-	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/contracts"
 	pb "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto"
 	grpcUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/utils"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 )
 
 type PostsGrpcServerHandler struct {
-	postsMetrics *contracts.PostsMetrics
-	logger       logger.Logger
-	validator    *validator.Validate
+	logger    logger.Logger
+	validator *validator.Validate
 
 	createPostHandler  createPostCommand.CreatePostHandler
 	deletePostHandler  deletePostCommand.DeletePostHandler
@@ -48,14 +46,9 @@ type PostsGrpcServerHandler struct {
 	pb.UnimplementedPostsServiceServer
 }
 
-var grpcMetricsAttr = metric.WithAttributes(
-	attribute.Key("MetricsType").String("Grpc"),
-)
-
 func NewPostsGrpcServerHandler(
 	logger logger.Logger,
 	validator *validator.Validate,
-	postsMetrics *contracts.PostsMetrics,
 
 	createPostHandler createPostCommand.CreatePostHandler,
 	deletePostHandler deletePostCommand.DeletePostHandler,
@@ -73,9 +66,8 @@ func NewPostsGrpcServerHandler(
 	getPostHandler getPostQuery.GetPostHandler,
 ) *PostsGrpcServerHandler {
 	return &PostsGrpcServerHandler{
-		postsMetrics: postsMetrics,
-		logger:       logger,
-		validator:    validator,
+		logger:    logger,
+		validator: validator,
 
 		createPostHandler:  createPostHandler,
 		deletePostHandler:  deletePostHandler,
@@ -103,10 +95,8 @@ func (p *PostsGrpcServerHandler) CreatePost(
 	req *pb.CreatePostRequest,
 ) (*pb.CreatePostResponse, error) {
 	p.logger.Info("[PostService] Handle create post command")
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "CreatePost"))
-
-	// p.postsMetrics.CreatePostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "CreatePost"))
 
 	// Create command
 	cmd, err := createPostCommand.NewCreatePostCommand(req)
@@ -131,9 +121,8 @@ func (p *PostsGrpcServerHandler) UpdatePost(
 	req *pb.UpdatePostRequest,
 ) (*pb.UpdatePostResponse, error) {
 	p.logger.Infof("[PostService] Handle update post command for: %s", req.GetId())
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "UpdatePost"))
-	// p.postsMetrics.UpdatePostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "UpdatePost"))
 
 	// Create command
 	cmd, err := updatePostCommand.NewUpdatePostCommand(req)
@@ -157,9 +146,8 @@ func (p *PostsGrpcServerHandler) PublishPost(
 	req *pb.PublishPostRequest,
 ) (*pb.PublishPostResponse, error) {
 	p.logger.Infof("[PostService] Handle publish post command for: %s", req.GetId())
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "PublishPost"))
-	// p.postsMetrics.PublishPostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "PublishPost"))
 
 	// Create command
 	cmd, err := publishPostCommand.NewPublishPostCommand(req)
@@ -183,9 +171,8 @@ func (p *PostsGrpcServerHandler) UnpublishPost(
 	req *pb.UnpublishPostRequest,
 ) (*pb.UnpublishPostResponse, error) {
 	p.logger.Infof("[PostService] Handle unpublish post command for: %s", req.GetId())
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "UnpublishPost"))
-	// p.postsMetrics.UnpublishPostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "UnpublishPost"))
 
 	// Create command
 	cmd, err := unpublishPostCommand.NewUnpublishPostCommand(req)
@@ -209,9 +196,8 @@ func (p *PostsGrpcServerHandler) DeletePost(
 	req *pb.DeletePostRequest,
 ) (*pb.DeletePostResponse, error) {
 	p.logger.Infof("[PostService] Handle delete post command for: %s", req.GetId())
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "DeletePost"))
-	// p.postsMetrics.DeletePostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "DeletePost"))
 
 	// Create command
 	cmd, err := deletePostCommand.NewDeletePostCommand(req)
@@ -235,9 +221,8 @@ func (p *PostsGrpcServerHandler) DeletePosts(
 	req *pb.DeletePostsRequest,
 ) (*pb.DeletePostsResponse, error) {
 	p.logger.Infof("[PostService] Handle delete posts command: %s", len(req.GetPostIds()))
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "DeletePosts"))
-	// p.postsMetrics.DeletePostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "DeletePosts"))
 
 	// Create command
 	cmd, err := deletePostsCommand.NewDeletePostsCommand(req)
@@ -261,9 +246,8 @@ func (p *PostsGrpcServerHandler) IncrementPostViews(
 	req *pb.IncrementPostViewsRequest,
 ) (*pb.IncrementPostViewsResponse, error) {
 	p.logger.Info("[PostService] Handle increment post views command for: %s", req.GetId())
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "IncrementPostViews"))
-	// p.postsMetrics.IncrementPostViewsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "IncrementPostViews"))
 
 	// Create command
 	cmd, err := incrementPostViewsCommand.NewIncrementPostViewsCommand(req)
@@ -287,9 +271,8 @@ func (p *PostsGrpcServerHandler) IncrementPostLikes(
 	req *pb.IncrementPostLikesRequest,
 ) (*pb.IncrementPostLikesResponse, error) {
 	p.logger.Infof("[PostService] Handle increment post likes command for: %s", req.GetId())
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "IncrementPostLikes"))
-	// p.postsMetrics.IncrementPostLikesGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "IncrementPostLikes"))
 
 	// Create command
 	cmd, err := incrementPostLikesCommand.NewIncrementPostLikesCommand(req)
@@ -319,7 +302,6 @@ func (p *PostsGrpcServerHandler) GetPost(
 	p.logger.Infof("[PostService] Handle get post query: %+v", req)
 	// span := trace.SpanFromContext(ctx)
 	// span.SetAttributes(attribute.String("rpc.method", "GetPost"))
-	// p.postsMetrics.GetPostGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
 
 	query, err := getPostQuery.NewGetPostQuery(req)
 	if err != nil {
@@ -341,9 +323,8 @@ func (p *PostsGrpcServerHandler) GetPublishedPosts(
 	req *pb.GetPublishedPostsRequest,
 ) (*pb.GetPublishedPostsResponse, error) {
 	p.logger.Infof("[PostService] Handle get published posts query: %+v", req)
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "GetPublishedPosts"))
-	// p.postsMetrics.GetPublishedPostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "GetPublishedPosts"))
 
 	query, err := getPublishedPostsQuery.NewGetPublishedPostsQuery(req)
 	if err != nil {
@@ -364,9 +345,8 @@ func (p *PostsGrpcServerHandler) GetAllPosts(
 	req *pb.GetAllPostsRequest,
 ) (*pb.GetAllPostsResponse, error) {
 	p.logger.Infof("[PostService] Handle get all posts query: %+v", req)
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "GetAllPosts"))
-	// p.postsMetrics.GetAllPostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "GetAllPosts"))
 
 	query, err := getAllPostsQuery.NewGetAllPostsQuery(req)
 	if err != nil {
@@ -388,9 +368,8 @@ func (p *PostsGrpcServerHandler) GetPostsByCategory(
 	req *pb.GetPostsByCategoryRequest,
 ) (*pb.GetPostsByCategoryResponse, error) {
 	p.logger.Infof("[PostService] Handle get posts by category query: %+v", req)
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "GetPostsByCategory"))
-	// p.postsMetrics.GetPostsByCategoryGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "GetPostsByCategory"))
 
 	return &pb.GetPostsByCategoryResponse{
 		Data:       nil,
@@ -403,9 +382,8 @@ func (p *PostsGrpcServerHandler) GetPostsByAuthor(
 	req *pb.GetPostsByAuthorRequest,
 ) (*pb.GetPostsByAuthorResponse, error) {
 	p.logger.Infof("[PostService] Handle get posts by author query: %+v", req)
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "GetPostsByAuthor"))
-	// p.postsMetrics.GetPostsByAuthorGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "GetPostsByAuthor"))
 
 	return &pb.GetPostsByAuthorResponse{
 		Data:       nil,
@@ -418,9 +396,8 @@ func (p *PostsGrpcServerHandler) GetPopularPosts(
 	req *pb.GetPopularPostsRequest,
 ) (*pb.GetPopularPostsResponse, error) {
 	p.logger.Infof("[PostService] Handle get popular posts query: %+v", req)
-	// span := trace.SpanFromContext(ctx)
-	// span.SetAttributes(attribute.String("rpc.method", "GetPopularPosts"))
-	// p.postsMetrics.GetPopularPostsGrpcRequests.Add(ctx, 1, grpcMetricsAttr)
+	span := trace.SpanFromContext(ctx)
+	span.SetAttributes(attribute.String("rpc.method", "GetPopularPosts"))
 
 	query, err := getPopularPostsQuery.NewGetPopularPostsQuery(req)
 	if err != nil {

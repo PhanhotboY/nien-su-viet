@@ -47,11 +47,11 @@ export function EventForm({
     name: initialData?.name || '',
     content: initialData?.content || '',
     fromYear: initialData?.fromYear || new Date().getFullYear(),
-    fromMonth: initialData?.fromMonth || null,
-    fromDay: initialData?.fromDay || null,
-    toYear: initialData?.toYear || null,
-    toMonth: initialData?.toMonth || null,
-    toDay: initialData?.toDay || null,
+    fromMonth: initialData?.fromMonth,
+    fromDay: initialData?.fromDay,
+    toYear: initialData?.toYear,
+    toMonth: initialData?.toMonth,
+    toDay: initialData?.toDay,
     thumbnail: initialData?.thumbnail,
     fromDateType:
       initialData?.fromDateType || HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT,
@@ -223,7 +223,10 @@ export function EventForm({
                 <Select
                   value={formData.fromMonth?.toString() || ''}
                   onValueChange={(value) =>
-                    updateField('fromMonth', value ? parseInt(value) : null)
+                    updateField(
+                      'fromMonth',
+                      value ? parseInt(value) : undefined,
+                    )
                   }
                 >
                   <SelectTrigger className="w-full" id="fromMonth">
@@ -254,7 +257,7 @@ export function EventForm({
                   onChange={(e) =>
                     updateField(
                       'fromDay',
-                      e.target.value ? parseInt(e.target.value) : null,
+                      e.target.value ? parseInt(e.target.value) : undefined,
                     )
                   }
                 />
@@ -331,7 +334,7 @@ export function EventForm({
                 <Select
                   value={formData.toMonth?.toString() || ''}
                   onValueChange={(value) =>
-                    updateField('toMonth', value ? parseInt(value) : null)
+                    updateField('toMonth', value ? parseInt(value) : undefined)
                   }
                 >
                   <SelectTrigger id="toMonth" className="w-full">
@@ -362,7 +365,7 @@ export function EventForm({
                   onChange={(e) =>
                     updateField(
                       'toDay',
-                      e.target.value ? parseInt(e.target.value) : null,
+                      e.target.value ? parseInt(e.target.value) : undefined,
                     )
                   }
                 />

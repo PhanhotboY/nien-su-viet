@@ -1,3 +1,5 @@
+'use client';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { getAvatarFallback, getMinutes, shimmer, toBase64 } from '@/lib/utils';
@@ -11,6 +13,7 @@ import Link from '@/i18n/navigation';
 import React from 'react';
 import readingTime from 'reading-time';
 import AuthorInfo from './author-info';
+import { useTranslations } from 'next-intl';
 
 // async function getPublicImageUrl(postId: string, fileName: string) {
 
@@ -40,8 +43,8 @@ interface MainPostItemProps {
   locale: string;
 }
 
-const MainPostItem: React.FC<MainPostItemProps> = async ({ post, locale }) => {
-  const tshared = await getTranslations({ locale, namespace: 'Shared' });
+const MainPostItem: React.FC<MainPostItemProps> = ({ post, locale }) => {
+  const tshared = useTranslations('Shared');
   const readTime = readingTime('');
   // const comments = await getComments(post.id ? post.id : "");
 
