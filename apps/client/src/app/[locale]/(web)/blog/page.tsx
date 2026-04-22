@@ -10,6 +10,7 @@ import {
 import { PostsLayout } from '@/components/website/blog/posts-layout';
 import MainPostItem from '@/components/website/post/main-post-item';
 import MainPostItemLoading from '@/components/website/post/main-post-item-loading';
+import { getMetadata } from '@/content/landing/metadata';
 import { genMetadata } from '@/lib/metadata.lib';
 import { getPublicPosts } from '@/services/post.service';
 import { Metadata } from 'next';
@@ -26,12 +27,14 @@ export async function generateMetadata({
 }: BlogPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'BlogPage' });
+  const metadata = await getMetadata({ locale });
 
   return genMetadata({
-    title: `${t('title')} - Nien Su Viet`,
+    title: `${t('title')} - ${metadata.title}`,
     description: t('description'),
     locale,
     path: '/blog',
+    logo: metadata.logo,
   });
 }
 

@@ -380,24 +380,12 @@
       "og-image": "https://res.cloudinary.com/dr814cumk/image/upload/v1770954853/Nien_Su_Viet_logo_bviv6p.webp",
       "logo": "/assets/logo/nsv-logo.webp",
       "logoDark": "/assets/logo/nsv-logo-dark.webp",
-      "social": {
-        "facebook": "https://facebook.com/niensuviet",
-        "twitter": "https://x.com/niensuviet",
-        "instagram": "https://instagram.com/niensuviet",
-        "linkedin": "https://linkedin.com/company/niensuviet",
-        "youtube": "https://youtube.com/@niensuviet",
-        "tiktok": "https://tiktok.com/@niensuviet",
-        "zalo": "https://zalo.me/niensuviet"
-      },
       "address": {
         "street": "123 Nguyen Trai",
         "district": "Thu Duc",
         "province": "Ho Chi Minh City",
         "country": "Vietnam"
-      },
-      "msisdn": "+84987654321",
-      "email": "contact@niensuviet.app",
-      "map": "https://maps.google.com/?q=123+Nguyen+Trai+Thu+Duc+Ho+Chi+Minh+City"
+      }
     },
     "Auth": {
       "account": "Account",

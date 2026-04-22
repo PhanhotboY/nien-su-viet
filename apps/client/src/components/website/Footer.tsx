@@ -10,6 +10,9 @@ import {
   TiktokIcon,
   ZaloIcon,
   TwitterIcon,
+  InstagramIcon,
+  ThreadsIcon,
+  XIcon,
 } from '@/icons/socials';
 import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
@@ -25,14 +28,16 @@ interface FooterProps {
     tiktok?: string;
     zalo?: string;
     twitter?: string;
+    instagram?: string;
+    threads?: string;
   };
   email: string;
-  msisdn?: string;
-  address: {
-    street?: string;
-    district?: string;
-    province?: string;
-  };
+  // msisdn?: string;
+  // address: {
+  //   street?: string;
+  //   district?: string;
+  //   province?: string;
+  // };
   navItems: Awaited<ReturnType<typeof getFooterNavItems>>;
 }
 
@@ -43,8 +48,8 @@ export const Footer = ({
   description,
   social,
   email,
-  msisdn,
-  address,
+  // msisdn,
+  // address,
   navItems,
 }: FooterProps) => {
   const t = useTranslations('HomePage.Footer');
@@ -101,8 +106,7 @@ export const Footer = ({
                   target="_blank"
                   className="opacity-60 hover:opacity-100 flex items-center gap-2"
                 >
-                  <TwitterIcon className="h-6 w-6" />
-                  Twitter
+                  <XIcon className="h-6 w-6" />X (Twitter)
                 </Link>
               </div>
             )}
@@ -117,6 +121,34 @@ export const Footer = ({
                 >
                   <YoutubeIcon className="h-6 w-6" />
                   YouTube
+                </Link>
+              </div>
+            )}
+
+            {social?.instagram && (
+              <div>
+                <Link
+                  rel="noreferrer noopener"
+                  href={social.instagram}
+                  target="_blank"
+                  className="opacity-60 hover:opacity-100 flex items-center gap-2"
+                >
+                  <InstagramIcon className="h-6 w-6" />
+                  Instagram
+                </Link>
+              </div>
+            )}
+
+            {social?.threads && (
+              <div>
+                <Link
+                  rel="noreferrer noopener"
+                  href={social.threads}
+                  target="_blank"
+                  className="opacity-60 hover:opacity-100 flex items-center gap-2"
+                >
+                  <ThreadsIcon className="h-6 w-6" />
+                  Threads
                 </Link>
               </div>
             )}
@@ -181,7 +213,7 @@ export const Footer = ({
             </Link>
           </div>
 
-          {msisdn && (
+          {/*{msisdn && (
             <div>
               <Link
                 href={`tel:${msisdn}`}
@@ -191,9 +223,9 @@ export const Footer = ({
                 {msisdn}
               </Link>
             </div>
-          )}
+          )}*/}
 
-          {(address?.street || address?.district || address?.province) && (
+          {/*{(address?.street || address?.district || address?.province) && (
             <div className="opacity-60 flex items-start gap-2 text-sm">
               <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
               <span>
@@ -212,7 +244,7 @@ export const Footer = ({
                 {address.province}
               </span>
             </div>
-          )}
+          )}*/}
         </div>
       </section>
 

@@ -28,6 +28,7 @@ export function PostsLayout() {
     });
   }, []);
 
+  const [loading, setLoading] = useState(true);
   const [featuredPost, setFeaturedPost] = useState<
     Awaited<ReturnType<typeof getPublicPosts>>['data'][0] | null
   >(null);
@@ -52,17 +53,21 @@ export function PostsLayout() {
       ...(urlSearchParams.get('q')
         ? { search: urlSearchParams.get('q') as string }
         : {}),
-    }).then(({ data, pagination }) => {
-      // Featured post (show first post on first page if no search)
-      if (isFirstPage && !hasSearchQuery && data.length > 0) {
-        setFeaturedPost(data[0]);
-        setRegularPosts(data.slice(1));
-      } else {
-        setFeaturedPost(null);
-        setRegularPosts(data);
-      }
-      setPagination(pagination);
-    });
+    })
+      .then(({ data, pagination }) => {
+        // Featured post (show first post on first page if no search)
+        if (isFirstPage && !hasSearchQuery && data.length > 0) {
+          setFeaturedPost(data[0]);
+          setRegularPosts(data.slice(1));
+        } else {
+          setFeaturedPost(null);
+          setRegularPosts(data);
+        }
+        setPagination(pagination);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [params.toString()]);
 
   const hasNoPosts = regularPosts.length === 0 && !featuredPost;
@@ -72,14 +77,46 @@ export function PostsLayout() {
     return urlSearchParams;
   }, [params.toString()]);
 
+  if (loading) {
+    return (
+      <>
+        <div className="mb-12">
+          <MainPostItemLoading />
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+          {/* Main Content Area */}
+          <div className="lg:col-span-8">
+            {/* Posts Grid or Empty State */}
+            <div className="space-y-8">
+              {[1, 2, 3, 4]?.map((p) => (
+                <div
+                  key={p}
+                  className="transition-all duration-200 hover:scale-[1.01]"
+                >
+                  <MainPostItemLoading />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-4">
+            <div className="sticky top-4">
+              <BlogSidebar recentPosts={[]} locale={locale} />
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       {/* Featured Post - Only on first page without search */}
       {featuredPost && (
         <div className="mb-12">
-          <Suspense fallback={<MainPostItemLoading />}>
-            <FeaturedPost post={featuredPost} locale={locale} />
-          </Suspense>
+          <FeaturedPost post={featuredPost} locale={locale} />
         </div>
       )}
 

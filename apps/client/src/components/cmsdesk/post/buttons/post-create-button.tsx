@@ -7,6 +7,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
 import { protectedPostConfig } from '@/config/cmsdesk';
 import { createPost } from '@/services/post.service';
 import { useAuthenticate } from '@daveyplate/better-auth-ui';
@@ -55,14 +56,14 @@ const PostCreateButton = () => {
 
   return (
     <>
-      <button
+      <Button
         type="button"
         onClick={createPostHandler}
-        className="flex items-center rounded-md bg-gray-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-gray-600"
+        className="flex items-center rounded-md px-3.5 py-2.5 shadow-sm"
       >
         {isLoading && <SpinnerIcon className="mr-2 h-4 w-4 animate-spin" />}
         {protectedPostConfig.newPost}
-      </button>
+      </Button>
       <AlertDialog open={isLoading} onOpenChange={setIsLoading}>
         <AlertDialogContent className="font-sans">
           <AlertDialogHeader>

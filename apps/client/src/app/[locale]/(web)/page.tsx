@@ -42,13 +42,13 @@ export default async function HomeTimePage({
     logo: `${CLIENT_HOST}${metadata.logo}`,
     email: metadata.email,
     sameAs: [metadata.social.facebook],
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: metadata.address.street,
-      addressLocality: metadata.address.district,
-      addressRegion: metadata.address.province,
-      addressCountry: 'VN',
-    },
+    // address: {
+    //   '@type': 'PostalAddress',
+    //   streetAddress: metadata.address.street,
+    //   addressLocality: metadata.address.district,
+    //   addressRegion: metadata.address.province,
+    //   addressCountry: 'VN',
+    // },
   };
 
   const itemListJsonLd = {
