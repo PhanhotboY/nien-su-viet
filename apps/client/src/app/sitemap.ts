@@ -25,7 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     //   getPublicPosts(),
     //   getEvents({ page: '1', limit: '100' }),
     // ]);
-    const { data: posts } = await getPublicPosts();
+    const { data: posts } = await getPublicPosts({page:'1', limit: '100'});
     const postRoutes = locales.map(
       (locale) =>
         posts?.map((post) =>
@@ -54,6 +54,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [...defaultRoutes, ...postRoutes].flat();
   } catch (e) {
+    console.error('Error generating sitemap:', e);
     return defaultRoutes.flat();
   }
 }
