@@ -62,7 +62,7 @@ func (g PostListQueryDto) MapToQuery() repository.PostQuery {
 	if g.Limit != nil {
 		limit = *g.Limit
 	}
-	var offset uint32 = 10
+	var offset uint32 = 0
 	if g.Page != nil && *g.Page > 0 {
 		offset = limit * (*g.Page - 1)
 	}
