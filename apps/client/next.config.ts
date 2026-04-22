@@ -3,6 +3,9 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  turbopack: {
+    root: process.cwd(),
+  },
   typescript: {
     ignoreBuildErrors: false,
   },
@@ -15,6 +18,9 @@ const nextConfig: NextConfig = {
       {
         hostname: 'res.cloudinary.com',
       },
+      {
+        hostname: process.env.NEXT_PUBLIC_CLIENT_HOST || 'localhost',
+      }
     ],
   },
   experimental: {
