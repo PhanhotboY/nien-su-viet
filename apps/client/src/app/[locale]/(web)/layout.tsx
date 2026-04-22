@@ -91,17 +91,16 @@ export default async function RootLayout({
         social={{
           facebook: appData.social.facebook,
           twitter: appData.social.twitter,
-          // youtube: appData.social.youtube,
-          // tiktok: appData.social.tiktok,
-          // zalo: appData.social.zalo,
+          instagram: appData.social.instagram,
+          threads: appData.social.threads,
         }}
         email={appData.email}
         // msisdn={appData.msisdn}
-        address={{
-          street: appData.address.street,
-          district: appData.address.district,
-          province: appData.address.province,
-        }}
+        // address={{
+        //   street: appData.address.street,
+        //   district: appData.address.district,
+        //   province: appData.address.province,
+        // }}
         navItems={footerNavItems}
       />
     </>

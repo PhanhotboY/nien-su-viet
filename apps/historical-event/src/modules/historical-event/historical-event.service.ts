@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
-import { context, Span, trace } from '@opentelemetry/api';
+import { trace } from '@opentelemetry/api';
 import { isUUID } from 'class-validator';
 
 import { PrismaService } from '@historical-event/database';
@@ -9,10 +9,8 @@ import {
   RedisService,
   UtilService,
   WithSpan,
-  addSpanAttributes,
   recordOperationTiming,
   type RedisServiceType,
-  createSpan,
 } from '@phanhotboy/nsv-common';
 import { Prisma } from '@historical-event-prisma';
 import {
@@ -20,7 +18,6 @@ import {
   CreateHistoricalEventResponse,
   DeleteHistoricalEventRequest,
   DeleteHistoricalEventResponse,
-  EventDateType,
   type GetAllHistoricalEventsRequest,
   GetAllHistoricalEventsResponse,
   type GetHistoricalEventPreviewRequest,
@@ -31,9 +28,11 @@ import {
   UpdateHistoricalEventResponse,
 } from '@phanhotboy/genproto/historical_event_service/historical_events';
 import { UserService } from '../user';
-import { HistoricalEventBaseUpdateDto } from '@gateway/modules/historical-event/dto';
-import { HISTORICAL_EVENT } from '@phanhotboy/constants';
 import { TimestampUtil } from '@phanhotboy/nsv-common/util/grpc.util';
+import {
+  toEventDateType,
+  toGrpcEventDateType,
+} from '@historical-event/helper/dateType.helper';
 
 const tracerName = 'historical-event-service';
 @Injectable()
@@ -210,11 +209,11 @@ export class HistoricalEventService {
             ? {
                 ...event,
                 thumbnail: event.thumbnail ?? undefined,
-                fromDateType: toEventDateType(event.fromDateType),
+                fromDateType: toGrpcEventDateType(event.fromDateType),
                 fromYear: event.fromYear ?? undefined,
                 fromMonth: event.fromMonth ?? undefined,
                 fromDay: event.fromDay ?? undefined,
-                toDateType: toEventDateType(event.toDateType),
+                toDateType: toGrpcEventDateType(event.toDateType),
                 toYear: event.toYear ?? undefined,
                 toMonth: event.toMonth ?? undefined,
                 toDay: event.toDay ?? undefined,
@@ -285,14 +284,18 @@ export class HistoricalEventService {
   ): Promise<UpdateHistoricalEventResponse> {
     const found = await this.getEventById({ id: payload.id });
     const cleanPayload =
-      this.util.removeNestedUndefined<HistoricalEventBaseUpdateDto>(payload);
+      this.util.removeNestedUndefined<UpdateHistoricalEventRequest>(payload);
     if (this.util.isEmptyObj(cleanPayload)) {
       return { data: { id: payload.id, success: true } };
     }
 
     const updated = await this.prisma.historicalEvent.update({
       where: { id: payload.id },
-      data: cleanPayload,
+      data: {
+        ...cleanPayload,
+        toDateType: toEventDateType(payload.toDateType),
+        fromDateType: toEventDateType(payload.fromDateType),
+      },
     });
 
     // Clear cache
@@ -319,18 +322,5 @@ export class HistoricalEventService {
     await this.redisService.del(this.cacheKey);
 
     return { data: { id, success: true } };
-  }
-}
-
-function toEventDateType(
-  dateType?: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>,
-): EventDateType {
-  switch (dateType) {
-    case HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT:
-      return EventDateType.EXACT;
-    case HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE:
-      return EventDateType.APPROXIMATE;
-    default:
-      return EventDateType.EVENT_DATE_TYPE_UNSPECIFIED;
   }
 }

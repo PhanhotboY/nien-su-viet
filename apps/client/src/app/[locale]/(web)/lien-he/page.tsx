@@ -1,3 +1,7 @@
+import { Metadata } from 'next';
+import { Mail } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
+
 import { Separator } from '@/components/ui/separator';
 import {
   Card,
@@ -7,19 +11,41 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {
-  Facebook,
-  Instagram,
-  Linkedin,
-  Mail,
-  MapPin,
-  Phone,
-  Twitter,
-} from 'lucide-react';
 import Link from '@/i18n/navigation';
 import { getMetadata } from '@/content/landing/metadata';
 import ContactForm from '@/components/website/contact/ContactForm';
-import { getTranslations } from 'next-intl/server';
+import {
+  FacebookIcon,
+  XIcon,
+  InstagramIcon,
+  ThreadsIcon,
+} from '@/icons/socials';
+import { genMetadata } from '@/lib/metadata.lib';
+
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  try {
+    const { locale } = await params;
+    const metadata = await getMetadata({ locale });
+
+    const t = await getTranslations({ locale, namespace: 'ContactPage' });
+
+    return genMetadata({
+      title: `${t('header.title')} - ${metadata.title}`,
+      description: t('header.description'),
+      locale,
+      path: '/lien-he',
+      logo: metadata.logo,
+    });
+  } catch (error) {
+    const title = 'Nien Su Viet';
+    const description = 'Vietnam history timeline website';
+
+    return genMetadata({ title, description, locale: 'vi', path: '/' });
+  }
+}
 
 export default async function ContactPage({
   params,
@@ -29,14 +55,6 @@ export default async function ContactPage({
   const { locale } = await params;
   const appData = await getMetadata({ locale });
   const t = await getTranslations({ locale, namespace: 'ContactPage' });
-
-  const addressLines = [
-    appData?.address?.street,
-    [appData?.address?.district, appData?.address?.province]
-      .filter(Boolean)
-      .join(', ') || undefined,
-    appData?.address?.country ?? t('address.countryFallback'),
-  ].filter(Boolean) as string[];
 
   return (
     <div className="container mx-auto py-12">
@@ -64,7 +82,7 @@ export default async function ContactPage({
 
               <CardContent className="space-y-6">
                 {/* Address */}
-                <div className="flex gap-4">
+                {/*<div className="flex gap-4">
                   <div className="flex-shrink-0">
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                       <MapPin className="h-5 w-5 text-primary" />
@@ -84,10 +102,10 @@ export default async function ContactPage({
                         : t('common.empty')}
                     </p>
                   </div>
-                </div>
+                </div>*/}
 
                 {/* Phone */}
-                <div className="flex gap-4">
+                {/*<div className="flex gap-4">
                   <div className="flex-shrink-0">
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                       <Phone className="h-5 w-5 text-primary" />
@@ -100,7 +118,7 @@ export default async function ContactPage({
                       {appData?.msisdn ?? t('common.empty')}
                     </p>
                   </div>
-                </div>
+                </div>*/}
 
                 {/* Email */}
                 <div className="flex gap-4">
@@ -141,7 +159,7 @@ export default async function ContactPage({
                       rel="noopener noreferrer"
                       aria-label={t('social.aria.facebook')}
                     >
-                      <Facebook className="h-5 w-5" />
+                      <FacebookIcon className="h-5 w-5" />
                     </a>
                   </Button>
 
@@ -157,7 +175,7 @@ export default async function ContactPage({
                       rel="noopener noreferrer"
                       aria-label={t('social.aria.twitter')}
                     >
-                      <Twitter className="h-5 w-5" />
+                      <XIcon className="h-5 w-5" />
                     </a>
                   </Button>
 
@@ -175,7 +193,7 @@ export default async function ContactPage({
                       rel="noopener noreferrer"
                       aria-label={t('social.aria.instagram')}
                     >
-                      <Instagram className="h-5 w-5" />
+                      <InstagramIcon className="h-5 w-5" />
                     </a>
                   </Button>
 
@@ -186,12 +204,12 @@ export default async function ContactPage({
                     asChild
                   >
                     <a
-                      href={appData?.social?.linkedin ?? 'https://linkedin.com'}
+                      href={appData?.social?.threads ?? 'https://linkedin.com'}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={t('social.aria.linkedin')}
                     >
-                      <Linkedin className="h-5 w-5" />
+                      <ThreadsIcon className="h-5 w-5" />
                     </a>
                   </Button>
                 </div>
@@ -216,36 +234,9 @@ export default async function ContactPage({
           <div className="md:col-span-2">
             <ContactForm
               contactShortcuts={{
-                msisdn: appData?.msisdn,
                 email: appData?.email,
               }}
             />
-
-            {/* Map (Optional) */}
-            <Card className="mt-6">
-              <CardHeader>
-                <CardTitle>{t('map.title')}</CardTitle>
-                <CardDescription>{t('map.description')}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                  {appData?.map ? (
-                    <a
-                      className="text-primary hover:underline"
-                      href={appData.map}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {t('map.open')}
-                    </a>
-                  ) : (
-                    <p className="text-muted-foreground">
-                      {t('map.placeholder')}
-                    </p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </div>

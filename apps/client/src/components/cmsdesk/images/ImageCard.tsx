@@ -3,21 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  Loader2,
-  MoreVertical,
-  Trash2,
-  Edit2,
-  ExternalLink,
-  Code,
-  Check,
-} from 'lucide-react';
+import { Trash2, Edit2, ExternalLink, Copy, Check } from 'lucide-react';
 import type { IImage } from '@/types/image';
 
 interface ImageCardProps {
@@ -92,14 +78,16 @@ export function ImageCard({ image, onEdit, onDelete }: ImageCardProps) {
             onClick={handleCopyUrl}
             disabled={isDeleting}
             className="absolute top-4 right-4 aspect-square"
+            title="Copy image link"
           >
-            {isCopied ? <Check className="h-4" /> : <Code className="h-4" />}
+            {isCopied ? <Check className="h-4" /> : <Copy className="h-4" />}
           </Button>
 
           <Button
             variant="destructive"
             onClick={handleDelete}
             disabled={isDeleting}
+            title="Delete image"
           >
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -107,10 +95,15 @@ export function ImageCard({ image, onEdit, onDelete }: ImageCardProps) {
             onClick={() => window.open(image.img_url, '_blank')}
             disabled={isDeleting}
             variant="outline"
+            title="Open image in new tab"
           >
             <ExternalLink className="h-4 w-4" />
           </Button>
-          <Button onClick={() => onEdit(image)} disabled={isDeleting}>
+          <Button
+            onClick={() => onEdit(image)}
+            disabled={isDeleting}
+            title="Edit image"
+          >
             <Edit2 className="h-4 w-4" />
           </Button>
         </div>

@@ -9,7 +9,7 @@ import (
 
 type PostListQueryDto struct {
 	Page          *uint32                `json:"page,omitempty" validate:"omitempty,gte=1"`
-	Limit         *uint32                `json:"limit,omitempty" validate:"omitempty,gte=1,lte=100"`
+	Limit         *uint32                `json:"limit,omitempty" validate:"omitempty,gte=1,lte=1000"`
 	Published     *bool                  `json:"published,omitempty"`
 	Search        *string                `json:"search,omitempty" validate:"omitempty,max=255"`
 	SortBy        *string                `json:"sort_by,omitempty"`
@@ -62,7 +62,7 @@ func (g PostListQueryDto) MapToQuery() repository.PostQuery {
 	if g.Limit != nil {
 		limit = *g.Limit
 	}
-	var offset uint32 = 10
+	var offset uint32 = 0
 	if g.Page != nil && *g.Page > 0 {
 		offset = limit * (*g.Page - 1)
 	}

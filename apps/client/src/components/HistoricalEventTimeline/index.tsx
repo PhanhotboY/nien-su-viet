@@ -14,7 +14,7 @@ import { IPaginatedResponse } from '../../interfaces/response.interface';
 
 import 'vis-timeline/styles/vis-timeline-graph2d.css';
 import './index.css';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { getEvents } from '@/services/historical-event.service';
 import { EventDetailDialog } from './EventDetailDialog';
 import { useTranslations } from 'next-intl';

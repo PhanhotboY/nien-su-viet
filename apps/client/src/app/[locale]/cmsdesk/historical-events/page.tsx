@@ -19,9 +19,9 @@ export default function HistoricalEventManagementPage() {
             Manage and organize historical events
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="gap-1">
           <Link href="/cmsdesk/historical-events/new">
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="h-4 w-4" />
             Create Event
           </Link>
         </Button>

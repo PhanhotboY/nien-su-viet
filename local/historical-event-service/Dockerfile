@@ -23,6 +23,7 @@ COPY package*.json ./
 RUN npm ci --omit=dev --legacy-peer-deps && npm cache clean --force
 
 COPY --from=builder /app/dist ./dist
+COPY ./api ./api
 
 EXPOSE 8082
 

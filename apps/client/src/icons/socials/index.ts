@@ -5,3 +5,5 @@ export { default as TwitterIcon } from './twitter-icon';
 export { default as YoutubeIcon } from './youtube-icon';
 export { default as TiktokIcon } from './tiktok-icon';
 export { default as ZaloIcon } from './zalo-icon';
+export { default as ThreadsIcon } from './threads-icon';
+export { default as XIcon } from './x-icon';

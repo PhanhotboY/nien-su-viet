@@ -25,7 +25,7 @@ async function findPostsHandler(query: any) {
     ('use server');
     const { data } = await findPosts({
       page: (query.page as string) || '1',
-      limit: (query.limit as string) || '10',
+      limit: (query.limit as string) || '100',
       ...(query.q ? { q: query.q as string } : {}),
     });
     return data;

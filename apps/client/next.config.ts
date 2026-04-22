@@ -15,6 +15,9 @@ const nextConfig: NextConfig = {
       {
         hostname: 'res.cloudinary.com',
       },
+      {
+        hostname: process.env.NEXT_PUBLIC_CLIENT_HOST || 'localhost',
+      }
     ],
   },
   experimental: {

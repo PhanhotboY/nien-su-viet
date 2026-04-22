@@ -9,7 +9,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - nsv-pg-auth-data:/var/lib/postgresql/data
+      - nsv-pg-auth-data:/var/lib/postgresql
   nsv-pg-hevent:
     image: postgres:alpine
     container_name: nsv-pg-hevent
@@ -20,7 +20,7 @@ services:
     ports:
       - '5433:5432'
     volumes:
-      - nsv-pg-hevent-data:/var/lib/postgresql/data
+      - nsv-pg-hevent-data:/var/lib/postgresql
   nsv-pg-post:
     image: postgres:alpine
     container_name: nsv-pg-post
@@ -31,7 +31,7 @@ services:
     ports:
       - '5434:5432'
     volumes:
-      - nsv-pg-post-data:/var/lib/postgresql/data
+      - nsv-pg-post-data:/var/lib/postgresql
   nsv-rmq:
     image: rabbitmq:4-management-alpine
     container_name: nsv-rmq
