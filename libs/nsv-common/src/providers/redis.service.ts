@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { type RedisClientType } from '@keyv/redis';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { recordOperationTimingSync } from '../otel';
 
 /**
  * Extended Redis service to handle hash operations with JSON serialization
@@ -23,15 +24,17 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
     return new Proxy(this, {
       get(target, prop) {
-        if (prop in target) {
-          return Reflect.get(target, prop);
-        }
+        return recordOperationTimingSync('redis', String(prop), () => {
+          if (prop in target) {
+            return Reflect.get(target, prop);
+          }
 
-        const value = Reflect.get(target.redisClient, prop);
-        if (typeof value === 'function') {
-          return value.bind(target.redisClient);
-        }
-        return value;
+          const value = Reflect.get(target.redisClient, prop);
+          if (typeof value === 'function') {
+            return value.bind(target.redisClient);
+          }
+          return value;
+        });
       },
     });
   }

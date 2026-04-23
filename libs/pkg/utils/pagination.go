@@ -18,7 +18,7 @@ func NewPagination(limit, offset, totalItems uint32) *Pagination {
 	page := uint32(1)
 	if limit > 0 {
 		totalPages = uint32(math.Ceil(float64(totalItems) / float64(limit)))
-		page = (offset / limit) + 1
+		page = (offset / limit)
 	}
 	return &Pagination{
 		Page:       page,

@@ -8,6 +8,7 @@ export * from './rmq';
 export * from './util';
 export * from './logger';
 export * from './otel';
+export * from './elasticsearch';
 
 declare global {
   type Values<T> = T[keyof T];

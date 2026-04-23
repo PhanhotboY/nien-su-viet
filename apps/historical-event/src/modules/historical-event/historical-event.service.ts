@@ -3,7 +3,6 @@ import { RpcException } from '@nestjs/microservices';
 import { trace } from '@opentelemetry/api';
 import { isUUID } from 'class-validator';
 
-import { PrismaService } from '@historical-event/database';
 import {
   getExcerpt,
   RedisService,
@@ -12,132 +11,78 @@ import {
   recordOperationTiming,
   type RedisServiceType,
 } from '@phanhotboy/nsv-common';
-import { Prisma } from '@historical-event-prisma';
-import {
-  type CreateHistoricalEventRequest,
-  CreateHistoricalEventResponse,
+import type {
+  CreateHistoricalEventRequest,
   DeleteHistoricalEventRequest,
-  DeleteHistoricalEventResponse,
-  type GetAllHistoricalEventsRequest,
-  GetAllHistoricalEventsResponse,
-  type GetHistoricalEventPreviewRequest,
-  GetHistoricalEventPreviewResponse,
-  type GetHistoricalEventRequest,
-  GetHistoricalEventResponse,
+  GetAllHistoricalEventsRequest,
+  GetHistoricalEventPreviewRequest,
+  GetHistoricalEventRequest,
   UpdateHistoricalEventRequest,
-  UpdateHistoricalEventResponse,
 } from '@phanhotboy/genproto/historical_event_service/historical_events';
 import { UserService } from '../user';
-import { TimestampUtil } from '@phanhotboy/nsv-common/util/grpc.util';
-import {
-  toEventDateType,
-  toGrpcEventDateType,
-} from '@historical-event/helper/dateType.helper';
+import { HistoricalEventsEsRepo } from '@historical-event/modules/historical-event/infrastructure/persistence/elasticsearch/historical-events.repo';
+import HistoricalEventsPgRepo from '@historical-event/modules/historical-event/infrastructure/persistence/postgresql/historical-events.repo';
+import { requestToListQuery, uniqueQueryBuilder } from './helper';
+import { status } from '@grpc/grpc-js';
 
 const tracerName = 'historical-event-service';
 @Injectable()
 export class HistoricalEventService {
-  private readonly cachePrefix = 'historical-event';
+  private readonly serviceName = 'historical-events';
   private readonly cacheKey: string;
 
   constructor(
-    private readonly prisma: PrismaService,
     private readonly util: UtilService,
     @Inject(RedisService)
     private readonly redisService: RedisServiceType,
     private readonly userService: UserService,
     private readonly logger: Logger,
+    private readonly eventPgRepo: HistoricalEventsPgRepo,
+    private readonly eventEsRepo: HistoricalEventsEsRepo,
   ) {
-    this.cacheKey = this.util.genCacheKey(this.cachePrefix);
+    this.cacheKey = this.util.genCacheKey(this.serviceName);
   }
 
   @WithSpan(tracerName, 'historical_event.create', {
     'operation.type': 'create',
   })
-  async createEvent(
-    payload: CreateHistoricalEventRequest,
-  ): Promise<CreateHistoricalEventResponse> {
+  async createEvent(payload: CreateHistoricalEventRequest) {
     await this.userService.findUserById(payload.authorId);
 
     const event = await recordOperationTiming(tracerName, 'prisma.create', () =>
-      this.prisma.historicalEvent.create({
-        data: payload as any,
-      }),
+      this.eventPgRepo.createHistoricalEvent(payload),
     );
 
-    // Clear cache
-    await recordOperationTiming(tracerName, 'redis.cache.delete', () =>
-      this.redisService.del(this.cacheKey),
-    );
+    // Clear cache + Index to Elasticsearch
+    const [cacheRes, indexRes] = await Promise.allSettled([
+      recordOperationTiming(tracerName, 'redis.cache.delete', () =>
+        this.redisService.del(this.cacheKey),
+      ),
+      recordOperationTiming(tracerName, 'elasticsearch.index', () =>
+        this.eventEsRepo.index(event),
+      ),
+    ]);
+    if (cacheRes.status === 'rejected') {
+      this.logger.error(
+        `Failed to clear cache for key ${this.cacheKey} after creating event with id ${event.id}`,
+        cacheRes.reason,
+      );
+    }
+    if (indexRes.status === 'rejected') {
+      this.logger.error(
+        `Failed to index event with id ${event.id} to Elasticsearch after creation`,
+        indexRes.reason,
+      );
+    }
 
-    return { data: { id: event.id, success: true } };
+    return { id: event.id, success: true };
   }
 
   @WithSpan(tracerName, 'historical_event.list', { 'operation.type': 'list' })
-  async getEvents(
-    query: GetAllHistoricalEventsRequest,
-  ): Promise<GetAllHistoricalEventsResponse> {
-    const {
-      page = 1,
-      limit = 10,
-      categoryIds,
-      fromDay,
-      fromMonth,
-      fromYear,
-      toDay,
-      toMonth,
-      toYear,
-      sortOrder = 'desc',
-      sortBy = 'fromYear',
-    } = query;
-
-    const options = {
-      where: {} as Prisma.HistoricalEventWhereInput,
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: {
-        [sortBy]: sortOrder,
-      },
-      include: {
-        author: true,
-      },
-    } satisfies Parameters<typeof this.prisma.historicalEvent.findMany>[0];
-
-    if (categoryIds && categoryIds.length > 0) {
-      options!.where!.categories = {
-        some: { categoryId: { in: categoryIds } },
-      };
-    }
-
-    const hasFromYear = fromYear !== undefined;
-    const hasFromMonth = fromMonth !== undefined;
-    const hasFromDay = fromDay !== undefined;
-    const hasToYear = toYear !== undefined;
-    const hasToMonth = toMonth !== undefined;
-    const hasToDay = toDay !== undefined;
-
-    if (hasFromYear) {
-      options!.where!.fromYear = fromYear;
-    }
-
-    if (hasFromMonth && hasFromYear) {
-      options!.where!.fromMonth = fromMonth;
-    }
-
-    if (hasFromDay && hasFromMonth && hasFromYear) {
-      options!.where!.fromDay = fromDay;
-    }
-    if (hasToYear) {
-      options!.where!.toYear = toYear;
-    }
-
-    if (hasToMonth && hasToYear) {
-      options!.where!.toMonth = toMonth;
-    }
-
-    if (hasToDay && hasToMonth && hasToYear) {
-      options!.where!.toDay = toDay;
-    }
+  async getEvents(query: GetAllHistoricalEventsRequest) {
+    const page = query.page || 1;
+    const limit = query.limit || 10;
+    const options = requestToListQuery({ ...query, page, limit });
 
     return this.util.handleHashCachingQuery(
       {
@@ -147,15 +92,15 @@ export class HistoricalEventService {
       async () => {
         const [events, total] = await Promise.all([
           recordOperationTiming(tracerName, 'prisma.findMany', () =>
-            this.prisma.historicalEvent.findMany(options),
+            this.eventPgRepo.searchHistoricalEvents(options),
           ),
           recordOperationTiming(tracerName, 'prisma.count', () =>
-            this.prisma.historicalEvent.count({ where: options.where }),
+            this.eventPgRepo.countHistoricalEvents(options),
           ),
         ]);
 
         return {
-          data: events as any,
+          events,
           pagination: {
             total,
             page,
@@ -170,27 +115,19 @@ export class HistoricalEventService {
   @WithSpan(tracerName, 'historical_event.get_by_id', {
     'operation.type': 'read',
   })
-  async getEventById({
-    id,
-  }: GetHistoricalEventRequest): Promise<GetHistoricalEventResponse> {
+  async getEventById({ id }: GetHistoricalEventRequest) {
     const span = trace.getActiveSpan();
 
     if (isUUID(id, '4') === false) {
       const exception = new RpcException({
         message: 'ID không hợp lệ',
-        statusCode: 400,
+        code: status.INVALID_ARGUMENT,
       });
       span?.recordException(exception);
       throw exception;
     }
 
-    const options = {
-      where: { id },
-      include: {
-        author: true,
-        categories: { include: { category: true, event: false } },
-      },
-    } satisfies Parameters<typeof this.prisma.historicalEvent.findUnique>[0];
+    const options = uniqueQueryBuilder(id);
 
     return await this.util.handleHashCachingQuery(
       {
@@ -202,27 +139,15 @@ export class HistoricalEventService {
         const event = await recordOperationTiming(
           tracerName,
           'prisma.findUnique',
-          () => this.prisma.historicalEvent.findUnique(options),
+          () => this.eventPgRepo.getHistoricalEventById(options),
         );
-        return {
-          data: event
-            ? {
-                ...event,
-                thumbnail: event.thumbnail ?? undefined,
-                fromDateType: toGrpcEventDateType(event.fromDateType),
-                fromYear: event.fromYear ?? undefined,
-                fromMonth: event.fromMonth ?? undefined,
-                fromDay: event.fromDay ?? undefined,
-                toDateType: toGrpcEventDateType(event.toDateType),
-                toYear: event.toYear ?? undefined,
-                toMonth: event.toMonth ?? undefined,
-                toDay: event.toDay ?? undefined,
-                categories: [],
-                createdAt: TimestampUtil.toTimestamp(event.createdAt),
-                updatedAt: TimestampUtil.toTimestamp(event.updatedAt),
-              }
-            : undefined,
-        };
+        return (
+          event && {
+            ...event,
+            author: (event as any).author,
+            categories: (event as any).categories,
+          }
+        );
       },
     );
   }
@@ -230,37 +155,22 @@ export class HistoricalEventService {
   @WithSpan(tracerName, 'historical_event.get_preview', {
     'operation.type': 'read',
   })
-  async getEventPreviewById({
-    id,
-  }: GetHistoricalEventPreviewRequest): Promise<GetHistoricalEventPreviewResponse> {
-    const { data: event } = await this.getEventById({ id });
+  async getEventPreviewById({ id }: GetHistoricalEventPreviewRequest) {
+    const event = await this.getEventById({ id });
 
     const excerpt = getExcerpt(event!.content, 1000);
 
     return {
-      data: {
-        ...event!,
-        excerpt,
-      },
+      ...event!,
+      excerpt,
     };
   }
 
   @WithSpan(tracerName, 'historical_event.get_by_id_and_author', {
     'operation.type': 'read',
   })
-  async getAuthorEventById(
-    id: string,
-    authorId: string,
-  ): Promise<GetHistoricalEventResponse> {
-    const options = {
-      where: { id, authorId },
-      include: {
-        author: true,
-        categories: {
-          include: { category: true, event: false },
-        },
-      },
-    } satisfies Parameters<typeof this.prisma.historicalEvent.findUnique>[0];
+  async getAuthorEventById(id: string, authorId: string) {
+    const options = uniqueQueryBuilder(id, authorId);
 
     return this.util.handleHashCachingQuery(
       {
@@ -272,55 +182,47 @@ export class HistoricalEventService {
         const event = recordOperationTiming(
           tracerName,
           'prisma.findUnique.with.author',
-          () => this.prisma.historicalEvent.findUnique(options),
+          () => this.eventPgRepo.getHistoricalEventById(options),
         ) as any;
-        return { data: event ?? undefined };
+        return event ?? undefined;
       },
     );
   }
 
-  async updateEvent(
-    payload: UpdateHistoricalEventRequest,
-  ): Promise<UpdateHistoricalEventResponse> {
-    const found = await this.getEventById({ id: payload.id });
-    const cleanPayload =
-      this.util.removeNestedUndefined<UpdateHistoricalEventRequest>(payload);
-    if (this.util.isEmptyObj(cleanPayload)) {
-      return { data: { id: payload.id, success: true } };
-    }
+  @WithSpan(tracerName, 'historical_event.update', {
+    'operation.type': 'update',
+  })
+  async updateEvent({ id, ...payload }: UpdateHistoricalEventRequest) {
+    const found = await this.getEventById({ id });
 
-    const updated = await this.prisma.historicalEvent.update({
-      where: { id: payload.id },
-      data: {
-        ...cleanPayload,
-        toDateType: toEventDateType(payload.toDateType),
-        fromDateType: toEventDateType(payload.fromDateType),
-      },
-    });
+    await this.eventPgRepo.updateHistoricalEvent(id, payload);
 
     // Clear cache
     await this.redisService.del(this.cacheKey);
 
-    return { data: { id: updated.id, success: true } };
+    return { id, success: true };
   }
 
-  async deleteEvent({
-    id,
-    authorId,
-  }: DeleteHistoricalEventRequest): Promise<DeleteHistoricalEventResponse> {
+  @WithSpan(tracerName, 'historical_event.delete', {
+    'operation.type': 'delete',
+  })
+  async deleteEvent({ id, authorId }: DeleteHistoricalEventRequest) {
+    const span = trace.getActiveSpan();
     const { data: event } = await this.getAuthorEventById(id, authorId);
     if (!event) {
-      throw new RpcException({
+      const exception = new RpcException({
         message: 'Sự kiện lịch sử không tồn tại',
-        statusCode: 404,
+        code: status.NOT_FOUND,
       });
+      span?.recordException(exception);
+      throw exception;
     }
 
-    await this.prisma.historicalEvent.delete({ where: { id } });
+    await this.eventPgRepo.deleteHistoricalEvent(id);
 
     // Clear cache
     await this.redisService.del(this.cacheKey);
 
-    return { data: { id, success: true } };
+    return { id, success: true };
   }
 }

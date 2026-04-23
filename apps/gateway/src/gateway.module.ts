@@ -11,7 +11,6 @@ import { CommonModule } from '@phanhotboy/nsv-common';
 import { SerializeResponseInterceptor } from './common/interceptors';
 import { CatchEverythingFilter, HttpExceptionsFilter } from './common/filters';
 import { BetterAuthGuard, RolesGuard } from './common/guards';
-import { MicroserviceExceptionFilter } from '@phanhotboy/nsv-common/filters/rpc-exception.filter';
 
 @Module({
   imports: [
@@ -38,6 +37,16 @@ import { MicroserviceExceptionFilter } from '@phanhotboy/nsv-common/filters/rpc-
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    // Global pipes
+    // Global filters
+    {
+      provide: APP_FILTER,
+      useClass: CatchEverythingFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionsFilter,
+    },
     // Global interceptors
     {
       provide: APP_INTERCEPTOR,
@@ -51,20 +60,6 @@ import { MicroserviceExceptionFilter } from '@phanhotboy/nsv-common/filters/rpc-
     {
       provide: APP_INTERCEPTOR,
       useClass: CacheInterceptor,
-    },
-    // Global pipes
-    // Global filters
-    {
-      provide: APP_FILTER,
-      useClass: CatchEverythingFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionsFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: MicroserviceExceptionFilter,
     },
   ],
 })
