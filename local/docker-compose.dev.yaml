@@ -72,6 +72,7 @@ services:
       - '9200:9200'
     volumes:
       - esdata:/usr/share/elasticsearch/data
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     mem_limit: '1g'
     restart: unless-stopped
 
