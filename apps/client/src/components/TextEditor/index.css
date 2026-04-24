@@ -70,4 +70,14 @@
       color: oklch(from var(--card-foreground) l c h / 0.75) !important;
     }
   }
+
+  .ce-toolbar__plus,
+  .ce-toolbar__settings-btn {
+    color: var(--card-foreground);
+
+    &:hover {
+      background-color: var(--card-foreground);
+      color: var(--card);
+    }
+  }
 }
