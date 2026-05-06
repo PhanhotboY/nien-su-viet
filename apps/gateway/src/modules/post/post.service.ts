@@ -53,51 +53,51 @@ export class PostService {
     );
   }
 
-  async getAllPosts(query: PostQueryDto) {
-    return this.microserviceErrorHandler.handleAsyncCall(
-      () =>
-        firstValueFrom(
-          this.postService
-            .getAllPosts(plainToInstance(PostQueryGrpcDto, query))
-            .pipe(
-              timeout(10000),
-              catchError((error) => throwError(() => error)),
-            ),
-        ),
-      'get posts',
-      this.serviceName,
-    );
-  }
+  // async getAllPosts(query: PostQueryDto) {
+  //   return this.microserviceErrorHandler.handleAsyncCall(
+  //     () =>
+  //       firstValueFrom(
+  //         this.postService
+  //           .getAllPosts(plainToInstance(PostQueryGrpcDto, query))
+  //           .pipe(
+  //             timeout(10000),
+  //             catchError((error) => throwError(() => error)),
+  //           ),
+  //       ),
+  //     'get posts',
+  //     this.serviceName,
+  //   );
+  // }
 
-  async getPublishedPosts(query: PostQueryDto) {
-    return this.microserviceErrorHandler.handleAsyncCall(
-      () =>
-        firstValueFrom(
-          this.postService
-            .getPublishedPosts(plainToInstance(PostQueryGrpcDto, query))
-            .pipe(
-              timeout(10000),
-              catchError((error) => throwError(() => error)),
-            ),
-        ),
-      'get published posts',
-      this.serviceName,
-    );
-  }
+  // async getPublishedPosts(query: PostQueryDto) {
+  //   return this.microserviceErrorHandler.handleAsyncCall(
+  //     () =>
+  //       firstValueFrom(
+  //         this.postService
+  //           .getPublishedPosts(plainToInstance(PostQueryGrpcDto, query))
+  //           .pipe(
+  //             timeout(10000),
+  //             catchError((error) => throwError(() => error)),
+  //           ),
+  //       ),
+  //     'get published posts',
+  //     this.serviceName,
+  //   );
+  // }
 
-  async findPostByIdOrSlug(id: string) {
-    return this.microserviceErrorHandler.handleAsyncCall(
-      () =>
-        firstValueFrom(
-          this.postService.getPost({ id }).pipe(
-            timeout(10000),
-            catchError((error) => throwError(() => error)),
-          ),
-        ),
-      'get post by id or slug',
-      this.serviceName,
-    );
-  }
+  // async findPostByIdOrSlug(id: string) {
+  //   return this.microserviceErrorHandler.handleAsyncCall(
+  //     () =>
+  //       firstValueFrom(
+  //         this.postService.getPost({ id }).pipe(
+  //           timeout(10000),
+  //           catchError((error) => throwError(() => error)),
+  //         ),
+  //       ),
+  //     'get post by id or slug',
+  //     this.serviceName,
+  //   );
+  // }
 
   async updatePost(id: string, payload: PostBaseUpdateDto) {
     return this.microserviceErrorHandler.handleAsyncCall(

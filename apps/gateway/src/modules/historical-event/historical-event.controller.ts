@@ -45,29 +45,29 @@ export class HistoricalEventController {
     private readonly config: ConfigService,
   ) {}
 
-  @Get(':id/preview')
-  @Public()
-  @Serialize(HistoricalEventPreviewResponseDto)
-  @ApiOkSerializedResponse(HistoricalEventPreviewResponseDto)
-  getHistoricalEventPreviewById(@Param('id') id: string) {
-    return this.historicalEventService.getEventPreviewById(id);
-  }
+  // @Get(':id/preview')
+  // @Public()
+  // @Serialize(HistoricalEventPreviewResponseDto)
+  // @ApiOkSerializedResponse(HistoricalEventPreviewResponseDto)
+  // getHistoricalEventPreviewById(@Param('id') id: string) {
+  //   return this.historicalEventService.getEventPreviewById(id);
+  // }
 
-  @Get(':id')
-  @Public()
-  @Serialize(HistoricalEventDetailResponseDto)
-  @ApiOkSerializedResponse(HistoricalEventDetailResponseDto)
-  getHistoricalEventById(@Param('id') id: string) {
-    return this.historicalEventService.getEventById(id);
-  }
+  // @Get(':id')
+  // @Public()
+  // @Serialize(HistoricalEventDetailResponseDto)
+  // @ApiOkSerializedResponse(HistoricalEventDetailResponseDto)
+  // getHistoricalEventById(@Param('id') id: string) {
+  //   return this.historicalEventService.getEventById(id);
+  // }
 
-  @Get()
-  @Public()
-  @Serialize(HistoricalEventBriefResponseDto)
-  @ApiOkSerializedPaginatedResponse(HistoricalEventBriefResponseDto)
-  getAllHistoricalEvents(@Query() query: HistoricalEventQueryDto) {
-    return this.historicalEventService.getEvents(query) as any;
-  }
+  // @Get()
+  // @Public()
+  // @Serialize(HistoricalEventBriefResponseDto)
+  // @ApiOkSerializedPaginatedResponse(HistoricalEventBriefResponseDto)
+  // getAllHistoricalEvents(@Query() query: HistoricalEventQueryDto) {
+  //   return this.historicalEventService.getEvents(query) as any;
+  // }
 
   @Post()
   @Throttle(RATE_LIMIT.INTERNAL)

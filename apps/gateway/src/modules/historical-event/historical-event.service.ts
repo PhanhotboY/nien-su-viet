@@ -54,84 +54,6 @@ export class HistoricalEventService {
     );
   }
 
-  async getEvents(query: HistoricalEventQueryDto) {
-    return this.microserviceErrorHandler.handleAsyncCall(
-      () =>
-        firstValueFrom(
-          this.heventClient
-            .getAllEvents({
-              page: query.page,
-              limit: query.limit,
-              search: query.search,
-              sortBy: query.sortBy,
-              /** "asc" or "desc" */
-              sortOrder: query.sortOrder,
-              authorId: query.authorId,
-              /** Filter by category */
-              categoryIds: query.categoryIds || [],
-              /** Filter by from date range */
-              fromYear: query.fromYear,
-              fromMonth: query.fromMonth,
-              fromDay: query.fromDay,
-              /** Filter by to date range */
-              toYear: query.toYear,
-              toMonth: query.toMonth,
-              toDay: query.toDay,
-              /** Search specific year */
-              searchYear: query.searchYear,
-              /** Filter by created date range */
-              createdAtFrom:
-                query.createdAtFrom &&
-                TimestampUtil.toTimestamp(query.createdAtFrom),
-              createdAtTo:
-                query.createdAtTo &&
-                TimestampUtil.toTimestamp(query.createdAtTo),
-              /** Filter by updated date range */
-              updatedAtFrom:
-                query.updatedAtFrom &&
-                TimestampUtil.toTimestamp(query.updatedAtFrom),
-              updatedAtTo:
-                query.updatedAtTo &&
-                TimestampUtil.toTimestamp(query.updatedAtTo),
-            })
-            .pipe(
-              timeout(10000),
-              catchError((error) => throwError(() => error)),
-            ),
-        ),
-      'get events',
-      this.serviceName,
-    );
-  }
-
-  async getEventById(id: string) {
-    return this.microserviceErrorHandler.handleAsyncCall(
-      () =>
-        firstValueFrom(
-          this.heventClient.getEvent({ id }).pipe(
-            timeout(10000),
-            catchError((error) => throwError(() => error)),
-          ),
-        ),
-      'get event by id',
-      this.serviceName,
-    );
-  }
-
-  async getEventPreviewById(id: string) {
-    return this.microserviceErrorHandler.handleAsyncCall(
-      () =>
-        firstValueFrom(
-          this.heventClient.getEventPreview({ id }).pipe(
-            timeout(10000),
-            catchError((error) => throwError(() => error)),
-          ),
-        ),
-      'get event preview by id',
-      this.serviceName,
-    );
-  }
-
   async updateEvent(id: string, payload: HistoricalEventBaseUpdateDto) {
     return this.microserviceErrorHandler.handleAsyncCall(
       () =>
@@ -185,6 +107,6 @@ function toEventDateType(
     case HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE:
       return EventDateType.APPROXIMATE;
     default:
-      return EventDateType.EVENT_DATE_TYPE_UNSPECIFIED;
+      return EventDateType.UNRECOGNIZED;
   }
 }

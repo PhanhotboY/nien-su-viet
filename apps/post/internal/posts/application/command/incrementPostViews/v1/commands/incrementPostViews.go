@@ -13,8 +13,8 @@ type IncrementPostViewsCommand struct {
 func NewIncrementPostViewsCommand(
 	req any,
 ) (*IncrementPostViewsCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.IncrementPostViewsRequest{})
-	if err != nil {
+	typedReq := new(dto.IncrementPostViewsRequest)
+	if err := dtoUtil.ValidateStruct(req, typedReq); err != nil {
 		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewIncrementPostViewsCommand")
 	}
 

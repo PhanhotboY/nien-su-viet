@@ -13,8 +13,8 @@ type PublishPostCommand struct {
 func NewPublishPostCommand(
 	req any,
 ) (*PublishPostCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.PublishPostRequest{})
-	if err != nil {
+	typedReq := new(dto.PublishPostRequest)
+	if err := dtoUtil.ValidateStruct(req, typedReq); err != nil {
 		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewPublishPostCommand")
 	}
 

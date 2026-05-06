@@ -353,22 +353,23 @@
         ]
       }
     },
-    "/api/v1/historical-events/{id}/preview": {
-      "get": {
-        "operationId": "HistoricalEventController_getHistoricalEventPreviewById",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
+    "/api/v1/historical-events": {
+      "post": {
+        "operationId": "HistoricalEventController_createHistoricalEvent",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HistoricalEventBaseCreateDto"
+              }
             }
           }
-        ],
+        },
         "responses": {
-          "200": {
-            "description": "The serialized result of HistoricalEventPreviewResponseDto",
+          "201": {
+            "description": "The serialized result of Creation result",
             "content": {
               "application/json": {
                 "schema": {
@@ -379,7 +380,7 @@
                     {
                       "properties": {
                         "data": {
-                          "$ref": "#/components/schemas/HistoricalEventPreviewResponseDto"
+                          "$ref": "#/components/schemas/OperationMetadataDto"
                         }
                       }
                     }
@@ -395,45 +396,6 @@
       }
     },
     "/api/v1/historical-events/{id}": {
-      "get": {
-        "operationId": "HistoricalEventController_getHistoricalEventById",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The serialized result of HistoricalEventDetailResponseDto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SerializedResponseDto"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/HistoricalEventDetailResponseDto"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "HistoricalEvent"
-        ]
-      },
       "put": {
         "operationId": "HistoricalEventController_updateHistoricalEvent",
         "parameters": [
@@ -523,9 +485,632 @@
         ]
       }
     },
-    "/api/v1/historical-events": {
+    "/api/v1/posts": {
+      "post": {
+        "operationId": "PostController_createPost",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostBaseCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The serialized result of Creation result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      }
+    },
+    "/api/v1/posts/{id}": {
+      "put": {
+        "operationId": "PostController_updatePost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostBaseUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The serialized result of OperationMetadataDto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      },
+      "delete": {
+        "operationId": "PostController_deletePost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The serialized result of OperationMetadataDto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      }
+    },
+    "/api/v1/posts/{id}/publish": {
+      "put": {
+        "operationId": "PostController_publishPost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The serialized result of OperationMetadataDto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      }
+    },
+    "/api/v1/posts/{id}/unpublish": {
+      "put": {
+        "operationId": "PostController_unpublishPost",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The serialized result of OperationMetadataDto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/OperationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Post"
+        ]
+      }
+    },
+    "/api/v1/search/posts": {
       "get": {
-        "operationId": "HistoricalEventController_getAllHistoricalEvents",
+        "operationId": "SearchPostController_getPublishedPosts",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "authorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryIds",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "published",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "createdAtFrom",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "createdAtTo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAtFrom",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAtTo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The serialized paginated result of PostBriefResponseDto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/PostBriefResponseDto"
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/PaginationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "SearchPost"
+        ]
+      }
+    },
+    "/api/v1/search/posts/all": {
+      "get": {
+        "operationId": "SearchPostController_getAllPosts",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "authorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryIds",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "published",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "createdAtFrom",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "createdAtTo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAtFrom",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "updatedAtTo",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The serialized paginated result of PostBriefResponseDto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/PostBriefResponseDto"
+                        },
+                        "pagination": {
+                          "$ref": "#/components/schemas/PaginationMetadataDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "SearchPost"
+        ]
+      }
+    },
+    "/api/v1/search/posts/{id}": {
+      "get": {
+        "operationId": "SearchPostController_getPostById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The serialized result of PostDetailResponseDto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/PostDetailResponseDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "SearchPost"
+        ]
+      }
+    },
+    "/api/v1/search/historical-events/{id}/preview": {
+      "get": {
+        "operationId": "SearchHistoricalEventController_getHistoricalEventPreviewById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The serialized result of HistoricalEventPreviewResponseDto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/HistoricalEventPreviewResponseDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "SearchHistoricalEvent"
+        ]
+      }
+    },
+    "/api/v1/search/historical-events/{id}": {
+      "get": {
+        "operationId": "SearchHistoricalEventController_getHistoricalEventById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The serialized result of HistoricalEventDetailResponseDto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SerializedResponseDto"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/HistoricalEventDetailResponseDto"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "SearchHistoricalEvent"
+        ]
+      }
+    },
+    "/api/v1/search/historical-events": {
+      "get": {
+        "operationId": "SearchHistoricalEventController_getAllHistoricalEvents",
         "parameters": [
           {
             "name": "page",
@@ -722,584 +1307,7 @@
           }
         },
         "tags": [
-          "HistoricalEvent"
-        ]
-      },
-      "post": {
-        "operationId": "HistoricalEventController_createHistoricalEvent",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/HistoricalEventBaseCreateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "The serialized result of Creation result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SerializedResponseDto"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/OperationMetadataDto"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "HistoricalEvent"
-        ]
-      }
-    },
-    "/api/v1/posts": {
-      "get": {
-        "operationId": "PostController_getPublishedPosts",
-        "parameters": [
-          {
-            "name": "page",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "name": "limit",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "name": "search",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sortBy",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sortOrder",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
-            }
-          },
-          {
-            "name": "authorId",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "name": "categoryIds",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          },
-          {
-            "name": "published",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "createdAtFrom",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "createdAtTo",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "updatedAtFrom",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "updatedAtTo",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The serialized paginated result of PostBriefResponseDto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SerializedResponseDto"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/PostBriefResponseDto"
-                        },
-                        "pagination": {
-                          "$ref": "#/components/schemas/PaginationMetadataDto"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Post"
-        ]
-      },
-      "post": {
-        "operationId": "PostController_createPost",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PostBaseCreateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "The serialized result of Creation result",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SerializedResponseDto"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/OperationMetadataDto"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Post"
-        ]
-      }
-    },
-    "/api/v1/posts/all": {
-      "get": {
-        "operationId": "PostController_getAllPosts",
-        "parameters": [
-          {
-            "name": "page",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "name": "limit",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "minimum": 1,
-              "type": "number"
-            }
-          },
-          {
-            "name": "search",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sortBy",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "sortOrder",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
-            }
-          },
-          {
-            "name": "authorId",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "name": "categoryIds",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          },
-          {
-            "name": "published",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "createdAtFrom",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "createdAtTo",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "updatedAtFrom",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "updatedAtTo",
-            "required": false,
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The serialized paginated result of PostBriefResponseDto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SerializedResponseDto"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/PostBriefResponseDto"
-                        },
-                        "pagination": {
-                          "$ref": "#/components/schemas/PaginationMetadataDto"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Post"
-        ]
-      }
-    },
-    "/api/v1/posts/{id}": {
-      "get": {
-        "operationId": "PostController_getPostById",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The serialized result of PostDetailResponseDto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SerializedResponseDto"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/PostDetailResponseDto"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Post"
-        ]
-      },
-      "put": {
-        "operationId": "PostController_updatePost",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PostBaseUpdateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "The serialized result of OperationMetadataDto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SerializedResponseDto"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/OperationMetadataDto"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Post"
-        ]
-      },
-      "delete": {
-        "operationId": "PostController_deletePost",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The serialized result of OperationMetadataDto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SerializedResponseDto"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/OperationMetadataDto"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Post"
-        ]
-      }
-    },
-    "/api/v1/posts/{id}/publish": {
-      "put": {
-        "operationId": "PostController_publishPost",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The serialized result of OperationMetadataDto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SerializedResponseDto"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/OperationMetadataDto"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Post"
-        ]
-      }
-    },
-    "/api/v1/posts/{id}/unpublish": {
-      "put": {
-        "operationId": "PostController_unpublishPost",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The serialized result of OperationMetadataDto",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "allOf": [
-                    {
-                      "$ref": "#/components/schemas/SerializedResponseDto"
-                    },
-                    {
-                      "properties": {
-                        "data": {
-                          "$ref": "#/components/schemas/OperationMetadataDto"
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "Post"
+          "SearchHistoricalEvent"
         ]
       }
     }
@@ -1335,6 +1343,359 @@
           "message",
           "statusCode",
           "timestamp"
+        ]
+      },
+      "OperationMetadataDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "success"
+        ]
+      },
+      "HistoricalEventBaseCreateDto": {
+        "type": "object",
+        "properties": {
+          "authorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri"
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "fromDay": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "fromMonth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "fromYear": {
+            "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDay": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "toMonth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "toYear": {
+            "type": "number"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "name",
+          "fromDateType",
+          "fromYear",
+          "toDateType",
+          "content"
+        ]
+      },
+      "HistoricalEventBaseUpdateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri"
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "fromDay": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "fromMonth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "fromYear": {
+            "type": "number"
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDay": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "toMonth": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "toYear": {
+            "type": "number"
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authorId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "PostBaseCreateDto": {
+        "type": "object",
+        "properties": {
+          "authorId": {
+            "type": "string"
+          },
+          "published": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "title",
+          "slug",
+          "content"
+        ]
+      },
+      "PostBaseUpdateDto": {
+        "type": "object",
+        "properties": {
+          "publishedAt": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "content": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "authorId": {
+            "type": "string"
+          },
+          "published": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PostBriefResponseDto": {
+        "type": "object",
+        "properties": {
+          "updatedAt": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "published": {
+            "type": "boolean"
+          },
+          "authorId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "updatedAt",
+          "createdAt",
+          "id",
+          "title",
+          "slug",
+          "published",
+          "authorId"
+        ]
+      },
+      "PaginationMetadataDto": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number"
+          },
+          "totalPages": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "total",
+          "totalPages",
+          "page",
+          "limit"
+        ]
+      },
+      "PostDetailResponseDto": {
+        "type": "object",
+        "properties": {
+          "updatedAt": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "thumbnail": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "published": {
+            "type": "boolean"
+          },
+          "authorId": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "updatedAt",
+          "createdAt",
+          "id",
+          "title",
+          "slug",
+          "published",
+          "authorId",
+          "content"
         ]
       },
       "UserBriefResponseDto": {
@@ -1582,359 +1943,6 @@
           "fromYear",
           "toDateType"
         ]
-      },
-      "PaginationMetadataDto": {
-        "type": "object",
-        "properties": {
-          "total": {
-            "type": "number"
-          },
-          "totalPages": {
-            "type": "number"
-          },
-          "page": {
-            "type": "number"
-          },
-          "limit": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "total",
-          "totalPages",
-          "page",
-          "limit"
-        ]
-      },
-      "OperationMetadataDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "success": {
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "id",
-          "success"
-        ]
-      },
-      "HistoricalEventBaseCreateDto": {
-        "type": "object",
-        "properties": {
-          "authorId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "thumbnail": {
-            "type": "string",
-            "format": "uri"
-          },
-          "fromDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
-          },
-          "fromDay": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 31
-          },
-          "fromMonth": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 12
-          },
-          "fromYear": {
-            "type": "number"
-          },
-          "toDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
-          },
-          "toDay": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 31
-          },
-          "toMonth": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 12
-          },
-          "toYear": {
-            "type": "number"
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "required": [
-          "name",
-          "fromDateType",
-          "fromYear",
-          "toDateType",
-          "content"
-        ]
-      },
-      "HistoricalEventBaseUpdateDto": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "thumbnail": {
-            "type": "string",
-            "format": "uri"
-          },
-          "fromDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
-          },
-          "fromDay": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 31
-          },
-          "fromMonth": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 12
-          },
-          "fromYear": {
-            "type": "number"
-          },
-          "toDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
-          },
-          "toDay": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 31
-          },
-          "toMonth": {
-            "type": "number",
-            "minimum": 1,
-            "maximum": 12
-          },
-          "toYear": {
-            "type": "number"
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1
-          },
-          "authorId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        }
-      },
-      "PostBriefResponseDto": {
-        "type": "object",
-        "properties": {
-          "updatedAt": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "thumbnail": {
-            "type": "string",
-            "format": "uri"
-          },
-          "title": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "slug": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "summary": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 500
-          },
-          "published": {
-            "type": "boolean"
-          },
-          "authorId": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "updatedAt",
-          "createdAt",
-          "id",
-          "title",
-          "slug",
-          "published",
-          "authorId"
-        ]
-      },
-      "PostDetailResponseDto": {
-        "type": "object",
-        "properties": {
-          "updatedAt": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "thumbnail": {
-            "type": "string",
-            "format": "uri"
-          },
-          "title": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "slug": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "summary": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 500
-          },
-          "published": {
-            "type": "boolean"
-          },
-          "authorId": {
-            "type": "string"
-          },
-          "content": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "updatedAt",
-          "createdAt",
-          "id",
-          "title",
-          "slug",
-          "published",
-          "authorId",
-          "content"
-        ]
-      },
-      "PostBaseCreateDto": {
-        "type": "object",
-        "properties": {
-          "authorId": {
-            "type": "string"
-          },
-          "published": {
-            "type": "boolean"
-          },
-          "title": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "slug": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1
-          },
-          "summary": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 500
-          },
-          "thumbnail": {
-            "type": "string",
-            "format": "uri"
-          },
-          "categoryId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "required": [
-          "title",
-          "slug",
-          "content"
-        ]
-      },
-      "PostBaseUpdateDto": {
-        "type": "object",
-        "properties": {
-          "publishedAt": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "slug": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "content": {
-            "type": "string",
-            "minLength": 1
-          },
-          "summary": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 500
-          },
-          "thumbnail": {
-            "type": "string",
-            "format": "uri"
-          },
-          "categoryId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "authorId": {
-            "type": "string"
-          },
-          "published": {
-            "type": "boolean"
-          }
-        }
       },
       "EventCategoryBriefResponseDto": {
         "type": "object",

@@ -3,7 +3,6 @@ import { configuration } from './config'; // Load configuration before importing
 import { CommonModule } from '@phanhotboy/nsv-common';
 import { HistoricalEventModule } from './modules/historical-event/historical-event.module';
 import { PrismaModule } from './database';
-import { UserModule } from './modules/user';
 
 @Module({
   imports: [
@@ -14,7 +13,6 @@ import { UserModule } from './modules/user';
     }),
     PrismaModule.forRoot(),
     HistoricalEventModule,
-    UserModule,
   ],
 })
 export class AppModule {}

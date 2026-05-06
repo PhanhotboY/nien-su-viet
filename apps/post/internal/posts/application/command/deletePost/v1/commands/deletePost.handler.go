@@ -4,7 +4,9 @@ import (
 	"context"
 
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/deletePost/v1/dto"
+	event "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/deletePost/v1/events"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/repository"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/bus"
 	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
@@ -15,9 +17,9 @@ import (
 // ============================================================
 
 type DeletePostHandler struct {
-	log       logger.Logger
-	postRepo  repository.PostRepository
-	cacheRepo repository.PostCacheRepository
+	log      logger.Logger
+	postRepo repository.PostRepository
+	bus      bus.Bus
 }
 
 type IDeletePostHandler interface {
@@ -27,12 +29,12 @@ type IDeletePostHandler interface {
 func NewDeletePostHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
-	cacheRepo repository.PostCacheRepository,
+	bus bus.Bus,
 ) DeletePostHandler {
 	return DeletePostHandler{
-		log:       log,
-		postRepo:  postRepo,
-		cacheRepo: cacheRepo,
+		log:      log,
+		postRepo: postRepo,
+		bus:      bus,
 	}
 }
 
@@ -47,9 +49,10 @@ func (h DeletePostHandler) Handle(
 		return nil, grpcerrors.ParseError(err)
 	}
 
-	err = h.cacheRepo.DeleteAllPosts(ctx)
-	if err != nil {
-		h.log.Warnf("failed to delete all posts cache after deleting post: %v", err)
+	if postDeletedEvent, err := event.NewPostDeletedEvent(id); err != nil {
+		h.log.Errorf("failed to create post deleted event: %v", err)
+	} else {
+		h.bus.PublishMessage(ctx, postDeletedEvent)
 	}
 
 	return dto.NewDeletePostResponse(id, true, "Post deleted successfully"), nil

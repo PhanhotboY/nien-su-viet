@@ -11,9 +11,8 @@ import (
 )
 
 type IncrementPostViewsHandler struct {
-	log       logger.Logger
-	postRepo  repository.PostRepository
-	cacheRepo repository.PostCacheRepository
+	log      logger.Logger
+	postRepo repository.PostRepository
 }
 
 type IIncrementPostViewsHandler interface {
@@ -23,12 +22,10 @@ type IIncrementPostViewsHandler interface {
 func NewIncrementPostViewsHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
-	cacheRepo repository.PostCacheRepository,
 ) IncrementPostViewsHandler {
 	return IncrementPostViewsHandler{
-		log:       log,
-		postRepo:  postRepo,
-		cacheRepo: cacheRepo,
+		log:      log,
+		postRepo: postRepo,
 	}
 }
 
@@ -54,11 +51,6 @@ func (h IncrementPostViewsHandler) Handle(
 	if err != nil {
 		h.log.Errorf("failed to increment post views: %v", err)
 		return nil, grpcerrors.ParseError(err)
-	}
-
-	err = h.cacheRepo.DeleteAllPosts(ctx)
-	if err != nil {
-		h.log.Warnf("failed to delete all posts cache after incrementing post views: %v", err)
 	}
 
 	return dto.NewIncrementPostViewsResponse(id, true, "Post views incremented successfully", post.Views), nil

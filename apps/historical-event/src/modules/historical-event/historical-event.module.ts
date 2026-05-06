@@ -1,22 +1,19 @@
 import { Module } from '@nestjs/common';
 import { HistoricalEventService } from './historical-event.service';
 import { HistoricalEventController } from './historical-event.controller';
-import { RmqModule, SearchModule } from '@phanhotboy/nsv-common';
+import { RmqModule } from '@phanhotboy/nsv-common';
 import { RMQ } from '@phanhotboy/constants';
-import { UserModule } from '../user';
-import HistoricalEventsPgRepo from './infrastructure/persistence/postgresql/historical-events.repo';
-import { HistoricalEventsEsRepo } from './infrastructure/persistence/elasticsearch/historical-events.repo';
+import { HistoricalEventsPgRepo } from './infrastructure/persistence/postgresql/historical-events.repo';
+import { IHistoricalEventDbRepo } from '@historical-event/modules/historical-event/domain/repo/historical-event.db.repo';
 
 @Module({
-  imports: [
-    RmqModule.register({ name: RMQ.TOPIC_EVENTS_EXCHANGE }),
-    UserModule,
-    SearchModule,
-  ],
+  imports: [RmqModule.register({ name: RMQ.TOPIC_EVENTS_EXCHANGE })],
   controllers: [HistoricalEventController],
   providers: [
-    HistoricalEventsPgRepo,
-    HistoricalEventsEsRepo,
+    {
+      provide: IHistoricalEventDbRepo,
+      useClass: HistoricalEventsPgRepo,
+    },
     HistoricalEventService,
   ],
   exports: [HistoricalEventService],

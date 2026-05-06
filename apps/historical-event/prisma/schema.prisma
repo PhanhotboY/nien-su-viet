@@ -7,17 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id            String            @id
-  email         String            @unique
-  image         String?
-  name          String
-  role          String?
-  editedEvents  EventEdit[]
-  createdEvents HistoricalEvent[]
-  createdPosts  Post[]
-}
-
 enum EVENT_DATE_TYPE {
   EXACT
   APPROXIMATE
@@ -41,7 +30,6 @@ model HistoricalEvent {
   toDateType   EVENT_DATE_TYPE   @default(EXACT)
   categories   EventCategories[]
   editors      EventEdit[]
-  author       User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
   thumbnail    String?
 
   @@index([fromYear], map: "idx_event_from_year")
@@ -94,7 +82,6 @@ model EventEdit {
   newToYear     Int?            @db.SmallInt
   newToMonth    Int?            @db.SmallInt
   newToDay      Int?            @db.SmallInt
-  editor        User            @relation(fields: [editorId], references: [id], onDelete: Cascade)
   event         HistoricalEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@index([eventId], map: "idx_edit_event")
@@ -124,7 +111,6 @@ model Post {
 
   authorId   String
   categoryId String?       @db.Uuid
-  author     User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
   category   PostCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
   views       Int      @default(0)

@@ -7,8 +7,11 @@ import {
   type CreateHistoricalEventRequest,
   type UpdateHistoricalEventRequest,
 } from '@phanhotboy/genproto/historical_event_service/historical_events';
-import { UtilService } from '@phanhotboy/nsv-common';
 import { Injectable } from '@nestjs/common';
+import {
+  isEmptyObj,
+  removeNestedUndefined,
+} from '@phanhotboy/nsv-common/util/object.util';
 
 type HistoricalEventListQuery = Parameters<
   PrismaService['historicalEvent']['findMany']
@@ -18,11 +21,8 @@ type HistoricalEventUniqueQuery = Parameters<
 >[0];
 
 @Injectable()
-export default class HistoricalEventsPgRepo implements IHistoricalEventDbRepo {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly util: UtilService,
-  ) {}
+export class HistoricalEventsPgRepo implements IHistoricalEventDbRepo {
+  constructor(private readonly prisma: PrismaService) {}
 
   async createHistoricalEvent(payload: CreateHistoricalEventRequest) {
     const event = await this.prisma.historicalEvent.create({
@@ -52,8 +52,8 @@ export default class HistoricalEventsPgRepo implements IHistoricalEventDbRepo {
     payload: Omit<UpdateHistoricalEventRequest, 'id'>,
   ) {
     const cleanPayload =
-      this.util.removeNestedUndefined<UpdateHistoricalEventRequest>(payload);
-    if (this.util.isEmptyObj(cleanPayload)) {
+      removeNestedUndefined<UpdateHistoricalEventRequest>(payload);
+    if (isEmptyObj(cleanPayload)) {
       return id;
     }
     await this.prisma.historicalEvent.update({

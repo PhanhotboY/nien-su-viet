@@ -42,31 +42,31 @@ export class PostController {
     @Inject(RedisService) private readonly redis: RedisServiceType,
   ) {}
 
-  @Get()
-  @Public()
-  @Serialize(PostBriefResponseDto)
-  @ApiOkSerializedPaginatedResponse(PostBriefResponseDto)
-  async getPublishedPosts(@Query() query: PostQueryDto) {
-    const res = await this.postService.getPublishedPosts(query);
-    return res;
-  }
+  // @Get()
+  // @Public()
+  // @Serialize(PostBriefResponseDto)
+  // @ApiOkSerializedPaginatedResponse(PostBriefResponseDto)
+  // async getPublishedPosts(@Query() query: PostQueryDto) {
+  //   const res = await this.postService.getPublishedPosts(query);
+  //   return res;
+  // }
 
-  @Get('all')
-  @Permissions({ post: ['read'] })
-  @Serialize(PostBriefResponseDto)
-  @ApiOkSerializedPaginatedResponse(PostBriefResponseDto)
-  async getAllPosts(@Query() query: PostQueryDto) {
-    const res = await this.postService.getAllPosts(query);
-    return res;
-  }
+  // @Get('all')
+  // @Permissions({ post: ['read'] })
+  // @Serialize(PostBriefResponseDto)
+  // @ApiOkSerializedPaginatedResponse(PostBriefResponseDto)
+  // async getAllPosts(@Query() query: PostQueryDto) {
+  //   const res = await this.postService.getAllPosts(query);
+  //   return res;
+  // }
 
-  @Get(':id')
-  @Public()
-  @Serialize(PostDetailResponseDto)
-  @ApiOkSerializedResponse(PostDetailResponseDto)
-  getPostById(@Param('id') id: string) {
-    return this.postService.findPostByIdOrSlug(id);
-  }
+  // @Get(':id')
+  // @Public()
+  // @Serialize(PostDetailResponseDto)
+  // @ApiOkSerializedResponse(PostDetailResponseDto)
+  // getPostById(@Param('id') id: string) {
+  //   return this.postService.findPostByIdOrSlug(id);
+  // }
 
   @Post()
   @Throttle(RATE_LIMIT.INTERNAL)

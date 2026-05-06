@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package events;
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/events;events";
+
+message HistoricalEventCreatedEvent {
+  string id = 1;
+  string author_id = 2;
+  string name = 3;
+  optional string thumbnail = 4;
+  string from_date_type = 5;
+  optional int32 from_day = 6;
+  optional int32 from_month = 7;
+  int32 from_year = 8;
+  optional string to_date_type = 9;
+  optional int32 to_day = 10;
+  optional int32 to_month = 11;
+  optional int32 to_year = 12;
+  string content = 13;
+  string created_at = 14;
+  string updated_at = 15;
+}
+
+message HistoricalEventUpdatedEvent {
+  string id = 1;
+  optional string name = 2;
+  optional string thumbnail = 3;
+  optional string from_date_type = 4;
+  optional int32 from_day = 5;
+  optional int32 from_month = 6;
+  optional int32 from_year = 7;
+  optional string to_date_type = 8;
+  optional int32 to_day = 9;
+  optional int32 to_month = 10;
+  optional int32 to_year = 11;
+  optional string content = 12;
+  optional string updated_at = 13;
+}
+
+message HistoricalEventDeletedEvent {
+  string id = 1;
+  string author_id = 2;
+}

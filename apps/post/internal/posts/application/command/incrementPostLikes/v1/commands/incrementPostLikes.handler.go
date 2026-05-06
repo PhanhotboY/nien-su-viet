@@ -11,9 +11,8 @@ import (
 )
 
 type IncrementPostLikesHandler struct {
-	log       logger.Logger
-	postRepo  repository.PostRepository
-	cacheRepo repository.PostCacheRepository
+	log      logger.Logger
+	postRepo repository.PostRepository
 }
 
 type IIncrementPostLikesHandler interface {
@@ -23,12 +22,10 @@ type IIncrementPostLikesHandler interface {
 func NewIncrementPostLikesHandler(
 	log logger.Logger,
 	postRepo repository.PostRepository,
-	cacheRepo repository.PostCacheRepository,
 ) IncrementPostLikesHandler {
 	return IncrementPostLikesHandler{
-		log:       log,
-		postRepo:  postRepo,
-		cacheRepo: cacheRepo,
+		log:      log,
+		postRepo: postRepo,
 	}
 }
 
@@ -54,11 +51,6 @@ func (h IncrementPostLikesHandler) Handle(
 	if err != nil {
 		h.log.Errorf("failed to increment post likes: %v", err)
 		return nil, grpcerrors.ParseError(err)
-	}
-
-	err = h.cacheRepo.DeleteAllPosts(ctx)
-	if err != nil {
-		h.log.Warnf("failed to delete all posts cache after incrementing post likes: %v", err)
 	}
 
 	return dto.NewIncrementPostLikesResponse(id, true, "Post likes incremented successfully", post.Likes), nil

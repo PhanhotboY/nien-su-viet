@@ -32,4 +32,24 @@ const genConfiguration = function <D extends Object, T extends Object>(
   };
 };
 
-export const commonUtils = { genConfiguration };
+const toSnakeCase = (str: string) => {
+  if (!str) return '';
+  return (
+    str
+      .match(
+        /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g,
+      )
+      ?.map((word) => word.toLowerCase())
+      .join('_') || ''
+  );
+};
+
+const getRoutingKey = function (event: Function) {
+  return toSnakeCase(event.name);
+};
+
+const getQueueName = function (event: Function) {
+  return `${toSnakeCase(event.name)}_queue`;
+};
+
+export const commonUtils = { genConfiguration, getRoutingKey, getQueueName };

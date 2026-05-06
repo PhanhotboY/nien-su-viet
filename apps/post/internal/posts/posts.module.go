@@ -12,13 +12,8 @@ import (
 	unpublishPostCommand "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/unpublishPost/v1/commands"
 	updatePostCommand "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/updatePost/v1/commands"
 
-	getAllPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getAllPosts/v1/queries"
-	getPopularPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPopularPosts/v1/queries"
-	getPostQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPost/v1/queries"
-	getPublishedPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPublishedPosts/v1/queries"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/domain/entity"
 	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/cache"
-	rmqConsumer "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/messaging/rmq/consumer"
 
 	// rmqProvider	"github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/infrastructure/messaging/rmq"
 
@@ -38,17 +33,10 @@ var Module = fx.Module(
 	)),
 
 	fx.Provide(
-		configPostsMetrics,
-
 		// Outbound Infrastructure
 		persistence.NewPostRepository,
 		cache.NewPostCacheRepository,
 
-		// Application Query
-		getPublishedPostsQuery.NewGetPublishedPostsHandler,
-		getPopularPostsQuery.NewGetPopularPostsHandler,
-		getPostQuery.NewGetPostHandler,
-		getAllPostsQuery.NewGetAllPostsHandler,
 		// Application Command
 		createPostCommand.NewCreatePostHandler,
 		deletePostCommand.NewDeletePostHandler,
@@ -62,5 +50,4 @@ var Module = fx.Module(
 
 	// Inbound Infrastructure
 	grpc.Module,
-	rmqConsumer.Module,
 )

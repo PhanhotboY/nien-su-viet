@@ -10,9 +10,6 @@ async function bootstrap() {
   const grpcPort = process.env.GRPC_PORT || 50051;
   const app = await NestFactory.create(AppModule);
 
-  const rmqService = app.get(RmqService);
-  app.connectMicroservice(rmqService.getOptions('historical_event_queue'));
-
   const grpcServerOptions: GrpcOptions = {
     transport: Transport.GRPC,
     options: {

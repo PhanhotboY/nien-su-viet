@@ -13,8 +13,8 @@ type CreatePostCommand struct {
 func NewCreatePostCommand(
 	req any,
 ) (*CreatePostCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.CreatePostRequest{})
-	if err != nil {
+	typedReq := new(dto.CreatePostRequest)
+	if err := dtoUtil.ValidateStruct(req, typedReq); err != nil {
 		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewCreatePostCommand")
 	}
 

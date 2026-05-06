@@ -11,9 +11,8 @@ import (
 )
 
 type UnpublishPostHandler struct {
-	log       logger.Logger
-	postRepo  repository.PostRepository
-	cacheRepo repository.PostCacheRepository
+	log      logger.Logger
+	postRepo repository.PostRepository
 }
 
 type IUnpublishPostHandler interface {
@@ -26,9 +25,8 @@ func NewUnpublishPostHandler(
 	cacheRepo repository.PostCacheRepository,
 ) UnpublishPostHandler {
 	return UnpublishPostHandler{
-		log:       log,
-		postRepo:  postRepo,
-		cacheRepo: cacheRepo,
+		log:      log,
+		postRepo: postRepo,
 	}
 }
 
@@ -55,11 +53,6 @@ func (h UnpublishPostHandler) Handle(
 	if err != nil {
 		h.log.Errorf("failed to unpublish post: %v", err)
 		return nil, grpcerrors.ParseError(err)
-	}
-
-	err = h.cacheRepo.DeleteAllPosts(ctx)
-	if err != nil {
-		h.log.Warnf("failed to delete all posts cache after unpublishing post: %v", err)
 	}
 
 	return dto.NewUnpublishPostResponse(id, true, "Post unpublished successfully"), nil

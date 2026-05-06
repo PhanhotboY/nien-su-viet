@@ -13,18 +13,23 @@ import (
 )
 
 type Config struct {
-	Server     ServerConfig     `mapstructure:"server"`
-	Postgresql PostgresqlConfig `mapstructure:"pg"`
-	Rmq        RmqConfig        `mapstructure:"rmq"`
-	Grpc       GrpcConfig       `mapstructure:"grpc"`
-	Logger     LoggerConfig     `mapstructure:"logger"`
-	Redis      RedisOptions     `mapstructure:"redis"`
-	Metrics    MetricsOptions   `mapstructure:"metrics"`
-	Tracing    TracingOptions   `mapstructure:"tracing"`
+	Server        ServerConfig        `mapstructure:"server"`
+	Postgresql    PostgresqlConfig    `mapstructure:"pg"`
+	Rmq           RmqConfig           `mapstructure:"rmq"`
+	Grpc          GrpcConfig          `mapstructure:"grpc"`
+	Logger        LoggerConfig        `mapstructure:"logger"`
+	Redis         RedisOptions        `mapstructure:"redis"`
+	Metrics       MetricsOptions      `mapstructure:"metrics"`
+	Tracing       TracingOptions      `mapstructure:"tracing"`
+	Elasticsearch ElasticsearchConfig `mapstructure:"elasticsearch"`
 }
 
 func LoadConfig() Config {
-	env := os.Getenv("POST_SERVER_ENV")
+	envPrefix := os.Getenv("ENV_PREFIX")
+	if envPrefix == "" {
+		log.Fatal("missing ENV_PREFIX environment variable")
+	}
+	env := os.Getenv(fmt.Sprintf("%s_SERVER_ENV", envPrefix))
 	wd, _ := os.Getwd()
 	envPath, _ := searchRootDirectory(wd)
 	configName := ".env"
@@ -36,8 +41,7 @@ func LoadConfig() Config {
 	v.AddConfigPath(envPath)
 	v.SetConfigName(configName)
 	v.SetConfigType("env")
-	v.SetEnvPrefix("post")
-
+	v.SetEnvPrefix(envPrefix)
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
 	BindEnvs(v, Config{}, "")

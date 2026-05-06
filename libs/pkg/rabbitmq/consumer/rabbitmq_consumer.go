@@ -349,13 +349,14 @@ func (r *rabbitMQConsumer) handleReceived(
 		}
 	}
 
-	r.handle(ctx, ack, nack, consumeContext)
+	r.handle(ctx, ack, nack, delivery.RoutingKey, consumeContext)
 }
 
 func (r *rabbitMQConsumer) handle(
 	ctx context.Context,
 	ack func(),
 	nack func(),
+	routingKey string,
 	messageConsumeContext messagingTypes.MessageConsumeContext,
 ) {
 	var err error

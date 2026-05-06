@@ -14,8 +14,8 @@ type DeletePostsCommand struct {
 func NewDeletePostsCommand(
 	req any,
 ) (*DeletePostsCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.DeletePostsRequest{})
-	if err != nil {
+	typedReq := new(dto.DeletePostsRequest)
+	if err := dtoUtil.ValidateStruct(req, typedReq); err != nil {
 		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewDeletePostsCommand")
 	}
 

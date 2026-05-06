@@ -5,18 +5,17 @@
 // source: historical_event_service/historical_events.proto
 
 /* eslint-disable */
-import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
-import { Observable } from 'rxjs';
-import { PaginationMetadata } from '../common/pagination';
-import { OperationMetadata } from '../common/response';
-import { Timestamp } from '../google/protobuf/timestamp';
+import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
+import { Observable } from "rxjs";
+import { OperationMetadata } from "../common/response";
+import { Timestamp } from "../google/protobuf/timestamp";
 
-export const protobufPackage = 'historical_event_service';
+export const protobufPackage = "historical_event_service";
 
 export enum EventDateType {
-  EVENT_DATE_TYPE_UNSPECIFIED = 0,
-  EXACT = 1,
-  APPROXIMATE = 2,
+  EXACT = 0,
+  APPROXIMATE = 1,
+  UNRECOGNIZED = -1,
 }
 
 /** HistoricalEvent represents a historical event entity */
@@ -34,74 +33,6 @@ export interface HistoricalEvent {
   toYear?: number | undefined;
   content: string;
   authorId: string;
-  createdAt: Timestamp | undefined;
-  updatedAt: Timestamp | undefined;
-}
-
-/** User represents a user entity (minimal info for author) */
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  avatar?: string | undefined;
-}
-
-/** HistoricalEventBrief is a brief version with author info */
-export interface HistoricalEventBrief {
-  id: string;
-  name: string;
-  thumbnail?: string | undefined;
-  fromDateType: EventDateType;
-  fromDay?: number | undefined;
-  fromMonth?: number | undefined;
-  fromYear: number;
-  toDateType?: EventDateType | undefined;
-  toDay?: number | undefined;
-  toMonth?: number | undefined;
-  toYear?: number | undefined;
-  author: User | undefined;
-}
-
-/** Category represents an event category */
-export interface Category {
-  id: string;
-  name: string;
-}
-
-/** HistoricalEventPreview includes an excerpt and categories */
-export interface HistoricalEventPreview {
-  id: string;
-  name: string;
-  thumbnail?: string | undefined;
-  fromDateType: EventDateType;
-  fromDay?: number | undefined;
-  fromMonth?: number | undefined;
-  fromYear: number;
-  toDateType?: EventDateType | undefined;
-  toDay?: number | undefined;
-  toMonth?: number | undefined;
-  toYear?: number | undefined;
-  author: User | undefined;
-  categories: Category[];
-  excerpt: string;
-}
-
-/** HistoricalEventDetail includes full content and categories */
-export interface HistoricalEventDetail {
-  id: string;
-  name: string;
-  thumbnail?: string | undefined;
-  fromDateType: EventDateType;
-  fromDay?: number | undefined;
-  fromMonth?: number | undefined;
-  fromYear: number;
-  toDateType?: EventDateType | undefined;
-  toDay?: number | undefined;
-  toMonth?: number | undefined;
-  toYear?: number | undefined;
-  author: User | undefined;
-  categories: Category[];
-  content: string;
   createdAt: Timestamp | undefined;
   updatedAt: Timestamp | undefined;
 }
@@ -156,164 +87,43 @@ export interface DeleteHistoricalEventResponse {
   data: OperationMetadata | undefined;
 }
 
-/** GetHistoricalEventRequest */
-export interface GetHistoricalEventRequest {
-  id: string;
-}
-
-export interface GetHistoricalEventResponse {
-  data: HistoricalEventDetail | undefined;
-}
-
-/** GetHistoricalEventPreviewRequest */
-export interface GetHistoricalEventPreviewRequest {
-  id: string;
-}
-
-export interface GetHistoricalEventPreviewResponse {
-  data: HistoricalEventPreview | undefined;
-}
-
-/** GetAllHistoricalEventsRequest */
-export interface GetAllHistoricalEventsRequest {
-  page?: number | undefined;
-  limit?: number | undefined;
-  search?: string | undefined;
-  sortBy?: string | undefined;
-  /** "asc" or "desc" */
-  sortOrder?: string | undefined;
-  authorId?: string | undefined;
-  /** Filter by category */
-  categoryIds: string[];
-  /** Filter by from date range */
-  fromYear?: number | undefined;
-  fromMonth?: number | undefined;
-  fromDay?: number | undefined;
-  /** Filter by to date range */
-  toYear?: number | undefined;
-  toMonth?: number | undefined;
-  toDay?: number | undefined;
-  /** Search specific year */
-  searchYear?: number | undefined;
-  /** Filter by created date range */
-  createdAtFrom?: Timestamp | undefined;
-  createdAtTo?: Timestamp | undefined;
-  /** Filter by updated date range */
-  updatedAtFrom?: Timestamp | undefined;
-  updatedAtTo?: Timestamp | undefined;
-}
-
-export interface GetAllHistoricalEventsResponse {
-  data: HistoricalEventBrief[];
-  pagination: PaginationMetadata | undefined;
-}
-
-export const HISTORICAL_EVENT_SERVICE_PACKAGE_NAME = 'historical_event_service';
+export const HISTORICAL_EVENT_SERVICE_PACKAGE_NAME = "historical_event_service";
 
 export interface HistoricalEventServiceClient {
-  createEvent(
-    request: CreateHistoricalEventRequest,
-  ): Observable<CreateHistoricalEventResponse>;
+  createEvent(request: CreateHistoricalEventRequest): Observable<CreateHistoricalEventResponse>;
 
-  updateEvent(
-    request: UpdateHistoricalEventRequest,
-  ): Observable<UpdateHistoricalEventResponse>;
+  updateEvent(request: UpdateHistoricalEventRequest): Observable<UpdateHistoricalEventResponse>;
 
-  deleteEvent(
-    request: DeleteHistoricalEventRequest,
-  ): Observable<DeleteHistoricalEventResponse>;
-
-  getEvent(
-    request: GetHistoricalEventRequest,
-  ): Observable<GetHistoricalEventResponse>;
-
-  getEventPreview(
-    request: GetHistoricalEventPreviewRequest,
-  ): Observable<GetHistoricalEventPreviewResponse>;
-
-  getAllEvents(
-    request: GetAllHistoricalEventsRequest,
-  ): Observable<GetAllHistoricalEventsResponse>;
+  deleteEvent(request: DeleteHistoricalEventRequest): Observable<DeleteHistoricalEventResponse>;
 }
 
 export interface HistoricalEventServiceController {
   createEvent(
     request: CreateHistoricalEventRequest,
-  ):
-    | Promise<CreateHistoricalEventResponse>
-    | Observable<CreateHistoricalEventResponse>
-    | CreateHistoricalEventResponse;
+  ): Promise<CreateHistoricalEventResponse> | Observable<CreateHistoricalEventResponse> | CreateHistoricalEventResponse;
 
   updateEvent(
     request: UpdateHistoricalEventRequest,
-  ):
-    | Promise<UpdateHistoricalEventResponse>
-    | Observable<UpdateHistoricalEventResponse>
-    | UpdateHistoricalEventResponse;
+  ): Promise<UpdateHistoricalEventResponse> | Observable<UpdateHistoricalEventResponse> | UpdateHistoricalEventResponse;
 
   deleteEvent(
     request: DeleteHistoricalEventRequest,
-  ):
-    | Promise<DeleteHistoricalEventResponse>
-    | Observable<DeleteHistoricalEventResponse>
-    | DeleteHistoricalEventResponse;
-
-  getEvent(
-    request: GetHistoricalEventRequest,
-  ):
-    | Promise<GetHistoricalEventResponse>
-    | Observable<GetHistoricalEventResponse>
-    | GetHistoricalEventResponse;
-
-  getEventPreview(
-    request: GetHistoricalEventPreviewRequest,
-  ):
-    | Promise<GetHistoricalEventPreviewResponse>
-    | Observable<GetHistoricalEventPreviewResponse>
-    | GetHistoricalEventPreviewResponse;
-
-  getAllEvents(
-    request: GetAllHistoricalEventsRequest,
-  ):
-    | Promise<GetAllHistoricalEventsResponse>
-    | Observable<GetAllHistoricalEventsResponse>
-    | GetAllHistoricalEventsResponse;
+  ): Promise<DeleteHistoricalEventResponse> | Observable<DeleteHistoricalEventResponse> | DeleteHistoricalEventResponse;
 }
 
 export function HistoricalEventServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = [
-      'createEvent',
-      'updateEvent',
-      'deleteEvent',
-      'getEvent',
-      'getEventPreview',
-      'getAllEvents',
-    ];
+    const grpcMethods: string[] = ["createEvent", "updateEvent", "deleteEvent"];
     for (const method of grpcMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
-        constructor.prototype,
-        method,
-      );
-      GrpcMethod('HistoricalEventService', method)(
-        constructor.prototype[method],
-        method,
-        descriptor,
-      );
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcMethod("HistoricalEventService", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
-      const descriptor: any = Reflect.getOwnPropertyDescriptor(
-        constructor.prototype,
-        method,
-      );
-      GrpcStreamMethod('HistoricalEventService', method)(
-        constructor.prototype[method],
-        method,
-        descriptor,
-      );
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcStreamMethod("HistoricalEventService", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
 
-export const HISTORICAL_EVENT_SERVICE_NAME = 'HistoricalEventService';
+export const HISTORICAL_EVENT_SERVICE_NAME = "HistoricalEventService";

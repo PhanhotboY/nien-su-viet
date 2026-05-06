@@ -55,7 +55,7 @@ func (r *RabbitMQTestContainers) Start(ctx context.Context, t *testing.T) (setti
 	}
 
 	cfg := settings.RmqConfig{
-		QueueName:    r.cfg.Rmq.QueueName,
+		// QueueName:    r.cfg.Rmq.QueueName,
 		DeliveryMode: r.cfg.Rmq.DeliveryMode,
 		Persisted:    r.cfg.Rmq.Persisted,
 		AppId:        r.cfg.Rmq.AppId,

@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package search_service;
+
+option go_package = "github.com/phanhotboy/nien-su-viet/apps/search/internal/shared/grpc/genproto;search_service";
+
+// ============================================================
+// Common Message Types
+// ============================================================
+// User represents a user entity (minimal info for author)
+message User {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  optional string avatar = 4;
+}
+
+// ============================================================
+// QUERIES - Read Operations
+// ============================================================
+
+// GetUserByIdRequest represents a query to get a user by ID
+message GetUserByIdRequest {
+  string id = 1;
+}
+
+message GetUserByIdResponse {
+  User data = 1;
+}
+
+// ============================================================
+// SERVICE DEFINITIONS - gRPC
+// ============================================================
+service UserService {
+  rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse);
+}

@@ -11,6 +11,7 @@ import { CommonModule } from '@phanhotboy/nsv-common';
 import { SerializeResponseInterceptor } from './common/interceptors';
 import { CatchEverythingFilter, HttpExceptionsFilter } from './common/filters';
 import { BetterAuthGuard, RolesGuard } from './common/guards';
+import { SearchModule } from './modules/search/search.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { BetterAuthGuard, RolesGuard } from './common/guards';
     AuthModule,
     HistoricalEventModule,
     PostModule,
+    SearchModule,
   ],
   providers: [
     // Global guards

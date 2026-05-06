@@ -121,15 +121,15 @@ func (br *postRepository) applySorting(db *gorm.DB, query repository.PostQuery) 
 	return db.Order(query.SortBy + " " + query.SortOrder)
 }
 
-func (br *postRepository) CreatePost(ctx context.Context, post *entity.Post) (string, error) {
+func (br *postRepository) CreatePost(ctx context.Context, post *entity.Post) (*entity.Post, error) {
 	if err := uuid.Validate(post.Id.String()); err != nil {
 		post.Id = uuid.New()
 	}
 	result := br.db.WithContext(ctx).Model(&entity.Post{}).Create(post)
 	if result.Error != nil {
-		return "", result.Error
+		return nil, result.Error
 	}
-	return post.Id.String(), nil
+	return post, nil
 }
 
 func (br *postRepository) GetPostByID(ctx context.Context, postId string) (*entity.Post, error) {

@@ -14,7 +14,7 @@ export async function getPublicPosts(
   query?: Record<string, string> | string,
 ): Promise<IPaginatedResponse<PostBriefResponseDto>> {
   const response = (await retryFetcher(
-    `/posts?${new URLSearchParams(query).toString()}`,
+    `/search/posts?${new URLSearchParams(query).toString()}`,
     { isPublicRoute: true },
   )) as IPaginatedResponse<PostResponseDto>;
 
@@ -25,7 +25,7 @@ export async function findPosts(
   query?: Record<string, string> | string,
 ): Promise<IPaginatedResponse<PostBriefResponseDto>> {
   const response = (await retryFetcher(
-    `/posts/all?${new URLSearchParams(query).toString()}`,
+    `/search/posts/all?${new URLSearchParams(query).toString()}`,
   )) as IPaginatedResponse<PostResponseDto>;
 
   return response;
@@ -33,7 +33,7 @@ export async function findPosts(
 
 export async function getPost(id: string) {
   await avoidRateLimit();
-  const response = await retryFetcher<PostResponseDto>(`/posts/${id}`, {
+  const response = await retryFetcher<PostResponseDto>(`/search/posts/${id}`, {
     method: 'GET',
     isPublicRoute: true,
   });

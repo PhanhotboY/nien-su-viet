@@ -1,0 +1,79 @@
+package queries
+
+import (
+	"context"
+
+	"github.com/phanhotboy/nien-su-viet/apps/search/internal/posts/application/query/getPost/v1/dto"
+	"github.com/phanhotboy/nien-su-viet/apps/search/internal/posts/domain/entity"
+	"github.com/phanhotboy/nien-su-viet/apps/search/internal/posts/domain/repository"
+	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
+	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
+	"go.opentelemetry.io/otel/trace"
+)
+
+type GetPostHandler struct {
+	log       logger.Logger
+	tracer    trace.Tracer
+	postRepo  repository.PostEsRepository
+	cacheRepo repository.PostCacheRepository
+}
+
+type IGetPostHandler interface {
+	grpcTypes.GrpcHandler[*GetPostQuery, *dto.GetPostRes]
+}
+
+func NewGetPostHandler(
+	log logger.Logger,
+	postRepo repository.PostEsRepository,
+	cacheRepo repository.PostCacheRepository,
+	tracer trace.Tracer,
+) GetPostHandler {
+	return GetPostHandler{
+		log:       log,
+		tracer:    tracer,
+		postRepo:  postRepo,
+		cacheRepo: cacheRepo,
+	}
+}
+
+func (c GetPostHandler) Handle(
+	ctx context.Context,
+	query *GetPostQuery,
+) (*dto.GetPostRes, error) {
+	var post *entity.Post
+	var err error
+
+	// Try to get post from cache
+	post, err = c.cacheRepo.GetPost(ctx, query.IDOrSlug)
+	if err != nil {
+		c.log.Warnf("failed to get post from cache: %v, fallback to db", err)
+	}
+
+	// If not in cache, fetch from database
+	if post == nil {
+		if query.IsValidUUID() {
+			post, err = c.postRepo.GetPostByID(ctx, query.IDOrSlug)
+		} else {
+			post, err = c.postRepo.GetPostBySlug(ctx, query.IDOrSlug)
+		}
+
+		if err != nil {
+			return nil, grpcerrors.ParseError(err)
+		}
+
+		if post == nil {
+			return nil, grpcerrors.NewNotFoundErrorGrpcError("post not found", "posts.GetPost")
+		}
+
+		// Cache the result
+		if err := c.cacheRepo.PutPost(ctx, query.IDOrSlug, post); err != nil {
+			c.log.Warnf("failed to cache post: %v", err)
+		}
+	}
+
+	res := &dto.GetPostRes{}
+	res.FromEntity(post)
+
+	return res, nil
+}

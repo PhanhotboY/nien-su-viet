@@ -7,7 +7,6 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
-import { PaginationMetadata } from "../common/pagination";
 import { OperationMetadata } from "../common/response";
 import { Timestamp } from "../google/protobuf/timestamp";
 
@@ -119,147 +118,6 @@ export interface IncrementPostLikesResponse {
   data: OperationMetadata | undefined;
 }
 
-/** GetPostRequest represents a query to get a single post by ID */
-export interface GetPostRequest {
-  id: string;
-}
-
-export interface GetPostResponse {
-  data: Post | undefined;
-}
-
-/** GetPublishedPostsRequest represents a query to list posts with pagination and filtering */
-export interface GetPublishedPostsRequest {
-  page?: number | undefined;
-  limit?: number | undefined;
-  search?: string | undefined;
-  sortBy?:
-    | string
-    | undefined;
-  /** "asc" or "desc" */
-  sortOrder?: string | undefined;
-  authorId?: string | undefined;
-  categoryIds: string[];
-  createdAtFrom?: Timestamp | undefined;
-  createdAtTo?: Timestamp | undefined;
-  updatedAtFrom?: Timestamp | undefined;
-  updatedAtTo?: Timestamp | undefined;
-}
-
-export interface GetPublishedPostsResponse {
-  data: Post[];
-  pagination: PaginationMetadata | undefined;
-}
-
-/** GetPostsByCategoryRequest represents a query to get posts by category */
-export interface GetPostsByCategoryRequest {
-  categoryId: string;
-  page?: number | undefined;
-  limit?: number | undefined;
-}
-
-export interface GetPostsByCategoryResponse {
-  data: Post[];
-  pagination: PaginationMetadata | undefined;
-}
-
-/** GetPostsByAuthorRequest represents a query to get posts by author */
-export interface GetPostsByAuthorRequest {
-  authorId: string;
-  page?: number | undefined;
-  limit?: number | undefined;
-}
-
-export interface GetPostsByAuthorResponse {
-  data: Post[];
-  pagination: PaginationMetadata | undefined;
-}
-
-/** GetPopularPostsRequest represents a query to get popular posts by views */
-export interface GetPopularPostsRequest {
-  limit: number;
-  /** Optional: get posts from last N days */
-  daysAgo?: number | undefined;
-}
-
-export interface GetPopularPostsResponse {
-  data: Post[];
-}
-
-/** GetAllPostsRequest */
-export interface GetAllPostsRequest {
-  page?: number | undefined;
-  limit?: number | undefined;
-  search?: string | undefined;
-  sortBy?:
-    | string
-    | undefined;
-  /** "asc" or "desc" */
-  sortOrder?: string | undefined;
-  authorId?: string | undefined;
-  categoryIds: string[];
-  createdAtFrom?: Timestamp | undefined;
-  createdAtTo?: Timestamp | undefined;
-  updatedAtFrom?: Timestamp | undefined;
-  updatedAtTo?: Timestamp | undefined;
-}
-
-export interface GetAllPostsResponse {
-  data: Post[];
-  pagination: PaginationMetadata | undefined;
-}
-
-/** PostCreatedEventRequest represents an event when a post is created */
-export interface PostCreatedEventRequest {
-  id: string;
-  title: string;
-  slug: string;
-  authorId: string;
-  createdAt: Timestamp | undefined;
-}
-
-/** PostUpdatedEvent represents an event when a post is updated */
-export interface PostUpdatedEvent {
-  id: string;
-  title: string;
-  slug: string;
-  updatedAt: Timestamp | undefined;
-}
-
-/** PostPublishedEvent represents an event when a post is published */
-export interface PostPublishedEvent {
-  id: string;
-  title: string;
-  publishedAt: Timestamp | undefined;
-}
-
-/** PostUnpublishedEvent represents an event when a post is unpublished */
-export interface PostUnpublishedEvent {
-  id: string;
-  unpublishedAt: Timestamp | undefined;
-}
-
-/** PostDeletedEvent represents an event when a post is deleted */
-export interface PostDeletedEvent {
-  id: string;
-  title: string;
-  deletedAt: Timestamp | undefined;
-}
-
-/** PostViewsIncrementedEvent represents an event when post views are incremented */
-export interface PostViewsIncrementedEvent {
-  id: string;
-  views: number;
-  incrementedAt: Timestamp | undefined;
-}
-
-/** PostLikesIncrementedEvent represents an event when post likes are incremented */
-export interface PostLikesIncrementedEvent {
-  id: string;
-  likes: number;
-  incrementedAt: Timestamp | undefined;
-}
-
 export const POST_SERVICE_PACKAGE_NAME = "post_service";
 
 /** PostsService handlers */
@@ -280,18 +138,6 @@ export interface PostsServiceClient {
   incrementPostViews(request: IncrementPostViewsRequest): Observable<IncrementPostViewsResponse>;
 
   incrementPostLikes(request: IncrementPostLikesRequest): Observable<IncrementPostLikesResponse>;
-
-  getPost(request: GetPostRequest): Observable<GetPostResponse>;
-
-  getPublishedPosts(request: GetPublishedPostsRequest): Observable<GetPublishedPostsResponse>;
-
-  getAllPosts(request: GetAllPostsRequest): Observable<GetAllPostsResponse>;
-
-  getPostsByCategory(request: GetPostsByCategoryRequest): Observable<GetPostsByCategoryResponse>;
-
-  getPostsByAuthor(request: GetPostsByAuthorRequest): Observable<GetPostsByAuthorResponse>;
-
-  getPopularPosts(request: GetPopularPostsRequest): Observable<GetPopularPostsResponse>;
 }
 
 /** PostsService handlers */
@@ -328,28 +174,6 @@ export interface PostsServiceController {
   incrementPostLikes(
     request: IncrementPostLikesRequest,
   ): Promise<IncrementPostLikesResponse> | Observable<IncrementPostLikesResponse> | IncrementPostLikesResponse;
-
-  getPost(request: GetPostRequest): Promise<GetPostResponse> | Observable<GetPostResponse> | GetPostResponse;
-
-  getPublishedPosts(
-    request: GetPublishedPostsRequest,
-  ): Promise<GetPublishedPostsResponse> | Observable<GetPublishedPostsResponse> | GetPublishedPostsResponse;
-
-  getAllPosts(
-    request: GetAllPostsRequest,
-  ): Promise<GetAllPostsResponse> | Observable<GetAllPostsResponse> | GetAllPostsResponse;
-
-  getPostsByCategory(
-    request: GetPostsByCategoryRequest,
-  ): Promise<GetPostsByCategoryResponse> | Observable<GetPostsByCategoryResponse> | GetPostsByCategoryResponse;
-
-  getPostsByAuthor(
-    request: GetPostsByAuthorRequest,
-  ): Promise<GetPostsByAuthorResponse> | Observable<GetPostsByAuthorResponse> | GetPostsByAuthorResponse;
-
-  getPopularPosts(
-    request: GetPopularPostsRequest,
-  ): Promise<GetPopularPostsResponse> | Observable<GetPopularPostsResponse> | GetPopularPostsResponse;
 }
 
 export function PostsServiceControllerMethods() {
@@ -363,12 +187,6 @@ export function PostsServiceControllerMethods() {
       "deletePosts",
       "incrementPostViews",
       "incrementPostLikes",
-      "getPost",
-      "getPublishedPosts",
-      "getAllPosts",
-      "getPostsByCategory",
-      "getPostsByAuthor",
-      "getPopularPosts",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);

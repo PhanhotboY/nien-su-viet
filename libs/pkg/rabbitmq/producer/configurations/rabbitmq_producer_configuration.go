@@ -28,7 +28,8 @@ func NewDefaultRabbitMQProducerConfiguration(
 		ExchangeOptions: &options.RabbitMQExchangeOptions{
 			Durable: true,
 			Type:    types.ExchangeTopic,
-			Name:    utils.GetTopicOrExchangeName(messageType),
+			// Name:    utils.GetTopicOrExchangeName(messageType),
+			Name: "events",
 		},
 		DeliveryMode:        2,
 		RoutingKey:          utils.GetRoutingKey(messageType),

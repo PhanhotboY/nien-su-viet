@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package search_service;
+
+import "common/pagination.proto";
+import "google/protobuf/timestamp.proto";
+import "search_service/users.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/apps/search/internal/shared/grpc/genproto;search_service";
+
+// ============================================================
+// Common Message Types
+// ============================================================
+
+// Post represents a post entity
+message Post {
+  string id = 1;
+  string title = 2;
+  string slug = 3;
+  string content = 4;
+  optional string summary = 5;
+  optional string thumbnail = 6;
+  User author = 7;
+  optional string category_id = 8;
+  int32 views = 9;
+  int32 likes = 10;
+  bool published = 11;
+  optional google.protobuf.Timestamp published_at = 12;
+  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp updated_at = 14;
+}
+
+// ============================================================
+// QUERIES - Read Operations
+// ============================================================
+
+// GetPostRequest represents a query to get a single post by ID
+message GetPostRequest {
+  string id = 1;
+}
+
+message GetPostResponse {
+  Post data = 1;
+}
+
+// GetPublishedPostsRequest represents a query to list posts with pagination and filtering
+message GetPublishedPostsRequest {
+  optional int32 page = 1;
+  optional int32 limit = 2;
+  optional string search = 3;
+  optional string sort_by = 4;
+  optional string sort_order = 5; // "asc" or "desc"
+  optional string author_id = 6;
+  repeated string category_ids = 7;
+  optional google.protobuf.Timestamp created_at_from = 8;
+  optional google.protobuf.Timestamp created_at_to = 9;
+  optional google.protobuf.Timestamp updated_at_from = 10;
+  optional google.protobuf.Timestamp updated_at_to = 11;
+}
+
+message GetPublishedPostsResponse {
+  repeated Post data = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+// GetPostsByCategoryRequest represents a query to get posts by category
+message GetPostsByCategoryRequest {
+  string category_id = 1;
+  optional int32 page = 2;
+  optional int32 limit = 3;
+}
+
+message GetPostsByCategoryResponse {
+  repeated Post data = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+// GetPostsByAuthorRequest represents a query to get posts by author
+message GetPostsByAuthorRequest {
+  string author_id = 1;
+  optional int32 page = 2;
+  optional int32 limit = 3;
+}
+
+message GetPostsByAuthorResponse {
+  repeated Post data = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+// GetPopularPostsRequest represents a query to get popular posts by views
+message GetPopularPostsRequest {
+  int32 limit = 1;
+  optional int32 days_ago = 2; // Optional: get posts from last N days
+}
+
+message GetPopularPostsResponse {
+  repeated Post data = 1;
+}
+
+// GetAllPostsRequest
+message GetAllPostsRequest {
+  optional int32 page = 1;
+  optional int32 limit = 2;
+  optional string search = 3;
+  optional string sort_by = 4;
+  optional string sort_order = 5; // "asc" or "desc"
+  optional string author_id = 6;
+  repeated string category_ids = 7;
+  optional google.protobuf.Timestamp created_at_from = 8;
+  optional google.protobuf.Timestamp created_at_to = 9;
+  optional google.protobuf.Timestamp updated_at_from = 10;
+  optional google.protobuf.Timestamp updated_at_to = 11;
+}
+
+message GetAllPostsResponse {
+  repeated Post data = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+// ============================================================
+// SERVICE DEFINITIONS - CQRS Pattern
+// ============================================================
+
+// PostsService handlers
+service PostsService {
+  rpc GetPost(GetPostRequest) returns (GetPostResponse);
+  rpc GetPublishedPosts(GetPublishedPostsRequest) returns (GetPublishedPostsResponse);
+  rpc GetAllPosts(GetAllPostsRequest) returns (GetAllPostsResponse);
+  rpc GetPostsByCategory(GetPostsByCategoryRequest) returns (GetPostsByCategoryResponse);
+  rpc GetPostsByAuthor(GetPostsByAuthorRequest) returns (GetPostsByAuthorResponse);
+  rpc GetPopularPosts(GetPopularPostsRequest) returns (GetPopularPostsResponse);
+}

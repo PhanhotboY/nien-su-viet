@@ -5,6 +5,12 @@ import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { retryFetcher } from '.';
 import { IApiResponse } from '../interfaces/response.interface';
 import { avoidRateLimit } from '@/helper/rate-limit.helper';
+import { revalidateTag } from 'next/cache';
+
+const historicalEventCacheTag = 'historical-events';
+const nextFetchOptions = {
+  tags: [historicalEventCacheTag],
+};
 
 export async function getEvents(
   query?: Record<string, string> | string,
@@ -12,9 +18,10 @@ export async function getEvents(
   IPaginatedResponse<components['schemas']['HistoricalEventBriefResponseDto']>
 > {
   const response = (await retryFetcher(
-    `/historical-events?${new URLSearchParams(query).toString()}`,
+    `/search/historical-events?${new URLSearchParams(query).toString()}`,
     {
       isPublicRoute: true,
+      next: nextFetchOptions,
     },
   )) as IPaginatedResponse<
     components['schemas']['HistoricalEventBriefResponseDto']
@@ -29,8 +36,9 @@ export async function getEvent(
   IApiResponse<components['schemas']['HistoricalEventDetailResponseDto']>
 > {
   await avoidRateLimit();
-  const response = await retryFetcher(`/historical-events/${id}`, {
+  const response = await retryFetcher(`/search/historical-events/${id}`, {
     isPublicRoute: true,
+    next: nextFetchOptions,
   });
 
   return response;
@@ -41,7 +49,13 @@ export async function getEventPreview(
 ): Promise<
   IApiResponse<components['schemas']['HistoricalEventPreviewResponseDto']>
 > {
-  const response = await retryFetcher(`/historical-events/${id}/preview`);
+  const response = await retryFetcher(
+    `/search/historical-events/${id}/preview`,
+    {
+      isPublicRoute: true,
+      next: nextFetchOptions,
+    },
+  );
 
   return response;
 }
@@ -55,6 +69,7 @@ export async function createEvent(
     method: 'POST',
     body: JSON.stringify(eventData),
   });
+  revalidateTag(historicalEventCacheTag, 'max');
 
   return response;
 }
@@ -67,6 +82,7 @@ export async function updateEvent(
     method: 'PUT',
     body: JSON.stringify(eventData),
   });
+  revalidateTag(historicalEventCacheTag, 'max');
   return response;
 }
 
@@ -76,6 +92,7 @@ export async function deleteEvent(
   const response = await retryFetcher(`/historical-events/${id}`, {
     method: 'DELETE',
   });
+  revalidateTag(historicalEventCacheTag, 'max');
   return response;
 }
 
