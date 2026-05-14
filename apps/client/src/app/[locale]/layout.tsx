@@ -28,7 +28,7 @@ export default async function AdminLayout({
   const messages = await getMessages({ locale });
 
   return (
-    <html lang={locale}>
+    <html lang={locale} data-scroll-behavior="smooth">
       <body className={`${inter.variable} antialiased flex min-h-svh flex-col`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
