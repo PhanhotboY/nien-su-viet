@@ -48,9 +48,9 @@ func GetTopicOrExchangeNameFromType(message reflect.Type) string {
 
 func GetQueueName(message interface{}) string {
 	if reflect.TypeOf(message).Kind() == reflect.Pointer {
-		return strcase.ToSnake(reflect.TypeOf(message).Elem().Name())
+		return strcase.ToSnake(reflect.TypeOf(message).Elem().Name()) + "_queue"
 	}
-	return strcase.ToSnake(reflect.TypeOf(message).Name())
+	return strcase.ToSnake(reflect.TypeOf(message).Name()) + "_queue"
 }
 
 func GetQueueNameFromType(message reflect.Type) string {

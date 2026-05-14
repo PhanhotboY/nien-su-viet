@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package common;
 
-option go_package = "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto/common;common";
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/common;common";
 
 message OperationMetadata {
   string id = 1;

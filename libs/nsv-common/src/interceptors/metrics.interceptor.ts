@@ -70,7 +70,8 @@ export class MetricsInterceptor implements NestInterceptor {
         finalize: () => {
           const duration = Date.now() - start;
           const method = req.method;
-          const route = req.route?.path || 'unknown_route';
+          const route =
+            req._parsedUrl?.pathname || req.route?.path || 'unknown_route';
           const handler = context.getHandler().name;
 
           this.sm.requests_total.add(

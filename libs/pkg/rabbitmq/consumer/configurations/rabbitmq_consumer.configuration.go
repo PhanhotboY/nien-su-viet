@@ -41,12 +41,12 @@ func NewDefaultRabbitMQConsumerConfiguration(
 		NoLocal:          false,
 		NoWait:           true,
 		BindingOptions: &options.RabbitMQBindingOptions{
-			RoutingKey: messageType.GetRoutingKey(),
+			RoutingKey: utils.GetRoutingKey(messageType),
 		},
 		ExchangeOptions: &options.RabbitMQExchangeOptions{
 			Durable: true,
 			Type:    types.ExchangeTopic,
-			Name:    utils.GetTopicOrExchangeName(messageType),
+			Name:    "events", // shared accross all services
 		},
 		QueueOptions: &options.RabbitMQQueueOptions{
 			Durable: true,

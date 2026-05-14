@@ -96,7 +96,7 @@ func (r *rabbitMQProducer) PublishMessageWithTopicName(
 	if producerConfiguration != nil && producerConfiguration.RoutingKey != "" {
 		routingKey = producerConfiguration.RoutingKey
 	} else {
-		routingKey = message.GetRoutingKey()
+		routingKey = utils.GetRoutingKey(message)
 	}
 
 	producerOptions := &producer3.ProducerTracingOptions{

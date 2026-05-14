@@ -8,7 +8,7 @@ import (
 type RmqConfig struct {
 	RmqHostOptions `mapstructure:",squash"`
 
-	QueueName    string `mapstructure:"queue_name"`
+	ExchangeName string `mapstructure:"exchange_name"`
 	DeliveryMode uint8
 	Persisted    bool
 	AppId        string

@@ -5,8 +5,11 @@ import { ConfigService } from '@nestjs/config';
 import { createBetterAuthInstance } from '../src/lib/auth';
 import { configuration } from '@auth/config';
 import { PrismaService } from '@auth/database';
-import { ClientProxy, ClientRMQ } from '@nestjs/microservices';
+import { ClientRMQ } from '@nestjs/microservices';
 import { RmqUrl } from '@nestjs/microservices/external/rmq-url.interface';
+import { RedisService, RedisServiceType } from '@phanhotboy/nsv-common';
+import { createKeyv } from '@keyv/redis';
+import { createCache } from 'cache-manager';
 
 export async function setupAdmin() {
   const config = new ConfigService(configuration());
@@ -17,7 +20,16 @@ export async function setupAdmin() {
     exchange: 'events',
     exchangeType: 'topic',
   });
-  const auth = createBetterAuthInstance(config, prisma, rmq);
+  const keyvRedis = createKeyv({
+    url: config.get('REDIS_URL'),
+  });
+  const redis = new RedisService(createCache({ stores: [keyvRedis] }));
+  const auth = createBetterAuthInstance(
+    config,
+    prisma,
+    rmq,
+    redis as RedisServiceType,
+  );
   // Dynamic import after env is loaded
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminName = process.env.ADMIN_NAME || 'Admin User';

@@ -18,7 +18,6 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useLocale } from 'next-intl';
-import { CLIENT_HOST } from '@/lib/config';
 
 const sidebarNavItems = [
   {
@@ -26,12 +25,15 @@ const sidebarNavItems = [
     icon: Users,
     label: 'Users',
   },
+  {
+    href: '/admin/organizations',
+    icon: GalleryVerticalEnd,
+    label: 'Organizations',
+  },
 ];
 
 export function DashboardSidebar() {
   const pathname = usePathname();
-  const router = useRouter();
-  const locale = useLocale();
   const { signOut } = authClient;
 
   const handleLogout = async () => {

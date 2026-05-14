@@ -1,3 +1,4 @@
+import { post } from 'axios';
 import { createAccessControl } from 'better-auth/plugins/access';
 import {
   defaultStatements,
@@ -18,12 +19,14 @@ const eventStatements = {
   eventEdit: crudActions,
 };
 
-const cmsStatements = {
-  app: crudActions,
-  footerNavItem: crudActions,
-  headerNavItem: crudActions,
+const postStatements = {
   ping: crudActions,
   post: crudActions,
+};
+
+const organizationStatements = {
+  organization: crudActions,
+  organizationMember: crudActions,
 };
 
 const statements = {
@@ -31,7 +34,8 @@ const statements = {
   user: [...defaultStatements.user],
   session: [...defaultStatements.session],
   ...eventStatements,
-  ...cmsStatements,
+  ...postStatements,
+  ...organizationStatements,
 };
 
 /**
@@ -43,14 +47,15 @@ const ac = createAccessControl(statements);
 
 const admin = ac.newRole({
   ...eventStatements,
-  ...cmsStatements,
+  ...postStatements,
+  ...organizationStatements,
   ...(adminAc.statements as any),
 });
 
 const editor = ac.newRole({
   ...eventStatements,
   eventEdit: ['create', 'read', 'update'],
-  ...cmsStatements,
+  ...postStatements,
   ping: [],
   ...(userAc.statements as any),
 });
@@ -59,10 +64,7 @@ const user = ac.newRole({
   historicalEvent: ['read'],
   eventCategory: ['read'],
   eventEdit: ['read'],
-  app: ['read'],
-  footerNavItem: ['read'],
-  headerNavItem: ['read'],
-  blog: ['read'],
+  post: ['read'],
   ...userAc.statements,
 } as unknown as any);
 

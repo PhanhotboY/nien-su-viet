@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 import {
   All,
   Controller,
+  Delete,
   Get,
   Inject,
   Logger,
@@ -12,10 +13,18 @@ import {
   Res,
 } from '@nestjs/common';
 
-import { Serialize } from '@phanhotboy/nsv-common';
+import {
+  OperationMetadataDto,
+  PaginatedResponseDto,
+  Serialize,
+} from '@phanhotboy/nsv-common';
 import { RATE_LIMIT } from '@gateway/config';
 import { Public } from '@gateway/common/decorators';
-import { UserBriefResponseDto } from './dto';
+import {
+  MemberBriefResponseDto,
+  OrganizationBaseDto,
+  UserBriefResponseDto,
+} from './dto';
 import { HttpProxyService } from '@gateway/common/services/http-proxy.service';
 
 @Controller('auth')
@@ -31,6 +40,43 @@ export class AuthController {
   @Throttle(RATE_LIMIT.INTERNAL)
   async getUserInfo(@Param('id') userId: string, @Req() req: Request) {
     this.logger.debug(`Fetching info for user: ${userId}`);
+    return await this.proxyService.makeRequest(req);
+  }
+
+  @Get('admin/organizations/:id/members')
+  @Throttle(RATE_LIMIT.INTERNAL)
+  async getAllOrganizationMembers(
+    @Req() req: Request,
+  ): Promise<PaginatedResponseDto<MemberBriefResponseDto>> {
+    return await this.proxyService.makeRequest(req);
+  }
+
+  @Get('admin/organizations/:id')
+  @Throttle(RATE_LIMIT.INTERNAL)
+  async getOrganizationById(@Req() req: Request): Promise<OrganizationBaseDto> {
+    return await this.proxyService.makeRequest(req);
+  }
+
+  @Get('admin/organizations')
+  @Throttle(RATE_LIMIT.INTERNAL)
+  @Serialize(OrganizationBaseDto)
+  async getAllOrganizations(
+    @Req() req: Request,
+  ): Promise<OrganizationBaseDto[]> {
+    return await this.proxyService.makeRequest(req);
+  }
+
+  @Post('admin/organizations/:orgId/members/:userId')
+  async addUserToOrganization(
+    @Req() req: Request,
+  ): Promise<OperationMetadataDto> {
+    return await this.proxyService.makeRequest(req);
+  }
+
+  @Delete('admin/organizations/:orgId/members/:memberId')
+  async removeUserFromOrganization(
+    @Req() req: Request,
+  ): Promise<OperationMetadataDto> {
     return await this.proxyService.makeRequest(req);
   }
 

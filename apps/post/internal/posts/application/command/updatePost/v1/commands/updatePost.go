@@ -14,7 +14,8 @@ type UpdatePostCommand struct {
 func NewUpdatePostCommand(
 	req any,
 ) (*UpdatePostCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.UpdatePostRequest{})
+	typedReq := new(dto.UpdatePostRequest)
+	err := dtoUtil.ValidateStruct(req, typedReq)
 	if err != nil {
 		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewUpdatePostCommandWithValidation")
 	}

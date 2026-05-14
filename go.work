@@ -1,6 +1,8 @@
 go 1.26.0
 
 use (
-	./apps/post
 	./libs/pkg
+
+	./apps/post
+	./apps/billing
 )

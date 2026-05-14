@@ -1,6 +1,10 @@
 import { betterAuth } from 'better-auth';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
-import { admin as adminPlugin, openAPI } from 'better-auth/plugins';
+import {
+  admin as adminPlugin,
+  organization,
+  openAPI,
+} from 'better-auth/plugins';
 import { ClientProxy } from '@nestjs/microservices';
 
 import { type Config } from '../config';
@@ -8,18 +12,26 @@ import { UserBaseDto, UserDeleteDto } from '@auth/auth/dto';
 import { ac, roles } from '@phanhotboy/nsv-common/lib';
 import { PrismaService } from '@auth/database';
 import { plainToInstance } from 'class-transformer';
-import { ConfigService } from '@phanhotboy/nsv-common';
+import { ConfigService, RedisServiceType } from '@phanhotboy/nsv-common';
 import { USER_EVENT } from '@phanhotboy/constants/user.event.constant';
 
 export function createBetterAuthInstance(
   config: ConfigService<Config>,
   prisma: PrismaService,
   rmq: ClientProxy,
+  redisService: RedisServiceType,
 ) {
   return betterAuth({
     database: prismaAdapter(prisma, {
       provider: 'postgresql',
     }),
+    secondaryStorage: {
+      get: (key) => redisService.get(key),
+      set: (key, value, ttl) => redisService.set(key, value, ttl),
+      delete: async (key) => {
+        await redisService.del(key);
+      },
+    },
     secret: config.get('betterAuth.secret'),
     basePath: '/api/v1/auth',
     trustedOrigins: config.get('trustedOrigins'),
@@ -44,12 +56,30 @@ export function createBetterAuthInstance(
       },
     },
     plugins: [
+      organization({
+        teams: { enabled: false },
+        // Limit to 1 organization per user
+        organizationLimit: async (user) => {
+          if (user.role === 'admin') {
+            return false;
+          }
+          const member = prisma.member.findFirst({
+            where: { userId: user.id },
+          });
+          if (!member) {
+            return false;
+          }
+
+          return true;
+        },
+      }),
       adminPlugin({
         ac,
         roles,
         adminRoles: ['admin'],
         defaultRole: 'user',
       }),
+      openAPI(),
     ],
     databaseHooks: {
       user: {

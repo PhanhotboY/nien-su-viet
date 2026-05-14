@@ -54,7 +54,8 @@ export class TracingInterceptor implements NestInterceptor {
         },
         finalize: () => {
           const method = req.method;
-          const route = req.route?.path || 'unknown_route';
+          const route =
+            req._parsedUrl?.pathname || req.route?.path || 'unknown_route';
           const handler = context.getHandler().name;
 
           span?.setAttributes(

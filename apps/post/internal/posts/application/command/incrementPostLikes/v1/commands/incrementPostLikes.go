@@ -13,7 +13,8 @@ type IncrementPostLikesCommand struct {
 func NewIncrementPostLikesCommand(
 	req any,
 ) (*IncrementPostLikesCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.IncrementPostLikesRequest{})
+	typedReq := new(dto.IncrementPostLikesRequest)
+	err := dtoUtil.ValidateStruct(req, typedReq)
 	if err != nil {
 		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewIncrementPostLikesCommand")
 	}

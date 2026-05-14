@@ -24,7 +24,11 @@ type Config struct {
 }
 
 func LoadConfig() Config {
-	env := os.Getenv("POST_SERVER_ENV")
+	envPrefix := os.Getenv("ENV_PREFIX")
+	if envPrefix == "" {
+		log.Fatal("missing ENV_PREFIX environment variable")
+	}
+	env := os.Getenv(fmt.Sprintf("%s_SERVER_ENV", envPrefix))
 	wd, _ := os.Getwd()
 	envPath, _ := searchRootDirectory(wd)
 	configName := ".env"
@@ -36,7 +40,7 @@ func LoadConfig() Config {
 	v.AddConfigPath(envPath)
 	v.SetConfigName(configName)
 	v.SetConfigType("env")
-	v.SetEnvPrefix("post")
+	v.SetEnvPrefix(envPrefix)
 
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()

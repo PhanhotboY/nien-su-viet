@@ -13,7 +13,8 @@ type GetPopularPostsQuery struct {
 func NewGetPopularPostsQuery(
 	req any,
 ) (*GetPopularPostsQuery, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.GetPopularPostsQueryReq{})
+	typedReq := new(dto.GetPopularPostsQueryReq)
+	err := dtoUtil.ValidateStruct(req, typedReq)
 	if err != nil {
 		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewGetPopularPostsQuery")
 	}

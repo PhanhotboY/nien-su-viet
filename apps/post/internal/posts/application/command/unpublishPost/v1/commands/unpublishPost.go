@@ -13,7 +13,8 @@ type UnpublishPostCommand struct {
 func NewUnpublishPostCommand(
 	req any,
 ) (*UnpublishPostCommand, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.UnpublishPostRequest{})
+	typedReq := new(dto.UnpublishPostRequest)
+	err := dtoUtil.ValidateStruct(req, typedReq)
 	if err != nil {
 		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewUnpublishPostCommand")
 	}

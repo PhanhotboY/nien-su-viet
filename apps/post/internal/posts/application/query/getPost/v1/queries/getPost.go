@@ -14,7 +14,8 @@ type GetPostQuery struct {
 func NewGetPostQuery(
 	req any,
 ) (*GetPostQuery, error) {
-	typedReq, err := dtoUtil.ValidateStruct(req, dto.GetPostQueryReq{})
+	typedReq := new(dto.GetPostQueryReq)
+	err := dtoUtil.ValidateStruct(req, typedReq)
 	if err != nil {
 		return nil, grpcerrors.NewValidationGrpcError(err.Error(), "NewGetPostQuery")
 	}

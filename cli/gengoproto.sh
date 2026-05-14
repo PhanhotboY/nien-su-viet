@@ -18,5 +18,4 @@ protoc \
   --go-grpc_out="$outPath" \
   --go-grpc_opt=module="$modulePath" \
   --go-grpc_opt=require_unimplemented_servers=false \
-    api/proto/common/*.proto \
     api/proto/${service}_service/*.proto

@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { AppModule } from './app.module';
 import { RmqService } from '@phanhotboy/nsv-common';
 import { AuthService } from './auth';
@@ -8,6 +9,25 @@ async function bootstrap() {
   const rmqService = app.get(RmqService);
   const auth = app.get(AuthService);
   app.connectMicroservice(rmqService.getOptions('auth_queue'));
+
+  // Generate Better Auth OpenAPI schema (contains all auth routes)
+  const document = await auth.api.generateOpenAPISchema();
+  for (const path in document.paths) {
+    for (const method in document.paths[path]) {
+      const op = document.paths[path][method];
+      // rename operationId
+      op.operationId = `${method}_${path.replace(/\W+/g, '_')}`;
+    }
+  }
+
+  // Save OpenAPI JSON into monorepo
+  if (existsSync('api/openapi') === false) {
+    mkdirSync('api/openapi', { recursive: true });
+  }
+  writeFileSync(
+    `api/openapi/auth-service.json`,
+    JSON.stringify(document, null, 2),
+  );
 
   // Global prefix
   app.setGlobalPrefix('/api/v1');
