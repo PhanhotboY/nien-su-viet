@@ -99,7 +99,7 @@ const file_common_pagination_proto_rawDesc = "" +
 	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x14\n" +
 	"\x05limit\x18\x03 \x01(\x05R\x05limit\x12\x1f\n" +
 	"\vtotal_pages\x18\x04 \x01(\x05R\n" +
-	"totalPagesBZZXgithub.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto/common;commonb\x06proto3"
+	"totalPagesBIZGgithub.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/common;commonb\x06proto3"
 
 var (
 	file_common_pagination_proto_rawDescOnce sync.Once

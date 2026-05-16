@@ -4,8 +4,8 @@ import (
 	"go.uber.org/fx"
 	googleGrpc "google.golang.org/grpc"
 
-	postsService "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto"
 	grpcServer "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc"
+	postsService "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/post_service"
 )
 
 var Module = fx.Module(

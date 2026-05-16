@@ -80,7 +80,7 @@ const file_common_response_proto_rawDesc = "" +
 	"\x15common/response.proto\x12\x06common\"=\n" +
 	"\x11OperationMetadata\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
-	"\asuccess\x18\x02 \x01(\bR\asuccessBZZXgithub.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto/common;commonb\x06proto3"
+	"\asuccess\x18\x02 \x01(\bR\asuccessBIZGgithub.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/common;commonb\x06proto3"
 
 var (
 	file_common_response_proto_rawDescOnce sync.Once

@@ -10,8 +10,8 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:              "reward-microservice",
-	Short:            "reward-microservice based on vertical slice architecture",
+	Use:              "billing-microservice",
+	Short:            "billing-microservice based on vertical slice architecture",
 	Long:             `This is a command runner or cli for api architecture in golang.`,
 	TraverseChildren: true,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -23,12 +23,12 @@ var rootCmd = &cobra.Command{
 
 // @contact.name Phan Nguyen
 // @contact.url https://github.com/phanhotboy
-// @title Reward Service Api
+// @title Billing Service Api
 // @version 1.0
-// @description Reward Service Api
+// @description Billing Service Api
 func main() {
 	pterm.DefaultBigText.WithLetters(
-		putils.LettersFromStringWithStyle("Reward", pterm.FgLightGreen.ToStyle()),
+		putils.LettersFromStringWithStyle("Billing", pterm.FgLightGreen.ToStyle()),
 		putils.LettersFromStringWithStyle(" Service", pterm.FgLightMagenta.ToStyle())).
 		Render()
 

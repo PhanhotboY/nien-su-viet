@@ -46,12 +46,14 @@ swagger2openapi:
 
 .PHONY: gengoproto
 gengoproto:
-	@./cli/gengoproto.sh post
+	@./cli/gengoproto.sh
 
 .PHONY: gentsproto
 gentsproto:
 	@./cli/gentsproto.sh post
 	@./cli/gentsproto.sh historical_event
+	@./cli/gentsproto.sh billing
+
 
 .PHONY: genproto
 genproto:

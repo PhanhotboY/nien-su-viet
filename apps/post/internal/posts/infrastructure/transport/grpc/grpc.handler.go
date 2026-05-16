@@ -19,7 +19,7 @@ import (
 	getPopularPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPopularPosts/v1/queries"
 	getPostQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPost/v1/queries"
 	getPublishedPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPublishedPosts/v1/queries"
-	pb "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto"
+	pb "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/post_service"
 	grpcUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/utils"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 )

@@ -7,7 +7,7 @@
 package posts_service
 
 import (
-	common "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto/common"
+	common "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -2469,7 +2469,7 @@ const file_post_service_posts_proto_rawDesc = "" +
 	"\vGetAllPosts\x12 .post_service.GetAllPostsRequest\x1a!.post_service.GetAllPostsResponse\x12g\n" +
 	"\x12GetPostsByCategory\x12'.post_service.GetPostsByCategoryRequest\x1a(.post_service.GetPostsByCategoryResponse\x12a\n" +
 	"\x10GetPostsByAuthor\x12%.post_service.GetPostsByAuthorRequest\x1a&.post_service.GetPostsByAuthorResponse\x12^\n" +
-	"\x0fGetPopularPosts\x12$.post_service.GetPopularPostsRequest\x1a%.post_service.GetPopularPostsResponseBZZXgithub.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto;posts_serviceb\x06proto3"
+	"\x0fGetPopularPosts\x12$.post_service.GetPopularPostsRequest\x1a%.post_service.GetPopularPostsResponseBVZTgithub.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/post_service;posts_serviceb\x06proto3"
 
 var (
 	file_post_service_posts_proto_rawDescOnce sync.Once
