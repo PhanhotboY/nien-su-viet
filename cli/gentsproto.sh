@@ -14,5 +14,4 @@ protoc \
     --proto_path="api/proto" \
     --ts_proto_opt=nestJs=true \
     --ts_proto_out="$outPath" \
-    api/proto/${service}_service/*.proto \
-    api/proto/events/*_events.proto
+    api/proto/**/*.proto

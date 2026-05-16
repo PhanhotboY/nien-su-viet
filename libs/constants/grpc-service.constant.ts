@@ -1,3 +1,4 @@
+// proto path must be relative to the project root
 export const GRPC_SERVICE = {
   MAIN_PROTO_PATH: './api/proto',
   POST: {

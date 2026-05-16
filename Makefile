@@ -50,10 +50,7 @@ gengoproto:
 
 .PHONY: gentsproto
 gentsproto:
-	@./cli/gentsproto.sh post
-	@./cli/gentsproto.sh historical_event
-	@./cli/gentsproto.sh billing
-
+	@./cli/gentsproto.sh
 
 .PHONY: genproto
 genproto:

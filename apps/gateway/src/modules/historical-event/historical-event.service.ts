@@ -183,8 +183,7 @@ function toEventDateType(
     case HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT:
       return EventDateType.EXACT;
     case HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE:
-      return EventDateType.APPROXIMATE;
     default:
-      return EventDateType.EVENT_DATE_TYPE_UNSPECIFIED;
+      return EventDateType.APPROXIMATE;
   }
 }
