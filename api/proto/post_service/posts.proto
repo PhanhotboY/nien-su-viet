@@ -6,7 +6,7 @@ import "common/pagination.proto";
 import "common/response.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/phanhotboy/nien-su-viet/apps/post/internal/shared/grpc/genproto;posts_service";
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/post_service;posts_service";
 
 // ============================================================
 // Common Message Types

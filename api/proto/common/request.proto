@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package common;
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/common;common";
+
+message ListQueryRequest {
+  optional int32 page = 1;
+  optional int32 limit = 2;
+  optional string search = 3;
+  optional string sort_by = 4;
+  optional string sort_order = 5; // "asc" or "desc"
+}

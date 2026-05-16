@@ -1,0 +1,332 @@
+syntax = "proto3";
+
+package billing_event;
+
+import "billing_service/billing.proto";
+import "billing_service/payment_attempts.proto";
+import "billing_service/payment_transactions.proto";
+import "billing_service/purchases.proto";
+import "billing_service/subscriptions.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/events;events";
+
+/// ============================================================================
+// Event envelope
+// ============================================================================
+//
+// Store these in OUTBOX_EVENTS.payload.
+//
+// Notes:
+// - event_id should be globally unique.
+// - aggregate_type/aggregate_id in OUTBOX_EVENTS should match these fields.
+// - attributes can store trace_id, correlation_id, actor_id, request_id, etc.
+//
+message EventEnvelope {
+  string event_id = 1;
+  string event_type = 2; // e.g. "purchase.completed.v1"
+  string aggregate_type = 3; // "subscription", "purchase", "payment_attempt", ...
+  string aggregate_id = 4; // UUID as string
+
+  google.protobuf.Timestamp occurred_at = 5;
+
+  // Optional: versioning separate from event_type naming
+  int32 schema_version = 6;
+
+  // Optional metadata for routing/tracing
+  map<string, string> attributes = 7;
+
+  oneof data {
+    SubscriptionCreated subscription_created = 100;
+    SubscriptionUpdated subscription_updated = 101;
+    SubscriptionCanceled subscription_canceled = 102;
+    SubscriptionExpired subscription_expired = 103;
+
+    PurchaseCreated purchase_created = 200;
+    PurchaseCompleted purchase_completed = 201;
+    PurchaseFailed purchase_failed = 202;
+    PurchaseCanceled purchase_canceled = 203;
+
+    PaymentAttemptCreated payment_attempt_created = 300;
+    PaymentAttemptUpdated payment_attempt_updated = 301;
+    PaymentAttemptSucceeded payment_attempt_succeeded = 302;
+    PaymentAttemptFailed payment_attempt_failed = 303;
+    PaymentAttemptExpired payment_attempt_expired = 304;
+
+    PaymentTransactionRecorded payment_transaction_recorded = 400;
+
+    RefundRequested refund_requested = 500;
+    RefundSucceeded refund_succeeded = 501;
+    RefundFailed refund_failed = 502;
+
+    WebhookEventReceived webhook_event_received = 600;
+    WebhookEventProcessed webhook_event_processed = 601;
+    WebhookEventProcessingFailed webhook_event_processing_failed = 602;
+  }
+}
+
+// ============================================================================
+// Subscription events
+// ============================================================================
+
+message SubscriptionSnapshot {
+  string subscription_id = 1;
+  string user_id = 2;
+  string plan_id = 3;
+
+  billing_service.SubscriptionStatus status = 4;
+
+  google.protobuf.Timestamp current_period_start = 5;
+  google.protobuf.Timestamp current_period_end = 6;
+
+  bool cancel_at_period_end = 7;
+
+  google.protobuf.Timestamp canceled_at = 8;
+  google.protobuf.Timestamp expired_at = 9;
+
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+}
+
+message SubscriptionCreated {
+  SubscriptionSnapshot subscription = 1;
+}
+
+message SubscriptionUpdated {
+  SubscriptionSnapshot before = 1;
+  SubscriptionSnapshot after = 2;
+
+  // Optional: what triggered this (webhook, admin, scheduler, etc.)
+  string cause = 3;
+}
+
+message SubscriptionCanceled {
+  string subscription_id = 1;
+  string user_id = 2;
+
+  bool at_period_end = 3;
+  google.protobuf.Timestamp canceled_at = 4;
+
+  string cause = 5;
+}
+
+message SubscriptionExpired {
+  string subscription_id = 1;
+  string user_id = 2;
+
+  google.protobuf.Timestamp expired_at = 3;
+
+  string cause = 4;
+}
+
+// ============================================================================
+// Purchase events
+// ============================================================================
+
+message PurchaseSnapshot {
+  string purchase_id = 1;
+  string user_id = 2;
+  string subscription_id = 3;
+  string plan_id = 4;
+
+  billing_service.Money amount = 5;
+  billing_service.PurchaseStatus status = 6;
+
+  string idempotency_key = 7;
+
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp completed_at = 9;
+}
+
+message PurchaseCreated {
+  PurchaseSnapshot purchase = 1;
+}
+
+message PurchaseCompleted {
+  PurchaseSnapshot purchase = 1;
+
+  // Helpful pointers for downstream consumers
+  string successful_payment_attempt_id = 2;
+  string capture_transaction_id = 3; // your internal PaymentTransaction id (if you create it)
+  string provider = 4; // "stripe", "momo", ...
+  string provider_reference = 5; // provider's charge/payment reference
+}
+
+message PurchaseFailed {
+  PurchaseSnapshot purchase = 1;
+
+  // Optional failure info (avoid leaking secrets)
+  string provider = 2;
+  string provider_reference = 3;
+  string failure_reason = 4; // normalized reason, if available
+}
+
+message PurchaseCanceled {
+  PurchaseSnapshot purchase = 1;
+  string cause = 2;
+}
+
+// ============================================================================
+// Payment Attempt events
+// ============================================================================
+
+message PaymentAttemptSnapshot {
+  string payment_attempt_id = 1;
+  string purchase_id = 2;
+
+  string provider = 3;
+  billing_service.PaymentAttemptStatus status = 4;
+
+  billing_service.Money amount = 5;
+
+  string provider_transaction_id = 6;
+  string checkout_url = 7;
+
+  google.protobuf.Timestamp expires_at = 8;
+
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+
+  // Keep metadata out of most events unless you need it.
+}
+
+message PaymentAttemptCreated {
+  PaymentAttemptSnapshot payment_attempt = 1;
+}
+
+message PaymentAttemptUpdated {
+  PaymentAttemptSnapshot before = 1;
+  PaymentAttemptSnapshot after = 2;
+}
+
+message PaymentAttemptSucceeded {
+  PaymentAttemptSnapshot payment_attempt = 1;
+
+  // Optional pointer to the capture/payment transaction recorded
+  string transaction_id = 2;
+  string provider_reference = 3;
+}
+
+message PaymentAttemptFailed {
+  PaymentAttemptSnapshot payment_attempt = 1;
+
+  string failure_reason = 2;
+  google.protobuf.Struct provider_error = 3; // e.g. error codes from provider
+}
+
+message PaymentAttemptExpired {
+  PaymentAttemptSnapshot payment_attempt = 1;
+}
+
+// ============================================================================
+// Payment Transaction events
+// ============================================================================
+
+message PaymentTransactionSnapshot {
+  string transaction_id = 1;
+  string payment_attempt_id = 2;
+
+  billing_service.PaymentTransactionType type = 3;
+  billing_service.PaymentTransactionStatus status = 4;
+
+  billing_service.Money amount = 5;
+
+  string provider_reference = 6;
+
+  google.protobuf.Timestamp processed_at = 7;
+  google.protobuf.Timestamp created_at = 8;
+
+  // Keep arbitrary metadata minimal; include if consumers need it.
+  google.protobuf.Struct metadata = 9;
+}
+
+message PaymentTransactionRecorded {
+  PaymentTransactionSnapshot transaction = 1;
+
+  // Optional: link refund -> capture, etc. (if you add related_transaction_id in DB)
+  string related_transaction_id = 2;
+}
+
+// ============================================================================
+// Refund events (modeled as a workflow around payment transactions)
+// ============================================================================
+
+message RefundRequested {
+  string refund_request_id = 1; // your internal idempotent request id (could reuse event_id)
+
+  string purchase_id = 2;
+
+  // The payment attempt/transaction you intend to refund
+  string payment_attempt_id = 3;
+  string capture_transaction_id = 4;
+
+  billing_service.Money amount = 5;
+  string reason = 6;
+
+  // For convenience
+  string provider = 7;
+  string idempotency_key = 8;
+
+  google.protobuf.Timestamp requested_at = 9;
+}
+
+message RefundSucceeded {
+  string purchase_id = 1;
+  string payment_attempt_id = 2;
+
+  string capture_transaction_id = 3;
+  string refund_transaction_id = 4; // your internal PaymentTransaction id
+
+  billing_service.Money amount = 5;
+
+  string provider = 6;
+  string provider_reference = 7; // provider refund id
+
+  google.protobuf.Timestamp succeeded_at = 8;
+}
+
+message RefundFailed {
+  string purchase_id = 1;
+  string payment_attempt_id = 2;
+
+  billing_service.Money amount = 3;
+
+  string provider = 4;
+  string failure_reason = 5;
+  google.protobuf.Struct provider_error = 6;
+
+  google.protobuf.Timestamp failed_at = 7;
+}
+
+// ============================================================================
+// Webhook events (ingestion + processing)
+// ============================================================================
+
+message WebhookEventReceived {
+  string provider = 1;
+  string external_event_id = 2;
+  string event_type = 3;
+
+  google.protobuf.Timestamp received_at = 4;
+}
+
+message WebhookEventProcessed {
+  string provider = 1;
+  string external_event_id = 2;
+  string event_type = 3;
+
+  google.protobuf.Timestamp processed_at = 4;
+
+  // Optional: what this webhook caused (helpful for observability)
+  repeated string emitted_event_ids = 5; // outbox event ids
+}
+
+message WebhookEventProcessingFailed {
+  string provider = 1;
+  string external_event_id = 2;
+  string event_type = 3;
+
+  string error_message = 4;
+  google.protobuf.Timestamp failed_at = 5;
+}

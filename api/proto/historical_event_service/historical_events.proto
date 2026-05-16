@@ -6,13 +6,15 @@ import "common/pagination.proto";
 import "common/response.proto";
 import "google/protobuf/timestamp.proto";
 
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/historical_event_service;historical_event_service";
+
 // ============================================================
 // Enum Types
 // ============================================================
 
 enum EventDateType {
-  EXACT = 1;
-  APPROXIMATE = 2;
+  EXACT = 0;
+  APPROXIMATE = 1;
 }
 
 // ============================================================

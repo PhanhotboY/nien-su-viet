@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package billing_service;
+
+import "billing_service/billing.proto";
+import "common/pagination.proto";
+import "common/request.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
+
+enum PaymentTransactionType {
+  PAYMENT_TRANSACTION_TYPE_UNSPECIFIED = 0;
+  PAYMENT_TRANSACTION_TYPE_PAYMENT = 1;
+  PAYMENT_TRANSACTION_TYPE_AUTH = 2;
+  PAYMENT_TRANSACTION_TYPE_CAPTURE = 3;
+  PAYMENT_TRANSACTION_TYPE_REFUND = 4;
+  PAYMENT_TRANSACTION_TYPE_VOID = 5;
+  PAYMENT_TRANSACTION_TYPE_CHARGEBACK = 6;
+  PAYMENT_TRANSACTION_TYPE_ADJUSTMENT = 7;
+  PAYMENT_TRANSACTION_TYPE_FEE = 8;
+}
+
+enum PaymentTransactionStatus {
+  PAYMENT_TRANSACTION_STATUS_UNSPECIFIED = 0;
+  PAYMENT_TRANSACTION_STATUS_PENDING = 1;
+  PAYMENT_TRANSACTION_STATUS_SUCCEEDED = 2;
+  PAYMENT_TRANSACTION_STATUS_FAILED = 3;
+  PAYMENT_TRANSACTION_STATUS_CANCELED = 4;
+}
+
+message PaymentTransaction {
+  string id = 1;
+
+  string payment_attempt_id = 2;
+
+  PaymentTransactionType type = 3;
+  PaymentTransactionStatus status = 4;
+
+  Money amount = 5;
+
+  string provider_reference = 6;
+  google.protobuf.Struct metadata = 7;
+
+  google.protobuf.Timestamp processed_at = 8;
+  google.protobuf.Timestamp created_at = 9;
+}
+
+// ============================================================================
+// Transaction Query Service (optional but useful for support/reconciliation)
+// ============================================================================
+
+message ListPaymentTransactionsByPurchaseRequest {
+  string purchase_id = 1;
+  common.ListQueryRequest query = 2;
+}
+
+message ListPaymentTransactionsByPurchaseResponse {
+  repeated PaymentTransaction transactions = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+message ListPaymentTransactionsByAttemptRequest {
+  string payment_attempt_id = 1;
+  common.ListQueryRequest query = 2;
+}
+
+message ListPaymentTransactionsByAttemptResponse {
+  repeated PaymentTransaction transactions = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+service PaymentTransactionService {
+  rpc ListByPurchase(ListPaymentTransactionsByPurchaseRequest) returns (ListPaymentTransactionsByPurchaseResponse);
+  rpc ListByAttempt(ListPaymentTransactionsByAttemptRequest) returns (ListPaymentTransactionsByAttemptResponse);
+}

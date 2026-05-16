@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package billing_service;
+
+import "billing_service/billing.proto";
+import "common/pagination.proto";
+import "common/request.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
+
+enum PurchaseStatus {
+  PURCHASE_STATUS_UNSPECIFIED = 0;
+  PURCHASE_STATUS_PENDING = 1;
+  PURCHASE_STATUS_REQUIRES_PAYMENT = 2;
+  PURCHASE_STATUS_COMPLETED = 3;
+  PURCHASE_STATUS_FAILED = 4;
+  PURCHASE_STATUS_CANCELED = 5;
+}
+
+message Purchase {
+  string id = 1;
+
+  string user_id = 2;
+  string subscription_id = 3;
+  string plan_id = 4;
+
+  Money amount = 5;
+  PurchaseStatus status = 6;
+
+  string idempotency_key = 7;
+
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp completed_at = 9;
+}
+
+// ============================================================================
+// Purchase / Billing Service (invoices, renewals)
+// ============================================================================
+
+message CreatePurchaseRequest {
+  string user_id = 1;
+  string subscription_id = 2;
+  string plan_id = 3;
+
+  Money amount = 4;
+
+  // Client-generated idempotency key to prevent duplicates.
+  string idempotency_key = 5;
+}
+
+message CreatePurchaseResponse {
+  Purchase purchase = 1;
+}
+
+message GetPurchaseRequest {
+  string purchase_id = 1;
+}
+
+message GetPurchaseResponse {
+  Purchase purchase = 1;
+}
+
+message ListPurchasesBySubscriptionRequest {
+  string subscription_id = 1;
+  common.ListQueryRequest query = 2;
+}
+
+message ListPurchasesBySubscriptionResponse {
+  repeated Purchase purchases = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+message ListPurchasesByUserRequest {
+  string user_id = 1;
+  common.ListQueryRequest query = 2;
+}
+
+message ListPurchasesByUserResponse {
+  repeated Purchase purchases = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+service PurchaseService {
+  rpc CreatePurchase(CreatePurchaseRequest) returns (CreatePurchaseResponse);
+  rpc GetPurchase(GetPurchaseRequest) returns (GetPurchaseResponse);
+  rpc ListPurchasesBySubscription(ListPurchasesBySubscriptionRequest) returns (ListPurchasesBySubscriptionResponse);
+  rpc ListPurchasesByUser(ListPurchasesByUserRequest) returns (ListPurchasesByUserResponse);
+}

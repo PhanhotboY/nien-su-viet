@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package billing_service;
+
+import "common/pagination.proto";
+import "common/request.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
+
+enum SubscriptionStatus {
+  SUBSCRIPTION_STATUS_UNSPECIFIED = 0;
+  SUBSCRIPTION_STATUS_INCOMPLETE = 1;
+  SUBSCRIPTION_STATUS_TRIALING = 2;
+  SUBSCRIPTION_STATUS_ACTIVE = 3;
+  SUBSCRIPTION_STATUS_PAST_DUE = 4;
+  SUBSCRIPTION_STATUS_CANCELED = 5;
+  SUBSCRIPTION_STATUS_EXPIRED = 6;
+}
+
+message Subscription {
+  string id = 1;
+  string user_id = 2;
+  string plan_id = 3;
+
+  SubscriptionStatus status = 4;
+
+  google.protobuf.Timestamp current_period_start = 5;
+  google.protobuf.Timestamp current_period_end = 6;
+
+  bool cancel_at_period_end = 7;
+
+  google.protobuf.Timestamp canceled_at = 8;
+  google.protobuf.Timestamp expired_at = 9;
+
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+}
+
+// ============================================================================
+// Subscription Service
+// ============================================================================
+
+message CreateSubscriptionRequest {
+  string user_id = 1;
+  string plan_id = 2;
+
+  // If you support trials, you can set an initial period here.
+  google.protobuf.Timestamp initial_period_start = 3;
+  google.protobuf.Timestamp initial_period_end = 4;
+}
+
+message CreateSubscriptionResponse {
+  Subscription subscription = 1;
+}
+
+message GetSubscriptionRequest {
+  string subscription_id = 1;
+}
+
+message GetSubscriptionResponse {
+  Subscription subscription = 1;
+}
+
+message ListSubscriptionsByUserRequest {
+  string user_id = 1;
+  common.ListQueryRequest query = 2;
+}
+
+message ListSubscriptionsByUserResponse {
+  repeated Subscription subscriptions = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+message CancelSubscriptionRequest {
+  string subscription_id = 1;
+
+  // If true: set cancel_at_period_end=true.
+  // If false: cancel immediately.
+  bool at_period_end = 2;
+
+  // Idempotency for repeated cancel calls (recommended).
+  string idempotency_key = 3;
+}
+
+message CancelSubscriptionResponse {
+  Subscription subscription = 1;
+}
+
+service SubscriptionService {
+  rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
+  rpc GetSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse);
+  rpc ListSubscriptionsByUser(ListSubscriptionsByUserRequest) returns (ListSubscriptionsByUserResponse);
+  rpc CancelSubscription(CancelSubscriptionRequest) returns (CancelSubscriptionResponse);
+}

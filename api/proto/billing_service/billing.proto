@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package billing_service;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
+
+// ============================================================================
+// Shared Types (same as prior file; included here for a self-contained proto)
+// ============================================================================
+
+message Money {
+  int64 amount = 1; // minor units (cents). For VND, typically whole units.
+  string currency = 2; // ISO-4217, e.g. "USD", "VND"
+}
+
+message PaymentWebhookEvent {
+  string id = 1;
+
+  string provider = 2;
+  string external_event_id = 3;
+  string event_type = 4;
+
+  google.protobuf.Struct payload = 5;
+
+  bool processed = 6;
+  google.protobuf.Timestamp processed_at = 7;
+
+  string error_message = 8;
+  google.protobuf.Timestamp created_at = 9;
+}
+
+// ============================================================================
+// Webhook Ingest Service (provider callbacks -> your system)
+// ============================================================================
+
+// Generic webhook ingest. Your edge/API gateway can call this after verifying
+// provider signatures, or your service can verify internally (your choice).
+message IngestWebhookRequest {
+  string provider = 1;
+  string external_event_id = 2;
+  string event_type = 3;
+
+  google.protobuf.Struct payload = 4;
+
+  // When you received it (optional).
+  google.protobuf.Timestamp received_at = 5;
+}
+
+message IngestWebhookResponse {
+  PaymentWebhookEvent stored_event = 1;
+
+  // true if this webhook event was newly accepted (not a duplicate)
+  bool accepted = 2;
+}
+
+service PaymentWebhookService {
+  rpc IngestWebhook(IngestWebhookRequest) returns (IngestWebhookResponse);
+}

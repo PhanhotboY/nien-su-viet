@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package billing_service;
+
+import "billing_service/billing.proto";
+import "common/pagination.proto";
+import "common/request.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
+
+enum BillingInterval {
+  BILLING_INTERVAL_UNSPECIFIED = 0;
+  BILLING_INTERVAL_DAY = 1;
+  BILLING_INTERVAL_WEEK = 2;
+  BILLING_INTERVAL_MONTH = 3;
+  BILLING_INTERVAL_YEAR = 4;
+}
+
+message SubscriptionPlan {
+  string id = 1;
+  string code = 2;
+  string name = 3;
+  Money price = 4;
+  BillingInterval billing_interval = 5;
+  bool is_active = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+// ============================================================================
+// Plan Service
+// ============================================================================
+
+message ListPlansRequest {
+  bool only_active = 1;
+  common.ListQueryRequest query = 2;
+}
+
+message ListPlansResponse {
+  repeated SubscriptionPlan plans = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+message GetPlanRequest {
+  string plan_id = 1;
+}
+
+message GetPlanResponse {
+  SubscriptionPlan plan = 1;
+}
+
+service SubscriptionPlanService {
+  rpc ListPlans(ListPlansRequest) returns (ListPlansResponse);
+  rpc GetPlan(GetPlanRequest) returns (GetPlanResponse);
+}
