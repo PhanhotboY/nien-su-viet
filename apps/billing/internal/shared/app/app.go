@@ -1,6 +1,15 @@
 package app
 
 import (
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/outbox_events"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_transactions"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/processed_events"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/infrastructure"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/subscription_events"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/subscriptions"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/fxapp"
 )
 
@@ -15,6 +24,16 @@ func (a *App) Run() {
 	appBuilder := fxapp.NewApplicationBuilder()
 
 	// provide infrastructure dependencies, e.g., database, cache, etc.
+	appBuilder.ProvideModule(infrastructure.Module)
+
+	appBuilder.ProvideModule(subscriptions.Module)
+	appBuilder.ProvideModule(subscription_events.Module)
+	appBuilder.ProvideModule(purchases.Module)
+	appBuilder.ProvideModule(payment_attempts.Module)
+	appBuilder.ProvideModule(payment_transactions.Module)
+	appBuilder.ProvideModule(outbox_events.Module)
+	appBuilder.ProvideModule(processed_events.Module)
+	appBuilder.ProvideModule(plans.Module)
 
 	app := appBuilder.Build()
 

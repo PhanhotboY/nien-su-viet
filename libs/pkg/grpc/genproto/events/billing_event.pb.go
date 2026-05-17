@@ -35,16 +35,10 @@ const (
 // - aggregate_type/aggregate_id in OUTBOX_EVENTS should match these fields.
 // - attributes can store trace_id, correlation_id, actor_id, request_id, etc.
 type EventEnvelope struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	EventId       string                 `protobuf:"bytes,1,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
-	EventType     string                 `protobuf:"bytes,2,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`             // e.g. "purchase.completed.v1"
-	AggregateType string                 `protobuf:"bytes,3,opt,name=aggregate_type,json=aggregateType,proto3" json:"aggregate_type,omitempty"` // "subscription", "purchase", "payment_attempt", ...
-	AggregateId   string                 `protobuf:"bytes,4,opt,name=aggregate_id,json=aggregateId,proto3" json:"aggregate_id,omitempty"`       // UUID as string
-	OccurredAt    *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`
-	// Optional: versioning separate from event_type naming
-	SchemaVersion int32 `protobuf:"varint,6,opt,name=schema_version,json=schemaVersion,proto3" json:"schema_version,omitempty"`
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	OccurredAt *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`
 	// Optional metadata for routing/tracing
-	Attributes map[string]string `protobuf:"bytes,7,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Attributes map[string]string `protobuf:"bytes,2,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// Types that are valid to be assigned to Data:
 	//
 	//	*EventEnvelope_SubscriptionCreated
@@ -102,46 +96,11 @@ func (*EventEnvelope) Descriptor() ([]byte, []int) {
 	return file_events_billing_event_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *EventEnvelope) GetEventId() string {
-	if x != nil {
-		return x.EventId
-	}
-	return ""
-}
-
-func (x *EventEnvelope) GetEventType() string {
-	if x != nil {
-		return x.EventType
-	}
-	return ""
-}
-
-func (x *EventEnvelope) GetAggregateType() string {
-	if x != nil {
-		return x.AggregateType
-	}
-	return ""
-}
-
-func (x *EventEnvelope) GetAggregateId() string {
-	if x != nil {
-		return x.AggregateId
-	}
-	return ""
-}
-
 func (x *EventEnvelope) GetOccurredAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.OccurredAt
 	}
 	return nil
-}
-
-func (x *EventEnvelope) GetSchemaVersion() int32 {
-	if x != nil {
-		return x.SchemaVersion
-	}
-	return 0
 }
 
 func (x *EventEnvelope) GetAttributes() map[string]string {
@@ -2251,18 +2210,12 @@ var File_events_billing_event_proto protoreflect.FileDescriptor
 
 const file_events_billing_event_proto_rawDesc = "" +
 	"\n" +
-	"\x1aevents/billing_event.proto\x12\rbilling_event\x1a\x1dbilling_service/billing.proto\x1a&billing_service/payment_attempts.proto\x1a*billing_service/payment_transactions.proto\x1a\x1fbilling_service/purchases.proto\x1a#billing_service/subscriptions.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa0\x11\n" +
-	"\rEventEnvelope\x12\x19\n" +
-	"\bevent_id\x18\x01 \x01(\tR\aeventId\x12\x1d\n" +
+	"\x1aevents/billing_event.proto\x12\rbilling_event\x1a\x1dbilling_service/billing.proto\x1a&billing_service/payment_attempts.proto\x1a*billing_service/payment_transactions.proto\x1a\x1fbilling_service/purchases.proto\x1a#billing_service/subscriptions.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xf5\x0f\n" +
+	"\rEventEnvelope\x12;\n" +
+	"\voccurred_at\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"occurredAt\x12L\n" +
 	"\n" +
-	"event_type\x18\x02 \x01(\tR\teventType\x12%\n" +
-	"\x0eaggregate_type\x18\x03 \x01(\tR\raggregateType\x12!\n" +
-	"\faggregate_id\x18\x04 \x01(\tR\vaggregateId\x12;\n" +
-	"\voccurred_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"occurredAt\x12%\n" +
-	"\x0eschema_version\x18\x06 \x01(\x05R\rschemaVersion\x12L\n" +
-	"\n" +
-	"attributes\x18\a \x03(\v2,.billing_event.EventEnvelope.AttributesEntryR\n" +
+	"attributes\x18\x02 \x03(\v2,.billing_event.EventEnvelope.AttributesEntryR\n" +
 	"attributes\x12W\n" +
 	"\x14subscription_created\x18d \x01(\v2\".billing_event.SubscriptionCreatedH\x00R\x13subscriptionCreated\x12W\n" +
 	"\x14subscription_updated\x18e \x01(\v2\".billing_event.SubscriptionUpdatedH\x00R\x13subscriptionUpdated\x12Z\n" +

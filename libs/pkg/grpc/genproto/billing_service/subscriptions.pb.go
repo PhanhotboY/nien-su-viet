@@ -28,7 +28,7 @@ type SubscriptionStatus int32
 const (
 	SubscriptionStatus_SUBSCRIPTION_STATUS_UNSPECIFIED SubscriptionStatus = 0
 	SubscriptionStatus_SUBSCRIPTION_STATUS_INCOMPLETE  SubscriptionStatus = 1
-	SubscriptionStatus_SUBSCRIPTION_STATUS_TRIALING    SubscriptionStatus = 2
+	SubscriptionStatus_SUBSCRIPTION_STATUS_PENDING     SubscriptionStatus = 2
 	SubscriptionStatus_SUBSCRIPTION_STATUS_ACTIVE      SubscriptionStatus = 3
 	SubscriptionStatus_SUBSCRIPTION_STATUS_PAST_DUE    SubscriptionStatus = 4
 	SubscriptionStatus_SUBSCRIPTION_STATUS_CANCELED    SubscriptionStatus = 5
@@ -40,7 +40,7 @@ var (
 	SubscriptionStatus_name = map[int32]string{
 		0: "SUBSCRIPTION_STATUS_UNSPECIFIED",
 		1: "SUBSCRIPTION_STATUS_INCOMPLETE",
-		2: "SUBSCRIPTION_STATUS_TRIALING",
+		2: "SUBSCRIPTION_STATUS_PENDING",
 		3: "SUBSCRIPTION_STATUS_ACTIVE",
 		4: "SUBSCRIPTION_STATUS_PAST_DUE",
 		5: "SUBSCRIPTION_STATUS_CANCELED",
@@ -49,7 +49,7 @@ var (
 	SubscriptionStatus_value = map[string]int32{
 		"SUBSCRIPTION_STATUS_UNSPECIFIED": 0,
 		"SUBSCRIPTION_STATUS_INCOMPLETE":  1,
-		"SUBSCRIPTION_STATUS_TRIALING":    2,
+		"SUBSCRIPTION_STATUS_PENDING":     2,
 		"SUBSCRIPTION_STATUS_ACTIVE":      3,
 		"SUBSCRIPTION_STATUS_PAST_DUE":    4,
 		"SUBSCRIPTION_STATUS_CANCELED":    5,
@@ -666,11 +666,11 @@ const file_billing_service_subscriptions_proto_rawDesc = "" +
 	"\rat_period_end\x18\x02 \x01(\bR\vatPeriodEnd\x12'\n" +
 	"\x0fidempotency_key\x18\x03 \x01(\tR\x0eidempotencyKey\"_\n" +
 	"\x1aCancelSubscriptionResponse\x12A\n" +
-	"\fsubscription\x18\x01 \x01(\v2\x1d.billing_service.SubscriptionR\fsubscription*\x84\x02\n" +
+	"\fsubscription\x18\x01 \x01(\v2\x1d.billing_service.SubscriptionR\fsubscription*\x83\x02\n" +
 	"\x12SubscriptionStatus\x12#\n" +
 	"\x1fSUBSCRIPTION_STATUS_UNSPECIFIED\x10\x00\x12\"\n" +
-	"\x1eSUBSCRIPTION_STATUS_INCOMPLETE\x10\x01\x12 \n" +
-	"\x1cSUBSCRIPTION_STATUS_TRIALING\x10\x02\x12\x1e\n" +
+	"\x1eSUBSCRIPTION_STATUS_INCOMPLETE\x10\x01\x12\x1f\n" +
+	"\x1bSUBSCRIPTION_STATUS_PENDING\x10\x02\x12\x1e\n" +
 	"\x1aSUBSCRIPTION_STATUS_ACTIVE\x10\x03\x12 \n" +
 	"\x1cSUBSCRIPTION_STATUS_PAST_DUE\x10\x04\x12 \n" +
 	"\x1cSUBSCRIPTION_STATUS_CANCELED\x10\x05\x12\x1f\n" +

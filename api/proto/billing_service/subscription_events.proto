@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package billing_service;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
+
+// Mirrors the SUBSCRIPTION_EVENTS table
+message SubscriptionEvent {
+  string id = 1; // UUID
+
+  string subscription_id = 2; // FK -> subscriptions.id
+
+  string event_type = 3; // e.g. "subscription.created", "subscription.renewed", ...
+
+  // Raw event payload (JSONB in DB)
+  google.protobuf.Struct payload = 4;
+
+  google.protobuf.Timestamp created_at = 5;
+}
+
+// --------------------
+// Requests/Responses
+// --------------------
+
+message GetSubscriptionEventRequest {
+  string id = 1;
+}
+
+message GetSubscriptionEventResponse {
+  SubscriptionEvent event = 1;
+}
+
+message ListSubscriptionEventsRequest {
+  string subscription_id = 1;
+
+  // Optional filter
+  string event_type = 2;
+
+  int32 page_size = 3;
+  string page_token = 4;
+}
+
+message ListSubscriptionEventsResponse {
+  repeated SubscriptionEvent events = 1;
+  string next_page_token = 2;
+}
+
+// Internal/admin/debug service. Many systems don’t expose this publicly.
+service SubscriptionEventService {
+  rpc GetSubscriptionEvent(GetSubscriptionEventRequest) returns (GetSubscriptionEventResponse);
+  rpc ListSubscriptionEvents(ListSubscriptionEventsRequest) returns (ListSubscriptionEventsResponse);
+}

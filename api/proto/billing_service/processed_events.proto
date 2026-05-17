@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package billing_service;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
+
+message ProcessedMessage {
+  string id = 1; // UUID
+
+  string consumer_name = 2;
+  string message_id = 3;
+
+  google.protobuf.Timestamp processed_at = 4;
+}
+
+// --- Requests / Responses ---
+
+message GetProcessedMessageRequest {
+  string id = 1;
+}
+
+message GetProcessedMessageResponse {
+  ProcessedMessage message = 1;
+}
+
+message ListProcessedMessagesRequest {
+  // Optional filters (add more as needed)
+  string consumer_name = 1; // empty => all consumers
+  int32 page_size = 2;
+  string page_token = 3;
+}
+
+message ListProcessedMessagesResponse {
+  repeated ProcessedMessage messages = 1;
+  string next_page_token = 2;
+}
+
+// This is usually internal-only for debugging/admin.
+// Many systems don’t expose this at all; they only query DB directly.
+service ProcessedMessageService {
+  rpc GetProcessedMessage(GetProcessedMessageRequest) returns (GetProcessedMessageResponse);
+  rpc ListProcessedMessages(ListProcessedMessagesRequest) returns (ListProcessedMessagesResponse);
+}

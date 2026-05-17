@@ -29,18 +29,9 @@ export const protobufPackage = "billing_event";
  * - attributes can store trace_id, correlation_id, actor_id, request_id, etc.
  */
 export interface EventEnvelope {
-  eventId: string;
-  /** e.g. "purchase.completed.v1" */
-  eventType: string;
-  /** "subscription", "purchase", "payment_attempt", ... */
-  aggregateType: string;
-  /** UUID as string */
-  aggregateId: string;
   occurredAt:
     | Timestamp
     | undefined;
-  /** Optional: versioning separate from event_type naming */
-  schemaVersion: number;
   /** Optional metadata for routing/tracing */
   attributes: { [key: string]: string };
   subscriptionCreated?: SubscriptionCreated | undefined;

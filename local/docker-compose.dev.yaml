@@ -32,6 +32,17 @@ services:
       - '5434:5432'
     volumes:
       - nsv-pg-post-data:/var/lib/postgresql
+  nsv-pg-billing:
+    image: postgres:alpine
+    container_name: nsv-pg-billing
+    environment:
+      POSTGRES_USER: nsv_billing_user
+      POSTGRES_PASSWORD: secure_password
+      POSTGRES_DB: nsv_billing_db
+    ports:
+      - '5435:5432'
+    volumes:
+      - nsv-pg-billing-data:/var/lib/postgresql
   nsv-rmq:
     image: rabbitmq:4-management-alpine
     container_name: nsv-rmq
@@ -66,5 +77,6 @@ volumes:
   nsv-pg-auth-data:
   nsv-pg-hevent-data:
   nsv-pg-post-data:
+  nsv-pg-billing-data:
   nsv-rmq-data:
   nsv-rdb-data:

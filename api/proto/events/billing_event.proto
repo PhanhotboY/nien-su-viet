@@ -24,18 +24,10 @@ option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/e
 // - attributes can store trace_id, correlation_id, actor_id, request_id, etc.
 //
 message EventEnvelope {
-  string event_id = 1;
-  string event_type = 2; // e.g. "purchase.completed.v1"
-  string aggregate_type = 3; // "subscription", "purchase", "payment_attempt", ...
-  string aggregate_id = 4; // UUID as string
-
-  google.protobuf.Timestamp occurred_at = 5;
-
-  // Optional: versioning separate from event_type naming
-  int32 schema_version = 6;
+  google.protobuf.Timestamp occurred_at = 1;
 
   // Optional metadata for routing/tracing
-  map<string, string> attributes = 7;
+  map<string, string> attributes = 2;
 
   oneof data {
     SubscriptionCreated subscription_created = 100;

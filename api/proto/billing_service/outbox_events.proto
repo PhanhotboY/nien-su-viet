@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package billing_service;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
+
+enum OutboxEventStatus {
+  OUTBOX_EVENT_STATUS_UNSPECIFIED = 0;
+  OUTBOX_EVENT_STATUS_PENDING = 1;
+  OUTBOX_EVENT_STATUS_PUBLISHED = 2;
+  OUTBOX_EVENT_STATUS_FAILED = 3;
+  OUTBOX_EVENT_STATUS_RETRYING = 4;
+  OUTBOX_EVENT_STATUS_DEAD = 5; // optional: give up after max retries
+}
+
+message OutboxEvent {
+  string id = 1; // UUID
+
+  string aggregate_type = 2;
+  string aggregate_id = 3; // UUID-as-string
+
+  string event_type = 4;
+
+  // This should be a JSON-encoded string of the EventEnvelope.
+  google.protobuf.Struct payload = 5;
+
+  OutboxEventStatus status = 6;
+
+  int32 retry_count = 7;
+
+  google.protobuf.Timestamp next_retry_at = 8;
+
+  google.protobuf.Timestamp published_at = 9;
+  google.protobuf.Timestamp created_at = 10;
+}
+
+message GetOutboxEventRequest {
+  string id = 1;
+}
+
+message GetOutboxEventResponse {
+  OutboxEvent event = 1;
+}
+
+message ListOutboxEventsRequest {
+  // filter examples
+  OutboxEventStatus status = 1;
+  int32 page_size = 2;
+  string page_token = 3;
+}
+
+message ListOutboxEventsResponse {
+  repeated OutboxEvent events = 1;
+  string next_page_token = 2;
+}
+
+service OutboxService {
+  rpc GetOutboxEvent(GetOutboxEventRequest) returns (GetOutboxEventResponse);
+  rpc ListOutboxEvents(ListOutboxEventsRequest) returns (ListOutboxEventsResponse);
+}
