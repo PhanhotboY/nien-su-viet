@@ -14,11 +14,20 @@ import { Money } from "./billing";
 
 export const protobufPackage = "billing_service";
 
+/**
+ * BillingInterval defines the frequency at which subscription billing occurs.
+ * Used to calculate the next renewal date based on current period dates.
+ */
 export enum BillingInterval {
+  /** BILLING_INTERVAL_UNSPECIFIED - Unspecified interval; should not be used */
   BILLING_INTERVAL_UNSPECIFIED = 0,
+  /** BILLING_INTERVAL_DAY - Subscription renews every day */
   BILLING_INTERVAL_DAY = 1,
+  /** BILLING_INTERVAL_WEEK - Subscription renews every week (7 days) */
   BILLING_INTERVAL_WEEK = 2,
+  /** BILLING_INTERVAL_MONTH - Subscription renews every month (calendar-based) */
   BILLING_INTERVAL_MONTH = 3,
+  /** BILLING_INTERVAL_YEAR - Subscription renews every year (calendar-based) */
   BILLING_INTERVAL_YEAR = 4,
   UNRECOGNIZED = -1,
 }

@@ -9,13 +9,19 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
 
+// PurchaseStatus represents the lifecycle state of a purchase transaction.
+// A purchase progresses through these states during the payment and fulfillment process.
 enum PurchaseStatus {
+  // Unspecified status; should not be used
   PURCHASE_STATUS_UNSPECIFIED = 0;
+  // User initiated checkout but has not yet completed payment
   PURCHASE_STATUS_PENDING = 1;
-  PURCHASE_STATUS_REQUIRES_PAYMENT = 2;
-  PURCHASE_STATUS_COMPLETED = 3;
-  PURCHASE_STATUS_FAILED = 4;
-  PURCHASE_STATUS_CANCELED = 5;
+  // Payment completed successfully; webhook processed; new subscription period created
+  PURCHASE_STATUS_COMPLETED = 2;
+  // Payment processing failed; purchase will not result in subscription
+  PURCHASE_STATUS_FAILED = 3;
+  // Payment attempt expired before completion; purchase was abandoned
+  PURCHASE_STATUS_CANCELED = 4;
 }
 
 message Purchase {

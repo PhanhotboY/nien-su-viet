@@ -23,15 +23,21 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// PurchaseStatus represents the lifecycle state of a purchase transaction.
+// A purchase progresses through these states during the payment and fulfillment process.
 type PurchaseStatus int32
 
 const (
-	PurchaseStatus_PURCHASE_STATUS_UNSPECIFIED      PurchaseStatus = 0
-	PurchaseStatus_PURCHASE_STATUS_PENDING          PurchaseStatus = 1
-	PurchaseStatus_PURCHASE_STATUS_REQUIRES_PAYMENT PurchaseStatus = 2
-	PurchaseStatus_PURCHASE_STATUS_COMPLETED        PurchaseStatus = 3
-	PurchaseStatus_PURCHASE_STATUS_FAILED           PurchaseStatus = 4
-	PurchaseStatus_PURCHASE_STATUS_CANCELED         PurchaseStatus = 5
+	// Unspecified status; should not be used
+	PurchaseStatus_PURCHASE_STATUS_UNSPECIFIED PurchaseStatus = 0
+	// User initiated checkout but has not yet completed payment
+	PurchaseStatus_PURCHASE_STATUS_PENDING PurchaseStatus = 1
+	// Payment completed successfully; webhook processed; new subscription period created
+	PurchaseStatus_PURCHASE_STATUS_COMPLETED PurchaseStatus = 2
+	// Payment processing failed; purchase will not result in subscription
+	PurchaseStatus_PURCHASE_STATUS_FAILED PurchaseStatus = 3
+	// Payment attempt expired before completion; purchase was abandoned
+	PurchaseStatus_PURCHASE_STATUS_CANCELED PurchaseStatus = 4
 )
 
 // Enum value maps for PurchaseStatus.
@@ -39,18 +45,16 @@ var (
 	PurchaseStatus_name = map[int32]string{
 		0: "PURCHASE_STATUS_UNSPECIFIED",
 		1: "PURCHASE_STATUS_PENDING",
-		2: "PURCHASE_STATUS_REQUIRES_PAYMENT",
-		3: "PURCHASE_STATUS_COMPLETED",
-		4: "PURCHASE_STATUS_FAILED",
-		5: "PURCHASE_STATUS_CANCELED",
+		2: "PURCHASE_STATUS_COMPLETED",
+		3: "PURCHASE_STATUS_FAILED",
+		4: "PURCHASE_STATUS_CANCELED",
 	}
 	PurchaseStatus_value = map[string]int32{
-		"PURCHASE_STATUS_UNSPECIFIED":      0,
-		"PURCHASE_STATUS_PENDING":          1,
-		"PURCHASE_STATUS_REQUIRES_PAYMENT": 2,
-		"PURCHASE_STATUS_COMPLETED":        3,
-		"PURCHASE_STATUS_FAILED":           4,
-		"PURCHASE_STATUS_CANCELED":         5,
+		"PURCHASE_STATUS_UNSPECIFIED": 0,
+		"PURCHASE_STATUS_PENDING":     1,
+		"PURCHASE_STATUS_COMPLETED":   2,
+		"PURCHASE_STATUS_FAILED":      3,
+		"PURCHASE_STATUS_CANCELED":    4,
 	}
 )
 
@@ -650,14 +654,13 @@ const file_billing_service_purchases_proto_rawDesc = "" +
 	"\tpurchases\x18\x01 \x03(\v2\x19.billing_service.PurchaseR\tpurchases\x12:\n" +
 	"\n" +
 	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
-	"pagination*\xcd\x01\n" +
+	"pagination*\xa7\x01\n" +
 	"\x0ePurchaseStatus\x12\x1f\n" +
 	"\x1bPURCHASE_STATUS_UNSPECIFIED\x10\x00\x12\x1b\n" +
-	"\x17PURCHASE_STATUS_PENDING\x10\x01\x12$\n" +
-	" PURCHASE_STATUS_REQUIRES_PAYMENT\x10\x02\x12\x1d\n" +
-	"\x19PURCHASE_STATUS_COMPLETED\x10\x03\x12\x1a\n" +
-	"\x16PURCHASE_STATUS_FAILED\x10\x04\x12\x1c\n" +
-	"\x18PURCHASE_STATUS_CANCELED\x10\x052\xcb\x03\n" +
+	"\x17PURCHASE_STATUS_PENDING\x10\x01\x12\x1d\n" +
+	"\x19PURCHASE_STATUS_COMPLETED\x10\x02\x12\x1a\n" +
+	"\x16PURCHASE_STATUS_FAILED\x10\x03\x12\x1c\n" +
+	"\x18PURCHASE_STATUS_CANCELED\x10\x042\xcb\x03\n" +
 	"\x0fPurchaseService\x12a\n" +
 	"\x0eCreatePurchase\x12&.billing_service.CreatePurchaseRequest\x1a'.billing_service.CreatePurchaseResponse\x12X\n" +
 	"\vGetPurchase\x12#.billing_service.GetPurchaseRequest\x1a$.billing_service.GetPurchaseResponse\x12\x88\x01\n" +

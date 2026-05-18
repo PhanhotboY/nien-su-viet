@@ -23,15 +23,24 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// OutboxEventStatus represents the lifecycle state of an event in the outbox pattern.
+// The outbox pattern ensures reliable event publishing by storing events in the database
+// and processing them asynchronously.
 type OutboxEventStatus int32
 
 const (
+	// Unspecified status; should not be used
 	OutboxEventStatus_OUTBOX_EVENT_STATUS_UNSPECIFIED OutboxEventStatus = 0
-	OutboxEventStatus_OUTBOX_EVENT_STATUS_PENDING     OutboxEventStatus = 1
-	OutboxEventStatus_OUTBOX_EVENT_STATUS_PUBLISHED   OutboxEventStatus = 2
-	OutboxEventStatus_OUTBOX_EVENT_STATUS_FAILED      OutboxEventStatus = 3
-	OutboxEventStatus_OUTBOX_EVENT_STATUS_RETRYING    OutboxEventStatus = 4
-	OutboxEventStatus_OUTBOX_EVENT_STATUS_DEAD        OutboxEventStatus = 5 // optional: give up after max retries
+	// Event has been created but not yet published to message broker
+	OutboxEventStatus_OUTBOX_EVENT_STATUS_PENDING OutboxEventStatus = 1
+	// Event has been successfully published to message broker
+	OutboxEventStatus_OUTBOX_EVENT_STATUS_PUBLISHED OutboxEventStatus = 2
+	// Event publication failed; will be retried
+	OutboxEventStatus_OUTBOX_EVENT_STATUS_FAILED OutboxEventStatus = 3
+	// Event is currently being retried after a previous failure
+	OutboxEventStatus_OUTBOX_EVENT_STATUS_RETRYING OutboxEventStatus = 4
+	// Event reached maximum retry count; permanently failed and abandoned
+	OutboxEventStatus_OUTBOX_EVENT_STATUS_DEAD OutboxEventStatus = 5
 )
 
 // Enum value maps for OutboxEventStatus.

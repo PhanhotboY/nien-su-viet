@@ -14,13 +14,21 @@ import { Money } from "./billing";
 
 export const protobufPackage = "billing_service";
 
+/**
+ * PurchaseStatus represents the lifecycle state of a purchase transaction.
+ * A purchase progresses through these states during the payment and fulfillment process.
+ */
 export enum PurchaseStatus {
+  /** PURCHASE_STATUS_UNSPECIFIED - Unspecified status; should not be used */
   PURCHASE_STATUS_UNSPECIFIED = 0,
+  /** PURCHASE_STATUS_PENDING - User initiated checkout but has not yet completed payment */
   PURCHASE_STATUS_PENDING = 1,
-  PURCHASE_STATUS_REQUIRES_PAYMENT = 2,
-  PURCHASE_STATUS_COMPLETED = 3,
-  PURCHASE_STATUS_FAILED = 4,
-  PURCHASE_STATUS_CANCELED = 5,
+  /** PURCHASE_STATUS_COMPLETED - Payment completed successfully; webhook processed; new subscription period created */
+  PURCHASE_STATUS_COMPLETED = 2,
+  /** PURCHASE_STATUS_FAILED - Payment processing failed; purchase will not result in subscription */
+  PURCHASE_STATUS_FAILED = 3,
+  /** PURCHASE_STATUS_CANCELED - Payment attempt expired before completion; purchase was abandoned */
+  PURCHASE_STATUS_CANCELED = 4,
   UNRECOGNIZED = -1,
 }
 

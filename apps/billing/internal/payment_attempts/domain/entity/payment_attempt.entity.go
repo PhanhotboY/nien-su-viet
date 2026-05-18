@@ -14,7 +14,7 @@ type PaymentAttemptStatus string
 const (
 	PAYMENT_ATTEMPT_STATUS_CREATED   PaymentAttemptStatus = "created"
 	PAYMENT_ATTEMPT_STATUS_PENDING   PaymentAttemptStatus = "pending"
-	PAYMENT_ATTEMPT_STATUS_SUCCEEDED PaymentAttemptStatus = "suceeded"
+	PAYMENT_ATTEMPT_STATUS_SUCCEEDED PaymentAttemptStatus = "succeeded"
 	PAYMENT_ATTEMPT_STATUS_FAILED    PaymentAttemptStatus = "failed"
 	PAYMENT_ATTEMPT_STATUS_EXPIRED   PaymentAttemptStatus = "expired"
 	PAYMENT_ATTEMPT_STATUS_CANCELED  PaymentAttemptStatus = "canceled"

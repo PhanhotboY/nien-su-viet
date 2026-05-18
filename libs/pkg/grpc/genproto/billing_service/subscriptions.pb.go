@@ -23,37 +23,43 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// SubscriptionStatus represents the lifecycle state of a user's subscription.
+// These states define whether the user has access to subscription benefits and
+// whether the subscription is in good standing or has issues.
 type SubscriptionStatus int32
 
 const (
+	// Unspecified status; should not be used
 	SubscriptionStatus_SUBSCRIPTION_STATUS_UNSPECIFIED SubscriptionStatus = 0
-	SubscriptionStatus_SUBSCRIPTION_STATUS_INCOMPLETE  SubscriptionStatus = 1
-	SubscriptionStatus_SUBSCRIPTION_STATUS_PENDING     SubscriptionStatus = 2
-	SubscriptionStatus_SUBSCRIPTION_STATUS_ACTIVE      SubscriptionStatus = 3
-	SubscriptionStatus_SUBSCRIPTION_STATUS_PAST_DUE    SubscriptionStatus = 4
-	SubscriptionStatus_SUBSCRIPTION_STATUS_CANCELED    SubscriptionStatus = 5
-	SubscriptionStatus_SUBSCRIPTION_STATUS_EXPIRED     SubscriptionStatus = 6
+	// Initial state after successful payment; waiting for user role/permissions to be activated
+	SubscriptionStatus_SUBSCRIPTION_STATUS_PENDING SubscriptionStatus = 1
+	// Subscription is active; user has full access to subscription benefits
+	SubscriptionStatus_SUBSCRIPTION_STATUS_ACTIVE SubscriptionStatus = 2
+	// Renewal payment failed; user retains access through current period end, then expires
+	SubscriptionStatus_SUBSCRIPTION_STATUS_PAST_DUE SubscriptionStatus = 3
+	// User initiated cancellation; user retains access through current period end, then expires
+	SubscriptionStatus_SUBSCRIPTION_STATUS_CANCELED SubscriptionStatus = 4
+	// Subscription period ended; user no longer has access to benefits (can renew)
+	SubscriptionStatus_SUBSCRIPTION_STATUS_EXPIRED SubscriptionStatus = 5
 )
 
 // Enum value maps for SubscriptionStatus.
 var (
 	SubscriptionStatus_name = map[int32]string{
 		0: "SUBSCRIPTION_STATUS_UNSPECIFIED",
-		1: "SUBSCRIPTION_STATUS_INCOMPLETE",
-		2: "SUBSCRIPTION_STATUS_PENDING",
-		3: "SUBSCRIPTION_STATUS_ACTIVE",
-		4: "SUBSCRIPTION_STATUS_PAST_DUE",
-		5: "SUBSCRIPTION_STATUS_CANCELED",
-		6: "SUBSCRIPTION_STATUS_EXPIRED",
+		1: "SUBSCRIPTION_STATUS_PENDING",
+		2: "SUBSCRIPTION_STATUS_ACTIVE",
+		3: "SUBSCRIPTION_STATUS_PAST_DUE",
+		4: "SUBSCRIPTION_STATUS_CANCELED",
+		5: "SUBSCRIPTION_STATUS_EXPIRED",
 	}
 	SubscriptionStatus_value = map[string]int32{
 		"SUBSCRIPTION_STATUS_UNSPECIFIED": 0,
-		"SUBSCRIPTION_STATUS_INCOMPLETE":  1,
-		"SUBSCRIPTION_STATUS_PENDING":     2,
-		"SUBSCRIPTION_STATUS_ACTIVE":      3,
-		"SUBSCRIPTION_STATUS_PAST_DUE":    4,
-		"SUBSCRIPTION_STATUS_CANCELED":    5,
-		"SUBSCRIPTION_STATUS_EXPIRED":     6,
+		"SUBSCRIPTION_STATUS_PENDING":     1,
+		"SUBSCRIPTION_STATUS_ACTIVE":      2,
+		"SUBSCRIPTION_STATUS_PAST_DUE":    3,
+		"SUBSCRIPTION_STATUS_CANCELED":    4,
+		"SUBSCRIPTION_STATUS_EXPIRED":     5,
 	}
 )
 
@@ -666,15 +672,14 @@ const file_billing_service_subscriptions_proto_rawDesc = "" +
 	"\rat_period_end\x18\x02 \x01(\bR\vatPeriodEnd\x12'\n" +
 	"\x0fidempotency_key\x18\x03 \x01(\tR\x0eidempotencyKey\"_\n" +
 	"\x1aCancelSubscriptionResponse\x12A\n" +
-	"\fsubscription\x18\x01 \x01(\v2\x1d.billing_service.SubscriptionR\fsubscription*\x83\x02\n" +
+	"\fsubscription\x18\x01 \x01(\v2\x1d.billing_service.SubscriptionR\fsubscription*\xdf\x01\n" +
 	"\x12SubscriptionStatus\x12#\n" +
-	"\x1fSUBSCRIPTION_STATUS_UNSPECIFIED\x10\x00\x12\"\n" +
-	"\x1eSUBSCRIPTION_STATUS_INCOMPLETE\x10\x01\x12\x1f\n" +
-	"\x1bSUBSCRIPTION_STATUS_PENDING\x10\x02\x12\x1e\n" +
-	"\x1aSUBSCRIPTION_STATUS_ACTIVE\x10\x03\x12 \n" +
-	"\x1cSUBSCRIPTION_STATUS_PAST_DUE\x10\x04\x12 \n" +
-	"\x1cSUBSCRIPTION_STATUS_CANCELED\x10\x05\x12\x1f\n" +
-	"\x1bSUBSCRIPTION_STATUS_EXPIRED\x10\x062\xd7\x03\n" +
+	"\x1fSUBSCRIPTION_STATUS_UNSPECIFIED\x10\x00\x12\x1f\n" +
+	"\x1bSUBSCRIPTION_STATUS_PENDING\x10\x01\x12\x1e\n" +
+	"\x1aSUBSCRIPTION_STATUS_ACTIVE\x10\x02\x12 \n" +
+	"\x1cSUBSCRIPTION_STATUS_PAST_DUE\x10\x03\x12 \n" +
+	"\x1cSUBSCRIPTION_STATUS_CANCELED\x10\x04\x12\x1f\n" +
+	"\x1bSUBSCRIPTION_STATUS_EXPIRED\x10\x052\xd7\x03\n" +
 	"\x13SubscriptionService\x12m\n" +
 	"\x12CreateSubscription\x12*.billing_service.CreateSubscriptionRequest\x1a+.billing_service.CreateSubscriptionResponse\x12d\n" +
 	"\x0fGetSubscription\x12'.billing_service.GetSubscriptionRequest\x1a(.billing_service.GetSubscriptionResponse\x12|\n" +

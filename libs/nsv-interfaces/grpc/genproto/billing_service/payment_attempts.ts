@@ -15,14 +15,23 @@ import { PaymentTransaction } from "./payment_transactions";
 
 export const protobufPackage = "billing_service";
 
+/**
+ * PaymentAttemptStatus tracks the lifecycle of a payment attempt with a specific provider.
+ * A purchase may have multiple payment attempts across different providers or retries.
+ */
 export enum PaymentAttemptStatus {
+  /** PAYMENT_ATTEMPT_STATUS_UNSPECIFIED - Unspecified status; should not be used */
   PAYMENT_ATTEMPT_STATUS_UNSPECIFIED = 0,
-  PAYMENT_ATTEMPT_STATUS_CREATED = 1,
-  PAYMENT_ATTEMPT_STATUS_PENDING = 2,
-  PAYMENT_ATTEMPT_STATUS_SUCCEEDED = 3,
-  PAYMENT_ATTEMPT_STATUS_FAILED = 4,
-  PAYMENT_ATTEMPT_STATUS_EXPIRED = 5,
-  PAYMENT_ATTEMPT_STATUS_CANCELED = 6,
+  /** PAYMENT_ATTEMPT_STATUS_PENDING - Payment attempt is in progress (e.g., awaiting user confirmation on payment gateway) */
+  PAYMENT_ATTEMPT_STATUS_PENDING = 1,
+  /** PAYMENT_ATTEMPT_STATUS_SUCCEEDED - Payment attempt succeeded and payment was captured */
+  PAYMENT_ATTEMPT_STATUS_SUCCEEDED = 2,
+  /** PAYMENT_ATTEMPT_STATUS_FAILED - Payment attempt failed; may be retried with same or different provider */
+  PAYMENT_ATTEMPT_STATUS_FAILED = 3,
+  /** PAYMENT_ATTEMPT_STATUS_EXPIRED - Payment attempt expired before completion (e.g., checkout link timed out) */
+  PAYMENT_ATTEMPT_STATUS_EXPIRED = 4,
+  /** PAYMENT_ATTEMPT_STATUS_CANCELED - Payment attempt was canceled by user (switching payment method) or system */
+  PAYMENT_ATTEMPT_STATUS_CANCELED = 5,
   UNRECOGNIZED = -1,
 }
 

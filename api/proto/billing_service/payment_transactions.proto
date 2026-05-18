@@ -10,23 +10,40 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
 
+// PaymentTransactionType categorizes different types of payment-related transactions.
+// These types represent different operations in the payment processing workflow.
 enum PaymentTransactionType {
+  // Unspecified type; should not be used
   PAYMENT_TRANSACTION_TYPE_UNSPECIFIED = 0;
+  // Direct payment/charge transaction
   PAYMENT_TRANSACTION_TYPE_PAYMENT = 1;
+  // Authorization-only transaction (hold without capturing funds)
   PAYMENT_TRANSACTION_TYPE_AUTH = 2;
+  // Capture transaction (capture funds from a previous auth)
   PAYMENT_TRANSACTION_TYPE_CAPTURE = 3;
+  // Refund transaction (return funds to customer)
   PAYMENT_TRANSACTION_TYPE_REFUND = 4;
+  // Void transaction (cancel an auth or payment before capture)
   PAYMENT_TRANSACTION_TYPE_VOID = 5;
+  // Chargeback transaction (customer dispute that results in fund reversal)
   PAYMENT_TRANSACTION_TYPE_CHARGEBACK = 6;
+  // Adjustment transaction (fee adjustment, discount, or correction)
   PAYMENT_TRANSACTION_TYPE_ADJUSTMENT = 7;
+  // Fee transaction (service charge or processing fee)
   PAYMENT_TRANSACTION_TYPE_FEE = 8;
 }
 
+// PaymentTransactionStatus tracks the processing state of a payment transaction.
 enum PaymentTransactionStatus {
+  // Unspecified status; should not be used
   PAYMENT_TRANSACTION_STATUS_UNSPECIFIED = 0;
+  // Transaction has been created but not yet processed by provider
   PAYMENT_TRANSACTION_STATUS_PENDING = 1;
+  // Transaction was successfully processed by provider
   PAYMENT_TRANSACTION_STATUS_SUCCEEDED = 2;
+  // Transaction failed during processing
   PAYMENT_TRANSACTION_STATUS_FAILED = 3;
+  // Transaction was canceled before completion
   PAYMENT_TRANSACTION_STATUS_CANCELED = 4;
 }
 

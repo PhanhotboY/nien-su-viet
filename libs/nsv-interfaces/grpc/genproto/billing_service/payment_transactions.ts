@@ -16,24 +16,43 @@ import { Money } from "./billing";
 
 export const protobufPackage = "billing_service";
 
+/**
+ * PaymentTransactionType categorizes different types of payment-related transactions.
+ * These types represent different operations in the payment processing workflow.
+ */
 export enum PaymentTransactionType {
+  /** PAYMENT_TRANSACTION_TYPE_UNSPECIFIED - Unspecified type; should not be used */
   PAYMENT_TRANSACTION_TYPE_UNSPECIFIED = 0,
+  /** PAYMENT_TRANSACTION_TYPE_PAYMENT - Direct payment/charge transaction */
   PAYMENT_TRANSACTION_TYPE_PAYMENT = 1,
+  /** PAYMENT_TRANSACTION_TYPE_AUTH - Authorization-only transaction (hold without capturing funds) */
   PAYMENT_TRANSACTION_TYPE_AUTH = 2,
+  /** PAYMENT_TRANSACTION_TYPE_CAPTURE - Capture transaction (capture funds from a previous auth) */
   PAYMENT_TRANSACTION_TYPE_CAPTURE = 3,
+  /** PAYMENT_TRANSACTION_TYPE_REFUND - Refund transaction (return funds to customer) */
   PAYMENT_TRANSACTION_TYPE_REFUND = 4,
+  /** PAYMENT_TRANSACTION_TYPE_VOID - Void transaction (cancel an auth or payment before capture) */
   PAYMENT_TRANSACTION_TYPE_VOID = 5,
+  /** PAYMENT_TRANSACTION_TYPE_CHARGEBACK - Chargeback transaction (customer dispute that results in fund reversal) */
   PAYMENT_TRANSACTION_TYPE_CHARGEBACK = 6,
+  /** PAYMENT_TRANSACTION_TYPE_ADJUSTMENT - Adjustment transaction (fee adjustment, discount, or correction) */
   PAYMENT_TRANSACTION_TYPE_ADJUSTMENT = 7,
+  /** PAYMENT_TRANSACTION_TYPE_FEE - Fee transaction (service charge or processing fee) */
   PAYMENT_TRANSACTION_TYPE_FEE = 8,
   UNRECOGNIZED = -1,
 }
 
+/** PaymentTransactionStatus tracks the processing state of a payment transaction. */
 export enum PaymentTransactionStatus {
+  /** PAYMENT_TRANSACTION_STATUS_UNSPECIFIED - Unspecified status; should not be used */
   PAYMENT_TRANSACTION_STATUS_UNSPECIFIED = 0,
+  /** PAYMENT_TRANSACTION_STATUS_PENDING - Transaction has been created but not yet processed by provider */
   PAYMENT_TRANSACTION_STATUS_PENDING = 1,
+  /** PAYMENT_TRANSACTION_STATUS_SUCCEEDED - Transaction was successfully processed by provider */
   PAYMENT_TRANSACTION_STATUS_SUCCEEDED = 2,
+  /** PAYMENT_TRANSACTION_STATUS_FAILED - Transaction failed during processing */
   PAYMENT_TRANSACTION_STATUS_FAILED = 3,
+  /** PAYMENT_TRANSACTION_STATUS_CANCELED - Transaction was canceled before completion */
   PAYMENT_TRANSACTION_STATUS_CANCELED = 4,
   UNRECOGNIZED = -1,
 }

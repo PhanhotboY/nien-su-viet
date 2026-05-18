@@ -13,11 +13,10 @@ import (
 type PurchaseStatus string
 
 const (
-	PURCHASE_STATUS_PENDING          PurchaseStatus = "pending"
-	PURCHASE_STATUS_REQUIRES_PAYMENT PurchaseStatus = "requires_payment"
-	PURCHASE_STATUS_COMPLETED        PurchaseStatus = "completed"
-	PURCHASE_STATUS_FAILED           PurchaseStatus = "failed"
-	PURCHASE_STATUS_CANCELED         PurchaseStatus = "canceled"
+	PURCHASE_STATUS_PENDING   PurchaseStatus = "pending"
+	PURCHASE_STATUS_COMPLETED PurchaseStatus = "completed"
+	PURCHASE_STATUS_FAILED    PurchaseStatus = "failed"
+	PURCHASE_STATUS_CANCELED  PurchaseStatus = "canceled"
 )
 
 type Purchase struct {

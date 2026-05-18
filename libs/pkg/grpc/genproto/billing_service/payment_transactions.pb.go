@@ -24,18 +24,29 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// PaymentTransactionType categorizes different types of payment-related transactions.
+// These types represent different operations in the payment processing workflow.
 type PaymentTransactionType int32
 
 const (
+	// Unspecified type; should not be used
 	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_UNSPECIFIED PaymentTransactionType = 0
-	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_PAYMENT     PaymentTransactionType = 1
-	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_AUTH        PaymentTransactionType = 2
-	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_CAPTURE     PaymentTransactionType = 3
-	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_REFUND      PaymentTransactionType = 4
-	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_VOID        PaymentTransactionType = 5
-	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_CHARGEBACK  PaymentTransactionType = 6
-	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_ADJUSTMENT  PaymentTransactionType = 7
-	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_FEE         PaymentTransactionType = 8
+	// Direct payment/charge transaction
+	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_PAYMENT PaymentTransactionType = 1
+	// Authorization-only transaction (hold without capturing funds)
+	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_AUTH PaymentTransactionType = 2
+	// Capture transaction (capture funds from a previous auth)
+	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_CAPTURE PaymentTransactionType = 3
+	// Refund transaction (return funds to customer)
+	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_REFUND PaymentTransactionType = 4
+	// Void transaction (cancel an auth or payment before capture)
+	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_VOID PaymentTransactionType = 5
+	// Chargeback transaction (customer dispute that results in fund reversal)
+	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_CHARGEBACK PaymentTransactionType = 6
+	// Adjustment transaction (fee adjustment, discount, or correction)
+	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_ADJUSTMENT PaymentTransactionType = 7
+	// Fee transaction (service charge or processing fee)
+	PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_FEE PaymentTransactionType = 8
 )
 
 // Enum value maps for PaymentTransactionType.
@@ -91,14 +102,20 @@ func (PaymentTransactionType) EnumDescriptor() ([]byte, []int) {
 	return file_billing_service_payment_transactions_proto_rawDescGZIP(), []int{0}
 }
 
+// PaymentTransactionStatus tracks the processing state of a payment transaction.
 type PaymentTransactionStatus int32
 
 const (
+	// Unspecified status; should not be used
 	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_UNSPECIFIED PaymentTransactionStatus = 0
-	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_PENDING     PaymentTransactionStatus = 1
-	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_SUCCEEDED   PaymentTransactionStatus = 2
-	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_FAILED      PaymentTransactionStatus = 3
-	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_CANCELED    PaymentTransactionStatus = 4
+	// Transaction has been created but not yet processed by provider
+	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_PENDING PaymentTransactionStatus = 1
+	// Transaction was successfully processed by provider
+	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_SUCCEEDED PaymentTransactionStatus = 2
+	// Transaction failed during processing
+	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_FAILED PaymentTransactionStatus = 3
+	// Transaction was canceled before completion
+	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_CANCELED PaymentTransactionStatus = 4
 )
 
 // Enum value maps for PaymentTransactionStatus.

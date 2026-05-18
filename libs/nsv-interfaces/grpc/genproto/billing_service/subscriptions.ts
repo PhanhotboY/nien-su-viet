@@ -13,14 +13,24 @@ import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "billing_service";
 
+/**
+ * SubscriptionStatus represents the lifecycle state of a user's subscription.
+ * These states define whether the user has access to subscription benefits and
+ * whether the subscription is in good standing or has issues.
+ */
 export enum SubscriptionStatus {
+  /** SUBSCRIPTION_STATUS_UNSPECIFIED - Unspecified status; should not be used */
   SUBSCRIPTION_STATUS_UNSPECIFIED = 0,
-  SUBSCRIPTION_STATUS_INCOMPLETE = 1,
-  SUBSCRIPTION_STATUS_PENDING = 2,
-  SUBSCRIPTION_STATUS_ACTIVE = 3,
-  SUBSCRIPTION_STATUS_PAST_DUE = 4,
-  SUBSCRIPTION_STATUS_CANCELED = 5,
-  SUBSCRIPTION_STATUS_EXPIRED = 6,
+  /** SUBSCRIPTION_STATUS_PENDING - Initial state after successful payment; waiting for user role/permissions to be activated */
+  SUBSCRIPTION_STATUS_PENDING = 1,
+  /** SUBSCRIPTION_STATUS_ACTIVE - Subscription is active; user has full access to subscription benefits */
+  SUBSCRIPTION_STATUS_ACTIVE = 2,
+  /** SUBSCRIPTION_STATUS_PAST_DUE - Renewal payment failed; user retains access through current period end, then expires */
+  SUBSCRIPTION_STATUS_PAST_DUE = 3,
+  /** SUBSCRIPTION_STATUS_CANCELED - User initiated cancellation; user retains access through current period end, then expires */
+  SUBSCRIPTION_STATUS_CANCELED = 4,
+  /** SUBSCRIPTION_STATUS_EXPIRED - Subscription period ended; user no longer has access to benefits (can renew) */
+  SUBSCRIPTION_STATUS_EXPIRED = 5,
   UNRECOGNIZED = -1,
 }
 

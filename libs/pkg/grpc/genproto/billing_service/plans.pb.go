@@ -23,14 +23,21 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// BillingInterval defines the frequency at which subscription billing occurs.
+// Used to calculate the next renewal date based on current period dates.
 type BillingInterval int32
 
 const (
+	// Unspecified interval; should not be used
 	BillingInterval_BILLING_INTERVAL_UNSPECIFIED BillingInterval = 0
-	BillingInterval_BILLING_INTERVAL_DAY         BillingInterval = 1
-	BillingInterval_BILLING_INTERVAL_WEEK        BillingInterval = 2
-	BillingInterval_BILLING_INTERVAL_MONTH       BillingInterval = 3
-	BillingInterval_BILLING_INTERVAL_YEAR        BillingInterval = 4
+	// Subscription renews every day
+	BillingInterval_BILLING_INTERVAL_DAY BillingInterval = 1
+	// Subscription renews every week (7 days)
+	BillingInterval_BILLING_INTERVAL_WEEK BillingInterval = 2
+	// Subscription renews every month (calendar-based)
+	BillingInterval_BILLING_INTERVAL_MONTH BillingInterval = 3
+	// Subscription renews every year (calendar-based)
+	BillingInterval_BILLING_INTERVAL_YEAR BillingInterval = 4
 )
 
 // Enum value maps for BillingInterval.

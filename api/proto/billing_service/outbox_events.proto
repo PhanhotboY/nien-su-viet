@@ -7,13 +7,22 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
 
+// OutboxEventStatus represents the lifecycle state of an event in the outbox pattern.
+// The outbox pattern ensures reliable event publishing by storing events in the database
+// and processing them asynchronously.
 enum OutboxEventStatus {
+  // Unspecified status; should not be used
   OUTBOX_EVENT_STATUS_UNSPECIFIED = 0;
+  // Event has been created but not yet published to message broker
   OUTBOX_EVENT_STATUS_PENDING = 1;
+  // Event has been successfully published to message broker
   OUTBOX_EVENT_STATUS_PUBLISHED = 2;
+  // Event publication failed; will be retried
   OUTBOX_EVENT_STATUS_FAILED = 3;
+  // Event is currently being retried after a previous failure
   OUTBOX_EVENT_STATUS_RETRYING = 4;
-  OUTBOX_EVENT_STATUS_DEAD = 5; // optional: give up after max retries
+  // Event reached maximum retry count; permanently failed and abandoned
+  OUTBOX_EVENT_STATUS_DEAD = 5;
 }
 
 message OutboxEvent {

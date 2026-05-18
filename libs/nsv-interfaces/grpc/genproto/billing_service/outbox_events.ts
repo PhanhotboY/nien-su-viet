@@ -13,13 +13,23 @@ import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "billing_service";
 
+/**
+ * OutboxEventStatus represents the lifecycle state of an event in the outbox pattern.
+ * The outbox pattern ensures reliable event publishing by storing events in the database
+ * and processing them asynchronously.
+ */
 export enum OutboxEventStatus {
+  /** OUTBOX_EVENT_STATUS_UNSPECIFIED - Unspecified status; should not be used */
   OUTBOX_EVENT_STATUS_UNSPECIFIED = 0,
+  /** OUTBOX_EVENT_STATUS_PENDING - Event has been created but not yet published to message broker */
   OUTBOX_EVENT_STATUS_PENDING = 1,
+  /** OUTBOX_EVENT_STATUS_PUBLISHED - Event has been successfully published to message broker */
   OUTBOX_EVENT_STATUS_PUBLISHED = 2,
+  /** OUTBOX_EVENT_STATUS_FAILED - Event publication failed; will be retried */
   OUTBOX_EVENT_STATUS_FAILED = 3,
+  /** OUTBOX_EVENT_STATUS_RETRYING - Event is currently being retried after a previous failure */
   OUTBOX_EVENT_STATUS_RETRYING = 4,
-  /** OUTBOX_EVENT_STATUS_DEAD - optional: give up after max retries */
+  /** OUTBOX_EVENT_STATUS_DEAD - Event reached maximum retry count; permanently failed and abandoned */
   OUTBOX_EVENT_STATUS_DEAD = 5,
   UNRECOGNIZED = -1,
 }

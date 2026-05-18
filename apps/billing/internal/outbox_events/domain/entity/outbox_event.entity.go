@@ -14,7 +14,7 @@ const (
 	OUTBOX_EVENT_STATUS_PUBLISHED OutboxEventStatus = "published"
 	OUTBOX_EVENT_STATUS_FAILED    OutboxEventStatus = "failed"
 	OUTBOX_EVENT_STATUS_RETRYING  OutboxEventStatus = "retrying"
-	OUTBOX_EVENT_STATUS_DEAD      OutboxEventStatus = "dead" // optional: give up after max retries
+	OUTBOX_EVENT_STATUS_DEAD      OutboxEventStatus = "dead"
 )
 
 type OutboxEvent struct {

@@ -11,12 +11,11 @@ import (
 type SubscriptionStatus string
 
 const (
-	SUBSCRIPTION_STATUS_INCOMPLETE SubscriptionStatus = "incomplete"
-	SUBSCRIPTION_STATUS_PENDING    SubscriptionStatus = "pending"
-	SUBSCRIPTION_STATUS_ACTIVE     SubscriptionStatus = "active"
-	SUBSCRIPTION_STATUS_PAST_DUE   SubscriptionStatus = "past_due"
-	SUBSCRIPTION_STATUS_CANCELED   SubscriptionStatus = "canceled"
-	SUBSCRIPTION_STATUS_EXPIRED    SubscriptionStatus = "expired"
+	SUBSCRIPTION_STATUS_PENDING  SubscriptionStatus = "pending"
+	SUBSCRIPTION_STATUS_ACTIVE   SubscriptionStatus = "active"
+	SUBSCRIPTION_STATUS_PAST_DUE SubscriptionStatus = "past_due"
+	SUBSCRIPTION_STATUS_CANCELED SubscriptionStatus = "canceled"
+	SUBSCRIPTION_STATUS_EXPIRED  SubscriptionStatus = "expired"
 )
 
 type Subscription struct {
