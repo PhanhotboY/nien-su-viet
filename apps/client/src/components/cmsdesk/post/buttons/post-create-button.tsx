@@ -65,7 +65,7 @@ const PostCreateButton = () => {
         {protectedPostConfig.newPost}
       </Button>
       <AlertDialog open={isLoading} onOpenChange={setIsLoading}>
-        <AlertDialogContent className="font-sans">
+        <AlertDialogContent className="">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-center">
               {protectedPostConfig.pleaseWait}

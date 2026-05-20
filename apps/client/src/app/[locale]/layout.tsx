@@ -12,7 +12,7 @@ export async function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 const inter = Inter({
-  variable: '--font-inter',
+  display: 'swap',
   subsets: ['latin'],
 });
 
@@ -28,8 +28,8 @@ export default async function AdminLayout({
   const messages = await getMessages({ locale });
 
   return (
-    <html lang={locale}>
-      <body className={`${inter.variable} antialiased flex min-h-svh flex-col`}>
+    <html lang={locale} className={inter.className}>
+      <body className={`antialiased flex min-h-svh flex-col`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
             {children}

@@ -411,7 +411,7 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
         </form>
       </Form>
       <AlertDialog open={showLoadingAlert} onOpenChange={setShowLoadingAlert}>
-        <AlertDialogContent className="font-sans">
+        <AlertDialogContent className="">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-center">
               {protectedPostConfig.pleaseWait}

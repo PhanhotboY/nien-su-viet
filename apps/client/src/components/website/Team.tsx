@@ -7,8 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Facebook, Instagram, Linkedin } from 'lucide-react';
+// import { Facebook, Instagram, Linkedin } from 'lucide-react';
 import Link from '@/i18n/navigation';
+import { FacebookIcon, InstagramIcon } from '@/icons/socials';
 import { getTranslations } from 'next-intl/server';
 
 interface TeamProps {
@@ -100,14 +101,11 @@ export const Team = async ({ locale }: { locale: string }) => {
 
   const socialIcon = (iconName: string) => {
     switch (iconName) {
-      case 'Linkedin':
-        return <Linkedin size="20" />;
-
       case 'Facebook':
-        return <Facebook size="20" />;
+        return <FacebookIcon />;
 
       case 'Instagram':
-        return <Instagram size="20" />;
+        return <InstagramIcon />;
     }
   };
 

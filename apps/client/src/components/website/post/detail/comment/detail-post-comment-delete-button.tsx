@@ -92,7 +92,7 @@
 //             </div>
 //           </div>
 //           <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
-//             <AlertDialogContent className="text-md font-sans">
+//             <AlertDialogContent className="text-md">
 //               <AlertDialogHeader>
 //                 <AlertDialogTitle>
 //                   {detailCommentConfig.questionDelete}

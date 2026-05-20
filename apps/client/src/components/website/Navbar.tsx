@@ -78,7 +78,7 @@ export const Navbar = ({
                 alt={appTitle}
                 width={100}
                 height={50}
-                className="mr-2 object-contain"
+                className="logo-img mr-2 object-contain"
               />
             </Link>
           </NavigationMenuItem>
@@ -105,6 +105,8 @@ export const Navbar = ({
                       alt={appTitle}
                       width={100}
                       height={100}
+                      priority
+                      fetchPriority="high"
                       className="m-auto object-contain"
                     />
                   </SheetTitle>

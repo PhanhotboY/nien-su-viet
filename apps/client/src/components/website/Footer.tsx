@@ -72,7 +72,9 @@ export const Footer = ({
               alt={title}
               width={100}
               height={100}
-              className="mr-2 object-contain"
+              priority
+              fetchPriority="high"
+              className="logo-img mr-2 object-contain"
             />
           </Link>
           <p className="mt-4 text-sm text-muted-foreground">{description}</p>

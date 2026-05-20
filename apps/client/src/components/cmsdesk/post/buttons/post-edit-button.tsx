@@ -73,7 +73,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
           <ElipsisIcon className="h-4 w-4" />
           <span className="sr-only">Open</span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="font-sans">
+        <DropdownMenuContent align="end" className="">
           <DropdownMenuItem>
             <a
               className="flex w-full"
@@ -97,7 +97,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
       </DropdownMenu>
       {/* Delete alert */}
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
-        <AlertDialogContent className="text-md font-sans">
+        <AlertDialogContent className="text-md">
           <AlertDialogHeader>
             <AlertDialogTitle>
               {protectedPostConfig.questionDelete}
@@ -121,7 +121,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
       </AlertDialog>
       {/* Loading alert */}
       <AlertDialog open={showLoadingAlert} onOpenChange={setShowLoadingAlert}>
-        <AlertDialogContent className="font-sans">
+        <AlertDialogContent className="">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-center">
               {protectedPostConfig.pleaseWait}
