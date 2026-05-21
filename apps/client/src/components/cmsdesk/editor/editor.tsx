@@ -48,7 +48,7 @@ import {
 } from './upload';
 import { PostResponseDto } from '@/types/collection';
 import { updatePost } from '@/services/post.service';
-import { useAuthenticate } from '@daveyplate/better-auth-ui';
+import { useAuthenticate, useAuth } from '@/components/auth';
 import TextEditor from '@/components/TextEditor';
 import { useLocale } from 'next-intl';
 
@@ -63,7 +63,8 @@ type EditorFormValues = z.infer<typeof postEditFormSchema>;
 
 const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
   const router = useRouter();
-  const { data } = useAuthenticate();
+  const { authClient } = useAuth();
+  const { data } = useAuthenticate(authClient);
   const userId = data?.user.id || '';
   const locale = useLocale();
 
@@ -411,7 +412,7 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
         </form>
       </Form>
       <AlertDialog open={showLoadingAlert} onOpenChange={setShowLoadingAlert}>
-        <AlertDialogContent className="font-sans">
+        <AlertDialogContent className="">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-center">
               {protectedPostConfig.pleaseWait}

@@ -1,9 +1,6 @@
-'use client';
-
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { getAvatarFallback, shimmer, toBase64 } from '@/lib/utils';
+import { shimmer, toBase64 } from '@/lib/utils';
 import { PostBriefResponseDto } from '@/types/collection';
 import { format, parseISO } from 'date-fns';
 import { enUS, vi } from 'date-fns/locale';
@@ -12,16 +9,21 @@ import Image from 'next/image';
 import Link from '@/i18n/navigation';
 import readingTime from 'reading-time';
 import AuthorInfo from '../post/author-info';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 interface FeaturedPostProps {
   post: PostBriefResponseDto;
   locale: string;
 }
 
-export default function FeaturedPost({ post, locale }: FeaturedPostProps) {
-  const tshared = useTranslations('Shared');
-  const tblog = useTranslations('BlogPage');
+export default async function FeaturedPost({
+  post,
+  locale,
+}: FeaturedPostProps) {
+  const [tshared, tblog] = await Promise.all([
+    getTranslations({ locale, namespace: 'Shared' }),
+    getTranslations({ locale, namespace: 'BlogPage' }),
+  ]);
   const readTime = readingTime(post.summary || '');
 
   return (

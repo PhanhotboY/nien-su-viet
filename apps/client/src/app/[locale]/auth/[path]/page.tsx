@@ -1,39 +1,25 @@
+import { Metadata } from 'next';
 import Link from '@/i18n/navigation';
-import { redirect } from 'next/navigation';
-import { AuthView } from '@daveyplate/better-auth-ui';
+import { Auth } from '@/components/auth';
 
-import { getAuthSession } from '@/helper/auth.helper';
-import { authLocalization } from '@/localization/vi/auth-localization';
+import { authLegalCopy as authLegalCopyVi } from '@/localization/vi/auth-localization';
+import { authLegalCopy as authLegalCopyEn } from '@/localization/en/auth-localization';
 import { getTranslations } from 'next-intl/server';
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+  },
+};
 
 export default async function AuthPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ path: string; locale: string }>;
-  searchParams: Promise<{ redirectTo?: string }>;
 }) {
   const { path, locale } = await params;
-  const { user, error } = await getAuthSession();
   const tshared = await getTranslations({ locale, namespace: 'Shared' });
-
-  let { redirectTo } = await searchParams;
-  if (!redirectTo) {
-    switch (user?.role) {
-      case 'admin':
-        redirectTo = `/${locale}/admin`;
-        break;
-      case 'editor':
-        redirectTo = `/${locale}/cmsdesk`;
-        break;
-      default:
-        redirectTo = `/${locale}/`;
-    }
-  }
-
-  if (user && !error) {
-    redirect(redirectTo);
-  }
+  const authLegalCopy = locale === 'vi' ? authLegalCopyVi : authLegalCopyEn;
 
   if (!path) {
     return (
@@ -45,17 +31,17 @@ export default async function AuthPage({
 
   return (
     <main className="h-full container flex grow flex-col items-center justify-center gap-4 self-center p-4 md:p-6">
-      <AuthView path={path} />
+      <Auth path={path} />
 
       {!['callback', 'sign-out'].includes(path) && (
         <p className="w-3xs text-center text-muted-foreground text-xs">
-          {authLocalization.BY_CONTINUING_YOU_AGREE}{' '}
+          {authLegalCopy.BY_CONTINUING_YOU_AGREE}{' '}
           <Link
             className="text-warning underline"
             href="/terms"
             target="_blank"
           >
-            {authLocalization.TERMS_OF_SERVICE}
+            {authLegalCopy.TERMS_OF_SERVICE}
           </Link>{' '}
           {tshared('and')}{' '}
           <Link
@@ -63,7 +49,7 @@ export default async function AuthPage({
             href="/privacy"
             target="_blank"
           >
-            {authLocalization.PRIVACY_POLICY}
+            {authLegalCopy.PRIVACY_POLICY}
           </Link>
           .
         </p>

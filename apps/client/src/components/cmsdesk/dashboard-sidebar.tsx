@@ -1,16 +1,12 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/navigation';
-import Link from '@/i18n/navigation';
+import Link, { useRouter } from '@/i18n/navigation';
 import {
-  Users,
   Settings,
   LogOut,
   GalleryVerticalEnd,
   ChartGantt,
-  PanelTop,
-  Route,
   Newspaper,
   Image,
 } from 'lucide-react';
@@ -27,6 +23,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { useSignOut } from '@better-auth-ui/react';
 
 const sidebarNavItems = [
   {
@@ -58,12 +55,13 @@ const sidebarNavItems = [
 
 export function DashboardSidebar() {
   const pathname = usePathname();
+  const { mutate: signOut } = useSignOut(authClient);
   const router = useRouter();
-  const { signOut } = authClient;
 
   const handleLogout = async () => {
     try {
-      await signOut();
+      signOut();
+      router.refresh();
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -115,7 +113,7 @@ export function DashboardSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Settings">
-              <Link href="/cmsdesk/account/settings">
+              <Link href="/cmsdesk/settings/account">
                 <Settings className="h-4 w-4" />
                 <span>Settings</span>
               </Link>

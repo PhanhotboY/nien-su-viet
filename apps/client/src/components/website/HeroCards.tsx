@@ -9,10 +9,8 @@ import {
   CardTitle,
   CardFooter,
 } from '@/components/ui/card';
-import { Check, Linkedin } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { LightBulbIcon } from '../Icons';
-import { GitHubLogoIcon } from '@radix-ui/react-icons';
-import Link from '@/i18n/navigation';
 import { getTranslations } from 'next-intl/server';
 
 export const HeroCards = async ({ locale }: { locale: string }) => {
@@ -25,9 +23,6 @@ export const HeroCards = async ({ locale }: { locale: string }) => {
     namespace: 'AboutPage.Pricing.plans.free',
     locale,
   });
-  const pricingTitle = (
-    await getTranslations({ namespace: 'AboutPage.Pricing', locale })
-  )('title.prefix');
 
   return (
     <div className="hidden lg:flex flex-row gap-8 w-[700px] h-[500px]">

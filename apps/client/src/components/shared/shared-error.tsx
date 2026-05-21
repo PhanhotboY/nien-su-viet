@@ -44,7 +44,7 @@ const SharedError = ({ error }: { error: Error & { digest?: string } }) => {
 
         <CardContent className="space-y-4">
           <div className="rounded-lg bg-muted/50 p-4 border border-muted">
-            <p className="text-sm font-mono text-muted-foreground break-all">
+            <p className="text-sm text-muted-foreground break-all">
               {error.message || 'Lỗi không xác định'}
             </p>
             {error.digest && (

@@ -3,6 +3,8 @@
   overflow: auto;
   border: 1px solid var(--timeline-border);
   border-top: none;
+  min-height: 70vh;
+  max-height: 90vh;
 }
 
 /* Custom styling for vis-timeline elements */

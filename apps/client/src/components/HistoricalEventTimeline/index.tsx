@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { DataSet } from 'vis-data';
 import { Timeline, TimelineOptions } from 'vis-timeline';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut } from 'lucide-react';
+import dynamic from 'next/dynamic';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -16,8 +17,15 @@ import 'vis-timeline/styles/vis-timeline-graph2d.css';
 import './index.css';
 import { useRouter } from '@/i18n/navigation';
 import { getEvents } from '@/services/historical-event.service';
-import { EventDetailDialog } from './EventDetailDialog';
 import { useTranslations } from 'next-intl';
+
+const EventDetailDialog = dynamic(
+  () =>
+    import('./EventDetailDialog').then((mod) => ({
+      default: mod.EventDetailDialog,
+    })),
+  { ssr: false },
+);
 
 export function HistoricalEventTimeline() {
   const [events, setEvents] = useState<IPaginatedResponse<
@@ -43,122 +51,147 @@ export function HistoricalEventTimeline() {
   useEffect(() => {
     if (!timelineRef.current || !events) return;
 
-    const items = new DataSet<VisItem>(
-      events.data.map((event) => {
-        const start = createDate(
-          event.fromYear,
-          event.fromMonth!,
-          event.fromDay!,
-        );
-        const end = event.toYear
-          ? createDate(event.toYear, event.toMonth!, event.toDay!)
-          : undefined;
+    let timelineInstance: Timeline | null = null;
+    let cancelled = false;
+    let idleId: number | undefined;
+    let timeoutId: number | undefined;
 
-        return {
-          id: event.id,
-          content: '',
-          start,
-          end,
-          title: event.name, // Tooltip preview
-          type: end ? ('range' as const) : ('point' as const), // Range for events with duration
-          // className: event.
-          //   .map((c: any) => c.category.slug)
-          //   .join(' '),
-        };
-      }),
-    );
+    const initTimeline = () => {
+      if (cancelled || !timelineRef.current) return;
 
-    const initStartDate = new Date();
-    const initEndDate = new Date();
-    initStartDate.setFullYear(initStartDate.getFullYear() - 450);
-    initEndDate.setFullYear(initEndDate.getFullYear() + 50);
+      const items = new DataSet<VisItem>(
+        events.data.map((event) => {
+          const start = createDate(
+            event.fromYear,
+            event.fromMonth!,
+            event.fromDay!,
+          );
+          const end = event.toYear
+            ? createDate(event.toYear, event.toMonth!, event.toDay!)
+            : undefined;
 
-    const options: TimelineOptions = {
-      stack: true,
-      editable: false,
-      selectable: true,
-      showCurrentTime: false,
-      start: initStartDate,
-      end: initEndDate,
-      minHeight: '70vh',
-      maxHeight: '90vh',
-      verticalScroll: false,
-      horizontalScroll: false,
-      format: {
-        minorLabels: (date: any, scale, step) => {
-          switch (scale) {
-            case 'year':
-              return date.year().toString();
-            case 'month':
-              return date.format('MMM');
-            case 'week':
-              return date.format('w');
-            case 'day':
-              return date.format('D');
-            case 'weekday':
-              return date.format('ddd D');
-            case 'hour':
-              return date.format('HH:mm');
-            case 'minute':
-              return date.format('HH:mm');
-            case 'second':
-              return date.format('s');
-            case 'millisecond':
-              return date.format('SSS');
-            default:
-              return '';
-          }
+          return {
+            id: event.id,
+            content: '',
+            start,
+            end,
+            title: event.name, // Tooltip preview
+            type: end ? ('range' as const) : ('point' as const), // Range for events with duration
+            // className: event.
+            //   .map((c: any) => c.category.slug)
+            //   .join(' '),
+          };
+        }),
+      );
+
+      const initStartDate = new Date();
+      const initEndDate = new Date();
+      initStartDate.setFullYear(initStartDate.getFullYear() - 450);
+      initEndDate.setFullYear(initEndDate.getFullYear() + 50);
+
+      const options: TimelineOptions = {
+        stack: true,
+        editable: false,
+        selectable: true,
+        showCurrentTime: false,
+        start: initStartDate,
+        end: initEndDate,
+        minHeight: '70vh',
+        maxHeight: '90vh',
+        verticalScroll: false,
+        horizontalScroll: false,
+        format: {
+          minorLabels: (date: any, scale, step) => {
+            switch (scale) {
+              case 'year':
+                return date.year().toString();
+              case 'month':
+                return date.format('MMM');
+              case 'week':
+                return date.format('w');
+              case 'day':
+                return date.format('D');
+              case 'weekday':
+                return date.format('ddd D');
+              case 'hour':
+                return date.format('HH:mm');
+              case 'minute':
+                return date.format('HH:mm');
+              case 'second':
+                return date.format('s');
+              case 'millisecond':
+                return date.format('SSS');
+              default:
+                return '';
+            }
+          },
+          majorLabels: (date: any, scale, step) => {
+            const year = date.year().toString();
+            switch (scale) {
+              case 'year':
+                return '';
+              case 'month':
+                return year;
+              case 'week':
+                return `${date.format('MMMM')} ${year}`;
+              case 'day':
+                return `${date.format('MMMM')} ${year}`;
+              case 'weekday':
+                return `${date.format('MMMM')} ${year}`;
+              case 'hour':
+                return date.format('ddd D MMMM');
+              case 'minute':
+                return date.format('ddd D MMMM');
+              case 'second':
+                return date.format('D MMMM HH:mm');
+              case 'millisecond':
+                return date.format('HH:mm:ss');
+              default:
+                return '';
+            }
+          },
         },
-        majorLabels: (date: any, scale, step) => {
-          const year = date.year().toString();
-          switch (scale) {
-            case 'year':
-              return '';
-            case 'month':
-              return year;
-            case 'week':
-              return `${date.format('MMMM')} ${year}`;
-            case 'day':
-              return `${date.format('MMMM')} ${year}`;
-            case 'weekday':
-              return `${date.format('MMMM')} ${year}`;
-            case 'hour':
-              return date.format('ddd D MMMM');
-            case 'minute':
-              return date.format('ddd D MMMM');
-            case 'second':
-              return date.format('D MMMM HH:mm');
-            case 'millisecond':
-              return date.format('HH:mm:ss');
-            default:
-              return '';
-          }
+        template: (item) => {
+          return `
+            <div class="flex items-center justify-between gap-2 px-2 py-1">
+            <h2 class="text-sm font-semibold truncate">${item.title}</h2>
+              <span class="text-sm font-medium truncate">${item.content}</span>
+            </div>
+          `;
         },
-      },
-      template: (item) => {
-        return `
-          <div class="flex items-center justify-between gap-2 px-2 py-1">
-          <h2 class="text-sm font-semibold truncate">${item.title}</h2>
-            <span class="text-sm font-medium truncate">${item.content}</span>
-          </div>
-        `;
-      },
+      };
+
+      timelineInstance = new Timeline(timelineRef.current, items, options);
+
+      // Handle click to open React dialog
+      timelineInstance.on('select', (properties) => {
+        if (properties.items.length > 0) {
+          const itemId = properties.items[0];
+          setPreviewItemId(itemId);
+        }
+      });
+
+      setTimeline(timelineInstance);
     };
 
-    const newTimeline = new Timeline(timelineRef.current, items, options);
-
-    // Handle click to open React dialog
-    newTimeline.on('select', (properties) => {
-      if (properties.items.length > 0) {
-        const itemId = properties.items[0];
-        setPreviewItemId(itemId);
-      }
-    });
-
-    setTimeline(newTimeline);
+    if (typeof window !== 'undefined' && window.requestIdleCallback) {
+      idleId = window.requestIdleCallback(initTimeline, { timeout: 2500 });
+    } else {
+      timeoutId = window.setTimeout(initTimeline, 1);
+    }
 
     return () => {
-      newTimeline.destroy();
+      cancelled = true;
+      if (idleId !== undefined && window.cancelIdleCallback) {
+        window.cancelIdleCallback(idleId);
+      }
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+      }
+      if (timelineInstance) {
+        timelineInstance.destroy();
+      }
+      setTimeline(null);
     };
   }, [events, router]);
 
@@ -303,11 +336,13 @@ export function HistoricalEventTimeline() {
           </div>
         )}
 
-        <EventDetailDialog
-          eventId={previewItemId}
-          open={!!previewItemId}
-          onOpenChange={() => setPreviewItemId(null)}
-        />
+        {!!previewItemId && (
+          <EventDetailDialog
+            eventId={previewItemId}
+            open={!!previewItemId}
+            onOpenChange={() => setPreviewItemId(null)}
+          />
+        )}
       </CardContent>
     </Card>
   );

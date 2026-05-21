@@ -23,10 +23,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from '@/i18n/navigation';
 import Image from 'next/image';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { Menu, User, LogOut, LayoutDashboard } from 'lucide-react';
-import { SignedIn, SignedOut, UserAvatar } from '@daveyplate/better-auth-ui';
+import { SignedIn, UserAvatar } from '@/components/auth';
 
 import NavLink from './NavLink';
 import { ModeToggle } from '../mode-toggle';
@@ -35,6 +35,7 @@ import { authClient, isAdmin, isEditor } from '@/lib/auth-client';
 import LanguageSwitcher from '../language-switcher';
 import { getHeaderNavItems } from '@/content/menus/header-nav-items';
 import { useTheme } from 'next-themes';
+import { useSignOut } from '@better-auth-ui/react';
 
 interface NavbarProps {
   appTitle: string;
@@ -51,14 +52,14 @@ export const Navbar = ({
 }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { resolvedTheme: theme } = useTheme();
+  const { mutate: signOut } = useSignOut(authClient);
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const t = useTranslations('HomePage');
-  const locale = useLocale();
 
   const handleSignOut = async () => {
-    await authClient.signOut();
-    router.push(`/${locale}`);
+    signOut();
+    router.refresh();
   };
 
   const logoToUse = theme === 'dark' ? appLogoDark : appLogo;
@@ -78,17 +79,17 @@ export const Navbar = ({
                 alt={appTitle}
                 width={100}
                 height={50}
-                className="mr-2 object-contain"
+                className="logo-img mr-2 object-contain"
               />
             </Link>
           </NavigationMenuItem>
 
           {/* mobile */}
-          <span className="flex md:hidden ml-auto">
+          <NavigationMenuItem className="flex md:hidden ml-auto">
             <ModeToggle />
 
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger className="px-2">
+              <SheetTrigger className="px-2" aria-label="Open menu">
                 <Menu
                   className="flex md:hidden h-5 w-5"
                   onClick={() => setIsOpen(true)}
@@ -105,6 +106,8 @@ export const Navbar = ({
                       alt={appTitle}
                       width={100}
                       height={100}
+                      priority
+                      fetchPriority="high"
                       className="m-auto object-contain"
                     />
                   </SheetTitle>
@@ -123,24 +126,26 @@ export const Navbar = ({
                 </nav>
               </SheetContent>
             </Sheet>
-          </span>
+          </NavigationMenuItem>
 
           {/* desktop */}
-          <nav className="hidden md:flex gap-2 ml-20 grow">
-            {navItems
-              .sort((a, b) => a.order - b.order)
-              .map((item, i) => (
-                <NavLink
-                  key={i}
-                  className={`text-[17px] ${buttonVariants({
-                    variant: 'ghost',
-                  })}`}
-                  navItem={item}
-                />
-              ))}
-          </nav>
+          <NavigationMenuItem className="hidden md:block ml-10 grow">
+            <nav className="flex gap-2">
+              {navItems
+                .sort((a, b) => a.order - b.order)
+                .map((item, i) => (
+                  <NavLink
+                    key={i}
+                    className={`text-[17px] ${buttonVariants({
+                      variant: 'ghost',
+                    })}`}
+                    navItem={item}
+                  />
+                ))}
+            </nav>
+          </NavigationMenuItem>
 
-          <div className="hidden md:flex gap-2">
+          <NavigationMenuItem className="hidden md:flex gap-2">
             <SignedIn>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -164,7 +169,7 @@ export const Navbar = ({
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href="/account/settings" className="cursor-pointer">
+                    <Link href="/settings/account" className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
                       {t('Auth.account')}
                     </Link>
@@ -208,7 +213,7 @@ export const Navbar = ({
             <LanguageSwitcher />
 
             <ModeToggle />
-          </div>
+          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
     </header>

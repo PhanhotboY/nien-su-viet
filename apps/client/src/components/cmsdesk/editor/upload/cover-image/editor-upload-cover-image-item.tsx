@@ -83,7 +83,7 @@ const EditorUploadCoverImageItem: FC<EditorUploadCoverImageItemProps> = ({
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
-          <AlertDialogHeader className="font-sans">
+          <AlertDialogHeader className="">
             <AlertDialogTitle>
               {protectedEditorConfig.deleteImageQuestion}
             </AlertDialogTitle>
@@ -91,7 +91,7 @@ const EditorUploadCoverImageItem: FC<EditorUploadCoverImageItemProps> = ({
               {protectedEditorConfig.deleteImageDescription}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="font-sans">
+          <AlertDialogFooter className="">
             <AlertDialogCancel>
               {protectedEditorConfig.cancel}
             </AlertDialogCancel>
