@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
-@import '@daveyplate/better-auth-ui/css';
 @import './variables.css';
 
 @custom-variant dark (&:is(.dark *));
@@ -158,5 +157,5 @@ html {
 }
 
 .logo-img {
-  width: auto;
+  height: auto;
 }

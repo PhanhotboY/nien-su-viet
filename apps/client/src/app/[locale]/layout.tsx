@@ -3,9 +3,11 @@ import { Providers } from './provider';
 
 import { ScrollToTop } from '@/components/ScrollToTop';
 
-import '@/styles/globals.css';
+import '../../styles/globals.css';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
+import { API_ENDPOINT } from '@/lib/config';
+import { Suspense } from 'react';
 
 const locales = ['vi', 'en'] as const;
 export async function generateStaticParams() {
@@ -14,6 +16,7 @@ export async function generateStaticParams() {
 const inter = Inter({
   display: 'swap',
   subsets: ['latin'],
+  preload: true,
 });
 
 export default async function AdminLayout({
@@ -29,13 +32,24 @@ export default async function AdminLayout({
 
   return (
     <html lang={locale} className={inter.className}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="preconnect" href={API_ENDPOINT} />
+      </head>
       <body className={`antialiased flex min-h-svh flex-col`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <Providers>
-            {children}
+          <Suspense fallback={null}>
+            <Providers>
+              {children}
 
-            <ScrollToTop />
-          </Providers>
+              <ScrollToTop />
+            </Providers>
+          </Suspense>
         </NextIntlClientProvider>
       </body>
     </html>

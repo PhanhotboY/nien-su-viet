@@ -6,14 +6,25 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, TrendingUp } from 'lucide-react';
-import { getImportantEvents } from '@/content/landing/important-events';
+import { Calendar } from 'lucide-react';
 import { toEventPeriodString } from '@/helper/date';
 import { getTranslations } from 'next-intl/server';
+import { components } from '@nsv-interfaces/nsv-api-documentation';
 
-export const FeaturedPeriods = async ({ locale }: { locale: string }) => {
+export const FeaturedPeriods = async ({
+  locale,
+  importantEvents,
+}: {
+  locale: string;
+  importantEvents: (Omit<
+    components['schemas']['HistoricalEventBriefResponseDto'],
+    'author' | 'id'
+  > & {
+    description: string;
+    highlights: string[];
+  })[];
+}) => {
   const tshared = await getTranslations({ locale, namespace: 'Shared' });
-  const importantEvents = await getImportantEvents();
 
   return (
     <section

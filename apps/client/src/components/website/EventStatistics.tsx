@@ -42,7 +42,7 @@ export const EventStatistics = () => {
       aria-label="Thống kê lịch sử Việt Nam"
     >
       <h2 className="sr-only">Thống kê lịch sử Việt Nam</h2>
-      <dl className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {stats.map((stat, index) => (
           <Card
             key={index}
@@ -55,21 +55,21 @@ export const EventStatistics = () => {
               >
                 {stat.icon}
               </div>
-              <div className="space-y-1">
-                <dd className="text-2xl md:text-3xl font-bold bg-gradient-to-br from-primary to-secondary text-transparent bg-clip-text">
-                  {stat.value}
-                </dd>
+              <dl className="space-y-1">
                 <dt className="font-semibold text-sm md:text-base">
                   {stat.label}
                 </dt>
+                <dd className="text-2xl md:text-3xl font-bold bg-gradient-to-br from-primary to-secondary text-transparent bg-clip-text">
+                  {stat.value}
+                </dd>
                 <dd className="text-xs text-muted-foreground hidden md:block">
                   {stat.description}
                 </dd>
-              </div>
+              </dl>
             </CardContent>
           </Card>
         ))}
-      </dl>
+      </div>
     </section>
   );
 };

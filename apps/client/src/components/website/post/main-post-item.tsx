@@ -1,19 +1,14 @@
-'use client';
-
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
-import { getAvatarFallback, getMinutes, shimmer, toBase64 } from '@/lib/utils';
+import { getMinutes, shimmer, toBase64 } from '@/lib/utils';
 import { PostBriefResponseDto } from '@/types/collection';
 import { format, parseISO } from 'date-fns';
 import { enUS, vi } from 'date-fns/locale';
-import { CalendarIcon, Clock10Icon, MessageCircleIcon } from 'lucide-react';
+import { CalendarIcon, Clock10Icon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import Link from '@/i18n/navigation';
-import React from 'react';
 import readingTime from 'reading-time';
 import AuthorInfo from './author-info';
-import { useTranslations } from 'next-intl';
 
 // async function getPublicImageUrl(postId: string, fileName: string) {
 
@@ -41,10 +36,15 @@ import { useTranslations } from 'next-intl';
 interface MainPostItemProps {
   post: PostBriefResponseDto;
   locale: string;
+  priority?: boolean;
 }
 
-const MainPostItem: React.FC<MainPostItemProps> = ({ post, locale }) => {
-  const tshared = useTranslations('Shared');
+export default async function MainPostItem({
+  post,
+  locale,
+  priority,
+}: MainPostItemProps) {
+  const tshared = await getTranslations({ locale, namespace: 'Shared' });
   const readTime = readingTime('');
   // const comments = await getComments(post.id ? post.id : "");
 
@@ -58,7 +58,7 @@ const MainPostItem: React.FC<MainPostItemProps> = ({ post, locale }) => {
               alt={post.title ?? 'Cover'}
               height={256}
               width={256}
-              priority
+              priority={priority}
               placeholder={`data:image/svg+xml;base64,${toBase64(
                 shimmer(256, 256),
               )}`}
@@ -138,6 +138,4 @@ const MainPostItem: React.FC<MainPostItemProps> = ({ post, locale }) => {
       </Link>
     </Card>
   );
-};
-
-export default MainPostItem;
+}

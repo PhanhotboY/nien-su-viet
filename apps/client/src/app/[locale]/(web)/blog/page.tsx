@@ -1,25 +1,14 @@
-import { SharedPagination } from '@/components/shared';
-import {
-  BlogHeader,
-  BlogSearch,
-  BlogSidebar,
-  BlogStats,
-  EmptyState,
-  FeaturedPost,
-} from '@/components/website/blog';
-import { PostsLayout } from '@/components/website/blog/posts-layout';
-import MainPostItem from '@/components/website/post/main-post-item';
-import MainPostItemLoading from '@/components/website/post/main-post-item-loading';
-import { getMetadata } from '@/content/landing/metadata';
-import { genMetadata } from '@/lib/metadata.lib';
-import { getPublicPosts } from '@/services/post.service';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
+
+import { BlogHeader, BlogSearch } from '@/components/website/blog';
+import { getMetadata } from '@/content/landing/metadata';
+import { genMetadata } from '@/lib/metadata.lib';
+import { PostsLayout } from '@/components/website/blog/posts-layout';
 
 interface BlogPageProps {
   params: Promise<{ locale: string }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateMetadata({
@@ -38,8 +27,12 @@ export async function generateMetadata({
   });
 }
 
-export default async function HomePage({ params }: BlogPageProps) {
+export default async function HomePage({
+  params,
+  searchParams,
+}: BlogPageProps) {
   const { locale } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : undefined;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/50">
@@ -53,7 +46,7 @@ export default async function HomePage({ params }: BlogPageProps) {
           <BlogSearch />
         </div>
 
-        <PostsLayout />
+        <PostsLayout locale={locale} searchParams={resolvedSearchParams} />
       </div>
     </div>
   );

@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { protectedPostConfig } from '@/config/cmsdesk';
 import { deletePost } from '@/services/post.service';
-import { useAuthenticate } from '@daveyplate/better-auth-ui';
+import { useAuthenticate, useAuth } from '@/components/auth';
 import {
   MoreVertical as ElipsisIcon,
   Loader2 as SpinnerIcon,
@@ -39,7 +39,8 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
   const [showLoadingAlert, setShowLoadingAlert] = useState<boolean>(false);
-  const { data: session } = useAuthenticate();
+  const { authClient } = useAuth();
+  const { data: session } = useAuthenticate(authClient);
   const locale = useLocale();
 
   // Delete post

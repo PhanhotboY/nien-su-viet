@@ -10,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { protectedPostConfig } from '@/config/cmsdesk';
 import { createPost } from '@/services/post.service';
-import { useAuthenticate } from '@daveyplate/better-auth-ui';
+import { useAuthenticate, useAuth } from '@/components/auth';
 import { components } from '@nsv-interfaces/nsv-api-documentation';
 import { Loader2 as SpinnerIcon } from 'lucide-react';
 import { useLocale } from 'next-intl';
@@ -20,7 +20,8 @@ import { toast } from 'sonner';
 
 const PostCreateButton = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { data: session } = useAuthenticate();
+  const { authClient } = useAuth();
+  const { data: session } = useAuthenticate(authClient);
   const router = useRouter();
   const locale = useLocale();
 
