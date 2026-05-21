@@ -53,7 +53,7 @@ import {
 import { UserAddDialog } from './user-add-dialog';
 import { IPaginatedResponse } from '@/interfaces/response.interface';
 import type { components } from '@nsv-interfaces/auth-service';
-import { UserAvatar } from '@daveyplate/better-auth-ui';
+import { UserAvatar } from '@/components/auth';
 import { Button } from '../ui/button';
 import { roles } from '@/lib/permissions';
 import { swrFetcher } from '@/helper/swrFetcher';
@@ -420,7 +420,17 @@ export function UsersTable() {
                   <TableRow key={user.id}>
                     <TableCell className="px-4 py-3">
                       <div className="flex items-center gap-4">
-                        <UserAvatar user={user} />
+                        <UserAvatar
+                          user={{
+                            id: user.id ?? user.email,
+                            name: user.name,
+                            email: user.email,
+                            emailVerified: user.emailVerified,
+                            image: user.image ?? null,
+                            createdAt: new Date(user.createdAt),
+                            updatedAt: new Date(user.updatedAt),
+                          }}
+                        />
 
                         <div className="flex flex-col">
                           <span className="text-sm font-medium text-foreground">

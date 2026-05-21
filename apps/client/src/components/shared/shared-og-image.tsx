@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { SharedOgImageWrapper } from "./shared-og-image-wrapper";
+import { FC } from 'react';
+import { SharedOgImageWrapper } from './shared-og-image-wrapper';
 
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
@@ -25,8 +25,7 @@ const SharedOgImage: FC<SharedOgImageProps> = ({
             <div
               tw="flex text-xl font-bold text-gray-900"
               style={{
-                fontFamily: "Inter",
-                fontWeight: "bold",
+                fontWeight: 'bold',
                 fontSize: 46,
                 marginBottom: 16,
               }}
@@ -36,8 +35,7 @@ const SharedOgImage: FC<SharedOgImageProps> = ({
             <div
               tw="flex text-[40px] font-bold text-gray-500"
               style={{
-                fontFamily: "Inter",
-                fontWeight: "bold",
+                fontWeight: 'bold',
                 fontSize: 36,
                 marginBottom: 16,
               }}
@@ -49,11 +47,10 @@ const SharedOgImage: FC<SharedOgImageProps> = ({
                 <div
                   tw="flex bg-gray-200 text-[30px] text-gray-500"
                   style={{
-                    fontFamily: "Inter",
-                    fontWeight: "normal",
-                    alignItems: "center",
+                    fontWeight: 'normal',
+                    alignItems: 'center',
                     borderRadius: 100,
-                    display: "flex",
+                    display: 'flex',
                     height: 48,
                     marginRight: 16,
                     marginTop: 16,
@@ -71,7 +68,7 @@ const SharedOgImage: FC<SharedOgImageProps> = ({
             <div tw="flex justify-start">
               <div
                 tw="flex items-center font-bold text-3xl"
-                style={{ fontFamily: "Inter", fontWeight: "bolder" }}
+                style={{ fontWeight: 'bolder' }}
               >
                 {`https://ub.cafe${slug}`}
               </div>

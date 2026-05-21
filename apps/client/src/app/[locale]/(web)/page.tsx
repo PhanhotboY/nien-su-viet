@@ -1,4 +1,5 @@
-import { HistoricalEventTimeline } from '@/components/HistoricalEventTimeline';
+import dynamic from 'next/dynamic';
+
 import { EventStatistics } from '@/components/website/EventStatistics';
 import { QuickTips } from '@/components/website/QuickTips';
 import { FeaturedPeriods } from '@/components/website/FeaturedPeriods';
@@ -6,6 +7,11 @@ import { getTranslations } from 'next-intl/server';
 import { getMetadata } from '@/content/landing/metadata';
 import { getImportantEvents } from '@/content/landing/important-events';
 import { CLIENT_HOST } from '@/lib/config';
+const HistoricalEventTimeline = dynamic(() =>
+  import('@/components/HistoricalEventTimeline').then((mod) => ({
+    default: mod.HistoricalEventTimeline,
+  })),
+);
 
 export default async function HomeTimePage({
   params,
@@ -13,9 +19,11 @@ export default async function HomeTimePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'EventPage' });
-  const metadata = await getMetadata({ locale });
-  const importantEvents = await getImportantEvents();
+  const [t, metadata, importantEvents] = await Promise.all([
+    getTranslations({ locale, namespace: 'EventPage' }),
+    getMetadata({ locale }),
+    await getImportantEvents(),
+  ]);
 
   const websiteJsonLd = {
     '@context': 'https://schema.org',
@@ -139,7 +147,7 @@ export default async function HomeTimePage({
         <EventStatistics />
 
         {/* Featured Historical Periods */}
-        <FeaturedPeriods locale={locale} />
+        <FeaturedPeriods locale={locale} importantEvents={importantEvents} />
       </main>
     </>
   );
