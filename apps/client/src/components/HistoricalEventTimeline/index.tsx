@@ -328,7 +328,7 @@ export function HistoricalEventTimeline() {
       }
       setTimeline(null);
     };
-  }, [events, eventTimestamps, router, startDate, endDate]);
+  }, [events, router]);
 
   const handleZoomDate = useCallback(
     (
@@ -462,16 +462,13 @@ export function HistoricalEventTimeline() {
           })
           .slice(0, 20),
       );
-      timeline.setItems(items);
+      try {
+        timeline.setItems(items);
+      } catch (e) {
+        console.error(e);
+      }
     },
-    [
-      startDate,
-      endDate,
-      timeline,
-      searchResults,
-      eventToVisItem,
-      eventTimestamps,
-    ],
+    [startDate, endDate, searchResults],
   );
 
   return (
