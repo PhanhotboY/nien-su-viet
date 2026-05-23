@@ -26,10 +26,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-import { mainCategoryConfig } from '@/config/main';
 import { protectedEditorConfig, protectedPostConfig } from '@/config/cmsdesk';
 import { postEditFormSchema } from '@/lib/validation/post';
 import { PaperClipIcon } from '@heroicons/react/20/solid';
@@ -51,8 +49,9 @@ import { updatePost } from '@/services/post.service';
 import { useAuthenticate, useAuth } from '@/components/auth';
 import TextEditor from '@/components/TextEditor';
 import { useLocale } from 'next-intl';
-
-type FormData = z.infer<typeof postEditFormSchema>;
+import ImageInput from '../ImageInput';
+import { IImage } from '@/types/image';
+import { useEffect } from 'react';
 
 interface EditorProps {
   post: PostResponseDto;
@@ -80,8 +79,8 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
   const [content, setContent] = useState<string | null>(post?.content || null);
 
   // Handle cover image upload complete
-  const handleCoverUploadComplete = (urls: string[]) => {
-    form.setValue('thumbnail', urls[0]);
+  const handleCoverUploadComplete = (img: string) => {
+    form.setValue('thumbnail', img);
     toast.success(protectedEditorConfig.successMessageImageUpload);
     router.refresh();
   };
@@ -262,57 +261,23 @@ const Editor: FC<EditorProps> = ({ post, imageFolderName }) => {
                 render={({ field }) => (
                   <FormItem className="m-0">
                     <FormControl>
-                      <Input
+                      {/*<Input
                         placeholder={protectedEditorConfig.placeholderImage}
                         {...field}
                         disabled={true}
                         className="hidden bg-gray-50"
+                      />*/}
+                      <ImageInput
+                        label="Upload Cover Image"
+                        name="thumbnail"
+                        value={form.getValues('thumbnail')}
+                        onChange={handleCoverUploadComplete}
+                        multiple={false}
                       />
                     </FormControl>
                   </FormItem>
                 )}
               />
-
-              <div className="flex w-full flex-col">
-                <FileUploadModal
-                  open={showCoverModal}
-                  onOpenChange={setShowCoverModal}
-                  folderName={imageFolderName}
-                  maxFiles={1}
-                  maxSize={6 * 1024 * 1024}
-                  onUploadComplete={handleCoverUploadComplete}
-                  onUploadError={handleUploadError}
-                  title="Upload Cover Image"
-                  description={protectedEditorConfig.formImageNote}
-                />
-                {/* {coverImageFileName === '' && ( */}
-                <div className="col-span-full">
-                  <div className="mb-1 flex items-center gap-x-3">
-                    <button
-                      onClick={() => setShowCoverModal(!showCoverModal)}
-                      type="button"
-                      className="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    >
-                      <PaperClipIcon className="mr-1 h-4 w-4" />
-                      <span className="">
-                        {protectedEditorConfig.formCoverImageUploadFile}
-                      </span>
-                    </button>
-                  </div>
-                </div>
-                {/* )} */}
-
-                {form.getValues('thumbnail') ? (
-                  <EditorUploadCoverImageItem
-                    userId={userId}
-                    postId={post.id}
-                    imageUrl={form.getValues('thumbnail')!}
-                    deleteCoverHandler={() => form.setValue('thumbnail', '')}
-                  />
-                ) : (
-                  <EditorUploadCoverImagePlaceHolder />
-                )}
-              </div>
             </CardContent>
           </Card>
 
