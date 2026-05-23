@@ -30,6 +30,7 @@ cloudinary.config({
  * @returns Array of uploaded image details
  */
 export async function uploadImages(formData: FormData): Promise<IImage[]> {
+  console.log('Received formData:', formData);
   const folder = (formData.get('folder') as string) || 'nien-su-viet';
   const files = formData.getAll('image') as File[];
 
