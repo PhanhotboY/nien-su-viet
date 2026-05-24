@@ -25,7 +25,6 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { HISTORICAL_EVENT } from '@/constants/historical-event.constant';
 import { useLocale } from 'next-intl';
-import { initial } from 'lodash';
 
 interface EventFormProps {
   initialData?: components['schemas']['HistoricalEventBaseCreateDto'];
