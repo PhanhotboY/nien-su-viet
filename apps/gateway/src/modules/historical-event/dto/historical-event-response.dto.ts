@@ -1,9 +1,11 @@
-import { Exclude, Expose, Type } from 'class-transformer';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { OmitType, PickType } from '@nestjs/swagger';
 import { HistoricalEventBaseDto } from './historical-event-base.dto';
 import { EventCategoriesBriefResponseDto } from '@phanhotboy/nsv-common/dto/event-categories';
-import { IsString } from 'class-validator';
+import { IsIn, IsString } from 'class-validator';
 import { UserBriefResponseDto } from '@gateway/modules/auth/dto';
+import { toEventDateType } from '@historical-event/helper/dateType.helper';
+import { HISTORICAL_EVENT } from 'apps/client/src/constants/historical-event.constant';
 
 // DTO for response historical event
 @Exclude()
@@ -12,17 +14,29 @@ export class HistoricalEventBriefResponseDto extends PickType(
   [
     'id',
     'name',
-    'fromDateType',
     'fromDay',
     'fromMonth',
     'fromYear',
-    'toDateType',
     'toDay',
     'toMonth',
     'toYear',
     'thumbnail',
   ],
 ) {
+  @Expose()
+  @Transform(({ value }) => toEventDateType(value))
+  @IsIn(Object.values(HISTORICAL_EVENT.EVENT_DATE_TYPE), {
+    message: 'Loại ngày bắt đầu không hợp lệ.',
+  })
+  fromDateType!: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>;
+
+  @Expose()
+  @Transform(({ value }) => toEventDateType(value))
+  @IsIn(Object.values(HISTORICAL_EVENT.EVENT_DATE_TYPE), {
+    message: 'Loại ngày bắt đầu không hợp lệ.',
+  })
+  toDateType!: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>;
+
   @Expose()
   @Type(() => UserBriefResponseDto)
   author!: UserBriefResponseDto;

@@ -14,9 +14,13 @@ function toGrpcEventDateType(
   }
 }
 
+const eventDateTypeValues = Object.values(HISTORICAL_EVENT.EVENT_DATE_TYPE);
 function toEventDateType(
   dateType?: Values<typeof EventDateType>,
 ): Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE> {
+  if (eventDateTypeValues.includes(dateType as any)) {
+    return dateType as any;
+  }
   switch (dateType) {
     case EventDateType.EXACT:
       return HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT;

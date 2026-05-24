@@ -17,24 +17,24 @@ export function Serialize<T>(dto: ClassConstructor<T>) {
     intercept(_ctx: ExecutionContext, next: CallHandler): Observable<any> {
       return next.handle().pipe(
         map((data) => {
-          const serializeResponseData = (data: any) =>
-            Array.isArray(data)
-              ? data.map((d) =>
-                  plainToInstance(dto, d, { excludeExtraneousValues: true }),
-                )
-              : plainToInstance(dto, data, { excludeExtraneousValues: true });
-
           if (data?.pagination || data?.data) {
             return {
               ...data,
-              data: serializeResponseData(data.data),
+              data: serializeResponseData(data.data, dto),
             };
           }
 
-          return serializeResponseData(data);
+          return serializeResponseData(data, dto);
         }),
       );
     }
   }
   return UseInterceptors(SerializeInterceptor);
 }
+
+const serializeResponseData = (data: any, dto: ClassConstructor<any>) =>
+  Array.isArray(data)
+    ? data.map((d) =>
+        plainToInstance(dto, d, { excludeExtraneousValues: true }),
+      )
+    : plainToInstance(dto, data, { excludeExtraneousValues: true });
