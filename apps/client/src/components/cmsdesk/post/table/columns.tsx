@@ -5,10 +5,36 @@ import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
-import { categories, statuses } from './data/data';
+import { statuses } from './data/data';
 import { PostBriefResponseDto } from '@/types/collection';
+import Link from '@/i18n/navigation';
 
 export const columns: ColumnDef<PostBriefResponseDto>[] = [
+  {
+    accessorKey: 'thumbnail',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Thumbnail" />
+    ),
+    cell: ({ row }) => {
+      const thumbnail: string = row.getValue('thumbnail');
+      if (!thumbnail) {
+        return null;
+      }
+      return (
+        <div className="w-28 h-full items-center aspect-square">
+          <img
+            src={thumbnail}
+            alt="Thumbnail"
+            className="w-full h-full object-contain"
+          />
+        </div>
+      );
+    },
+    enableHiding: false,
+    enableSorting: false,
+    enableColumnFilter: false,
+    maxSize: 100,
+  },
   {
     accessorKey: 'title',
     header: ({ column }) => (
@@ -16,11 +42,16 @@ export const columns: ColumnDef<PostBriefResponseDto>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue('title')}
-          </span>
-        </div>
+        <Link
+          href={`/cmsdesk/posts/${row.getValue('id')}`}
+          className="flex space-x-2 hover:underline"
+        >
+          <div className="flex space-x-2">
+            <span className="max-w-[500px] truncate font-medium">
+              {row.getValue('title')}
+            </span>
+          </div>
+        </Link>
       );
     },
     enableHiding: false,

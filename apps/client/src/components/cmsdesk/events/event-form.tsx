@@ -54,7 +54,7 @@ export function EventForm({
     toDay: initialData?.toDay,
     thumbnail: initialData?.thumbnail,
     fromDateType:
-      initialData?.fromDateType || HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT,
+      initialData?.fromDateType || HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE,
     toDateType:
       initialData?.toDateType || HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT,
   });
@@ -184,11 +184,7 @@ export function EventForm({
                   <SelectContent>
                     {Object.values(HISTORICAL_EVENT.EVENT_DATE_TYPE).map(
                       (type, index) => (
-                        <SelectItem
-                          key={index}
-                          value={type.toString()}
-                          defaultValue={formData.fromDateType}
-                        >
+                        <SelectItem key={index} value={type.toString()}>
                           {type === HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT
                             ? 'Cụ thể'
                             : 'Xấp xỉ'}
@@ -297,11 +293,7 @@ export function EventForm({
                   <SelectContent>
                     {Object.values(HISTORICAL_EVENT.EVENT_DATE_TYPE).map(
                       (type, index) => (
-                        <SelectItem
-                          key={index}
-                          value={type}
-                          defaultValue={formData.toDateType}
-                        >
+                        <SelectItem key={index} value={type}>
                           {type === HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT
                             ? 'Cụ thể'
                             : 'Xấp xỉ'}
