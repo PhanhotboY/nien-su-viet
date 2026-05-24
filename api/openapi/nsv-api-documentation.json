@@ -1369,6 +1369,20 @@
           "excerpt": {
             "type": "string"
           },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
           "author": {
             "$ref": "#/components/schemas/UserBriefResponseDto"
           },
@@ -1379,13 +1393,6 @@
           "name": {
             "type": "string",
             "minLength": 1
-          },
-          "fromDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
           },
           "fromDay": {
             "type": "number",
@@ -1399,13 +1406,6 @@
           },
           "fromYear": {
             "type": "number"
-          },
-          "toDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
           },
           "toDay": {
             "type": "number",
@@ -1428,12 +1428,12 @@
         "required": [
           "categories",
           "excerpt",
+          "fromDateType",
+          "toDateType",
           "author",
           "id",
           "name",
-          "fromDateType",
-          "fromYear",
-          "toDateType"
+          "fromYear"
         ]
       },
       "HistoricalEventDetailResponseDto": {
@@ -1450,13 +1450,6 @@
             "type": "string",
             "minLength": 1
           },
-          "fromDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
-          },
           "fromDay": {
             "type": "number",
             "minimum": 1,
@@ -1469,13 +1462,6 @@
           },
           "fromYear": {
             "type": "number"
-          },
-          "toDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
           },
           "toDay": {
             "type": "number",
@@ -1493,6 +1479,20 @@
           "thumbnail": {
             "type": "string",
             "format": "uri"
+          },
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
           },
           "author": {
             "$ref": "#/components/schemas/UserBriefResponseDto"
@@ -1508,8 +1508,8 @@
           "content",
           "id",
           "name",
-          "fromDateType",
           "fromYear",
+          "fromDateType",
           "toDateType",
           "author",
           "categories"
@@ -1518,6 +1518,20 @@
       "HistoricalEventBriefResponseDto": {
         "type": "object",
         "properties": {
+          "fromDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
+          "toDateType": {
+            "type": "string",
+            "enum": [
+              "EXACT",
+              "APPROXIMATE"
+            ]
+          },
           "author": {
             "$ref": "#/components/schemas/UserBriefResponseDto"
           },
@@ -1528,13 +1542,6 @@
           "name": {
             "type": "string",
             "minLength": 1
-          },
-          "fromDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
           },
           "fromDay": {
             "type": "number",
@@ -1548,13 +1555,6 @@
           },
           "fromYear": {
             "type": "number"
-          },
-          "toDateType": {
-            "type": "string",
-            "enum": [
-              "EXACT",
-              "APPROXIMATE"
-            ]
           },
           "toDay": {
             "type": "number",
@@ -1575,12 +1575,12 @@
           }
         },
         "required": [
+          "fromDateType",
+          "toDateType",
           "author",
           "id",
           "name",
-          "fromDateType",
-          "fromYear",
-          "toDateType"
+          "fromYear"
         ]
       },
       "PaginationMetadataDto": {

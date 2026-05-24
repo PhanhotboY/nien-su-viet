@@ -29,12 +29,14 @@ import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
+import Link from '@/i18n/navigation';
 
 interface PostEditButtonProps {
-  id?: string;
+  id: string;
+  published?: boolean;
 }
 
-const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
+const PostEditButton: FC<PostEditButtonProps> = ({ id, published = false }) => {
   const router = useRouter();
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
@@ -87,6 +89,20 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
               {protectedPostConfig.edit}
             </a>
           </DropdownMenuItem>
+          {published && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link
+                  className="flex w-full"
+                  href={`/posts/${id}`}
+                  target="_blank"
+                >
+                  {protectedPostConfig.viewPublished}
+                </Link>
+              </DropdownMenuItem>
+            </>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex cursor-pointer items-center text-destructive focus:text-destructive"

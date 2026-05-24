@@ -6,7 +6,6 @@ import { DataTable } from '@/components/cmsdesk/post/table/data-table';
 import { protectedPostConfig } from '@/config/cmsdesk';
 import { findPosts } from '@/services/post.service';
 import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
 import { FC } from 'react';
 
 export const revalidate = 0;

@@ -10,5 +10,10 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  return <PostEditButton id={row.getValue('id')} />;
+  return (
+    <PostEditButton
+      id={row.getValue('id')}
+      published={row.getValue('published')}
+    />
+  );
 }
