@@ -6,7 +6,7 @@ export async function generateStaticParams() {
   try {
     const { data: posts } = await getPublicPosts({
       page: '1',
-      limit: '1000',
+      limit: '100',
     });
     return posts.map((post) => ({
       slug: post.slug.split('/'),
