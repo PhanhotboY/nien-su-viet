@@ -139,9 +139,9 @@ export function HistoricalEventTimeline() {
   const [error, setError] = useState<Error | null>(null);
   const t = useTranslations('EventPage');
   const now = new Date();
-  // Start with a default range of 15 years before and after today
+  // Start with a default range of 50 years before and after today
   const [startDate, setStartDate] = useState(
-    new Date(now.getFullYear() - 15, now.getMonth(), now.getDate()),
+    new Date(now.getFullYear() - 50, now.getMonth(), now.getDate()),
   );
   const [endDate, setEndDate] = useState(
     new Date(now.getFullYear(), now.getMonth(), now.getDate()),
@@ -201,28 +201,13 @@ export function HistoricalEventTimeline() {
     const initTimeline = () => {
       if (cancelled || !timelineRef.current) return;
 
-      const items = new DataSet<VisItem>(
-        events.data
-          .map((event) => {
-            const timestamps = eventTimestamps.get(event.id);
-            if (!timestamps) return null;
-
-            const { start: eventStartMs, end: eventEndMs } = timestamps;
-            const start = new Date(eventStartMs);
-            const end =
-              eventEndMs !== eventStartMs ? new Date(eventEndMs) : undefined;
-
-            return {
-              id: event.id,
-              content: '',
-              start,
-              end,
-              title: event.name,
-              type: end ? ('range' as const) : ('point' as const),
-            };
-          })
-          .filter(Boolean) as VisItem[],
-      );
+      const items = filterDisplayedEvents({
+        events,
+        eventTimestamps,
+        searchResults: null, // No search filter on initial load
+        startDate,
+        endDate,
+      });
 
       // Format label functions - moved outside to reduce allocations
       const formatDateLabel = (date: any, scale: string): string => {
@@ -375,33 +360,6 @@ export function HistoricalEventTimeline() {
     }
   }, [timeline, startDate, endDate, handleZoomDate]);
 
-  // Helper to convert event to VisItem
-  const eventToVisItem = useCallback(
-    (
-      event: components['schemas']['HistoricalEventBriefResponseDto'],
-    ): VisItem => {
-      const timestamps = eventTimestamps.get(event.id);
-      if (!timestamps) {
-        throw new Error(`No timestamps found for event ${event.id}`);
-      }
-
-      const { start: eventStartMs, end: eventEndMs } = timestamps;
-      const start = new Date(eventStartMs);
-      const end =
-        eventEndMs !== eventStartMs ? new Date(eventEndMs) : undefined;
-
-      return {
-        id: event.id,
-        content: '',
-        start,
-        end,
-        title: event.name,
-        type: end ? ('range' as const) : ('point' as const),
-      };
-    },
-    [eventTimestamps],
-  );
-
   // Memoize search results for efficiency
   const searchResults = useMemo(() => {
     if (!searchTermDebounced || !eventsIndex) return null;
@@ -410,66 +368,24 @@ export function HistoricalEventTimeline() {
     );
   }, [searchTermDebounced, eventsIndex]);
 
-  useEffect(
-    function filterEventsOnDateChange() {
-      if (!timeline || !events) return;
+  useEffect(() => {
+    if (!timeline || !events) {
+      return;
+    }
 
-      const startDateMs = startDate.getTime();
-      const endDateMs = endDate.getTime();
-      const timelineRange = endDateMs - startDateMs;
-
-      const filteredItems = events.data
-        .filter((event) => {
-          // Apply search filter first (fastest rejection)
-          if (searchResults && !searchResults.has(event.id)) {
-            return false;
-          }
-
-          const timestamps = eventTimestamps.get(event.id);
-          if (!timestamps) return false;
-
-          const { start: eventStart, end: eventEnd } = timestamps;
-          const eventRange = eventEnd - eventStart;
-
-          // Remove events that are too short compared to the current timeline range to avoid clutter
-          if (eventRange > 0 && timelineRange / eventRange > 6) {
-            return false;
-          }
-
-          // Check if event overlaps with visible timeline
-          return (
-            (eventStart >= startDateMs && eventStart <= endDateMs) ||
-            (eventEnd >= startDateMs && eventEnd <= endDateMs) ||
-            (eventStart <= startDateMs && eventEnd >= endDateMs)
-          );
-        })
-        .map(eventToVisItem);
-
-      // Limit to 20 items for performance
-      const items = new DataSet<VisItem>(
-        filteredItems
-          .sort((a, b) => {
-            // Prioritize events with duration, then sort by duration (longer first)
-            const hasEndA = a.end != null;
-            const hasEndB = b.end != null;
-            if (hasEndA !== hasEndB) return hasEndB ? 1 : -1;
-
-            const durationA =
-              (a.end?.getTime() ?? a.start.getTime()) - a.start.getTime();
-            const durationB =
-              (b.end?.getTime() ?? b.start.getTime()) - b.start.getTime();
-            return durationB - durationA;
-          })
-          .slice(0, 20),
-      );
-      try {
-        timeline.setItems(items);
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [startDate, endDate, searchResults],
-  );
+    const filteredEvents = filterDisplayedEvents({
+      events,
+      eventTimestamps,
+      searchResults,
+      startDate,
+      endDate,
+    });
+    try {
+      timeline.setItems(filteredEvents);
+    } catch (err) {
+      console.error('Error updating timeline items:', err);
+    }
+  }, [startDate, endDate, searchResults]);
 
   return (
     <Card className="py-0">
@@ -508,3 +424,92 @@ export function HistoricalEventTimeline() {
     </Card>
   );
 }
+
+function filterDisplayedEvents({
+  events,
+  eventTimestamps,
+  searchResults,
+  startDate,
+  endDate,
+}: {
+  events: IPaginatedResponse<
+    components['schemas']['HistoricalEventBriefResponseDto']
+  >;
+  eventTimestamps: Map<string, { start: number; end: number }>;
+  searchResults: Set<string> | null;
+  startDate: Date;
+  endDate: Date;
+}) {
+  const startDateMs = startDate.getTime();
+  const endDateMs = endDate.getTime();
+  const timelineRange = endDateMs - startDateMs;
+
+  const filteredItems = events.data
+    .filter((event) => {
+      // Apply search filter first (fastest rejection)
+      if (searchResults && !searchResults.has(event.id)) {
+        return false;
+      }
+
+      const timestamps = eventTimestamps.get(event.id);
+      if (!timestamps) return false;
+
+      const { start: eventStart, end: eventEnd } = timestamps;
+      const eventRange = eventEnd - eventStart;
+
+      // Remove events that are too short compared to the current timeline range to avoid clutter
+      if (eventRange > 0 && timelineRange / eventRange > 6) {
+        return false;
+      }
+
+      // Check if event overlaps with visible timeline
+      return (
+        (eventStart >= startDateMs && eventStart <= endDateMs) ||
+        (eventEnd >= startDateMs && eventEnd <= endDateMs) ||
+        (eventStart <= startDateMs && eventEnd >= endDateMs)
+      );
+    })
+    .map((event) => eventToVisItem(eventTimestamps, event));
+
+  // Limit to 20 items for performance
+  return new DataSet<VisItem>(
+    filteredItems
+      .sort((a, b) => {
+        // Prioritize events with duration, then sort by duration (longer first)
+        const hasEndA = a.end != null;
+        const hasEndB = b.end != null;
+        if (hasEndA !== hasEndB) return hasEndB ? 1 : -1;
+
+        const durationA =
+          (a.end?.getTime() ?? a.start.getTime()) - a.start.getTime();
+        const durationB =
+          (b.end?.getTime() ?? b.start.getTime()) - b.start.getTime();
+        return durationB - durationA;
+      })
+      .slice(0, 20),
+  );
+}
+
+// Helper to convert event to VisItem
+const eventToVisItem = (
+  eventTimestamps: Map<string, { start: number; end: number }>,
+  event: components['schemas']['HistoricalEventBriefResponseDto'],
+): VisItem => {
+  const timestamps = eventTimestamps.get(event.id);
+  if (!timestamps) {
+    throw new Error(`No timestamps found for event ${event.id}`);
+  }
+
+  const { start: eventStartMs, end: eventEndMs } = timestamps;
+  const start = new Date(eventStartMs);
+  const end = eventEndMs !== eventStartMs ? new Date(eventEndMs) : undefined;
+
+  return {
+    id: event.id,
+    content: '',
+    start,
+    end,
+    title: event.name,
+    type: end ? ('range' as const) : ('point' as const),
+  };
+};
