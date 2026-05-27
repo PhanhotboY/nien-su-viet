@@ -48,7 +48,7 @@ export async function generateMetadata({
   const resolvedParams = await params;
   const post = await getPostHandler(resolvedParams);
   const description = post?.summary?.slice(0, 100) + ('...' as string);
-  const slug = '/posts/' + post?.slug;
+  const path = '/posts/' + post?.slug;
 
   if (!post) {
     return {};
@@ -58,7 +58,7 @@ export async function generateMetadata({
     title: post.title,
     description,
     locale: resolvedParams.locale,
-    path: `/posts/${post.slug}`,
+    path,
     images: [post.thumbnail || '/assets/image/not-found.webp'],
   });
 }
