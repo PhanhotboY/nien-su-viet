@@ -1,6 +1,7 @@
 import { CLIENT_HOST } from '@/lib/config';
 import { getPublicPosts } from '@/services/post.service';
 import { getEvents } from '@/services/historical-event.service';
+import { ethnicGroupsMap } from '@/data/vi/vietnamese-ethnic-groups';
 import { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -25,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     //   getPublicPosts(),
     //   getEvents({ page: '1', limit: '100' }),
     // ]);
-    const { data: posts } = await getPublicPosts({page:'1', limit: '100'});
+    const { data: posts } = await getPublicPosts({ page: '1', limit: '100' });
     const postRoutes = locales.map(
       (locale) =>
         posts?.map((post) =>
@@ -39,20 +40,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ) || [],
     );
 
-    // const eventRoutes = locales.map(
-    //   (locale) =>
-    //     events?.map((event) =>
-    //       genSitemap({
-    //         path: `/su-kien/${event.id}`,
-    //         locale,
-    //         lastModified: new Date(),
-    //         changeFrequency: 'monthly' as const,
-    //         priority: 0.6,
-    //       }),
-    //     ) || [],
-    // );
+    const dantocRoutes = locales.map((locale) =>
+      [...ethnicGroupsMap.keys()].map((slug) =>
+        genSitemap({
+          path: `/dan-toc/${slug}`,
+          locale,
+          lastModified: new Date(),
+          changeFrequency: 'yearly' as const,
+          priority: 0.6,
+        }),
+      ),
+    );
 
-    return [...defaultRoutes, ...postRoutes].flat();
+    return [...defaultRoutes, ...postRoutes, ...dantocRoutes].flat();
   } catch (e) {
     console.error('Error generating sitemap:', e);
     return defaultRoutes.flat();
