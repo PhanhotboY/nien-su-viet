@@ -358,6 +358,28 @@ export default async function DanTocDetailPage({ params }: Props) {
         </div>
       </div>
 
+      {/* Credit Section */}
+      <div className="border-t border-border/40 bg-muted/20">
+        <div className="container mx-auto px-4 py-8">
+          <div className="mx-auto text-center">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+              {t('dataSource')}
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {t('creditText')}{' '}
+              <a
+                href={detail.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                CỔNG THÔNG TIN ĐIỆN TỬ BỘ DÂN TỘC VÀ TÔN GIÁO
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Bottom Navigation */}
       <div className="border-t border-border/40 bg-card/30 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-8">

@@ -496,7 +496,9 @@
     "notFoundDescription": "The ethnic group you are looking for does not exist or has been deleted.",
     "viewDetails": "View details",
     "seeMore": "See more",
-    "images": "Images"
+    "images": "Images",
+    "dataSource": "Data Source",
+    "creditText": "Information compiled from"
   },
   "Shared": {
     "author": "Author",

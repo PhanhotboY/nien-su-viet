@@ -496,7 +496,9 @@
     "notFoundDescription": "Dân tộc bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
     "viewDetails": "Xem chi tiết",
     "seeMore": "Xem thêm",
-    "images": "Hình ảnh"
+    "images": "Hình ảnh",
+    "dataSource": "Nguồn dữ liệu",
+    "creditText": "Thông tin được tổng hợp từ"
   },
   "Shared": {
     "author": "Tác giả",
