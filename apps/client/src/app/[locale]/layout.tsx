@@ -31,7 +31,11 @@ export default async function AdminLayout({
   const messages = await getMessages({ locale });
 
   return (
-    <html lang={locale} className={inter.className}>
+    <html
+      lang={locale}
+      className={inter.className}
+      data-scroll-behavior="smooth"
+    >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link

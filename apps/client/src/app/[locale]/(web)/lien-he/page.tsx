@@ -26,6 +26,7 @@ type Props = {
   params: Promise<{ locale: string }>;
 };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const path = '/lien-he';
   try {
     const { locale } = await params;
     const metadata = await getMetadata({ locale });
@@ -36,14 +37,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${t('header.title')} - ${metadata.title}`,
       description: t('header.description'),
       locale,
-      path: '/lien-he',
+      path,
       logo: metadata.logo,
     });
   } catch (error) {
     const title = 'Nien Su Viet';
     const description = 'Vietnam history timeline website';
 
-    return genMetadata({ title, description, locale: 'vi', path: '/' });
+    return genMetadata({ title, description, locale: 'vi', path });
   }
 }
 
