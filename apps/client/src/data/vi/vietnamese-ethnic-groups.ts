@@ -3,13 +3,25 @@ export const ethnicGroups = [
   {
     code: '01',
     name: 'BỐ Y',
-    slug: 'bo-y',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-bo-y.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-bo-y.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/a9ece33f-5d34-45d6-896c-1e2dff521002_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/137980ca-c4aa-4ee4-8651-87a9a29efc7d_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/c5310973-4668-4316-ab23-0b681340eb50_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI BỐ Y',
       self_name: 'Bố Y.',
       other_names: 'Chủng Chá, Trọng Gia...',
@@ -40,17 +52,26 @@ export const ethnicGroups = [
       entertainment:
         'Trong dịp hội hè, người Bố Y có các trò chơi đánh đu, cờ tướng, đánh quay, đánh khăng.',
     },
+    slug: 'nguoi-bo-y',
   },
   {
     code: '02',
     name: 'BANA',
-    slug: 'bana',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-bana.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-bana.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/2e2bbd10-f398-4acc-aaa4-6d8c8f636581_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/13c16ddc-e5ec-4e2d-87d9-797c2c578340_201606061.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI BANA',
       self_name: 'Ba Na.',
       other_names: 'Bơ Nâm, Roh, Kon Kđe, Ala Kông, Kpang Kông...',
@@ -78,17 +99,30 @@ export const ethnicGroups = [
       entertainment:
         'Phổ biến là các trò chơi : đuổi bắt ( đru đra ), c­ướp dây, hất đá, nhảy đập nhịp, thả diều, đá cầu, đi cà kheo, đánh quay, đánh vòng...',
     },
+    slug: 'nguoi-bana',
   },
   {
     code: '03',
     name: 'CHĂM',
-    slug: 'cham',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-cham.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-cham.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/4cdab2be-6306-40dd-9de0-65e21c14b593_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/c2eeabf7-7f56-4c8c-bd7d-a7936f51abef_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/58ab0f20-a05e-4b1b-afd2-b7797a5f060d_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI CHĂM',
       self_name: '',
       other_names: 'Chàm, Chiêm, Chiêm Thành, Chăm Pa, Hời...',
@@ -120,17 +154,30 @@ export const ethnicGroups = [
       entertainment:
         'Trẻ em thích đánh cù và thả diều, đánh trận giả, thi cướp cờ, chơi trò bịt mắt bắt dê.',
     },
+    slug: 'nguoi-cham',
   },
   {
     code: '04',
     name: 'BRÂU',
-    slug: 'brau',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-brau.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-brau.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/dc0b9f39-af41-40cc-8447-1175f34fe14d_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/cb0ef96d-6815-484f-a4b8-d764df7f9e61_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/e6094c2b-5dbe-4061-91cc-48fdebbaf588_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI BRÂU',
       self_name: '',
       other_names: 'Brao.',
@@ -160,17 +207,34 @@ export const ethnicGroups = [
       entertainment:
         'người Brâu có các trò chơi vui giải trí như đánh cù, thả diều sáo, hay diều bươm bướm, bơi lội trên sông, cướp dây, bịt mắt đi tìm, đi cà kheo...',
     },
+    slug: 'nguoi-brau',
   },
   {
     code: '05',
     name: 'CHỨT',
-    slug: 'chut',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-chut.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-chut.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/d1822f3b-b987-484f-9daf-090404a4b16f_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/e18a1e10-3bbd-41fe-8c4b-7efaa9a95595_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/53b7f34e-b2c9-43aa-b60b-cc53c68f86f4_201606062.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/ae7de9df-e932-4504-80ca-ec6b78508006_201606063.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI CHỨT',
       self_name: 'Chứt.',
       other_names: 'Rục, Arem, Sách.',
@@ -202,17 +266,30 @@ export const ethnicGroups = [
       entertainment:
         'Trong các dịp lễ tết, trẻ em chơi cầu lông làm bằng lông gà, đánh găng, người lớn thổi sáo, hát hò.',
     },
+    slug: 'nguoi-chut',
   },
   {
     code: '06',
     name: 'CHƠ RO',
-    slug: 'cho-ro',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-cho-ro.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-cho-ro.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/1cc885e5-62bb-4007-875c-854576301128_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/51e8e34c-f8e7-4daf-aa86-8b54540a9fad_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/69bc03c8-fc59-46f9-b7d6-f504f6371195_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI CHƠ RO',
       self_name: '',
       other_names: 'Châu Ro, Dơ Ro, Chro, Thượng.',
@@ -241,17 +318,30 @@ export const ethnicGroups = [
       entertainment:
         'Trẻ em thích chơi kéo co, cướp cành lá, bịt mắt bắt nhau, thả diều và đánh cù.',
     },
+    slug: 'nguoi-cho-ro',
   },
   {
     code: '07',
     name: 'CHU-RU',
-    slug: 'chu-ru',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-chu-ru.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-chu-ru.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/b8763f55-9965-44cd-9bb6-6188a29fa258_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/29aa7db0-2774-4c93-b4ef-607bc3bbcf6b_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/f4c66cb5-d1a7-445a-949e-81896351562d_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI CHU-RU',
       self_name: '',
       other_names: 'Chơ Ru, Kru, Thượng.',
@@ -283,17 +373,30 @@ export const ethnicGroups = [
       entertainment:
         'Sở thích của trẻ em là đánh cù, chơi thả diều (diều bướm và diều sáo). Chúng cũng hay chơi trò kéo co, đi cà kheo, đuổi bắt nhau...',
     },
+    slug: 'nguoi-chu-ru',
   },
   {
     code: '08',
     name: 'CỐNG',
-    slug: 'cong',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-cong.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-cong.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/98fd9519-b5ef-4cc7-89b3-5fe073cd9ca3_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/a678787c-ef74-404e-b03d-0732dcd516a5_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/04563937-a83c-433d-8c26-617128d36100_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI CỐNG',
       self_name: 'Xắm khống, Phuy A.',
       other_names: '',
@@ -325,17 +428,30 @@ export const ethnicGroups = [
       entertainment:
         'Các trò chơi tập thể như đuổi bắt, đánh khăng... được trẻ em ưa thích. Ngoài ra, chúng còn chơi các loại đồ chơi bằng tre gỗ tự chế.',
     },
+    slug: 'nguoi-cong',
   },
   {
     code: '09',
     name: 'Ê-ĐÊ',
-    slug: 'e-de',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-e-de.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-e-de.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/30a56905-f35d-46af-9cdb-ee6bed044966_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/9a617f85-9989-4c29-988a-61cbedf16bc9_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/cf452efc-a7ee-4d34-922e-292e87c2389c_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI Ê-ĐÊ',
       self_name: 'Anăk Ea Ðê, Ra Ðê (hay Rhađê), ê Ðê, êgar, Ðê.',
       other_names: '',
@@ -368,17 +484,30 @@ export const ethnicGroups = [
       entertainment:
         'Trẻ em thường thích chơi cù quay, thả diều vằng có sáo trúc. Trò chơi đi cà kheo trên cao nguyên cũng lôi cuốn không ít thiếu niên ê Ðê ở nhiều nơi. Trò bịt mắt dê, ném lao (ném xa và ném trúng mục tiêu cũng được nhiều trẻ em ê Ðê ưa thích.',
     },
+    slug: 'nguoi-e-de',
   },
   {
     code: '10',
     name: 'GIÁY',
-    slug: 'giay',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-giay.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-giay.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/3a5df497-6145-4b87-9ee1-4e6f1ffaff54_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/a25e5df6-deaa-4e9f-a46b-8cbb847dc134_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/0632297f-7a03-47ff-9be3-03aad63f8810_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI GIÁY',
       self_name: 'Giáy',
       other_names: 'Nhắng, Giẳng',
@@ -409,17 +538,26 @@ export const ethnicGroups = [
       arts: 'trong kho tàng văn nghệ của người Giáy có truyện cổ, thơ ca, tục ngữ, đồng dao, phong dao... Ở người Giáy có ba kiểu hát mà họ gọi là "vươn" hay "phướn" hát bên mâm rượu, hát đêm và hát tiễn dặn...',
       entertainment: '',
     },
+    slug: 'nguoi-giay',
   },
   {
     code: '11',
     name: 'GIA RAI',
-    slug: 'gia-rai',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-gia-rai.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-gia-rai.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/b056c3f8-977c-4c85-8c48-0b8cb4f2138b_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/46ab8e85-2738-47c3-9f6d-3cf83156b84d_201606061.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI GIA RAI',
       self_name: 'Gia Rai.',
       other_names: 'Giơ Ray, Chơ Ray.',
@@ -450,17 +588,34 @@ export const ethnicGroups = [
       arts: 'Người Gia Rai có nhiều trường ca như Ðăm San, Xinh Nhã, Ðăm Di... thể hiện dưới hình thức hát thơ có đệm đàn Tưng nưng. Những điệu vũ dân gian Gia Rai có một số động tác mô phỏng những cuộc chiến tranh giữa các bộ tộc. Ðàn Tơ rưng, Krông put, Tưng nưng ... rất được phổ biến.',
       entertainment: 'Thanh niên thích chơi kéo co trong ngày lễ.',
     },
+    slug: 'nguoi-gia-rai',
   },
   {
     code: '12',
     name: 'DAO',
-    slug: 'dao',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-dao.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-dao.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/b16ed8fb-e3cc-45d0-830d-be15b98fc3f8_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/22f1b33b-ae76-43e7-a210-322a4145a6b9_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/47607679-3d85-4850-b0a5-376962a38c73_201606062.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/db5aecc3-b143-4854-a4af-c6c229dd651c_201606063.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI DAO',
       self_name: 'Kìm Miền, Kìm Mùn (người rừng).',
       other_names: 'Mán.',
@@ -493,17 +648,30 @@ export const ethnicGroups = [
       arts: 'Người Dao có vốn văn nghệ dân gian rất phong phú, nhiều truyện cổ, bài hát, thơ ca. Ðặc biệt truyện Quả bầu với nạn hồng thuỷ, Sự tích Bàn Vương rất phổ biến trong người Dao. Múa, nhạc được họ sử dụng chủ yếu trong các nghi lễ tôn giáo.',
       entertainment: 'Người Dao thích chơi đu, chơi quay, đi cà kheo.',
     },
+    slug: 'nguoi-dao',
   },
   {
     code: '13',
     name: 'HÀ NHÌ',
-    slug: 'ha-nhi',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ha-nhi.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ha-nhi.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/51355879-ea66-46fe-8682-46fe60285ffb_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/5872fd8f-c42f-4fba-9bb3-53a1265fe000_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/be04b8a6-267d-4039-a6db-74270232b421_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI HÀ NHÌ',
       self_name: 'Hà Nhi gia.',
       other_names: 'U Ní, Xá U Ní.',
@@ -536,17 +704,30 @@ export const ethnicGroups = [
       entertainment:
         'Trẻ em Hà Nhì thích chơi các trò chơi đòi hỏi lòng dũng cảm, khéo léo như đấu vật, đuổi bắt, trốn tìm, chơi cù, đu quay.',
     },
+    slug: 'nguoi-ha-nhi',
   },
   {
     code: '14',
     name: 'GIÉ-TRIÊNG',
-    slug: 'gie-trieng',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-gie-trieng.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-gie-trieng.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/d1d3005b-13f9-4086-9b15-1102a647744b_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/d1e54372-4f1f-41cf-9069-e6ee7a138508_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/a3b392e7-cd11-4fac-a90d-922a3cff63b5_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI GIÉ-TRIÊNG',
       self_name: 'Mỗi nhóm có tên tự gọi riêng như: Gié, Triêng, Ve, Bnoong.',
       other_names: 'Cà Tang, Giang Rẫy.',
@@ -580,17 +761,30 @@ export const ethnicGroups = [
       arts: 'Bộ nhạc cụ phong phú, quý giá và quan trọng nhất là cồng chiêng. Tuỳ nơi, người ta dùng 3 cồng với 7 hay 9 chiêng, hoặc 6 chiêng, hoặc 4 chiêng... Có khi cồng chiêng tấu cùng với trống, với ống nứa. Nguyên ống nứa cũng là loại nhạc cụ để thổi, vỗ, gõ. Các loại đàn sáo, khèn đều đơn giản, thông dụng trong đời sống âm nhạc. Người Gié-Triêng, cũng như các tộc khác, có những làn điệu dân ca cổ truyền và nhiều truyện cổ.',
       entertainment: '',
     },
+    slug: 'nguoi-gie-trieng',
   },
   {
     code: '15',
     name: 'HOA',
-    slug: 'hoa',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-hoa.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-hoa.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/92bd424e-e927-46a2-ae1d-b22473b29efa_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/b1305f31-a573-49e7-93f9-4bc32fa4982e_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/260f157a-624f-4498-ba6c-5b78d4fc607d_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI HOA',
       self_name: '',
       other_names: 'Khách, Hán, Tàu.',
@@ -619,17 +813,30 @@ export const ethnicGroups = [
       arts: 'Sinh hoạt văn hoá truyền thống của người Hoa có nhiều thể loại như hát, múa, hài kịch... với nhiều loại nhạc cụ: tiêu, sáo, các loại đàn (tỳ bà, nhị, nguyệt...), chập choã... Hát "sơn ca" (sán cố) là hình thức được nhiều người ưa chuộng, nhất là tầng lớp thanh niên. Tổ chức văn nghệ dân gian truyền thống mang tính nghiệp dư đã có từ lâu là các "nhạc xã".',
       entertainment: '',
     },
+    slug: 'nguoi-hoa',
   },
   {
     code: '16',
     name: 'HRÊ',
-    slug: 'hre',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-hre.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-hre.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/40b6daec-866f-4114-a55a-558c81104d7c_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/3b725db4-6913-47f1-9abe-3f2b0906b0d3_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/a18a60a1-0a29-41f1-a6eb-722f5bbe61c4_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI HRÊ',
       self_name:
         'Hrê, trước kia thường gắn với tên sông sở tại như: "người Krê" - sông Krế ở Sơn Hà; "người Hrê" - sông Hrê ở Ba Tơ; "người nước Ðinh" - sông Ðinh ở An Lão)...',
@@ -664,17 +871,30 @@ export const ethnicGroups = [
       arts: 'Nhạc cụ thường dùng là bộ chiêng ba chiếc, bộ cồng ba chiếc, trống, các loại đàn ống tre hoặc có vỏ bầu làm hợp âm, sáo, nhị, đàn môi, nữ giới chơi bộ ống vỗ hai chiếc. Dân ca phổ biến nhất là điệu Katê và Ka choi. Truyện cổ (Hmon) được lưu truyền như một vốn quý trong văn hoá dân tộc, gồm những đề tài khác nhau. Các mô típ hoa văn hình học dệt trên vải và thể hiện trên đồ đan cũng mang tính truyền thống lâu đời.',
       entertainment: '',
     },
+    slug: 'nguoi-hre',
   },
   {
     code: '17',
     name: 'KHÁNG',
-    slug: 'khang',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-khang.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-khang.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/52d9da0d-883d-4c49-8114-049be0075dcd_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/60b38202-a632-4e39-9618-783c52a25621_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/84678384-f23c-4217-9238-782f3a90d89c_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI KHÁNG',
       self_name: 'Mơ Kháng.',
       other_names: 'Háng, Brển, Xá.',
@@ -705,17 +925,30 @@ export const ethnicGroups = [
       arts: 'Những làn điệu dân ca của người Kháng thường phản ánh đời sống sinh hoạt hàng ngày. Nhiều người biết hát các bài hát, áng thơ của người Thái, thuộc nhiều tục ngữ cao dao.',
       entertainment: '',
     },
+    slug: 'nguoi-khang',
   },
   {
     code: '18',
     name: 'KHƠ MÚ',
-    slug: 'kho-mu',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-kho-mu.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-kho-mu.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/c6cb007c-56dd-426d-a0cc-aee1fdaa3e59_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/ec1b0af1-7c2d-476e-b363-39b01342a8b5_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/ab3d0fc3-6cde-4441-abb2-ccbc81c203f0_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI KHƠ MÚ',
       self_name: 'Kmụ, Kưm Mụ.',
       other_names:
@@ -748,17 +981,30 @@ export const ethnicGroups = [
       entertainment:
         'Trong các ngày lễ tết, trẻ em hay đánh cầu lông làm bằng lông gà, đánh quay và các trò chơi dân gian khác.',
     },
+    slug: 'nguoi-kho-mu',
   },
   {
     code: '19',
     name: 'KHMER',
-    slug: 'khmer',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-khmer.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-khmer.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/1d7a6df6-a6bf-459c-95c2-ca85148f7eda_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/adf8c717-a4ee-45eb-8ea5-0577de03f659_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/d5769f04-7f70-47c4-a646-846d13de189f_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI KHMER',
       self_name: 'Người Khmer.',
       other_names: 'Cur, Cul, Cu Thổ, Việt gốc Miên, Khơ Me K’rôm.',
@@ -788,17 +1034,26 @@ export const ethnicGroups = [
       arts: 'Người Khmer có cả một kho tàng phong phú về truyện cổ như thần thoại, truyền thuyết, cổ tích, ngụ ngôn, truyện cười, có một nền sân khấu truyền thống như Dù kê, Dì kê, một nền âm nhạc vừa có nguồn gốc ấn Ðộ, vừa có nguồn gốc Ðông Nam á. Nghệ thuật và kiến trúc chùa tháp được coi là di sản đặc sắc nhất của văn hoá Khmer. Trong các ngôi chùa Khmer của Phật giáo tiểu thừa (Thérévada), ngoài tượng Ðức Phật Thích Ca được tôn thờ duy nhất, chiếm vị trí trung tâm khu chính điện, vẫn tồn tại một hệ thống phong phú linh thần, linh thú - những dấu vết tàn dư còn lại của Bà la môn giáo và tín ngưỡng dân gian.',
       entertainment: '',
     },
+    slug: 'nguoi-khmer',
   },
   {
     code: '20',
     name: 'KINH',
-    slug: 'kinh',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-viet.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-viet.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/7dfd7424-da8f-42b7-844e-9d50df957982_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/901ee645-6b3a-4692-b927-f958bb6a94a7_201606061.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI KINH',
       self_name: '',
       other_names: 'Việt',
@@ -831,17 +1086,38 @@ export const ethnicGroups = [
       entertainment:
         'Người Việt có rất nhiều trò chơi cho mỗi lứa tuổi, mỗi giới, mỗi mùa, cho cá nhân và cho tập thể. Có những trò chơi thể hiện thú thưởng thức rất thanh cao như thả chim, thả diều, cờ tướng... Lại có những trò chơi mang tính thể thao và cộng đồng mạnh mẽ như kéo co, đánh đu, đánh vật, đua thuyền. Rất nhiều trò chơi mang dấu ấn lịch sử và đậm đà bản sắc như vật cù, nấu cơm thi, đánh pháo đất. Trò chơi trẻ em thì rất nhiều và mỗi địa phương mỗi sắc thái khác nhau. Lễ hội mùa xuân là nơi tập trung rất nhiều cho chơi dân tộc.',
     },
+    slug: 'nguoi-kinh',
   },
   {
     code: '21',
     name: 'LA CHÍ',
-    slug: 'la-chi',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-la-chi.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-la-chi.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/9135194f-ce39-4c28-aafe-ceaeb74411fd_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/8f45c734-577c-4215-80e6-2914079334cd_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/819da052-61b4-48b1-93ab-a9c5d55146c7_201606062.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/342807fb-f3fa-4109-97f9-395b8d16d101_201606063.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/508bf501-3039-49c5-afef-9049f82de93d_201606064.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI LA CHÍ',
       self_name: 'Cù tê.',
       other_names: 'Thổ Ðen, Mán, Xá.',
@@ -870,17 +1146,30 @@ export const ethnicGroups = [
       entertainment:
         'Tết Nguyên đán nam nữ thường tập trung ở bãi rộng chơi ném còn, đánh quay, chơi đu thăng bằng. Tết tháng tám họ chơi đu dây. Trẻ em thích chơi ống phốc.',
     },
+    slug: 'nguoi-la-chi',
   },
   {
     code: '22',
     name: 'LA HA',
-    slug: 'la-ha',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-la-ha.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-la-ha.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/1ba1f4f5-35f8-473d-947a-d17b40c3f10e_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/b0c36e60-9289-4cb7-a6e2-4b2503fa4f52_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/6290ac26-bf5b-481d-832d-e76aa17ce636_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI LA HA',
       self_name: 'La Ha, Klá, Phlạo.',
       other_names:
@@ -910,17 +1199,30 @@ export const ethnicGroups = [
       arts: 'Người La Ha hát, làm thơ bằng tiếng Thái khá thạo. Hai điệu múa đặc trưng là múa dương vật (linga) và múa cung kiếm',
       entertainment: '',
     },
+    slug: 'nguoi-la-ha',
   },
   {
     code: '23',
     name: 'LA HỦ',
-    slug: 'la-hu',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-la-hu.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-la-hu.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/5ef3143e-23ff-4e2f-adb0-1016c38a4244_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/5672de58-e224-46c1-9d59-da209cb2c10a_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/d62eeafd-cc9d-43d9-b19f-47ffe5b49fe8_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI LA HỦ',
       self_name: 'La Hủ.',
       other_names: 'Xá lá vàng, Cò Xung, Khù Sung, Kha Quy, Cọ Sọ, Nê Thú.',
@@ -953,17 +1255,34 @@ export const ethnicGroups = [
       entertainment:
         'Chiều chiều, trẻ em thường quây quần bên đống lửa quanh nhà, bên bờ suối vừa chơi, vừa hát, gõ cây làm nhịp',
     },
+    slug: 'nguoi-la-hu',
   },
   {
     code: '24',
     name: 'LÀO',
-    slug: 'lao',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-lao.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-lao.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/0901ae01-4eb4-447a-8ebc-17a1c807f3b2_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/807c48a5-7af8-4d16-89e0-4cc4527a2a19_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/f2e397aa-a91c-4988-889d-4a3b2da7ebe7_201606062.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/1543b22e-33dc-4e99-8fa4-f9869aa58f73_201606063.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI LÀO',
       self_name: 'Thay, Thay Duồn, Thay Nhuồn.',
       other_names: 'Phu Thay, Phu Lào.',
@@ -995,17 +1314,30 @@ export const ethnicGroups = [
       arts: 'Người Lào có vốn văn học dân gian phong phú với nhiều huyền thoại, cổ tích, dân ca... Phụ nữ Lào không chỉ hát hay mà còn rất giỏi các điệu dân vũ. Do sống xen kẽ lâu đời với người Thái, văn nghệ dân gian Lào ít nhiều chịu ảnh hưởng của văn hoá Thái. Chính điều đó đã làm cho văn nghệ của họ thêm phong phú.',
       entertainment: '',
     },
+    slug: 'nguoi-lao',
   },
   {
     code: '25',
     name: 'LÔ LÔ',
-    slug: 'lo-lo',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-lo-lo.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-lo-lo.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/62190bc9-7675-45a0-b453-a5f044e2fc3e_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/2301eafc-4770-4f7b-a4d7-6f0d0a5aa473_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/b6c59c9f-3523-438f-89dd-1962021257db_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI LÔ LÔ',
       self_name: 'Lô Lô.',
       other_names: 'Mùn Di, Di, Màn Di, La La, Qua La, Ô Man, Lu Lộc Màn.',
@@ -1036,17 +1368,30 @@ export const ethnicGroups = [
       arts: 'Là một trong số ít các dân tộc ở nước ta hiện nay còn sử dụng trống đồng trong sinh hoạt. Trống đồng là một nhạc cụ truyền thống của người Lô Lô gắn liền với huyền thoại về nạn hồng thuỷ. Truyện kể rằng: xưa có nạn lụt lớn, nước dâng cao đến tận trời. Có hai chị em nhờ trời cứu để chị vào trống đồng to, em vào trống đồng nhỏ. Hai chị em thoát chết nhờ trống nổi lên mặt nước. Hết lụt họ ở trên núi, sống với nhau thành vợ, thành chồng. Họ là thuỷ tổ của loài người tái sinh.',
       entertainment: '',
     },
+    slug: 'nguoi-lo-lo',
   },
   {
     code: '26',
     name: 'RƠ MĂM',
-    slug: 'ro-mam',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ro-mam.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ro-mam.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/d6a4dfc8-88a0-471d-9cfa-540cd537b45b_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/3f49c78e-24f1-4f14-a443-cf362a52f0b7_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/9b740bdf-841e-44c1-9671-beedb6809233_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI RƠ MĂM',
       self_name: '',
       other_names: '',
@@ -1079,17 +1424,26 @@ export const ethnicGroups = [
       arts: 'Những làn điệu dân ca, những bài hát giao duyên của nam nữ thanh niên, những câu chuyện kể của người già với bộ nhạc cụ gồm chiêng, trống và các loại đàn, sáo... được làm ra từ nguồn tre, nứa trong rừng là yếu tố chính tạo dựng nên nền văn nghệ dân gian của cư dân nơi đây.',
       entertainment: '',
     },
+    slug: 'nguoi-ro-mam',
   },
   {
     code: '27',
     name: 'LỰ',
-    slug: 'lu',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-lu.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-lu.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/8dfc5c33-90e6-472c-9ee6-12fc424b5f76_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/774c1578-77f0-4689-8c1b-4eabc7b86437_201606061.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI LỰ',
       self_name: 'Lừ, Thay hoặc Thay Lừ.',
       other_names: 'Phù Lừ, Nhuồn, Duồn.',
@@ -1122,17 +1476,30 @@ export const ethnicGroups = [
       entertainment:
         'Người Lự có các trò chơi kéo co, ném én. Nam thanh niên thích múa gươm.',
     },
+    slug: 'nguoi-lu',
   },
   {
     code: '28',
     name: 'MNÔNG',
-    slug: 'mnong',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-mnong.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-mnong.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/dec9e120-045c-4643-b046-3b6fededd8ea_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/9a447359-4b22-4266-8ecb-cde2a3c6db2c_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/0bb525f0-efdf-4835-b3ad-7766f6fb27a2_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI MNÔNG',
       self_name: 'Mnông.',
       other_names: '',
@@ -1164,17 +1531,30 @@ export const ethnicGroups = [
       entertainment:
         'Trẻ em thường thích chơi diều, đánh cù, bịt mắt bắt dê, chạy, nhảy...',
     },
+    slug: 'nguoi-mnong',
   },
   {
     code: '29',
     name: 'MƯỜNG',
-    slug: 'muong',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-muong.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-muong.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/a6768821-77ea-450d-b9d4-a965cac43c9d_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/164e948f-46ef-4c8a-a62c-0160035cb3b0_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/e9a88b99-bb48-4c8d-86de-aea7a612ac01_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI MƯỜNG',
       self_name: 'Mol (hoặc Mon, Moan, Mual).',
       other_names: '',
@@ -1205,17 +1585,38 @@ export const ethnicGroups = [
       entertainment:
         'Trò chơi của người Mường gần gũi với mọi đối tượng. Có những trò chơi được tổ chức chu đáo, công phu như: thi bắn nỏ, đánh đu, ném còn... Các trò chơi của lứa tuổi thiếu niên nhi đồng được tổ chức linh hoạt ở mọi nơi, mọi lúc với những điều kiện chơi đàn giản, tiện lợi như trò đánh cá cắt, trò cò le, trò đánh chó hoặc buôn chó, trò đánh mảng, trò chăm chỉ, chằm chăn.',
     },
+    slug: 'nguoi-muong',
   },
   {
     code: '30',
     name: 'MÔNG',
-    slug: 'mong',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-mong.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-mong.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/f3a3d399-96b7-4110-85bd-098cdf6d68e6_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/ab2e89a4-4d04-4fcb-bb4b-5b03b776a1aa_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/ebdce5d9-2546-465a-84fa-891defd7bc1e_201606062.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/6a8101d7-5f21-496c-bfc7-26f99c099ca4_201606063.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/dbce994d-7e0e-4b31-9e5b-b67cb873fe53_201606064.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI MÔNG',
       self_name: 'Mông, Na Miẻo.',
       other_names: 'Mẹo, Mèo, Miếu Hạ, Mán Trắng.',
@@ -1240,17 +1641,26 @@ export const ethnicGroups = [
       arts: 'Thanh niên thích chơi khèn, vừa thổi vừa múa. Khèn, trống còn được sử dụng trong đám ma, lúc viếng, trong các lễ cúng cơm. Kèn lá, đàn môi là phương tiện để thanh niên trao đổi tâm tình.',
       entertainment: '',
     },
+    slug: 'nguoi-mong',
   },
   {
     code: '31',
     name: 'NGÁI',
-    slug: 'ngai',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ngai.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ngai.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/eb385dc0-a411-41be-ba11-e5cafbe8ce87_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/e0d509bc-5896-4dbf-a3b3-aaea734a5872_201606061.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI NGÁI',
       self_name: 'Sán Ngải.',
       other_names: 'Ngái Hắc Cá, Ngái Lầu Mần, Hẹ, Sín, Ðản, Lê, Xuyến.',
@@ -1283,17 +1693,30 @@ export const ethnicGroups = [
       entertainment:
         'Người Ngái thích chơi cù, chơi khăng, đuổi bắt, đánh cầu lông gà, đá cầu chinh và vài trò chơi tập thể khác.',
     },
+    slug: 'nguoi-ngai',
   },
   {
     code: '32',
     name: 'NÙNG',
-    slug: 'nung',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-nung.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-nung.htm',
-      images: [],
+      images: [
+        {
+          url: 'https://files.bdttg.gov.vn/ContentFolder/ubdt/source_files/2015/10/31/10500925_nung2_15-10-31.jpg',
+          alt: '',
+        },
+        {
+          url: 'https://files.bdttg.gov.vn/ContentFolder/ubdt/source_files/2015/10/31/10500891_nung3_15-10-31.jpg',
+          alt: '',
+        },
+        {
+          url: 'https://files.bdttg.gov.vn/ContentFolder/ubdt/source_files/2015/10/31/10500751_nung5_15-10-31.jpg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI NÙNG',
       self_name: 'Nồng.',
       other_names: '',
@@ -1327,17 +1750,30 @@ export const ethnicGroups = [
       entertainment:
         'Trong các ngày tết, ngày lễ, ngày hội thường có một số trò chơi như tung còn, đánh cầu lông, đánh quay, kéo co...',
     },
+    slug: 'nguoi-nung',
   },
   {
     code: '33',
     name: 'PÀ THẺN',
-    slug: 'pa-then',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-pa-then.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-pa-then.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/da220353-a290-47b4-8e96-16928614a61f_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/1f34eb8e-22fa-464d-918b-db3d81fe8ca7_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/af14e2be-13f8-4ee4-a7bd-691eebba9239_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI PÀ THẺN',
       self_name: 'Pà Hưng.',
       other_names: 'Mèo Lài, Mèo Hoa, Mèo Ðỏ, Bát tiên tộc...',
@@ -1367,17 +1803,30 @@ export const ethnicGroups = [
       arts: 'Ðời sống văn nghệ phong phú như ca hát, thổi sáo và các trò chơi dân gian.',
       entertainment: '',
     },
+    slug: 'nguoi-pa-then',
   },
   {
     code: '34',
     name: 'Ơ ĐU',
-    slug: 'o-du',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-o-du.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-o-du.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/cad4bbf7-0562-40f5-b278-243c651e551d_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/3a7c195f-4219-4db2-90b8-129600cf7708_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/f3d3b57a-ad1a-4ffa-ac61-ba6a2dbc6a9a_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI Ơ ĐU',
       self_name: 'Ơ Ðu hoặc I Ðu.',
       other_names: 'Tày Hạt (người đói rách).',
@@ -1409,17 +1858,38 @@ export const ethnicGroups = [
       entertainment:
         'Người Ơ Ðu có vai trò chơi đánh khăng, chơi quay, ném còn, ô ăn quan.',
     },
+    slug: 'nguoi-o-du',
   },
   {
     code: '35',
     name: 'PHÙ LÁ',
-    slug: 'phu-la',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-phu-la.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-phu-la.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/6ccc0f8a-38aa-4af4-9925-f824bb729187_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/5c475f4a-7529-42be-8d49-1e1bb327faee_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/66d99be4-79e4-4e21-aef7-1d69b0449b79_201606062.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/3a630296-e259-4148-b5f3-978ddad494ea_201606063.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/d985d52b-49c8-44f2-ac07-a8df75db7617_201606064.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI PHÙ LÁ',
       self_name: 'Lao Va Xơ, Bồ Khô Pạ, Phù Lá.',
       other_names: 'Xá Phó, Cần Thin.',
@@ -1452,17 +1922,26 @@ export const ethnicGroups = [
       entertainment:
         'Trẻ em thích chơi đu quay, đá cầu, trốn tìm, đánh cỏ, chơi cù...',
     },
+    slug: 'nguoi-phu-la',
   },
   {
     code: '36',
     name: 'PU PÉO',
-    slug: 'pu-peo',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-pu-peo.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-pu-peo.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/bb0eab4a-e3d1-44f2-8dc3-99f711137eff_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/f8fcbbf9-af36-49b1-b5a3-8fc124206f8f_201606061.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI PU PÉO',
       self_name: 'Kabeo.',
       other_names: 'La Quả, Penti Lô Lô.',
@@ -1493,17 +1972,30 @@ export const ethnicGroups = [
       arts: 'Hát đám cưới xin dâu giữa nhà trai và nhà gái suốt 3-4 giờ trở thành một sinh hoạt văn nghệ rất độc đáo. Ðám cưới là dịp để trai gái ca hát, vui chơi.',
       entertainment: '',
     },
+    slug: 'nguoi-pu-peo',
   },
   {
     code: '37',
     name: 'RA GLAY',
-    slug: 'ra-glay',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ra-glai.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ra-glai.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/7c6bd2a1-bbf3-4e9a-b3be-61709cff1cad_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/fb245303-a0f0-4908-bc8e-67980c23680c_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/0c6179c9-1b40-44e8-9b25-5912d6873e0f_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI RA GLAY',
       self_name: '',
       other_names: '',
@@ -1536,17 +2028,30 @@ export const ethnicGroups = [
       arts: 'Ðó là những truyện cổ tích, thần thoại, những làn điệu dân ca, những câu tục ngữ, ca dao... thể hiện tâm tư, tình cảm của cư dân. Ðó cúng còn là bộ nhạc cụ khá phong phú của người Ra Glai. Bộ chiêng đồng đầy đủ với 12 chiếc. Tuy nhiên, có thể sử dụng 4, 6, 7 hay 9 chiếc. Khèn bầu, khèn môi, đàn ống tre khá phổ biến. Người Ra Glai cũng là cư dân biết sử dụng những thanh đá kêu, ghép thành bộ thường gọi là đàn đá, đánh thay chiêng, khá độc đáo và lý thú.',
       entertainment: '',
     },
+    slug: 'nguoi-ra-glay',
   },
   {
     code: '38',
     name: 'SÁN CHAY',
-    slug: 'san-chay',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-san-chay.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-san-chay.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/4b14bd82-f3ed-4819-9668-84fd8e108dc9_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/7bba4250-43f0-412b-b0aa-88b874d468e9_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/c381c319-f6e6-484b-a698-b264386a117b_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI SÁN CHAY',
       self_name: 'Sán Chay',
       other_names: 'Hờn Bán, Chùng, Trại...',
@@ -1580,17 +2085,26 @@ export const ethnicGroups = [
       entertainment:
         'Ðánh cầu lông, đánh quay là những trò chơi phổ biến của người Sán Chay. Trong ngày hội có nơi còn biểu diễn trò "trồng chuối", "vặn rau cải".',
     },
+    slug: 'nguoi-san-chay',
   },
   {
     code: '39',
     name: 'SÁN DÌU',
-    slug: 'san-diu',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-san-diu.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-san-diu.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/7ab323ee-e523-4376-9e7e-e31e587d72f1_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/301e2a08-4a99-4de0-bfab-de99a3dd6fe5_201606061.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI SÁN DÌU',
       self_name: 'San Déo Nhín (Sơn Dao Nhân).',
       other_names: 'Trại, Trại Ðất, Mán Quần cộc, Mán Váy xẻ...',
@@ -1620,17 +2134,30 @@ export const ethnicGroups = [
       arts: 'Giống như ở nhiều dân tộc khác, người Sán Dìu cũng có hát giao duyên nam nữ mà họ gọi là soọng cô, thường được hát về đêm. Có những cuộc hát kéo dài suốt nhiều đêm.',
       entertainment: '',
     },
+    slug: 'nguoi-san-diu',
   },
   {
     code: '40',
     name: 'TÀ ÔI',
-    slug: 'ta-oi',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ta-oi.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ta-oi.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/f195e50f-8b7f-4832-8970-70437cd1d2f2_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/56c11ada-6b1c-46ee-9872-9cbdd796be6d_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/39ed5b6a-a279-4d50-b629-9fda0797999c_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI TÀ ÔI',
       self_name: '',
       other_names: 'Tà Ôi, Pa Cô, Tà Uốt, KanTua, Pa Hy...',
@@ -1661,17 +2188,26 @@ export const ethnicGroups = [
       arts: 'Vốn tục ngữ, ca dao, câu đố, truyện cổ khá phong phú. Người già am hiểu thường kể cho con cháu các truyện thời xưa, có tác dụng vừa giải trí, vừa giáo dục. Dân ca có điệu Calơi đối đáp khi uống rượu, hội hè, điệu Ba boih hát một mình khi lao động hoặc đi đường, điệu Roih gửi gắm, dặn dò đối với các bậc con cháu nhân các dịp vui vẻ, điệu Cha chap dành cho tình cảm trai gái của thanh niên...',
       entertainment: '',
     },
+    slug: 'nguoi-ta-oi',
   },
   {
     code: '41',
     name: 'SI LA',
-    slug: 'si-la',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-si-la.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-si-la.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/c3d0f965-79b4-49fe-8428-d6adcdc08ea1_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/e51363b9-9fbe-4627-af98-103137590793_201606061.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI SI LA',
       self_name: 'Cù Dề Sừ.',
       other_names: 'Kha Pẻ.',
@@ -1702,17 +2238,38 @@ export const ethnicGroups = [
       arts: 'Người Si La hát giao duyên giữa nam nữ thanh niên, hát sử ca.',
       entertainment: '',
     },
+    slug: 'nguoi-si-la',
   },
   {
     code: '42',
     name: 'TÀY',
-    slug: 'tay',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-tay.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-tay.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/9e0368d6-116f-4260-913a-602275c85ea5_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/7e85c4d1-43c7-48b6-bce9-eb56f099752f_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/532034cf-074f-4342-8cf9-9695db6fc54c_201606062.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/c2a6b0cb-8a85-41c9-b0d2-14792e6eb650_201606063.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/9a948854-33ba-4321-9376-830871a782ff_201606064.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI TÀY',
       self_name: '',
       other_names: 'Thổ.',
@@ -1746,17 +2303,34 @@ export const ethnicGroups = [
       entertainment:
         'Trong ngày hội lồng tồng ở nhiều nơi tổ chức ném còn, đánh cầu lông, kéo co, múa sư tử, đánh cờ tướng... Ngày thường trẻ em đánh quay, đánh khăng, đánh chắt, chơi ô...',
     },
+    slug: 'nguoi-tay',
   },
   {
     code: '43',
     name: 'THÁI',
-    slug: 'thai',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-thai.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-thai.htm',
-      images: [],
+      images: [
+        {
+          url: 'https://files.bdttg.gov.vn/ContentFolder/ubdt/source_files/2015/10/31/09345383_thai1.jpg_15-10-31.png',
+          alt: '',
+        },
+        {
+          url: 'https://files.bdttg.gov.vn/ContentFolder/ubdt/source_files/2015/10/31/09395768_thai2.jpg_15-10-31.png',
+          alt: '',
+        },
+        {
+          url: 'https://files.bdttg.gov.vn/ContentFolder/ubdt/source_files/2015/10/31/09442639_thai5.jpg_15-10-31.png',
+          alt: '',
+        },
+        {
+          url: 'https://files.bdttg.gov.vn/ContentFolder/ubdt/source_files/2015/10/31/09460762_thai7.jpg_15-10-31.png',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI THÁI',
       self_name: 'Tay hoặc Thay',
       other_names:
@@ -1787,17 +2361,30 @@ export const ethnicGroups = [
       entertainment:
         'Trò chơi của người Thái phổ biến là ném còn, kéo co, đua ngựa, dạo thuyền, bắn nỏ, múa xoè, chơi quay và quả mák lẹ. Nhiều trò chơi cho trẻ em.',
     },
+    slug: 'nguoi-thai',
   },
   {
     code: '44',
     name: 'THỔ',
-    slug: 'tho',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-tho.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-tho.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/8e1c06f9-0beb-482c-9b3d-e89f793cca22_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/ad71e51a-1964-4d5f-9af4-579d74a65a95_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/37c7ee29-4a89-4f85-bacc-09abcd57c555_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI THỔ',
       self_name: 'Thổ.',
       other_names: 'Người Nhà làng, Mường, Con Kha, Xá Lá Vàng.',
@@ -1829,11 +2416,11 @@ export const ethnicGroups = [
       entertainment:
         'Trò chơi gồm kéo co, múa sư tử, chơi cờ tướng. Trẻ em thích chơi đá cầu và đánh cù.',
     },
+    slug: 'nguoi-tho',
   },
   {
     code: '45',
     name: 'XƠ ĐĂNG',
-    slug: 'xo-dang',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-xo-dang.htm',
@@ -1872,17 +2459,26 @@ export const ethnicGroups = [
       arts: 'Người Xơ Ðăng có nhiều loại nhạc cụ (đàn, nhị, sáo dọc, ống vỗ kloongbút , trống, chiêng, cồng, tù và, ống gõ, giàn ống hoạt động nhờ sức nước...). Có loại dùng giải trí thông thường, có loại dùng trong lễ hội. Các loại nhạc cụ cụ thể và điệu tấu nhạc có sự khác nhau ít nhiều giữa các nhóm. Những điệu hát phổ biến là: hát đối đáp của trai gái, hát của người lớn tuổi, hát ru. Trong một số dịp lễ hội, đồng bào trình diễn múa: có điệu múa riêng cho nam, riêng cho nữ, cũng có điệu múa cả nam, nữ cùng tham gia. Truyện cổ Xơ Ðăng phong phú và đặc sắc.',
       entertainment: '',
     },
+    slug: 'nguoi-xo-dang',
   },
   {
     code: '46',
     name: 'XINH MUN',
-    slug: 'xinh-mun',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-xinh-mun.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-xinh-mun.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/174719c3-df3a-4aad-b538-932cc5f62166_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/537321eb-3871-4e85-aec1-9ef89c45428b_201606061.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI XINH MUN',
       self_name: 'Xinh Mun',
       other_names: 'Puộc, Xá, Pnạ',
@@ -1912,17 +2508,22 @@ export const ethnicGroups = [
       arts: 'Người Xinh Mun thích hát và múa vào các dịp tết lễ, ngay trên nhà. Trai gái, nam nữ hát đối với nhau rất tự nhiên.',
       entertainment: '',
     },
+    slug: 'nguoi-xinh-mun',
   },
   {
     code: '47',
     name: 'XTIÊNG',
-    slug: 'xtieng',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-xtieng.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-xtieng.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/7de268e0-ff72-4d27-b72f-57126f6bbaa7_201606060.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI XTIÊNG',
       self_name: '',
       other_names: 'Xa Ðiêng hay Xa Chiêng.',
@@ -1955,17 +2556,30 @@ export const ethnicGroups = [
       arts: 'Người Xtiêng rất yêu âm nhạc. Nhạc cụ quan trọng nhất, đồng thời là một trong số gia tài quý ở xã hội truyền thống, là cồng và chiêng; nhóm Bù Lơ chủ yếu dùng chiêng, mỗi bộ 6 chiếc, nhóm Bù Ðek (Bù Ðêk) chủ yếu dùng cồng, mỗi bộ 5 chiếc. Riêng trong đám ma, chỉ dùng 3 cồng hoặc 3 chiêng. Ngoài ra, còn có tù và, trống, khèn bầu, các loại đàn. Người Xtiêng cũng có kho tàng truyện cổ khá phong phú, có những điệu hát của mình. Tuy nhiên, đến nay, tương tự như nhiều nơi khác, ngay cả cồng, chiêng cũng chỉ còn rất ít so với xưa kia.',
       entertainment: '',
     },
+    slug: 'nguoi-xtieng',
   },
   {
     code: '48',
     name: 'BRU-VÂN KIỀU',
-    slug: 'bru-van-kieu',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-bru-van-kieu.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-bru-van-kieu.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/1b584519-2217-4890-b48b-74db6594dc08_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/f59bc24d-cd51-4c36-8f51-b76a508055b5_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/97918efc-4ee6-4377-a003-7738577f93a3_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI BRU-VÂN KIỀU',
       self_name: 'Có người cho Bru là tên tự gọi.',
       other_names: 'Bru, Vân Kiều.',
@@ -1998,17 +2612,30 @@ export const ethnicGroups = [
       arts: 'Người Bru-Vân Kiều có nhiều truyện cổ được truyền miệng, kể về sự tích các dòng họ, nguồn gốc dân tộc, về đề tài người mồ côi v.v... Có các điệu hát như: Oát là loại hát đối đáp giao duyên. Prdoak là hát chúc vui, chúc tụng khi có việc mừng. Xươt là hát vui trong các sinh hoạt vui đùa đông người. Roai tol, Roai trong là loại hát kể lể nặng nề, oán trách. Adâng kon là hát ru trẻ con. Trong đám ma và lễ hội đâm trâu thường có múa kết hợp với hát. Nhạc cụ phổ biến là: cồng, chiêng, đàn Achung, Plư, Ta-lư, kèn Amam, Ta-ral , khèn Pi, nhị, đàn môi, trống, sáo...',
       entertainment: '',
     },
+    slug: 'nguoi-bru-van-kieu',
   },
   {
     code: '49',
     name: 'CO',
-    slug: 'co',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-co.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-co.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/2f181184-5170-486e-a748-9e1a6423a14d_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/2aca71f4-dd55-4668-ac46-749dca376d1d_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/45dfe604-d419-4f12-8c4c-5ffed0a38cce_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI CO',
       self_name: 'Cor, Col.',
       other_names: 'Cua, Trầu.',
@@ -2040,17 +2667,30 @@ export const ethnicGroups = [
       arts: 'Ưa thích âm nhạc, dùng bộ chiêng 3 chiếc là phổ biến: nhạc cụ còn có trống, các loại đàn nhị. Múa chỉ xuất hiện trong lễ đâm trâu. Các điệu dân ca Xru (Klu), Agiới được lưu truyền rộng rãi. Vốn truyện cổ khá phong phú, có huyền thoại, truyền thuyết, truyện ngụ ngôn... Nghệ thuật trang trí tập trung nhất ở cây cột lễ và cái "gu" trong lễ hội đâm trâu.',
       entertainment: '',
     },
+    slug: 'nguoi-co',
   },
   {
     code: '50',
     name: 'CƠ HO',
-    slug: 'co-ho',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-co-ho.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-co-ho.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/628711a9-d15d-4d01-b241-fea646c44cbd_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/bf50d74e-fe23-47a8-8e87-d0fbadbb2398_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/c5f2416a-871c-41ab-815e-94737b570681_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI CƠ HO',
       self_name: 'Cơ Ho.',
       other_names: '',
@@ -2078,17 +2718,26 @@ export const ethnicGroups = [
       arts: 'Vốn văn học nghệ thuật dân gian Cơ Ho rất phong phú. Thơ ca giàu trữ tình và đầy nhạc tính. Một số vũ khúc cổ truyền thường được diễn trong các lễ hội. Các nhạc cụ truyền thống như bộ cồng chiêng 6 chiếc, kèn ống bầu (Kơmbuat), đàn ống tre (Kơrla), trống (Sơgơr)... có khả năng hoà âm với lời ca hoặc độc tấu.',
       entertainment: '',
     },
+    slug: 'nguoi-co-ho',
   },
   {
     code: '51',
     name: 'CỜ LAO',
-    slug: 'co-lao',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-co-lao.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-co-lao.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/3d227fb9-4ce2-402d-ace6-119c2fa10512_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/51662d9d-d4e6-4db4-a71b-33e0d66ce719_201606061.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI CỜ LAO',
       self_name: 'Cờ Lao.',
       other_names: 'Tứ Ðư, Ho Ki, Voa Ðề.',
@@ -2121,17 +2770,30 @@ export const ethnicGroups = [
       arts: '',
       entertainment: '',
     },
+    slug: 'nguoi-co-lao',
   },
   {
     code: '52',
     name: 'CƠ TU',
-    slug: 'co-tu',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-co-tu.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-co-tu.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/3ca70c2e-d149-4986-89ad-9f38c839837e_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/27e8a74f-3783-4f76-8ea9-3e5cc9c33dca_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/13e5615d-4851-41b1-aab3-fe0b07e7ca28_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI CƠ TU',
       self_name: 'Cơ Tu.',
       other_names: 'Ca Tu, Ka Tu.',
@@ -2164,17 +2826,30 @@ export const ethnicGroups = [
       arts: 'Người Cơ Tu có nhiều truyện cổ kể về sự tích, về xã hội con người, về sự phát sinh các dòng họ... Trong lễ hội thường trình diễn múa tập thể: nữ múa Dạ dạ, nam múa Ting tung. Nhạc cụ thường thấy là bộ chiêng 3 chiếc, cồng 1 chiếc, trống, sáo, đàn, nhị. Phụ nữ tài nghệ trong việc dệt các đồ án hoa văn bằng sợi màu trang trí với các hoạ tiết hình học phân bố và kết hợp khéo léo, chì và cườm trên vải. Nam giỏi trong điêu khắc trang trí ở nhà mồ, nhà công cộng, với những hình đầu trâu, chim, rắn, thú rừng, gà... cũng như trong việc vẽ hoa văn trang trí trên cây cột buộc con trâu tế. Người Cờ Tu có những điệu hát riêng của mình.',
       entertainment: '',
     },
+    slug: 'nguoi-co-tu',
   },
   {
     code: '53',
     name: 'MẠ',
-    slug: 'ma',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ma.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-ma.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/418d94c3-a65c-4028-9505-a4142415c8fe_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/fd8dfc24-2e8d-4f2a-a898-04361cc66f50_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/16a12eca-38e1-4c7a-84d3-8da6eb7150d4_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI MẠ',
       self_name: 'Mạ.',
       other_names: 'Châu Mạ, Chô Mạ, Chê Mạ.',
@@ -2204,17 +2879,30 @@ export const ethnicGroups = [
       arts: 'Vốn văn học nghệ thuật dân gian khá phong phú gồm nhiều truyền thuyết, truyện cổ và những bài dân ca trữ tình gọi là "tam bớt".',
       entertainment: '',
     },
+    slug: 'nguoi-ma',
   },
   {
     code: '54',
     name: 'MẢNG',
-    slug: 'mang',
     alternative_names: '',
     detail_url:
       'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-mang.htm',
     detail: {
       url: 'http://www.cema.gov.vn/gioi-thieu/cong-dong-54-dan-toc/nguoi-mang.htm',
-      images: [],
+      images: [
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/f55fe28d-6ade-410a-8511-06c928487051_201606060.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/5b0f2247-aba3-4a25-9596-d9762a7487ee_201606061.jpeg',
+          alt: '',
+        },
+        {
+          url: 'http://files.ubdt.gov.vn/ContentFolder/ubdt/source_files/2016/06/06/5fd9fe77-8531-4a69-a0b1-cab54530d71f_201606062.jpeg',
+          alt: '',
+        },
+      ],
       title: 'NGƯỜI MẢNG',
       self_name: 'Mảng.',
       other_names: 'Mảng Ư, Xá Mảng, Niểng O, Xá Bá O.',
@@ -2244,6 +2932,7 @@ export const ethnicGroups = [
       entertainment:
         'Vào các dịp lễ, tết, trẻ em chơi cầu lông, đánh quay. Thanh niên có nơi chơi ném còn.',
     },
+    slug: 'nguoi-mang',
   },
 ];
 

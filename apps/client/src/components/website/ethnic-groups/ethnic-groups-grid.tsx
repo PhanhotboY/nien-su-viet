@@ -15,6 +15,10 @@ interface EthnicGroup {
     other_names?: string;
     population?: string;
     history?: string;
+    images?: Array<{
+      url: string;
+      alt?: string;
+    }>;
   };
 }
 

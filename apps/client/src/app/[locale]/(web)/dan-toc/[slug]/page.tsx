@@ -11,12 +11,12 @@ import {
   Shirt,
   Home,
 } from 'lucide-react';
+import Image from 'next/image';
 
 import { getMetadata } from '@/content/landing/metadata';
 import { genMetadata } from '@/lib/metadata.lib';
 import { ethnicGroupsMap } from '@/data/vi/vietnamese-ethnic-groups';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type Props = {
   params: Promise<{ locale: string; slug: string }>;
@@ -162,255 +162,199 @@ export default async function DanTocDetailPage({ params }: Props) {
                   <CardTitle className="text-base">{t('selfName')}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm font-medium text-foreground">
-                    {detail.self_name}
-                  </p>
+                  <p className="text-sm font-medium">{detail.self_name}</p>
                 </CardContent>
               </Card>
             )}
           </div>
 
           {/* Right Column - Detailed Tabs */}
-          <div className="lg:col-span-2">
-            <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 mb-6">
-                <TabsTrigger value="overview">{t('overview')}</TabsTrigger>
-                <TabsTrigger value="culture">{t('culture')}</TabsTrigger>
-                <TabsTrigger value="lifestyle">{t('lifestyle')}</TabsTrigger>
-              </TabsList>
-
-              {/* Overview Tab */}
-              <TabsContent value="overview" className="space-y-6">
+          <Card className="lg:col-span-2">
+            <CardContent>
+              <article className="w-full [&_h2]:mb-2 [&>section:not(&>section:first-child)_h2]:mt-6">
+                {/* Overview Tab */}
                 {detail.other_names && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        {t('otherNames')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {detail.other_names}
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <section>
+                    <h2 className="text-lg font-bold">{t('otherNames')}</h2>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {detail.other_names}
+                    </p>
+                  </section>
                 )}
 
                 {detail.local_groups && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        {t('localGroups')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {detail.local_groups}
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <section>
+                    <h2 className="text-lg font-bold">{t('localGroups')}</h2>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {detail.local_groups}
+                    </p>
+                  </section>
                 )}
 
                 {detail.history && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <Calendar className="h-5 w-5 text-primary" />
-                        {t('history')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {detail.history}
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <section>
+                    <h2 className="text-lg flex items-center gap-2 font-bold">
+                      <Calendar className="h-5 w-5 text-primary font-bold" />
+                      {t('history')}
+                    </h2>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {detail.history}
+                    </p>
+                  </section>
                 )}
 
                 {detail.social_relations && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        {t('socialRelations')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {detail.social_relations}
-                      </p>
-                    </CardContent>
-                  </Card>
+                  <section>
+                    <h2 className="text-lg font-bold">
+                      {t('socialRelations')}
+                    </h2>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {detail.social_relations}
+                    </p>
+                  </section>
                 )}
-              </TabsContent>
 
-              {/* Culture Tab */}
-              <TabsContent value="culture" className="space-y-6">
-                {detail.arts && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">{t('arts')}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                {/* Culture Tab */}
+                <section>
+                  {detail.arts && (
+                    <section>
+                      <h2 className="text-lg font-bold">{t('arts')}</h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.arts}
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
+                    </section>
+                  )}
 
-                {detail.worship && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">{t('worship')}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                  {detail.worship && (
+                    <section>
+                      <h2 className="text-lg font-bold">{t('worship')}</h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.worship}
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
+                    </section>
+                  )}
 
-                {detail.entertainment && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">
+                  {detail.entertainment && (
+                    <section>
+                      <h2 className="text-lg font-bold">
                         {t('entertainment')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                      </h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.entertainment}
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
+                    </section>
+                  )}
 
-                {detail.marriage && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">{t('marriage')}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                  {detail.marriage && (
+                    <section>
+                      <h2 className="text-lg font-bold">{t('marriage')}</h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.marriage}
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
+                    </section>
+                  )}
 
-                {detail.funeral && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">{t('funeral')}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                  {detail.funeral && (
+                    <section>
+                      <h2 className="text-lg font-bold">{t('funeral')}</h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.funeral}
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
-              </TabsContent>
+                    </section>
+                  )}
+                </section>
 
-              {/* Lifestyle Tab */}
-              <TabsContent value="lifestyle" className="space-y-6">
-                {detail.food && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg flex items-center gap-2">
+                {/* Lifestyle Tab */}
+                <section>
+                  {detail.food && (
+                    <section>
+                      <h2 className="text-lg flex items-center gap-2 font-bold">
                         <UtensilsCrossed className="h-5 w-5 text-primary" />
                         {t('food')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                      </h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.food}
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
+                    </section>
+                  )}
 
-                {detail.clothing && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg flex items-center gap-2">
+                  {detail.clothing && (
+                    <section>
+                      <h2 className="text-lg flex items-center gap-2 font-bold">
                         <Shirt className="h-5 w-5 text-primary" />
                         {t('clothing')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                      </h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.clothing}
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
+                    </section>
+                  )}
 
-                {detail.housing && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg flex items-center gap-2">
+                  {detail.housing && (
+                    <section>
+                      <h2 className="text-lg flex items-center gap-2 font-bold">
                         <Home className="h-5 w-5 text-primary" />
                         {t('housing')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                      </h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.housing}
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
+                    </section>
+                  )}
 
-                {detail.economic_activities && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg flex items-center gap-2">
+                  {detail.economic_activities && (
+                    <section>
+                      <h2 className="text-lg flex items-center gap-2 font-bold">
                         <Briefcase className="h-5 w-5 text-primary" />
                         {t('economicActivities')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                      </h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.economic_activities}
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
+                    </section>
+                  )}
 
-                {detail.transportation && detail.transportation.trim() && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">
+                  {detail.transportation && detail.transportation.trim() && (
+                    <section>
+                      <h2 className="text-lg font-bold">
                         {t('transportation')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                      </h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.transportation}
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
+                    </section>
+                  )}
 
-                {detail.childbirth && detail.childbirth.trim() && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        {t('childbirth')}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                  {detail.childbirth && detail.childbirth.trim() && (
+                    <section>
+                      <h2 className="text-lg font-bold">{t('childbirth')}</h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {detail.childbirth}
                       </p>
-                    </CardContent>
-                  </Card>
+                    </section>
+                  )}
+                </section>
+
+                {/* Images */}
+                {detail.images.length > 0 && (
+                  <section>
+                    <h2 className="text-lg font-bold">{t('images')}</h2>
+                    <div className="grid grid-cols-3 gap-4">
+                      {detail.images.map((img) => (
+                        <Image
+                          alt={img.alt}
+                          src={img.url}
+                          width={200}
+                          height={200}
+                          className="object-contain h-full w-full aspect-square"
+                        />
+                      ))}
+                    </div>
+                  </section>
                 )}
-              </TabsContent>
-            </Tabs>
-          </div>
+              </article>
+            </CardContent>
+          </Card>
         </div>
       </div>
 

@@ -474,7 +474,7 @@
     "otherNames": "Other Names",
     "population": "Population",
     "language": "Language",
-    "selfName": "Their Name",
+    "selfName": "Self-call",
     "localGroups": "Local Groups",
     "history": "History",
     "socialRelations": "Social Relations",
@@ -495,7 +495,8 @@
     "notFound": "Ethnic group not found",
     "notFoundDescription": "The ethnic group you are looking for does not exist or has been deleted.",
     "viewDetails": "View details",
-    "seeMore": "See more"
+    "seeMore": "See more",
+    "images": "Images"
   },
   "Shared": {
     "author": "Author",

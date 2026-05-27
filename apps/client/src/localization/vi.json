@@ -474,7 +474,7 @@
     "otherNames": "Tên khác",
     "population": "Dân số",
     "language": "Ngôn ngữ",
-    "selfName": "Tên gọi của họ",
+    "selfName": "Tên tự gọi",
     "localGroups": "Nhóm địa phương",
     "history": "Lịch sử",
     "socialRelations": "Quan hệ xã hội",
@@ -495,7 +495,8 @@
     "notFound": "Không tìm thấy dân tộc",
     "notFoundDescription": "Dân tộc bạn tìm kiếm không tồn tại hoặc đã bị xóa.",
     "viewDetails": "Xem chi tiết",
-    "seeMore": "Xem thêm"
+    "seeMore": "Xem thêm",
+    "images": "Hình ảnh"
   },
   "Shared": {
     "author": "Tác giả",
