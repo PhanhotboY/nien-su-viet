@@ -524,17 +524,17 @@ export interface components {
         HistoricalEventPreviewResponseDto: {
             categories: Record<string, never>[];
             excerpt: string;
+            /** @enum {string} */
+            fromDateType: "EXACT" | "APPROXIMATE";
+            /** @enum {string} */
+            toDateType: "EXACT" | "APPROXIMATE";
             author: components["schemas"]["UserBriefResponseDto"];
             /** Format: uuid */
             id: string;
             name: string;
-            /** @enum {string} */
-            fromDateType: "EXACT" | "APPROXIMATE";
             fromDay?: number;
             fromMonth?: number;
             fromYear: number;
-            /** @enum {string} */
-            toDateType: "EXACT" | "APPROXIMATE";
             toDay?: number;
             toMonth?: number;
             toYear?: number;
@@ -546,33 +546,33 @@ export interface components {
             /** Format: uuid */
             id: string;
             name: string;
-            /** @enum {string} */
-            fromDateType: "EXACT" | "APPROXIMATE";
             fromDay?: number;
             fromMonth?: number;
             fromYear: number;
-            /** @enum {string} */
-            toDateType: "EXACT" | "APPROXIMATE";
             toDay?: number;
             toMonth?: number;
             toYear?: number;
             /** Format: uri */
             thumbnail?: string;
+            /** @enum {string} */
+            fromDateType: "EXACT" | "APPROXIMATE";
+            /** @enum {string} */
+            toDateType: "EXACT" | "APPROXIMATE";
             author: components["schemas"]["UserBriefResponseDto"];
             categories: Record<string, never>[];
         };
         HistoricalEventBriefResponseDto: {
+            /** @enum {string} */
+            fromDateType: "EXACT" | "APPROXIMATE";
+            /** @enum {string} */
+            toDateType: "EXACT" | "APPROXIMATE";
             author: components["schemas"]["UserBriefResponseDto"];
             /** Format: uuid */
             id: string;
             name: string;
-            /** @enum {string} */
-            fromDateType: "EXACT" | "APPROXIMATE";
             fromDay?: number;
             fromMonth?: number;
             fromYear: number;
-            /** @enum {string} */
-            toDateType: "EXACT" | "APPROXIMATE";
             toDay?: number;
             toMonth?: number;
             toYear?: number;

@@ -1,4 +1,4 @@
-import Editor from '@/components/cmsdesk/editor/editor';
+import Editor from '@/components/cmsdesk/post/editor';
 import { Separator } from '@/components/ui/separator';
 import { protectedEditorConfig } from '@/config/cmsdesk';
 import { getPost } from '@/services/post.service';

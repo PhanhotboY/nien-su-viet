@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Link from '@/i18n/navigation';
 import { Users, Settings, LogOut, GalleryVerticalEnd } from 'lucide-react';
-import { authClient } from '@/lib/auth-client';
 
 import {
   Sidebar,
@@ -17,7 +16,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { useLocale } from 'next-intl';
+import { useSignOut } from '@better-auth-ui/react';
+import { authClient } from '@/lib/auth-client';
 
 const sidebarNavItems = [
   {
@@ -34,11 +34,13 @@ const sidebarNavItems = [
 
 export function DashboardSidebar() {
   const pathname = usePathname();
-  const { signOut } = authClient;
+  const { mutate: signOut } = useSignOut(authClient);
+  const router = useRouter();
 
   const handleLogout = async () => {
     try {
-      await signOut();
+      signOut();
+      router.refresh();
     } catch (error) {
       console.error('Logout failed:', error);
     }

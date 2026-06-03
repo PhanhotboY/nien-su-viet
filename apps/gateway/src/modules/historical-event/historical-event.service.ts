@@ -15,6 +15,10 @@ import {
 } from './dto';
 import { TimestampUtil } from '@phanhotboy/nsv-common/util/grpc.util';
 import { HISTORICAL_EVENT } from '@phanhotboy/constants';
+import {
+  toEventDateType,
+  toGrpcEventDateType,
+} from '@historical-event/helper/dateType.helper';
 
 @Injectable()
 export class HistoricalEventService {
@@ -41,8 +45,8 @@ export class HistoricalEventService {
             .createEvent({
               ...payload,
               authorId,
-              fromDateType: toEventDateType(payload.fromDateType),
-              toDateType: toEventDateType(payload.toDateType),
+              fromDateType: toGrpcEventDateType(payload.fromDateType),
+              toDateType: toGrpcEventDateType(payload.toDateType),
             })
             .pipe(
               timeout(10000),
@@ -141,11 +145,11 @@ export class HistoricalEventService {
               id,
               name: payload.name,
               thumbnail: payload.thumbnail,
-              fromDateType: toEventDateType(payload.fromDateType),
+              fromDateType: toGrpcEventDateType(payload.fromDateType),
               fromDay: payload.fromDay,
               fromMonth: payload.fromMonth,
               fromYear: payload.fromYear,
-              toDateType: toEventDateType(payload.toDateType),
+              toDateType: toGrpcEventDateType(payload.toDateType),
               toDay: payload.toDay,
               toMonth: payload.toMonth,
               toYear: payload.toYear,
@@ -173,17 +177,5 @@ export class HistoricalEventService {
       'delete event',
       this.serviceName,
     );
-  }
-}
-
-function toEventDateType(
-  dateType?: Values<typeof HISTORICAL_EVENT.EVENT_DATE_TYPE>,
-): EventDateType {
-  switch (dateType) {
-    case HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT:
-      return EventDateType.EXACT;
-    case HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE:
-    default:
-      return EventDateType.APPROXIMATE;
   }
 }

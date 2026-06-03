@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { protectedPostConfig } from '@/config/cmsdesk';
 import { deletePost } from '@/services/post.service';
-import { useAuthenticate } from '@daveyplate/better-auth-ui';
+import { useAuthenticate, useAuth } from '@/components/auth';
 import {
   MoreVertical as ElipsisIcon,
   Loader2 as SpinnerIcon,
@@ -29,17 +29,20 @@ import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import React, { FC, useState } from 'react';
 import { toast } from 'sonner';
+import Link from '@/i18n/navigation';
 
 interface PostEditButtonProps {
-  id?: string;
+  id: string;
+  published?: boolean;
 }
 
-const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
+const PostEditButton: FC<PostEditButtonProps> = ({ id, published = false }) => {
   const router = useRouter();
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
   const [showLoadingAlert, setShowLoadingAlert] = useState<boolean>(false);
-  const { data: session } = useAuthenticate();
+  const { authClient } = useAuth();
+  const { data: session } = useAuthenticate(authClient);
   const locale = useLocale();
 
   // Delete post
@@ -73,7 +76,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
           <ElipsisIcon className="h-4 w-4" />
           <span className="sr-only">Open</span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="font-sans">
+        <DropdownMenuContent align="end" className="">
           <DropdownMenuItem>
             <a
               className="flex w-full"
@@ -86,6 +89,20 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
               {protectedPostConfig.edit}
             </a>
           </DropdownMenuItem>
+          {published && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link
+                  className="flex w-full"
+                  href={`/posts/${id}`}
+                  target="_blank"
+                >
+                  {protectedPostConfig.viewPublished}
+                </Link>
+              </DropdownMenuItem>
+            </>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="flex cursor-pointer items-center text-destructive focus:text-destructive"
@@ -97,7 +114,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
       </DropdownMenu>
       {/* Delete alert */}
       <AlertDialog open={showDeleteAlert} onOpenChange={setShowDeleteAlert}>
-        <AlertDialogContent className="text-md font-sans">
+        <AlertDialogContent className="text-md">
           <AlertDialogHeader>
             <AlertDialogTitle>
               {protectedPostConfig.questionDelete}
@@ -121,7 +138,7 @@ const PostEditButton: FC<PostEditButtonProps> = ({ id }) => {
       </AlertDialog>
       {/* Loading alert */}
       <AlertDialog open={showLoadingAlert} onOpenChange={setShowLoadingAlert}>
-        <AlertDialogContent className="font-sans">
+        <AlertDialogContent className="">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-center">
               {protectedPostConfig.pleaseWait}

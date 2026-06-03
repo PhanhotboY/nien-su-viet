@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { RedirectToSignIn } from '@daveyplate/better-auth-ui';
+import { RedirectToSignIn } from '@/components/auth';
 
 import DashboardLayout from '@/components/admin/dashboard-layout';
 import { isAdmin } from '@/lib/auth-client';

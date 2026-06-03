@@ -19,7 +19,7 @@
 //           </span>
 //         </Button>
 //       </DialogTrigger>
-//       <DialogContent className="font-sans sm:max-w-[425px]">
+//       <DialogContent className="sm:max-w-[425px]">
 //         <LoginSection />
 //       </DialogContent>
 //     </Dialog>

@@ -22,8 +22,15 @@
     max-width: none;
   }
 
+  .ce-toolbar__settings-btn,
+  .ce-toolbar__plus {
+    color: var(--popover);
+    background-color: var(--popover-foreground);
+  }
+
   .tc-table--heading .tc-row:first-child {
     z-index: 0;
+    background-color: var(--accent);
   }
 
   .ce-block__content:has(.tc-popover.tc-popover--opened) {

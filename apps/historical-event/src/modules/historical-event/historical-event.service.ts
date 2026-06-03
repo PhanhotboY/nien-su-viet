@@ -18,6 +18,7 @@ import {
   CreateHistoricalEventResponse,
   DeleteHistoricalEventRequest,
   DeleteHistoricalEventResponse,
+  EventDateType,
   type GetAllHistoricalEventsRequest,
   GetAllHistoricalEventsResponse,
   type GetHistoricalEventPreviewRequest,
@@ -61,7 +62,11 @@ export class HistoricalEventService {
 
     const event = await recordOperationTiming(tracerName, 'prisma.create', () =>
       this.prisma.historicalEvent.create({
-        data: payload as any,
+        data: {
+          ...payload,
+          fromDateType: toEventDateType(payload.fromDateType),
+          toDateType: toEventDateType(payload.toDateType),
+        },
       }),
     );
 

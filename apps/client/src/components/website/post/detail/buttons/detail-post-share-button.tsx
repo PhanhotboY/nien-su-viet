@@ -85,7 +85,7 @@
 //             <div className="flex-1 rounded-t-[10px] bg-white p-4">
 //               <div className="mx-auto mb-8 h-1.5 w-12 flex-shrink-0 rounded-full bg-zinc-300" />
 //               <div className="mx-auto max-w-md">
-//                 <Drawer.Title className="mx-auto mb-4 text-center font-sans text-lg font-semibold text-gray-600">
+//                 <Drawer.Title className="mx-auto mb-4 text-center text-lg font-semibold text-gray-600">
 //                   {detailShareConfig.title}
 //                 </Drawer.Title>
 //                 <div className="mx-auto my-6 grid grid-cols-3 justify-center gap-8">

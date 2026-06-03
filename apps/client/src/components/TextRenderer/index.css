@@ -208,7 +208,6 @@
     border-radius: var(--radius);
     background-color: var(--color-muted);
     padding: calc(var(--spacing) * 0.2) calc(var(--spacing) * 0.3);
-    font-family: var(--font-mono);
     font-size: var(--text-sm);
     line-height: var(--text-sm--line-height);
     font-weight: 600;

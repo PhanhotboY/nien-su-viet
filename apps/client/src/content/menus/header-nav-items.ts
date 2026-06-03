@@ -19,6 +19,12 @@ export async function getHeaderNavItems({ locale }: { locale: string }) {
     {
       order: 3,
       link_new_tab: false,
+      link_url: '/dan-toc',
+      link_label: t('ethnic-groups'),
+    },
+    {
+      order: 4,
+      link_new_tab: false,
       link_url: '/lien-he',
       link_label: t('contact'),
     },

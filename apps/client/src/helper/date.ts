@@ -12,14 +12,18 @@ const createDate = (
   const isBCE = year < 0;
   const absYear = Math.abs(year);
 
-  if (isBCE) {
-    // For BCE, create date and adjust
-    const date = new Date(0, (month || 1) - 1, day || 1);
-    date.setFullYear(-absYear);
-    return date;
+  const date = new Date(year, (month || 1) - 1, day || 1); // Start with a base date
+  if (year < 100) {
+    // For CE years less than 100, set the full year explicitly
+    date.setFullYear(absYear);
   }
 
-  return new Date(absYear, (month || 1) - 1, day || 1);
+  if (isBCE) {
+    // For BCE, create date and adjust
+    date.setFullYear(-absYear);
+  }
+
+  return date;
 };
 
 const formatHistoricalEventDate = ({
