@@ -8,9 +8,8 @@ function toGrpcEventDateType(
     case HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT:
       return EventDateType.EXACT;
     case HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE:
-      return EventDateType.APPROXIMATE;
     default:
-      return EventDateType.EVENT_DATE_TYPE_UNSPECIFIED;
+      return EventDateType.APPROXIMATE;
   }
 }
 
@@ -25,7 +24,6 @@ function toEventDateType(
     case EventDateType.EXACT:
       return HISTORICAL_EVENT.EVENT_DATE_TYPE.EXACT;
     case EventDateType.APPROXIMATE:
-    case EventDateType.EVENT_DATE_TYPE_UNSPECIFIED:
     default:
       return HISTORICAL_EVENT.EVENT_DATE_TYPE.APPROXIMATE;
   }

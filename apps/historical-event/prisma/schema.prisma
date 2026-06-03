@@ -25,10 +25,10 @@ enum EVENT_DATE_TYPE {
 
 model HistoricalEvent {
   id           String            @id @default(uuid()) @db.Uuid
-  fromYear     Int               @db.SmallInt
+  fromYear     Int               @db.Integer
   fromMonth    Int?              @db.SmallInt
   fromDay      Int?              @db.SmallInt
-  toYear       Int?              @db.SmallInt
+  toYear       Int?              @db.Integer
   toMonth      Int?              @db.SmallInt
   toDay        Int?              @db.SmallInt
   name         String            @db.VarChar(255)

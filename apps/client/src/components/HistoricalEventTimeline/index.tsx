@@ -268,6 +268,8 @@ export function HistoricalEventTimeline() {
         maxHeight: '90vh',
         verticalScroll: false,
         horizontalScroll: false,
+        min: new Date(-250000, 0, 1).getTime(), // Prevent int overflow, as well as the start of Con Moong cave
+        max: new Date().getTime() + 10 * 365 * 24 * 60 * 60 * 1000, // 10 years in the future
         format: {
           minorLabels: (date: any, scale) => formatDateLabel(date, scale),
           majorLabels: (date: any, scale) => formatMajorLabel(date, scale),
