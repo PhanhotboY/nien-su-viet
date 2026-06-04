@@ -22,7 +22,7 @@ const (
 type Purchase struct {
 	ID uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 
-	UserID uuid.UUID `gorm:"type:uuid;not null;index:idx_purchases_user_id"`
+	UserID string `gorm:"type:varchar(124);not null;index:idx_purchases_user_id"`
 
 	SubscriptionID uuid.UUID                       `gorm:"type:uuid;not null;index:idx_purchases_subscription_id"`
 	Subscription   subscriptionEntity.Subscription `gorm:"foreignKey:SubscriptionID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
