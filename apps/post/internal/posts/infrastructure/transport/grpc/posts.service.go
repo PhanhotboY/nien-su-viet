@@ -3,7 +3,6 @@ package grpc
 import (
 	"context"
 
-	"github.com/go-playground/validator"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 
@@ -20,13 +19,13 @@ import (
 	getPostQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPost/v1/queries"
 	getPublishedPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPublishedPosts/v1/queries"
 	pb "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/post_service"
+	posts_service "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/post_service"
 	grpcUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/utils"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 )
 
 type PostsGrpcServerHandler struct {
-	logger    logger.Logger
-	validator *validator.Validate
+	logger logger.Logger
 
 	createPostHandler  createPostCommand.CreatePostHandler
 	deletePostHandler  deletePostCommand.DeletePostHandler
@@ -42,13 +41,10 @@ type PostsGrpcServerHandler struct {
 	getAllPostsHandler       getAllPostsQuery.GetAllPostsHandler
 	getPopularPostsHandler   getPopularPostsQuery.GetPopularPostsHandler
 	getPostHandler           getPostQuery.GetPostHandler
-
-	pb.UnimplementedPostsServiceServer
 }
 
-func NewPostsGrpcServerHandler(
+func NewPostsGrpcServiceServer(
 	logger logger.Logger,
-	validator *validator.Validate,
 
 	createPostHandler createPostCommand.CreatePostHandler,
 	deletePostHandler deletePostCommand.DeletePostHandler,
@@ -64,10 +60,9 @@ func NewPostsGrpcServerHandler(
 	getAllPostsHandler getAllPostsQuery.GetAllPostsHandler,
 	getPopularPostsHandler getPopularPostsQuery.GetPopularPostsHandler,
 	getPostHandler getPostQuery.GetPostHandler,
-) *PostsGrpcServerHandler {
+) posts_service.PostsServiceServer {
 	return &PostsGrpcServerHandler{
-		logger:    logger,
-		validator: validator,
+		logger: logger,
 
 		createPostHandler:  createPostHandler,
 		deletePostHandler:  deletePostHandler,

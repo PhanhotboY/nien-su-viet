@@ -9,6 +9,7 @@ import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 import { PaginationMetadata } from "../common/pagination";
 import { ListQueryRequest } from "../common/request";
+import { OperationMetadata } from "../common/response";
 import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "billing_service";
@@ -57,15 +58,15 @@ export interface CreateSubscriptionRequest {
 }
 
 export interface CreateSubscriptionResponse {
-  subscription: Subscription | undefined;
+  data: OperationMetadata | undefined;
 }
 
 export interface GetSubscriptionRequest {
-  subscriptionId: string;
+  id: string;
 }
 
 export interface GetSubscriptionResponse {
-  subscription: Subscription | undefined;
+  data: Subscription | undefined;
 }
 
 export interface ListSubscriptionsByUserRequest {
@@ -74,7 +75,7 @@ export interface ListSubscriptionsByUserRequest {
 }
 
 export interface ListSubscriptionsByUserResponse {
-  subscriptions: Subscription[];
+  data: Subscription[];
   pagination: PaginationMetadata | undefined;
 }
 
@@ -90,7 +91,7 @@ export interface CancelSubscriptionRequest {
 }
 
 export interface CancelSubscriptionResponse {
-  subscription: Subscription | undefined;
+  data: OperationMetadata | undefined;
 }
 
 export const BILLING_SERVICE_PACKAGE_NAME = "billing_service";

@@ -4,6 +4,7 @@ package billing_service;
 
 import "common/pagination.proto";
 import "common/request.proto";
+import "common/response.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
@@ -59,15 +60,15 @@ message CreateSubscriptionRequest {
 }
 
 message CreateSubscriptionResponse {
-  Subscription subscription = 1;
+  common.OperationMetadata data = 1;
 }
 
 message GetSubscriptionRequest {
-  string subscription_id = 1;
+  string id = 1;
 }
 
 message GetSubscriptionResponse {
-  Subscription subscription = 1;
+  Subscription data = 1;
 }
 
 message ListSubscriptionsByUserRequest {
@@ -76,7 +77,7 @@ message ListSubscriptionsByUserRequest {
 }
 
 message ListSubscriptionsByUserResponse {
-  repeated Subscription subscriptions = 1;
+  repeated Subscription data = 1;
   common.PaginationMetadata pagination = 2;
 }
 
@@ -92,7 +93,7 @@ message CancelSubscriptionRequest {
 }
 
 message CancelSubscriptionResponse {
-  Subscription subscription = 1;
+  common.OperationMetadata data = 1;
 }
 
 service SubscriptionService {

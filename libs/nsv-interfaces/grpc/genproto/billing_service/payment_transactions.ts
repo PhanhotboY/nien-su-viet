@@ -75,7 +75,7 @@ export interface ListPaymentTransactionsByPurchaseRequest {
 }
 
 export interface ListPaymentTransactionsByPurchaseResponse {
-  transactions: PaymentTransaction[];
+  data: PaymentTransaction[];
   pagination: PaginationMetadata | undefined;
 }
 
@@ -85,7 +85,7 @@ export interface ListPaymentTransactionsByAttemptRequest {
 }
 
 export interface ListPaymentTransactionsByAttemptResponse {
-  transactions: PaymentTransaction[];
+  data: PaymentTransaction[];
   pagination: PaginationMetadata | undefined;
 }
 

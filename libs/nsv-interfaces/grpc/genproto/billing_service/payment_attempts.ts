@@ -8,6 +8,8 @@
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { wrappers } from "protobufjs";
 import { Observable } from "rxjs";
+import { PaginationMetadata } from "../common/pagination";
+import { OperationMetadata } from "../common/response";
 import { Struct } from "../google/protobuf/struct";
 import { Timestamp } from "../google/protobuf/timestamp";
 import { Money } from "./billing";
@@ -73,15 +75,15 @@ export interface CreatePaymentAttemptRequest {
 }
 
 export interface CreatePaymentAttemptResponse {
-  paymentAttempt: PaymentAttempt | undefined;
+  data: OperationMetadata | undefined;
 }
 
 export interface GetPaymentAttemptRequest {
-  paymentAttemptId: string;
+  id: string;
 }
 
 export interface GetPaymentAttemptResponse {
-  paymentAttempt: PaymentAttempt | undefined;
+  data: PaymentAttempt | undefined;
 }
 
 export interface ListPaymentAttemptsByPurchaseRequest {
@@ -89,7 +91,8 @@ export interface ListPaymentAttemptsByPurchaseRequest {
 }
 
 export interface ListPaymentAttemptsByPurchaseResponse {
-  paymentAttempts: PaymentAttempt[];
+  data: PaymentAttempt[];
+  pagination: PaginationMetadata | undefined;
 }
 
 /**
@@ -125,7 +128,7 @@ export interface RefundPurchaseResponse {
    * The refund transaction(s) created as a result.
    * Some providers may create multiple records (fees, partials, etc.)
    */
-  refundTransactions: PaymentTransaction[];
+  data: PaymentTransaction[];
 }
 
 export const BILLING_SERVICE_PACKAGE_NAME = "billing_service";

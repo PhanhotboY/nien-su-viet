@@ -271,8 +271,8 @@ func (x *CreatePurchaseRequest) GetIdempotencyKey() string {
 }
 
 type CreatePurchaseResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Purchase      *Purchase              `protobuf:"bytes,1,opt,name=purchase,proto3" json:"purchase,omitempty"`
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -307,16 +307,16 @@ func (*CreatePurchaseResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_purchases_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CreatePurchaseResponse) GetPurchase() *Purchase {
+func (x *CreatePurchaseResponse) GetData() *common.OperationMetadata {
 	if x != nil {
-		return x.Purchase
+		return x.Data
 	}
 	return nil
 }
 
 type GetPurchaseRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PurchaseId    string                 `protobuf:"bytes,1,opt,name=purchase_id,json=purchaseId,proto3" json:"purchase_id,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -351,16 +351,16 @@ func (*GetPurchaseRequest) Descriptor() ([]byte, []int) {
 	return file_billing_service_purchases_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetPurchaseRequest) GetPurchaseId() string {
+func (x *GetPurchaseRequest) GetId() string {
 	if x != nil {
-		return x.PurchaseId
+		return x.Id
 	}
 	return ""
 }
 
 type GetPurchaseResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Purchase      *Purchase              `protobuf:"bytes,1,opt,name=purchase,proto3" json:"purchase,omitempty"`
+	Data          *Purchase              `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -395,9 +395,9 @@ func (*GetPurchaseResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_purchases_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetPurchaseResponse) GetPurchase() *Purchase {
+func (x *GetPurchaseResponse) GetData() *Purchase {
 	if x != nil {
-		return x.Purchase
+		return x.Data
 	}
 	return nil
 }
@@ -456,7 +456,7 @@ func (x *ListPurchasesBySubscriptionRequest) GetQuery() *common.ListQueryRequest
 
 type ListPurchasesBySubscriptionResponse struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Purchases     []*Purchase                `protobuf:"bytes,1,rep,name=purchases,proto3" json:"purchases,omitempty"`
+	Data          []*Purchase                `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
 	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -492,9 +492,9 @@ func (*ListPurchasesBySubscriptionResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_purchases_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *ListPurchasesBySubscriptionResponse) GetPurchases() []*Purchase {
+func (x *ListPurchasesBySubscriptionResponse) GetData() []*Purchase {
 	if x != nil {
-		return x.Purchases
+		return x.Data
 	}
 	return nil
 }
@@ -560,7 +560,7 @@ func (x *ListPurchasesByUserRequest) GetQuery() *common.ListQueryRequest {
 
 type ListPurchasesByUserResponse struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Purchases     []*Purchase                `protobuf:"bytes,1,rep,name=purchases,proto3" json:"purchases,omitempty"`
+	Data          []*Purchase                `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
 	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -596,9 +596,9 @@ func (*ListPurchasesByUserResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_purchases_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *ListPurchasesByUserResponse) GetPurchases() []*Purchase {
+func (x *ListPurchasesByUserResponse) GetData() []*Purchase {
 	if x != nil {
-		return x.Purchases
+		return x.Data
 	}
 	return nil
 }
@@ -614,7 +614,7 @@ var File_billing_service_purchases_proto protoreflect.FileDescriptor
 
 const file_billing_service_purchases_proto_rawDesc = "" +
 	"\n" +
-	"\x1fbilling_service/purchases.proto\x12\x0fbilling_service\x1a\x1dbilling_service/billing.proto\x1a\x17common/pagination.proto\x1a\x14common/request.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x81\x03\n" +
+	"\x1fbilling_service/purchases.proto\x12\x0fbilling_service\x1a\x1dbilling_service/billing.proto\x1a\x17common/pagination.proto\x1a\x14common/request.proto\x1a\x15common/response.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x81\x03\n" +
 	"\bPurchase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12'\n" +
@@ -631,27 +631,26 @@ const file_billing_service_purchases_proto_rawDesc = "" +
 	"\x0fsubscription_id\x18\x02 \x01(\tR\x0esubscriptionId\x12\x17\n" +
 	"\aplan_id\x18\x03 \x01(\tR\x06planId\x12.\n" +
 	"\x06amount\x18\x04 \x01(\v2\x16.billing_service.MoneyR\x06amount\x12'\n" +
-	"\x0fidempotency_key\x18\x05 \x01(\tR\x0eidempotencyKey\"O\n" +
-	"\x16CreatePurchaseResponse\x125\n" +
-	"\bpurchase\x18\x01 \x01(\v2\x19.billing_service.PurchaseR\bpurchase\"5\n" +
-	"\x12GetPurchaseRequest\x12\x1f\n" +
-	"\vpurchase_id\x18\x01 \x01(\tR\n" +
-	"purchaseId\"L\n" +
-	"\x13GetPurchaseResponse\x125\n" +
-	"\bpurchase\x18\x01 \x01(\v2\x19.billing_service.PurchaseR\bpurchase\"}\n" +
+	"\x0fidempotency_key\x18\x05 \x01(\tR\x0eidempotencyKey\"G\n" +
+	"\x16CreatePurchaseResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"$\n" +
+	"\x12GetPurchaseRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"D\n" +
+	"\x13GetPurchaseResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.billing_service.PurchaseR\x04data\"}\n" +
 	"\"ListPurchasesBySubscriptionRequest\x12'\n" +
 	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12.\n" +
-	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\x9a\x01\n" +
-	"#ListPurchasesBySubscriptionResponse\x127\n" +
-	"\tpurchases\x18\x01 \x03(\v2\x19.billing_service.PurchaseR\tpurchases\x12:\n" +
+	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\x90\x01\n" +
+	"#ListPurchasesBySubscriptionResponse\x12-\n" +
+	"\x04data\x18\x01 \x03(\v2\x19.billing_service.PurchaseR\x04data\x12:\n" +
 	"\n" +
 	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
 	"pagination\"e\n" +
 	"\x1aListPurchasesByUserRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12.\n" +
-	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\x92\x01\n" +
-	"\x1bListPurchasesByUserResponse\x127\n" +
-	"\tpurchases\x18\x01 \x03(\v2\x19.billing_service.PurchaseR\tpurchases\x12:\n" +
+	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\x88\x01\n" +
+	"\x1bListPurchasesByUserResponse\x12-\n" +
+	"\x04data\x18\x01 \x03(\v2\x19.billing_service.PurchaseR\x04data\x12:\n" +
 	"\n" +
 	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
 	"pagination*\xa7\x01\n" +
@@ -694,8 +693,9 @@ var file_billing_service_purchases_proto_goTypes = []any{
 	(*ListPurchasesByUserResponse)(nil),         // 9: billing_service.ListPurchasesByUserResponse
 	(*Money)(nil),                               // 10: billing_service.Money
 	(*timestamppb.Timestamp)(nil),               // 11: google.protobuf.Timestamp
-	(*common.ListQueryRequest)(nil),             // 12: common.ListQueryRequest
-	(*common.PaginationMetadata)(nil),           // 13: common.PaginationMetadata
+	(*common.OperationMetadata)(nil),            // 12: common.OperationMetadata
+	(*common.ListQueryRequest)(nil),             // 13: common.ListQueryRequest
+	(*common.PaginationMetadata)(nil),           // 14: common.PaginationMetadata
 }
 var file_billing_service_purchases_proto_depIdxs = []int32{
 	10, // 0: billing_service.Purchase.amount:type_name -> billing_service.Money
@@ -703,14 +703,14 @@ var file_billing_service_purchases_proto_depIdxs = []int32{
 	11, // 2: billing_service.Purchase.created_at:type_name -> google.protobuf.Timestamp
 	11, // 3: billing_service.Purchase.completed_at:type_name -> google.protobuf.Timestamp
 	10, // 4: billing_service.CreatePurchaseRequest.amount:type_name -> billing_service.Money
-	1,  // 5: billing_service.CreatePurchaseResponse.purchase:type_name -> billing_service.Purchase
-	1,  // 6: billing_service.GetPurchaseResponse.purchase:type_name -> billing_service.Purchase
-	12, // 7: billing_service.ListPurchasesBySubscriptionRequest.query:type_name -> common.ListQueryRequest
-	1,  // 8: billing_service.ListPurchasesBySubscriptionResponse.purchases:type_name -> billing_service.Purchase
-	13, // 9: billing_service.ListPurchasesBySubscriptionResponse.pagination:type_name -> common.PaginationMetadata
-	12, // 10: billing_service.ListPurchasesByUserRequest.query:type_name -> common.ListQueryRequest
-	1,  // 11: billing_service.ListPurchasesByUserResponse.purchases:type_name -> billing_service.Purchase
-	13, // 12: billing_service.ListPurchasesByUserResponse.pagination:type_name -> common.PaginationMetadata
+	12, // 5: billing_service.CreatePurchaseResponse.data:type_name -> common.OperationMetadata
+	1,  // 6: billing_service.GetPurchaseResponse.data:type_name -> billing_service.Purchase
+	13, // 7: billing_service.ListPurchasesBySubscriptionRequest.query:type_name -> common.ListQueryRequest
+	1,  // 8: billing_service.ListPurchasesBySubscriptionResponse.data:type_name -> billing_service.Purchase
+	14, // 9: billing_service.ListPurchasesBySubscriptionResponse.pagination:type_name -> common.PaginationMetadata
+	13, // 10: billing_service.ListPurchasesByUserRequest.query:type_name -> common.ListQueryRequest
+	1,  // 11: billing_service.ListPurchasesByUserResponse.data:type_name -> billing_service.Purchase
+	14, // 12: billing_service.ListPurchasesByUserResponse.pagination:type_name -> common.PaginationMetadata
 	2,  // 13: billing_service.PurchaseService.CreatePurchase:input_type -> billing_service.CreatePurchaseRequest
 	4,  // 14: billing_service.PurchaseService.GetPurchase:input_type -> billing_service.GetPurchaseRequest
 	6,  // 15: billing_service.PurchaseService.ListPurchasesBySubscription:input_type -> billing_service.ListPurchasesBySubscriptionRequest

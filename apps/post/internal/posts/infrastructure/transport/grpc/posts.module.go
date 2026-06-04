@@ -6,20 +6,21 @@ import (
 
 	grpcServer "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc"
 	postsService "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/post_service"
+	posts_service "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/post_service"
 )
 
 var Module = fx.Module(
 	"postsInfrastructureTransportGrpcModule",
 
 	fx.Provide(
-		NewPostsGrpcServerHandler,
+		NewPostsGrpcServiceServer,
 	),
 
 	// Register the gRPC server and its routes
 	fx.Invoke(
-		func(postsGrpcServer grpcServer.GrpcServer, postGrpcServiceHandlers *PostsGrpcServerHandler) error {
+		func(postsGrpcServer grpcServer.GrpcServer, postsServiceServer posts_service.PostsServiceServer) error {
 			postsGrpcServer.GrpcServiceBuilder().RegisterRoutes(func(server *googleGrpc.Server) {
-				postsService.RegisterPostsServiceServer(server, postGrpcServiceHandlers)
+				postsService.RegisterPostsServiceServer(server, postsServiceServer)
 			})
 			return nil
 		},

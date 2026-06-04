@@ -8,6 +8,7 @@
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { wrappers } from "protobufjs";
 import { Observable } from "rxjs";
+import { PaginationMetadata } from "../common/pagination";
 import { Struct } from "../google/protobuf/struct";
 import { Timestamp } from "../google/protobuf/timestamp";
 
@@ -55,7 +56,7 @@ export interface GetOutboxEventRequest {
 }
 
 export interface GetOutboxEventResponse {
-  event: OutboxEvent | undefined;
+  data: OutboxEvent | undefined;
 }
 
 export interface ListOutboxEventsRequest {
@@ -66,8 +67,8 @@ export interface ListOutboxEventsRequest {
 }
 
 export interface ListOutboxEventsResponse {
-  events: OutboxEvent[];
-  nextPageToken: string;
+  data: OutboxEvent[];
+  pagination: PaginationMetadata | undefined;
 }
 
 export const BILLING_SERVICE_PACKAGE_NAME = "billing_service";

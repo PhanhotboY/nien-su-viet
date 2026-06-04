@@ -231,7 +231,7 @@ func (x *ListPlansRequest) GetQuery() *common.ListQueryRequest {
 
 type ListPlansResponse struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Plans         []*SubscriptionPlan        `protobuf:"bytes,1,rep,name=plans,proto3" json:"plans,omitempty"`
+	Data          []*SubscriptionPlan        `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
 	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -267,9 +267,9 @@ func (*ListPlansResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_plans_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *ListPlansResponse) GetPlans() []*SubscriptionPlan {
+func (x *ListPlansResponse) GetData() []*SubscriptionPlan {
 	if x != nil {
-		return x.Plans
+		return x.Data
 	}
 	return nil
 }
@@ -283,7 +283,7 @@ func (x *ListPlansResponse) GetPagination() *common.PaginationMetadata {
 
 type GetPlanRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PlanId        string                 `protobuf:"bytes,1,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -318,16 +318,16 @@ func (*GetPlanRequest) Descriptor() ([]byte, []int) {
 	return file_billing_service_plans_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetPlanRequest) GetPlanId() string {
+func (x *GetPlanRequest) GetId() string {
 	if x != nil {
-		return x.PlanId
+		return x.Id
 	}
 	return ""
 }
 
 type GetPlanResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Plan          *SubscriptionPlan      `protobuf:"bytes,1,opt,name=plan,proto3" json:"plan,omitempty"`
+	Data          *SubscriptionPlan      `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -362,9 +362,9 @@ func (*GetPlanResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_plans_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetPlanResponse) GetPlan() *SubscriptionPlan {
+func (x *GetPlanResponse) GetData() *SubscriptionPlan {
 	if x != nil {
-		return x.Plan
+		return x.Data
 	}
 	return nil
 }
@@ -386,16 +386,16 @@ const file_billing_service_plans_proto_rawDesc = "" +
 	"\x10ListPlansRequest\x12\x1f\n" +
 	"\vonly_active\x18\x01 \x01(\bR\n" +
 	"onlyActive\x12.\n" +
-	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\x88\x01\n" +
-	"\x11ListPlansResponse\x127\n" +
-	"\x05plans\x18\x01 \x03(\v2!.billing_service.SubscriptionPlanR\x05plans\x12:\n" +
+	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\x86\x01\n" +
+	"\x11ListPlansResponse\x125\n" +
+	"\x04data\x18\x01 \x03(\v2!.billing_service.SubscriptionPlanR\x04data\x12:\n" +
 	"\n" +
 	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
-	"pagination\")\n" +
-	"\x0eGetPlanRequest\x12\x17\n" +
-	"\aplan_id\x18\x01 \x01(\tR\x06planId\"H\n" +
+	"pagination\" \n" +
+	"\x0eGetPlanRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"H\n" +
 	"\x0fGetPlanResponse\x125\n" +
-	"\x04plan\x18\x01 \x01(\v2!.billing_service.SubscriptionPlanR\x04plan*\x9f\x01\n" +
+	"\x04data\x18\x01 \x01(\v2!.billing_service.SubscriptionPlanR\x04data*\x9f\x01\n" +
 	"\x0fBillingInterval\x12 \n" +
 	"\x1cBILLING_INTERVAL_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14BILLING_INTERVAL_DAY\x10\x01\x12\x19\n" +
@@ -437,9 +437,9 @@ var file_billing_service_plans_proto_depIdxs = []int32{
 	0, // 1: billing_service.SubscriptionPlan.billing_interval:type_name -> billing_service.BillingInterval
 	7, // 2: billing_service.SubscriptionPlan.created_at:type_name -> google.protobuf.Timestamp
 	8, // 3: billing_service.ListPlansRequest.query:type_name -> common.ListQueryRequest
-	1, // 4: billing_service.ListPlansResponse.plans:type_name -> billing_service.SubscriptionPlan
+	1, // 4: billing_service.ListPlansResponse.data:type_name -> billing_service.SubscriptionPlan
 	9, // 5: billing_service.ListPlansResponse.pagination:type_name -> common.PaginationMetadata
-	1, // 6: billing_service.GetPlanResponse.plan:type_name -> billing_service.SubscriptionPlan
+	1, // 6: billing_service.GetPlanResponse.data:type_name -> billing_service.SubscriptionPlan
 	2, // 7: billing_service.SubscriptionPlanService.ListPlans:input_type -> billing_service.ListPlansRequest
 	4, // 8: billing_service.SubscriptionPlanService.GetPlan:input_type -> billing_service.GetPlanRequest
 	3, // 9: billing_service.SubscriptionPlanService.ListPlans:output_type -> billing_service.ListPlansResponse

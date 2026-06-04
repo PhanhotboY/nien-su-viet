@@ -4,6 +4,8 @@ package billing_service;
 
 import "billing_service/billing.proto";
 import "billing_service/payment_transactions.proto";
+import "common/pagination.proto";
+import "common/response.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -69,15 +71,15 @@ message CreatePaymentAttemptRequest {
 }
 
 message CreatePaymentAttemptResponse {
-  PaymentAttempt payment_attempt = 1;
+  common.OperationMetadata data = 1;
 }
 
 message GetPaymentAttemptRequest {
-  string payment_attempt_id = 1;
+  string id = 1;
 }
 
 message GetPaymentAttemptResponse {
-  PaymentAttempt payment_attempt = 1;
+  PaymentAttempt data = 1;
 }
 
 message ListPaymentAttemptsByPurchaseRequest {
@@ -85,7 +87,8 @@ message ListPaymentAttemptsByPurchaseRequest {
 }
 
 message ListPaymentAttemptsByPurchaseResponse {
-  repeated PaymentAttempt payment_attempts = 1;
+  repeated PaymentAttempt data = 1;
+  common.PaginationMetadata pagination = 2;
 }
 
 // Initiate a refund for a specific purchase.
@@ -115,7 +118,7 @@ message RefundPurchaseRequest {
 message RefundPurchaseResponse {
   // The refund transaction(s) created as a result.
   // Some providers may create multiple records (fees, partials, etc.)
-  repeated PaymentTransaction refund_transactions = 1;
+  repeated PaymentTransaction data = 1;
 }
 
 service PaymentService {

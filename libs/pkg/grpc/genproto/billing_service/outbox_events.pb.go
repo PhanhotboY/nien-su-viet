@@ -7,6 +7,7 @@
 package billing_service
 
 import (
+	common "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
@@ -253,7 +254,7 @@ func (x *GetOutboxEventRequest) GetId() string {
 
 type GetOutboxEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Event         *OutboxEvent           `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
+	Data          *OutboxEvent           `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -288,9 +289,9 @@ func (*GetOutboxEventResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_outbox_events_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetOutboxEventResponse) GetEvent() *OutboxEvent {
+func (x *GetOutboxEventResponse) GetData() *OutboxEvent {
 	if x != nil {
-		return x.Event
+		return x.Data
 	}
 	return nil
 }
@@ -357,9 +358,9 @@ func (x *ListOutboxEventsRequest) GetPageToken() string {
 }
 
 type ListOutboxEventsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Events        []*OutboxEvent         `protobuf:"bytes,1,rep,name=events,proto3" json:"events,omitempty"`
-	NextPageToken string                 `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Data          []*OutboxEvent             `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -394,25 +395,25 @@ func (*ListOutboxEventsResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_outbox_events_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ListOutboxEventsResponse) GetEvents() []*OutboxEvent {
+func (x *ListOutboxEventsResponse) GetData() []*OutboxEvent {
 	if x != nil {
-		return x.Events
+		return x.Data
 	}
 	return nil
 }
 
-func (x *ListOutboxEventsResponse) GetNextPageToken() string {
+func (x *ListOutboxEventsResponse) GetPagination() *common.PaginationMetadata {
 	if x != nil {
-		return x.NextPageToken
+		return x.Pagination
 	}
-	return ""
+	return nil
 }
 
 var File_billing_service_outbox_events_proto protoreflect.FileDescriptor
 
 const file_billing_service_outbox_events_proto_rawDesc = "" +
 	"\n" +
-	"#billing_service/outbox_events.proto\x12\x0fbilling_service\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd0\x03\n" +
+	"#billing_service/outbox_events.proto\x12\x0fbilling_service\x1a\x17common/pagination.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd0\x03\n" +
 	"\vOutboxEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0eaggregate_type\x18\x02 \x01(\tR\raggregateType\x12!\n" +
@@ -429,17 +430,19 @@ const file_billing_service_outbox_events_proto_rawDesc = "" +
 	"created_at\x18\n" +
 	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"'\n" +
 	"\x15GetOutboxEventRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"L\n" +
-	"\x16GetOutboxEventResponse\x122\n" +
-	"\x05event\x18\x01 \x01(\v2\x1c.billing_service.OutboxEventR\x05event\"\x91\x01\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"J\n" +
+	"\x16GetOutboxEventResponse\x120\n" +
+	"\x04data\x18\x01 \x01(\v2\x1c.billing_service.OutboxEventR\x04data\"\x91\x01\n" +
 	"\x17ListOutboxEventsRequest\x12:\n" +
 	"\x06status\x18\x01 \x01(\x0e2\".billing_service.OutboxEventStatusR\x06status\x12\x1b\n" +
 	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x1d\n" +
 	"\n" +
-	"page_token\x18\x03 \x01(\tR\tpageToken\"x\n" +
-	"\x18ListOutboxEventsResponse\x124\n" +
-	"\x06events\x18\x01 \x03(\v2\x1c.billing_service.OutboxEventR\x06events\x12&\n" +
-	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken*\xdc\x01\n" +
+	"page_token\x18\x03 \x01(\tR\tpageToken\"\x88\x01\n" +
+	"\x18ListOutboxEventsResponse\x120\n" +
+	"\x04data\x18\x01 \x03(\v2\x1c.billing_service.OutboxEventR\x04data\x12:\n" +
+	"\n" +
+	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
+	"pagination*\xdc\x01\n" +
 	"\x11OutboxEventStatus\x12#\n" +
 	"\x1fOUTBOX_EVENT_STATUS_UNSPECIFIED\x10\x00\x12\x1f\n" +
 	"\x1bOUTBOX_EVENT_STATUS_PENDING\x10\x01\x12!\n" +
@@ -466,14 +469,15 @@ func file_billing_service_outbox_events_proto_rawDescGZIP() []byte {
 var file_billing_service_outbox_events_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_billing_service_outbox_events_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_billing_service_outbox_events_proto_goTypes = []any{
-	(OutboxEventStatus)(0),           // 0: billing_service.OutboxEventStatus
-	(*OutboxEvent)(nil),              // 1: billing_service.OutboxEvent
-	(*GetOutboxEventRequest)(nil),    // 2: billing_service.GetOutboxEventRequest
-	(*GetOutboxEventResponse)(nil),   // 3: billing_service.GetOutboxEventResponse
-	(*ListOutboxEventsRequest)(nil),  // 4: billing_service.ListOutboxEventsRequest
-	(*ListOutboxEventsResponse)(nil), // 5: billing_service.ListOutboxEventsResponse
-	(*structpb.Struct)(nil),          // 6: google.protobuf.Struct
-	(*timestamppb.Timestamp)(nil),    // 7: google.protobuf.Timestamp
+	(OutboxEventStatus)(0),            // 0: billing_service.OutboxEventStatus
+	(*OutboxEvent)(nil),               // 1: billing_service.OutboxEvent
+	(*GetOutboxEventRequest)(nil),     // 2: billing_service.GetOutboxEventRequest
+	(*GetOutboxEventResponse)(nil),    // 3: billing_service.GetOutboxEventResponse
+	(*ListOutboxEventsRequest)(nil),   // 4: billing_service.ListOutboxEventsRequest
+	(*ListOutboxEventsResponse)(nil),  // 5: billing_service.ListOutboxEventsResponse
+	(*structpb.Struct)(nil),           // 6: google.protobuf.Struct
+	(*timestamppb.Timestamp)(nil),     // 7: google.protobuf.Timestamp
+	(*common.PaginationMetadata)(nil), // 8: common.PaginationMetadata
 }
 var file_billing_service_outbox_events_proto_depIdxs = []int32{
 	6,  // 0: billing_service.OutboxEvent.payload:type_name -> google.protobuf.Struct
@@ -481,18 +485,19 @@ var file_billing_service_outbox_events_proto_depIdxs = []int32{
 	7,  // 2: billing_service.OutboxEvent.next_retry_at:type_name -> google.protobuf.Timestamp
 	7,  // 3: billing_service.OutboxEvent.published_at:type_name -> google.protobuf.Timestamp
 	7,  // 4: billing_service.OutboxEvent.created_at:type_name -> google.protobuf.Timestamp
-	1,  // 5: billing_service.GetOutboxEventResponse.event:type_name -> billing_service.OutboxEvent
+	1,  // 5: billing_service.GetOutboxEventResponse.data:type_name -> billing_service.OutboxEvent
 	0,  // 6: billing_service.ListOutboxEventsRequest.status:type_name -> billing_service.OutboxEventStatus
-	1,  // 7: billing_service.ListOutboxEventsResponse.events:type_name -> billing_service.OutboxEvent
-	2,  // 8: billing_service.OutboxService.GetOutboxEvent:input_type -> billing_service.GetOutboxEventRequest
-	4,  // 9: billing_service.OutboxService.ListOutboxEvents:input_type -> billing_service.ListOutboxEventsRequest
-	3,  // 10: billing_service.OutboxService.GetOutboxEvent:output_type -> billing_service.GetOutboxEventResponse
-	5,  // 11: billing_service.OutboxService.ListOutboxEvents:output_type -> billing_service.ListOutboxEventsResponse
-	10, // [10:12] is the sub-list for method output_type
-	8,  // [8:10] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	1,  // 7: billing_service.ListOutboxEventsResponse.data:type_name -> billing_service.OutboxEvent
+	8,  // 8: billing_service.ListOutboxEventsResponse.pagination:type_name -> common.PaginationMetadata
+	2,  // 9: billing_service.OutboxService.GetOutboxEvent:input_type -> billing_service.GetOutboxEventRequest
+	4,  // 10: billing_service.OutboxService.ListOutboxEvents:input_type -> billing_service.ListOutboxEventsRequest
+	3,  // 11: billing_service.OutboxService.GetOutboxEvent:output_type -> billing_service.GetOutboxEventResponse
+	5,  // 12: billing_service.OutboxService.ListOutboxEvents:output_type -> billing_service.ListOutboxEventsResponse
+	11, // [11:13] is the sub-list for method output_type
+	9,  // [9:11] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_billing_service_outbox_events_proto_init() }

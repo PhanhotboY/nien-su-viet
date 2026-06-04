@@ -7,6 +7,7 @@
 package billing_service
 
 import (
+	common "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
@@ -147,7 +148,7 @@ func (x *GetSubscriptionEventRequest) GetId() string {
 
 type GetSubscriptionEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Event         *SubscriptionEvent     `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
+	Data          *SubscriptionEvent     `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -182,9 +183,9 @@ func (*GetSubscriptionEventResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_subscription_events_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetSubscriptionEventResponse) GetEvent() *SubscriptionEvent {
+func (x *GetSubscriptionEventResponse) GetData() *SubscriptionEvent {
 	if x != nil {
-		return x.Event
+		return x.Data
 	}
 	return nil
 }
@@ -194,8 +195,8 @@ type ListSubscriptionEventsRequest struct {
 	SubscriptionId string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
 	// Optional filter
 	EventType     string `protobuf:"bytes,2,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`
-	PageSize      int32  `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	PageToken     string `protobuf:"bytes,4,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	Page          int32  `protobuf:"varint,3,opt,name=page,proto3" json:"page,omitempty"`
+	Limit         int32  `protobuf:"varint,4,opt,name=limit,proto3" json:"limit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -244,24 +245,24 @@ func (x *ListSubscriptionEventsRequest) GetEventType() string {
 	return ""
 }
 
-func (x *ListSubscriptionEventsRequest) GetPageSize() int32 {
+func (x *ListSubscriptionEventsRequest) GetPage() int32 {
 	if x != nil {
-		return x.PageSize
+		return x.Page
 	}
 	return 0
 }
 
-func (x *ListSubscriptionEventsRequest) GetPageToken() string {
+func (x *ListSubscriptionEventsRequest) GetLimit() int32 {
 	if x != nil {
-		return x.PageToken
+		return x.Limit
 	}
-	return ""
+	return 0
 }
 
 type ListSubscriptionEventsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Events        []*SubscriptionEvent   `protobuf:"bytes,1,rep,name=events,proto3" json:"events,omitempty"`
-	NextPageToken string                 `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Data          []*SubscriptionEvent       `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -296,25 +297,25 @@ func (*ListSubscriptionEventsResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_subscription_events_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ListSubscriptionEventsResponse) GetEvents() []*SubscriptionEvent {
+func (x *ListSubscriptionEventsResponse) GetData() []*SubscriptionEvent {
 	if x != nil {
-		return x.Events
+		return x.Data
 	}
 	return nil
 }
 
-func (x *ListSubscriptionEventsResponse) GetNextPageToken() string {
+func (x *ListSubscriptionEventsResponse) GetPagination() *common.PaginationMetadata {
 	if x != nil {
-		return x.NextPageToken
+		return x.Pagination
 	}
-	return ""
+	return nil
 }
 
 var File_billing_service_subscription_events_proto protoreflect.FileDescriptor
 
 const file_billing_service_subscription_events_proto_rawDesc = "" +
 	"\n" +
-	")billing_service/subscription_events.proto\x12\x0fbilling_service\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd9\x01\n" +
+	")billing_service/subscription_events.proto\x12\x0fbilling_service\x1a\x17common/pagination.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd9\x01\n" +
 	"\x11SubscriptionEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
 	"\x0fsubscription_id\x18\x02 \x01(\tR\x0esubscriptionId\x12\x1d\n" +
@@ -324,19 +325,20 @@ const file_billing_service_subscription_events_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"-\n" +
 	"\x1bGetSubscriptionEventRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"X\n" +
-	"\x1cGetSubscriptionEventResponse\x128\n" +
-	"\x05event\x18\x01 \x01(\v2\".billing_service.SubscriptionEventR\x05event\"\xa3\x01\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"V\n" +
+	"\x1cGetSubscriptionEventResponse\x126\n" +
+	"\x04data\x18\x01 \x01(\v2\".billing_service.SubscriptionEventR\x04data\"\x91\x01\n" +
 	"\x1dListSubscriptionEventsRequest\x12'\n" +
 	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12\x1d\n" +
 	"\n" +
-	"event_type\x18\x02 \x01(\tR\teventType\x12\x1b\n" +
-	"\tpage_size\x18\x03 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"event_type\x18\x02 \x01(\tR\teventType\x12\x12\n" +
+	"\x04page\x18\x03 \x01(\x05R\x04page\x12\x14\n" +
+	"\x05limit\x18\x04 \x01(\x05R\x05limit\"\x94\x01\n" +
+	"\x1eListSubscriptionEventsResponse\x126\n" +
+	"\x04data\x18\x01 \x03(\v2\".billing_service.SubscriptionEventR\x04data\x12:\n" +
 	"\n" +
-	"page_token\x18\x04 \x01(\tR\tpageToken\"\x84\x01\n" +
-	"\x1eListSubscriptionEventsResponse\x12:\n" +
-	"\x06events\x18\x01 \x03(\v2\".billing_service.SubscriptionEventR\x06events\x12&\n" +
-	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken2\x8a\x02\n" +
+	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
+	"pagination2\x8a\x02\n" +
 	"\x18SubscriptionEventService\x12s\n" +
 	"\x14GetSubscriptionEvent\x12,.billing_service.GetSubscriptionEventRequest\x1a-.billing_service.GetSubscriptionEventResponse\x12y\n" +
 	"\x16ListSubscriptionEvents\x12..billing_service.ListSubscriptionEventsRequest\x1a/.billing_service.ListSubscriptionEventsResponseB[ZYgithub.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_serviceb\x06proto3"
@@ -362,21 +364,23 @@ var file_billing_service_subscription_events_proto_goTypes = []any{
 	(*ListSubscriptionEventsResponse)(nil), // 4: billing_service.ListSubscriptionEventsResponse
 	(*structpb.Struct)(nil),                // 5: google.protobuf.Struct
 	(*timestamppb.Timestamp)(nil),          // 6: google.protobuf.Timestamp
+	(*common.PaginationMetadata)(nil),      // 7: common.PaginationMetadata
 }
 var file_billing_service_subscription_events_proto_depIdxs = []int32{
 	5, // 0: billing_service.SubscriptionEvent.payload:type_name -> google.protobuf.Struct
 	6, // 1: billing_service.SubscriptionEvent.created_at:type_name -> google.protobuf.Timestamp
-	0, // 2: billing_service.GetSubscriptionEventResponse.event:type_name -> billing_service.SubscriptionEvent
-	0, // 3: billing_service.ListSubscriptionEventsResponse.events:type_name -> billing_service.SubscriptionEvent
-	1, // 4: billing_service.SubscriptionEventService.GetSubscriptionEvent:input_type -> billing_service.GetSubscriptionEventRequest
-	3, // 5: billing_service.SubscriptionEventService.ListSubscriptionEvents:input_type -> billing_service.ListSubscriptionEventsRequest
-	2, // 6: billing_service.SubscriptionEventService.GetSubscriptionEvent:output_type -> billing_service.GetSubscriptionEventResponse
-	4, // 7: billing_service.SubscriptionEventService.ListSubscriptionEvents:output_type -> billing_service.ListSubscriptionEventsResponse
-	6, // [6:8] is the sub-list for method output_type
-	4, // [4:6] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	0, // 2: billing_service.GetSubscriptionEventResponse.data:type_name -> billing_service.SubscriptionEvent
+	0, // 3: billing_service.ListSubscriptionEventsResponse.data:type_name -> billing_service.SubscriptionEvent
+	7, // 4: billing_service.ListSubscriptionEventsResponse.pagination:type_name -> common.PaginationMetadata
+	1, // 5: billing_service.SubscriptionEventService.GetSubscriptionEvent:input_type -> billing_service.GetSubscriptionEventRequest
+	3, // 6: billing_service.SubscriptionEventService.ListSubscriptionEvents:input_type -> billing_service.ListSubscriptionEventsRequest
+	2, // 7: billing_service.SubscriptionEventService.GetSubscriptionEvent:output_type -> billing_service.GetSubscriptionEventResponse
+	4, // 8: billing_service.SubscriptionEventService.ListSubscriptionEvents:output_type -> billing_service.ListSubscriptionEventsResponse
+	7, // [7:9] is the sub-list for method output_type
+	5, // [5:7] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_billing_service_subscription_events_proto_init() }

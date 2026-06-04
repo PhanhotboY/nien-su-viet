@@ -13,9 +13,7 @@ type Consumer interface {
 	GetName() string
 }
 
-type ConsumerHandler interface {
-	Handle(ctx context.Context, consumeContext types.MessageConsumeContext) error
-}
+type ConsumerHandler func(ctx context.Context, consumeContext types.MessageConsumeContext) error
 
 type ConsumerConnector interface {
 	ConnectConsumer(message types.IMessage, consumer Consumer) error

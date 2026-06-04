@@ -325,7 +325,7 @@ func (x *ListPaymentTransactionsByPurchaseRequest) GetQuery() *common.ListQueryR
 
 type ListPaymentTransactionsByPurchaseResponse struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Transactions  []*PaymentTransaction      `protobuf:"bytes,1,rep,name=transactions,proto3" json:"transactions,omitempty"`
+	Data          []*PaymentTransaction      `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
 	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -361,9 +361,9 @@ func (*ListPaymentTransactionsByPurchaseResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_payment_transactions_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *ListPaymentTransactionsByPurchaseResponse) GetTransactions() []*PaymentTransaction {
+func (x *ListPaymentTransactionsByPurchaseResponse) GetData() []*PaymentTransaction {
 	if x != nil {
-		return x.Transactions
+		return x.Data
 	}
 	return nil
 }
@@ -429,7 +429,7 @@ func (x *ListPaymentTransactionsByAttemptRequest) GetQuery() *common.ListQueryRe
 
 type ListPaymentTransactionsByAttemptResponse struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Transactions  []*PaymentTransaction      `protobuf:"bytes,1,rep,name=transactions,proto3" json:"transactions,omitempty"`
+	Data          []*PaymentTransaction      `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
 	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -465,9 +465,9 @@ func (*ListPaymentTransactionsByAttemptResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_payment_transactions_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ListPaymentTransactionsByAttemptResponse) GetTransactions() []*PaymentTransaction {
+func (x *ListPaymentTransactionsByAttemptResponse) GetData() []*PaymentTransaction {
 	if x != nil {
-		return x.Transactions
+		return x.Data
 	}
 	return nil
 }
@@ -498,17 +498,17 @@ const file_billing_service_payment_transactions_proto_rawDesc = "" +
 	"(ListPaymentTransactionsByPurchaseRequest\x12\x1f\n" +
 	"\vpurchase_id\x18\x01 \x01(\tR\n" +
 	"purchaseId\x12.\n" +
-	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\xb0\x01\n" +
-	")ListPaymentTransactionsByPurchaseResponse\x12G\n" +
-	"\ftransactions\x18\x01 \x03(\v2#.billing_service.PaymentTransactionR\ftransactions\x12:\n" +
+	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\xa0\x01\n" +
+	")ListPaymentTransactionsByPurchaseResponse\x127\n" +
+	"\x04data\x18\x01 \x03(\v2#.billing_service.PaymentTransactionR\x04data\x12:\n" +
 	"\n" +
 	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
 	"pagination\"\x87\x01\n" +
 	"'ListPaymentTransactionsByAttemptRequest\x12,\n" +
 	"\x12payment_attempt_id\x18\x01 \x01(\tR\x10paymentAttemptId\x12.\n" +
-	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\xaf\x01\n" +
-	"(ListPaymentTransactionsByAttemptResponse\x12G\n" +
-	"\ftransactions\x18\x01 \x03(\v2#.billing_service.PaymentTransactionR\ftransactions\x12:\n" +
+	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\x9f\x01\n" +
+	"(ListPaymentTransactionsByAttemptResponse\x127\n" +
+	"\x04data\x18\x01 \x03(\v2#.billing_service.PaymentTransactionR\x04data\x12:\n" +
 	"\n" +
 	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
 	"pagination*\xed\x02\n" +
@@ -568,10 +568,10 @@ var file_billing_service_payment_transactions_proto_depIdxs = []int32{
 	9,  // 4: billing_service.PaymentTransaction.processed_at:type_name -> google.protobuf.Timestamp
 	9,  // 5: billing_service.PaymentTransaction.created_at:type_name -> google.protobuf.Timestamp
 	10, // 6: billing_service.ListPaymentTransactionsByPurchaseRequest.query:type_name -> common.ListQueryRequest
-	2,  // 7: billing_service.ListPaymentTransactionsByPurchaseResponse.transactions:type_name -> billing_service.PaymentTransaction
+	2,  // 7: billing_service.ListPaymentTransactionsByPurchaseResponse.data:type_name -> billing_service.PaymentTransaction
 	11, // 8: billing_service.ListPaymentTransactionsByPurchaseResponse.pagination:type_name -> common.PaginationMetadata
 	10, // 9: billing_service.ListPaymentTransactionsByAttemptRequest.query:type_name -> common.ListQueryRequest
-	2,  // 10: billing_service.ListPaymentTransactionsByAttemptResponse.transactions:type_name -> billing_service.PaymentTransaction
+	2,  // 10: billing_service.ListPaymentTransactionsByAttemptResponse.data:type_name -> billing_service.PaymentTransaction
 	11, // 11: billing_service.ListPaymentTransactionsByAttemptResponse.pagination:type_name -> common.PaginationMetadata
 	3,  // 12: billing_service.PaymentTransactionService.ListByPurchase:input_type -> billing_service.ListPaymentTransactionsByPurchaseRequest
 	5,  // 13: billing_service.PaymentTransactionService.ListByAttempt:input_type -> billing_service.ListPaymentTransactionsByAttemptRequest

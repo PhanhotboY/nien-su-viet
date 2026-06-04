@@ -48,16 +48,16 @@ export interface ListPlansRequest {
 }
 
 export interface ListPlansResponse {
-  plans: SubscriptionPlan[];
+  data: SubscriptionPlan[];
   pagination: PaginationMetadata | undefined;
 }
 
 export interface GetPlanRequest {
-  planId: string;
+  id: string;
 }
 
 export interface GetPlanResponse {
-  plan: SubscriptionPlan | undefined;
+  data: SubscriptionPlan | undefined;
 }
 
 export const BILLING_SERVICE_PACKAGE_NAME = "billing_service";

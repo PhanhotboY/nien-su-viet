@@ -284,8 +284,8 @@ func (x *CreateSubscriptionRequest) GetInitialPeriodEnd() *timestamppb.Timestamp
 }
 
 type CreateSubscriptionResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Subscription  *Subscription          `protobuf:"bytes,1,opt,name=subscription,proto3" json:"subscription,omitempty"`
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -320,18 +320,18 @@ func (*CreateSubscriptionResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_subscriptions_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CreateSubscriptionResponse) GetSubscription() *Subscription {
+func (x *CreateSubscriptionResponse) GetData() *common.OperationMetadata {
 	if x != nil {
-		return x.Subscription
+		return x.Data
 	}
 	return nil
 }
 
 type GetSubscriptionRequest struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	SubscriptionId string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetSubscriptionRequest) Reset() {
@@ -364,16 +364,16 @@ func (*GetSubscriptionRequest) Descriptor() ([]byte, []int) {
 	return file_billing_service_subscriptions_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetSubscriptionRequest) GetSubscriptionId() string {
+func (x *GetSubscriptionRequest) GetId() string {
 	if x != nil {
-		return x.SubscriptionId
+		return x.Id
 	}
 	return ""
 }
 
 type GetSubscriptionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Subscription  *Subscription          `protobuf:"bytes,1,opt,name=subscription,proto3" json:"subscription,omitempty"`
+	Data          *Subscription          `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -408,9 +408,9 @@ func (*GetSubscriptionResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_subscriptions_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetSubscriptionResponse) GetSubscription() *Subscription {
+func (x *GetSubscriptionResponse) GetData() *Subscription {
 	if x != nil {
-		return x.Subscription
+		return x.Data
 	}
 	return nil
 }
@@ -469,7 +469,7 @@ func (x *ListSubscriptionsByUserRequest) GetQuery() *common.ListQueryRequest {
 
 type ListSubscriptionsByUserResponse struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Subscriptions []*Subscription            `protobuf:"bytes,1,rep,name=subscriptions,proto3" json:"subscriptions,omitempty"`
+	Data          []*Subscription            `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
 	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -505,9 +505,9 @@ func (*ListSubscriptionsByUserResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_subscriptions_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *ListSubscriptionsByUserResponse) GetSubscriptions() []*Subscription {
+func (x *ListSubscriptionsByUserResponse) GetData() []*Subscription {
 	if x != nil {
-		return x.Subscriptions
+		return x.Data
 	}
 	return nil
 }
@@ -583,8 +583,8 @@ func (x *CancelSubscriptionRequest) GetIdempotencyKey() string {
 }
 
 type CancelSubscriptionResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Subscription  *Subscription          `protobuf:"bytes,1,opt,name=subscription,proto3" json:"subscription,omitempty"`
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -619,9 +619,9 @@ func (*CancelSubscriptionResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_subscriptions_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *CancelSubscriptionResponse) GetSubscription() *Subscription {
+func (x *CancelSubscriptionResponse) GetData() *common.OperationMetadata {
 	if x != nil {
-		return x.Subscription
+		return x.Data
 	}
 	return nil
 }
@@ -630,7 +630,7 @@ var File_billing_service_subscriptions_proto protoreflect.FileDescriptor
 
 const file_billing_service_subscriptions_proto_rawDesc = "" +
 	"\n" +
-	"#billing_service/subscriptions.proto\x12\x0fbilling_service\x1a\x17common/pagination.proto\x1a\x14common/request.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc4\x04\n" +
+	"#billing_service/subscriptions.proto\x12\x0fbilling_service\x1a\x17common/pagination.proto\x1a\x14common/request.proto\x1a\x15common/response.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc4\x04\n" +
 	"\fSubscription\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x17\n" +
@@ -652,27 +652,27 @@ const file_billing_service_subscriptions_proto_rawDesc = "" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x17\n" +
 	"\aplan_id\x18\x02 \x01(\tR\x06planId\x12L\n" +
 	"\x14initial_period_start\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x12initialPeriodStart\x12H\n" +
-	"\x12initial_period_end\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x10initialPeriodEnd\"_\n" +
-	"\x1aCreateSubscriptionResponse\x12A\n" +
-	"\fsubscription\x18\x01 \x01(\v2\x1d.billing_service.SubscriptionR\fsubscription\"A\n" +
-	"\x16GetSubscriptionRequest\x12'\n" +
-	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\"\\\n" +
-	"\x17GetSubscriptionResponse\x12A\n" +
-	"\fsubscription\x18\x01 \x01(\v2\x1d.billing_service.SubscriptionR\fsubscription\"i\n" +
+	"\x12initial_period_end\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\x10initialPeriodEnd\"K\n" +
+	"\x1aCreateSubscriptionResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"(\n" +
+	"\x16GetSubscriptionRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"L\n" +
+	"\x17GetSubscriptionResponse\x121\n" +
+	"\x04data\x18\x01 \x01(\v2\x1d.billing_service.SubscriptionR\x04data\"i\n" +
 	"\x1eListSubscriptionsByUserRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12.\n" +
-	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\xa2\x01\n" +
-	"\x1fListSubscriptionsByUserResponse\x12C\n" +
-	"\rsubscriptions\x18\x01 \x03(\v2\x1d.billing_service.SubscriptionR\rsubscriptions\x12:\n" +
+	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\x90\x01\n" +
+	"\x1fListSubscriptionsByUserResponse\x121\n" +
+	"\x04data\x18\x01 \x03(\v2\x1d.billing_service.SubscriptionR\x04data\x12:\n" +
 	"\n" +
 	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
 	"pagination\"\x91\x01\n" +
 	"\x19CancelSubscriptionRequest\x12'\n" +
 	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12\"\n" +
 	"\rat_period_end\x18\x02 \x01(\bR\vatPeriodEnd\x12'\n" +
-	"\x0fidempotency_key\x18\x03 \x01(\tR\x0eidempotencyKey\"_\n" +
-	"\x1aCancelSubscriptionResponse\x12A\n" +
-	"\fsubscription\x18\x01 \x01(\v2\x1d.billing_service.SubscriptionR\fsubscription*\xdf\x01\n" +
+	"\x0fidempotency_key\x18\x03 \x01(\tR\x0eidempotencyKey\"K\n" +
+	"\x1aCancelSubscriptionResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data*\xdf\x01\n" +
 	"\x12SubscriptionStatus\x12#\n" +
 	"\x1fSUBSCRIPTION_STATUS_UNSPECIFIED\x10\x00\x12\x1f\n" +
 	"\x1bSUBSCRIPTION_STATUS_PENDING\x10\x01\x12\x1e\n" +
@@ -712,8 +712,9 @@ var file_billing_service_subscriptions_proto_goTypes = []any{
 	(*CancelSubscriptionRequest)(nil),       // 8: billing_service.CancelSubscriptionRequest
 	(*CancelSubscriptionResponse)(nil),      // 9: billing_service.CancelSubscriptionResponse
 	(*timestamppb.Timestamp)(nil),           // 10: google.protobuf.Timestamp
-	(*common.ListQueryRequest)(nil),         // 11: common.ListQueryRequest
-	(*common.PaginationMetadata)(nil),       // 12: common.PaginationMetadata
+	(*common.OperationMetadata)(nil),        // 11: common.OperationMetadata
+	(*common.ListQueryRequest)(nil),         // 12: common.ListQueryRequest
+	(*common.PaginationMetadata)(nil),       // 13: common.PaginationMetadata
 }
 var file_billing_service_subscriptions_proto_depIdxs = []int32{
 	0,  // 0: billing_service.Subscription.status:type_name -> billing_service.SubscriptionStatus
@@ -725,12 +726,12 @@ var file_billing_service_subscriptions_proto_depIdxs = []int32{
 	10, // 6: billing_service.Subscription.updated_at:type_name -> google.protobuf.Timestamp
 	10, // 7: billing_service.CreateSubscriptionRequest.initial_period_start:type_name -> google.protobuf.Timestamp
 	10, // 8: billing_service.CreateSubscriptionRequest.initial_period_end:type_name -> google.protobuf.Timestamp
-	1,  // 9: billing_service.CreateSubscriptionResponse.subscription:type_name -> billing_service.Subscription
-	1,  // 10: billing_service.GetSubscriptionResponse.subscription:type_name -> billing_service.Subscription
-	11, // 11: billing_service.ListSubscriptionsByUserRequest.query:type_name -> common.ListQueryRequest
-	1,  // 12: billing_service.ListSubscriptionsByUserResponse.subscriptions:type_name -> billing_service.Subscription
-	12, // 13: billing_service.ListSubscriptionsByUserResponse.pagination:type_name -> common.PaginationMetadata
-	1,  // 14: billing_service.CancelSubscriptionResponse.subscription:type_name -> billing_service.Subscription
+	11, // 9: billing_service.CreateSubscriptionResponse.data:type_name -> common.OperationMetadata
+	1,  // 10: billing_service.GetSubscriptionResponse.data:type_name -> billing_service.Subscription
+	12, // 11: billing_service.ListSubscriptionsByUserRequest.query:type_name -> common.ListQueryRequest
+	1,  // 12: billing_service.ListSubscriptionsByUserResponse.data:type_name -> billing_service.Subscription
+	13, // 13: billing_service.ListSubscriptionsByUserResponse.pagination:type_name -> common.PaginationMetadata
+	11, // 14: billing_service.CancelSubscriptionResponse.data:type_name -> common.OperationMetadata
 	2,  // 15: billing_service.SubscriptionService.CreateSubscription:input_type -> billing_service.CreateSubscriptionRequest
 	4,  // 16: billing_service.SubscriptionService.GetSubscription:input_type -> billing_service.GetSubscriptionRequest
 	6,  // 17: billing_service.SubscriptionService.ListSubscriptionsByUser:input_type -> billing_service.ListSubscriptionsByUserRequest

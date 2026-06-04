@@ -7,6 +7,7 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
+import { PaginationMetadata } from "../common/pagination";
 import { Timestamp } from "../google/protobuf/timestamp";
 
 export const protobufPackage = "billing_service";
@@ -24,19 +25,19 @@ export interface GetProcessedMessageRequest {
 }
 
 export interface GetProcessedMessageResponse {
-  message: ProcessedMessage | undefined;
+  data: ProcessedMessage | undefined;
 }
 
 export interface ListProcessedMessagesRequest {
   /** Optional filters (add more as needed) */
   consumerName: string;
-  pageSize: number;
-  pageToken: string;
+  page: number;
+  limit: number;
 }
 
 export interface ListProcessedMessagesResponse {
-  messages: ProcessedMessage[];
-  nextPageToken: string;
+  data: ProcessedMessage[];
+  pagination: PaginationMetadata | undefined;
 }
 
 export const BILLING_SERVICE_PACKAGE_NAME = "billing_service";

@@ -7,6 +7,7 @@
 package billing_service
 
 import (
+	common "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
@@ -136,7 +137,7 @@ func (x *GetProcessedMessageRequest) GetId() string {
 
 type GetProcessedMessageResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       *ProcessedMessage      `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Data          *ProcessedMessage      `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -171,9 +172,9 @@ func (*GetProcessedMessageResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_processed_events_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GetProcessedMessageResponse) GetMessage() *ProcessedMessage {
+func (x *GetProcessedMessageResponse) GetData() *ProcessedMessage {
 	if x != nil {
-		return x.Message
+		return x.Data
 	}
 	return nil
 }
@@ -182,8 +183,8 @@ type ListProcessedMessagesRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Optional filters (add more as needed)
 	ConsumerName  string `protobuf:"bytes,1,opt,name=consumer_name,json=consumerName,proto3" json:"consumer_name,omitempty"` // empty => all consumers
-	PageSize      int32  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
-	PageToken     string `protobuf:"bytes,3,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	Page          int32  `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
+	Limit         int32  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -225,24 +226,24 @@ func (x *ListProcessedMessagesRequest) GetConsumerName() string {
 	return ""
 }
 
-func (x *ListProcessedMessagesRequest) GetPageSize() int32 {
+func (x *ListProcessedMessagesRequest) GetPage() int32 {
 	if x != nil {
-		return x.PageSize
+		return x.Page
 	}
 	return 0
 }
 
-func (x *ListProcessedMessagesRequest) GetPageToken() string {
+func (x *ListProcessedMessagesRequest) GetLimit() int32 {
 	if x != nil {
-		return x.PageToken
+		return x.Limit
 	}
-	return ""
+	return 0
 }
 
 type ListProcessedMessagesResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Messages      []*ProcessedMessage    `protobuf:"bytes,1,rep,name=messages,proto3" json:"messages,omitempty"`
-	NextPageToken string                 `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Data          []*ProcessedMessage        `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -277,25 +278,25 @@ func (*ListProcessedMessagesResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_processed_events_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ListProcessedMessagesResponse) GetMessages() []*ProcessedMessage {
+func (x *ListProcessedMessagesResponse) GetData() []*ProcessedMessage {
 	if x != nil {
-		return x.Messages
+		return x.Data
 	}
 	return nil
 }
 
-func (x *ListProcessedMessagesResponse) GetNextPageToken() string {
+func (x *ListProcessedMessagesResponse) GetPagination() *common.PaginationMetadata {
 	if x != nil {
-		return x.NextPageToken
+		return x.Pagination
 	}
-	return ""
+	return nil
 }
 
 var File_billing_service_processed_events_proto protoreflect.FileDescriptor
 
 const file_billing_service_processed_events_proto_rawDesc = "" +
 	"\n" +
-	"&billing_service/processed_events.proto\x12\x0fbilling_service\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa5\x01\n" +
+	"&billing_service/processed_events.proto\x12\x0fbilling_service\x1a\x17common/pagination.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa5\x01\n" +
 	"\x10ProcessedMessage\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\rconsumer_name\x18\x02 \x01(\tR\fconsumerName\x12\x1d\n" +
@@ -303,17 +304,18 @@ const file_billing_service_processed_events_proto_rawDesc = "" +
 	"message_id\x18\x03 \x01(\tR\tmessageId\x12=\n" +
 	"\fprocessed_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\vprocessedAt\",\n" +
 	"\x1aGetProcessedMessageRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"Z\n" +
-	"\x1bGetProcessedMessageResponse\x12;\n" +
-	"\amessage\x18\x01 \x01(\v2!.billing_service.ProcessedMessageR\amessage\"\x7f\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"T\n" +
+	"\x1bGetProcessedMessageResponse\x125\n" +
+	"\x04data\x18\x01 \x01(\v2!.billing_service.ProcessedMessageR\x04data\"m\n" +
 	"\x1cListProcessedMessagesRequest\x12#\n" +
-	"\rconsumer_name\x18\x01 \x01(\tR\fconsumerName\x12\x1b\n" +
-	"\tpage_size\x18\x02 \x01(\x05R\bpageSize\x12\x1d\n" +
+	"\rconsumer_name\x18\x01 \x01(\tR\fconsumerName\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x14\n" +
+	"\x05limit\x18\x03 \x01(\x05R\x05limit\"\x92\x01\n" +
+	"\x1dListProcessedMessagesResponse\x125\n" +
+	"\x04data\x18\x01 \x03(\v2!.billing_service.ProcessedMessageR\x04data\x12:\n" +
 	"\n" +
-	"page_token\x18\x03 \x01(\tR\tpageToken\"\x86\x01\n" +
-	"\x1dListProcessedMessagesResponse\x12=\n" +
-	"\bmessages\x18\x01 \x03(\v2!.billing_service.ProcessedMessageR\bmessages\x12&\n" +
-	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken2\x83\x02\n" +
+	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
+	"pagination2\x83\x02\n" +
 	"\x17ProcessedMessageService\x12p\n" +
 	"\x13GetProcessedMessage\x12+.billing_service.GetProcessedMessageRequest\x1a,.billing_service.GetProcessedMessageResponse\x12v\n" +
 	"\x15ListProcessedMessages\x12-.billing_service.ListProcessedMessagesRequest\x1a..billing_service.ListProcessedMessagesResponseB[ZYgithub.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_serviceb\x06proto3"
@@ -338,20 +340,22 @@ var file_billing_service_processed_events_proto_goTypes = []any{
 	(*ListProcessedMessagesRequest)(nil),  // 3: billing_service.ListProcessedMessagesRequest
 	(*ListProcessedMessagesResponse)(nil), // 4: billing_service.ListProcessedMessagesResponse
 	(*timestamppb.Timestamp)(nil),         // 5: google.protobuf.Timestamp
+	(*common.PaginationMetadata)(nil),     // 6: common.PaginationMetadata
 }
 var file_billing_service_processed_events_proto_depIdxs = []int32{
 	5, // 0: billing_service.ProcessedMessage.processed_at:type_name -> google.protobuf.Timestamp
-	0, // 1: billing_service.GetProcessedMessageResponse.message:type_name -> billing_service.ProcessedMessage
-	0, // 2: billing_service.ListProcessedMessagesResponse.messages:type_name -> billing_service.ProcessedMessage
-	1, // 3: billing_service.ProcessedMessageService.GetProcessedMessage:input_type -> billing_service.GetProcessedMessageRequest
-	3, // 4: billing_service.ProcessedMessageService.ListProcessedMessages:input_type -> billing_service.ListProcessedMessagesRequest
-	2, // 5: billing_service.ProcessedMessageService.GetProcessedMessage:output_type -> billing_service.GetProcessedMessageResponse
-	4, // 6: billing_service.ProcessedMessageService.ListProcessedMessages:output_type -> billing_service.ListProcessedMessagesResponse
-	5, // [5:7] is the sub-list for method output_type
-	3, // [3:5] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	0, // 1: billing_service.GetProcessedMessageResponse.data:type_name -> billing_service.ProcessedMessage
+	0, // 2: billing_service.ListProcessedMessagesResponse.data:type_name -> billing_service.ProcessedMessage
+	6, // 3: billing_service.ListProcessedMessagesResponse.pagination:type_name -> common.PaginationMetadata
+	1, // 4: billing_service.ProcessedMessageService.GetProcessedMessage:input_type -> billing_service.GetProcessedMessageRequest
+	3, // 5: billing_service.ProcessedMessageService.ListProcessedMessages:input_type -> billing_service.ListProcessedMessagesRequest
+	2, // 6: billing_service.ProcessedMessageService.GetProcessedMessage:output_type -> billing_service.GetProcessedMessageResponse
+	4, // 7: billing_service.ProcessedMessageService.ListProcessedMessages:output_type -> billing_service.ListProcessedMessagesResponse
+	6, // [6:8] is the sub-list for method output_type
+	4, // [4:6] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_billing_service_processed_events_proto_init() }

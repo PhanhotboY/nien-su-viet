@@ -7,6 +7,7 @@
 package billing_service
 
 import (
+	common "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
@@ -295,10 +296,10 @@ func (x *CreatePaymentAttemptRequest) GetIdempotencyKey() string {
 }
 
 type CreatePaymentAttemptResponse struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	PaymentAttempt *PaymentAttempt        `protobuf:"bytes,1,opt,name=payment_attempt,json=paymentAttempt,proto3" json:"payment_attempt,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreatePaymentAttemptResponse) Reset() {
@@ -331,18 +332,18 @@ func (*CreatePaymentAttemptResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_payment_attempts_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CreatePaymentAttemptResponse) GetPaymentAttempt() *PaymentAttempt {
+func (x *CreatePaymentAttemptResponse) GetData() *common.OperationMetadata {
 	if x != nil {
-		return x.PaymentAttempt
+		return x.Data
 	}
 	return nil
 }
 
 type GetPaymentAttemptRequest struct {
-	state            protoimpl.MessageState `protogen:"open.v1"`
-	PaymentAttemptId string                 `protobuf:"bytes,1,opt,name=payment_attempt_id,json=paymentAttemptId,proto3" json:"payment_attempt_id,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetPaymentAttemptRequest) Reset() {
@@ -375,18 +376,18 @@ func (*GetPaymentAttemptRequest) Descriptor() ([]byte, []int) {
 	return file_billing_service_payment_attempts_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetPaymentAttemptRequest) GetPaymentAttemptId() string {
+func (x *GetPaymentAttemptRequest) GetId() string {
 	if x != nil {
-		return x.PaymentAttemptId
+		return x.Id
 	}
 	return ""
 }
 
 type GetPaymentAttemptResponse struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	PaymentAttempt *PaymentAttempt        `protobuf:"bytes,1,opt,name=payment_attempt,json=paymentAttempt,proto3" json:"payment_attempt,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          *PaymentAttempt        `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetPaymentAttemptResponse) Reset() {
@@ -419,9 +420,9 @@ func (*GetPaymentAttemptResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_payment_attempts_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetPaymentAttemptResponse) GetPaymentAttempt() *PaymentAttempt {
+func (x *GetPaymentAttemptResponse) GetData() *PaymentAttempt {
 	if x != nil {
-		return x.PaymentAttempt
+		return x.Data
 	}
 	return nil
 }
@@ -471,10 +472,11 @@ func (x *ListPaymentAttemptsByPurchaseRequest) GetPurchaseId() string {
 }
 
 type ListPaymentAttemptsByPurchaseResponse struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	PaymentAttempts []*PaymentAttempt      `protobuf:"bytes,1,rep,name=payment_attempts,json=paymentAttempts,proto3" json:"payment_attempts,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Data          []*PaymentAttempt          `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ListPaymentAttemptsByPurchaseResponse) Reset() {
@@ -507,9 +509,16 @@ func (*ListPaymentAttemptsByPurchaseResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_payment_attempts_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *ListPaymentAttemptsByPurchaseResponse) GetPaymentAttempts() []*PaymentAttempt {
+func (x *ListPaymentAttemptsByPurchaseResponse) GetData() []*PaymentAttempt {
 	if x != nil {
-		return x.PaymentAttempts
+		return x.Data
+	}
+	return nil
+}
+
+func (x *ListPaymentAttemptsByPurchaseResponse) GetPagination() *common.PaginationMetadata {
+	if x != nil {
+		return x.Pagination
 	}
 	return nil
 }
@@ -606,9 +615,9 @@ type RefundPurchaseResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The refund transaction(s) created as a result.
 	// Some providers may create multiple records (fees, partials, etc.)
-	RefundTransactions []*PaymentTransaction `protobuf:"bytes,1,rep,name=refund_transactions,json=refundTransactions,proto3" json:"refund_transactions,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	Data          []*PaymentTransaction `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *RefundPurchaseResponse) Reset() {
@@ -641,9 +650,9 @@ func (*RefundPurchaseResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_payment_attempts_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *RefundPurchaseResponse) GetRefundTransactions() []*PaymentTransaction {
+func (x *RefundPurchaseResponse) GetData() []*PaymentTransaction {
 	if x != nil {
-		return x.RefundTransactions
+		return x.Data
 	}
 	return nil
 }
@@ -652,7 +661,7 @@ var File_billing_service_payment_attempts_proto protoreflect.FileDescriptor
 
 const file_billing_service_payment_attempts_proto_rawDesc = "" +
 	"\n" +
-	"&billing_service/payment_attempts.proto\x12\x0fbilling_service\x1a\x1dbilling_service/billing.proto\x1a*billing_service/payment_transactions.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9e\x04\n" +
+	"&billing_service/payment_attempts.proto\x12\x0fbilling_service\x1a\x1dbilling_service/billing.proto\x1a*billing_service/payment_transactions.proto\x1a\x17common/pagination.proto\x1a\x15common/response.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9e\x04\n" +
 	"\x0ePaymentAttempt\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1f\n" +
 	"\vpurchase_id\x18\x02 \x01(\tR\n" +
@@ -676,27 +685,30 @@ const file_billing_service_payment_attempts_proto_rawDesc = "" +
 	"\bprovider\x18\x02 \x01(\tR\bprovider\x12.\n" +
 	"\x06amount\x18\x03 \x01(\v2\x16.billing_service.MoneyR\x06amount\x12B\n" +
 	"\x10provider_options\x18\x04 \x01(\v2\x17.google.protobuf.StructR\x0fproviderOptions\x12'\n" +
-	"\x0fidempotency_key\x18\x05 \x01(\tR\x0eidempotencyKey\"h\n" +
-	"\x1cCreatePaymentAttemptResponse\x12H\n" +
-	"\x0fpayment_attempt\x18\x01 \x01(\v2\x1f.billing_service.PaymentAttemptR\x0epaymentAttempt\"H\n" +
-	"\x18GetPaymentAttemptRequest\x12,\n" +
-	"\x12payment_attempt_id\x18\x01 \x01(\tR\x10paymentAttemptId\"e\n" +
-	"\x19GetPaymentAttemptResponse\x12H\n" +
-	"\x0fpayment_attempt\x18\x01 \x01(\v2\x1f.billing_service.PaymentAttemptR\x0epaymentAttempt\"G\n" +
+	"\x0fidempotency_key\x18\x05 \x01(\tR\x0eidempotencyKey\"M\n" +
+	"\x1cCreatePaymentAttemptResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"*\n" +
+	"\x18GetPaymentAttemptRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"P\n" +
+	"\x19GetPaymentAttemptResponse\x123\n" +
+	"\x04data\x18\x01 \x01(\v2\x1f.billing_service.PaymentAttemptR\x04data\"G\n" +
 	"$ListPaymentAttemptsByPurchaseRequest\x12\x1f\n" +
 	"\vpurchase_id\x18\x01 \x01(\tR\n" +
-	"purchaseId\"s\n" +
-	"%ListPaymentAttemptsByPurchaseResponse\x12J\n" +
-	"\x10payment_attempts\x18\x01 \x03(\v2\x1f.billing_service.PaymentAttemptR\x0fpaymentAttempts\"\xc5\x01\n" +
+	"purchaseId\"\x98\x01\n" +
+	"%ListPaymentAttemptsByPurchaseResponse\x123\n" +
+	"\x04data\x18\x01 \x03(\v2\x1f.billing_service.PaymentAttemptR\x04data\x12:\n" +
+	"\n" +
+	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
+	"pagination\"\xc5\x01\n" +
 	"\x15RefundPurchaseRequest\x12\x1f\n" +
 	"\vpurchase_id\x18\x01 \x01(\tR\n" +
 	"purchaseId\x12.\n" +
 	"\x06amount\x18\x02 \x01(\v2\x16.billing_service.MoneyR\x06amount\x12\x16\n" +
 	"\x06reason\x18\x03 \x01(\tR\x06reason\x12'\n" +
 	"\x0fidempotency_key\x18\x04 \x01(\tR\x0eidempotencyKey\x12\x1a\n" +
-	"\bprovider\x18\x05 \x01(\tR\bprovider\"n\n" +
-	"\x16RefundPurchaseResponse\x12T\n" +
-	"\x13refund_transactions\x18\x01 \x03(\v2#.billing_service.PaymentTransactionR\x12refundTransactions*\xf4\x01\n" +
+	"\bprovider\x18\x05 \x01(\tR\bprovider\"Q\n" +
+	"\x16RefundPurchaseResponse\x127\n" +
+	"\x04data\x18\x01 \x03(\v2#.billing_service.PaymentTransactionR\x04data*\xf4\x01\n" +
 	"\x14PaymentAttemptStatus\x12&\n" +
 	"\"PAYMENT_ATTEMPT_STATUS_UNSPECIFIED\x10\x00\x12\"\n" +
 	"\x1ePAYMENT_ATTEMPT_STATUS_PENDING\x10\x01\x12$\n" +
@@ -738,7 +750,9 @@ var file_billing_service_payment_attempts_proto_goTypes = []any{
 	(*Money)(nil),                                 // 10: billing_service.Money
 	(*structpb.Struct)(nil),                       // 11: google.protobuf.Struct
 	(*timestamppb.Timestamp)(nil),                 // 12: google.protobuf.Timestamp
-	(*PaymentTransaction)(nil),                    // 13: billing_service.PaymentTransaction
+	(*common.OperationMetadata)(nil),              // 13: common.OperationMetadata
+	(*common.PaginationMetadata)(nil),             // 14: common.PaginationMetadata
+	(*PaymentTransaction)(nil),                    // 15: billing_service.PaymentTransaction
 }
 var file_billing_service_payment_attempts_proto_depIdxs = []int32{
 	0,  // 0: billing_service.PaymentAttempt.status:type_name -> billing_service.PaymentAttemptStatus
@@ -749,24 +763,25 @@ var file_billing_service_payment_attempts_proto_depIdxs = []int32{
 	12, // 5: billing_service.PaymentAttempt.updated_at:type_name -> google.protobuf.Timestamp
 	10, // 6: billing_service.CreatePaymentAttemptRequest.amount:type_name -> billing_service.Money
 	11, // 7: billing_service.CreatePaymentAttemptRequest.provider_options:type_name -> google.protobuf.Struct
-	1,  // 8: billing_service.CreatePaymentAttemptResponse.payment_attempt:type_name -> billing_service.PaymentAttempt
-	1,  // 9: billing_service.GetPaymentAttemptResponse.payment_attempt:type_name -> billing_service.PaymentAttempt
-	1,  // 10: billing_service.ListPaymentAttemptsByPurchaseResponse.payment_attempts:type_name -> billing_service.PaymentAttempt
-	10, // 11: billing_service.RefundPurchaseRequest.amount:type_name -> billing_service.Money
-	13, // 12: billing_service.RefundPurchaseResponse.refund_transactions:type_name -> billing_service.PaymentTransaction
-	2,  // 13: billing_service.PaymentService.CreatePaymentAttempt:input_type -> billing_service.CreatePaymentAttemptRequest
-	4,  // 14: billing_service.PaymentService.GetPaymentAttempt:input_type -> billing_service.GetPaymentAttemptRequest
-	6,  // 15: billing_service.PaymentService.ListPaymentAttemptsByPurchase:input_type -> billing_service.ListPaymentAttemptsByPurchaseRequest
-	8,  // 16: billing_service.PaymentService.RefundPurchase:input_type -> billing_service.RefundPurchaseRequest
-	3,  // 17: billing_service.PaymentService.CreatePaymentAttempt:output_type -> billing_service.CreatePaymentAttemptResponse
-	5,  // 18: billing_service.PaymentService.GetPaymentAttempt:output_type -> billing_service.GetPaymentAttemptResponse
-	7,  // 19: billing_service.PaymentService.ListPaymentAttemptsByPurchase:output_type -> billing_service.ListPaymentAttemptsByPurchaseResponse
-	9,  // 20: billing_service.PaymentService.RefundPurchase:output_type -> billing_service.RefundPurchaseResponse
-	17, // [17:21] is the sub-list for method output_type
-	13, // [13:17] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	13, // 8: billing_service.CreatePaymentAttemptResponse.data:type_name -> common.OperationMetadata
+	1,  // 9: billing_service.GetPaymentAttemptResponse.data:type_name -> billing_service.PaymentAttempt
+	1,  // 10: billing_service.ListPaymentAttemptsByPurchaseResponse.data:type_name -> billing_service.PaymentAttempt
+	14, // 11: billing_service.ListPaymentAttemptsByPurchaseResponse.pagination:type_name -> common.PaginationMetadata
+	10, // 12: billing_service.RefundPurchaseRequest.amount:type_name -> billing_service.Money
+	15, // 13: billing_service.RefundPurchaseResponse.data:type_name -> billing_service.PaymentTransaction
+	2,  // 14: billing_service.PaymentService.CreatePaymentAttempt:input_type -> billing_service.CreatePaymentAttemptRequest
+	4,  // 15: billing_service.PaymentService.GetPaymentAttempt:input_type -> billing_service.GetPaymentAttemptRequest
+	6,  // 16: billing_service.PaymentService.ListPaymentAttemptsByPurchase:input_type -> billing_service.ListPaymentAttemptsByPurchaseRequest
+	8,  // 17: billing_service.PaymentService.RefundPurchase:input_type -> billing_service.RefundPurchaseRequest
+	3,  // 18: billing_service.PaymentService.CreatePaymentAttempt:output_type -> billing_service.CreatePaymentAttemptResponse
+	5,  // 19: billing_service.PaymentService.GetPaymentAttempt:output_type -> billing_service.GetPaymentAttemptResponse
+	7,  // 20: billing_service.PaymentService.ListPaymentAttemptsByPurchase:output_type -> billing_service.ListPaymentAttemptsByPurchaseResponse
+	9,  // 21: billing_service.PaymentService.RefundPurchase:output_type -> billing_service.RefundPurchaseResponse
+	18, // [18:22] is the sub-list for method output_type
+	14, // [14:18] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_billing_service_payment_attempts_proto_init() }

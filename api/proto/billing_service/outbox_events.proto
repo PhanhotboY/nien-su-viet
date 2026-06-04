@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package billing_service;
 
+import "common/pagination.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -51,7 +52,7 @@ message GetOutboxEventRequest {
 }
 
 message GetOutboxEventResponse {
-  OutboxEvent event = 1;
+  OutboxEvent data = 1;
 }
 
 message ListOutboxEventsRequest {
@@ -62,8 +63,8 @@ message ListOutboxEventsRequest {
 }
 
 message ListOutboxEventsResponse {
-  repeated OutboxEvent events = 1;
-  string next_page_token = 2;
+  repeated OutboxEvent data = 1;
+  common.PaginationMetadata pagination = 2;
 }
 
 service OutboxService {

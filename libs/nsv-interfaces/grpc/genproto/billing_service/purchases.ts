@@ -9,6 +9,7 @@ import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 import { PaginationMetadata } from "../common/pagination";
 import { ListQueryRequest } from "../common/request";
+import { OperationMetadata } from "../common/response";
 import { Timestamp } from "../google/protobuf/timestamp";
 import { Money } from "./billing";
 
@@ -56,15 +57,15 @@ export interface CreatePurchaseRequest {
 }
 
 export interface CreatePurchaseResponse {
-  purchase: Purchase | undefined;
+  data: OperationMetadata | undefined;
 }
 
 export interface GetPurchaseRequest {
-  purchaseId: string;
+  id: string;
 }
 
 export interface GetPurchaseResponse {
-  purchase: Purchase | undefined;
+  data: Purchase | undefined;
 }
 
 export interface ListPurchasesBySubscriptionRequest {
@@ -73,7 +74,7 @@ export interface ListPurchasesBySubscriptionRequest {
 }
 
 export interface ListPurchasesBySubscriptionResponse {
-  purchases: Purchase[];
+  data: Purchase[];
   pagination: PaginationMetadata | undefined;
 }
 
@@ -83,7 +84,7 @@ export interface ListPurchasesByUserRequest {
 }
 
 export interface ListPurchasesByUserResponse {
-  purchases: Purchase[];
+  data: Purchase[];
   pagination: PaginationMetadata | undefined;
 }
 

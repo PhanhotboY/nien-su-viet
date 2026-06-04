@@ -74,7 +74,7 @@ message ListPaymentTransactionsByPurchaseRequest {
 }
 
 message ListPaymentTransactionsByPurchaseResponse {
-  repeated PaymentTransaction transactions = 1;
+  repeated PaymentTransaction data = 1;
   common.PaginationMetadata pagination = 2;
 }
 
@@ -84,7 +84,7 @@ message ListPaymentTransactionsByAttemptRequest {
 }
 
 message ListPaymentTransactionsByAttemptResponse {
-  repeated PaymentTransaction transactions = 1;
+  repeated PaymentTransaction data = 1;
   common.PaginationMetadata pagination = 2;
 }
 

@@ -8,6 +8,7 @@
 import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { wrappers } from "protobufjs";
 import { Observable } from "rxjs";
+import { PaginationMetadata } from "../common/pagination";
 import { Struct } from "../google/protobuf/struct";
 import { Timestamp } from "../google/protobuf/timestamp";
 
@@ -31,20 +32,20 @@ export interface GetSubscriptionEventRequest {
 }
 
 export interface GetSubscriptionEventResponse {
-  event: SubscriptionEvent | undefined;
+  data: SubscriptionEvent | undefined;
 }
 
 export interface ListSubscriptionEventsRequest {
   subscriptionId: string;
   /** Optional filter */
   eventType: string;
-  pageSize: number;
-  pageToken: string;
+  page: number;
+  limit: number;
 }
 
 export interface ListSubscriptionEventsResponse {
-  events: SubscriptionEvent[];
-  nextPageToken: string;
+  data: SubscriptionEvent[];
+  pagination: PaginationMetadata | undefined;
 }
 
 export const BILLING_SERVICE_PACKAGE_NAME = "billing_service";

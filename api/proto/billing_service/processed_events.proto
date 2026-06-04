@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package billing_service;
 
+import "common/pagination.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
@@ -22,19 +23,19 @@ message GetProcessedMessageRequest {
 }
 
 message GetProcessedMessageResponse {
-  ProcessedMessage message = 1;
+  ProcessedMessage data = 1;
 }
 
 message ListProcessedMessagesRequest {
   // Optional filters (add more as needed)
   string consumer_name = 1; // empty => all consumers
-  int32 page_size = 2;
-  string page_token = 3;
+  int32 page = 2;
+  int32 limit = 3;
 }
 
 message ListProcessedMessagesResponse {
-  repeated ProcessedMessage messages = 1;
-  string next_page_token = 2;
+  repeated ProcessedMessage data = 1;
+  common.PaginationMetadata pagination = 2;
 }
 
 // This is usually internal-only for debugging/admin.

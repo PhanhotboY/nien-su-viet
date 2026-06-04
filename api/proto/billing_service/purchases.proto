@@ -5,6 +5,7 @@ package billing_service;
 import "billing_service/billing.proto";
 import "common/pagination.proto";
 import "common/request.proto";
+import "common/response.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
@@ -56,15 +57,15 @@ message CreatePurchaseRequest {
 }
 
 message CreatePurchaseResponse {
-  Purchase purchase = 1;
+  common.OperationMetadata data = 1;
 }
 
 message GetPurchaseRequest {
-  string purchase_id = 1;
+  string id = 1;
 }
 
 message GetPurchaseResponse {
-  Purchase purchase = 1;
+  Purchase data = 1;
 }
 
 message ListPurchasesBySubscriptionRequest {
@@ -73,7 +74,7 @@ message ListPurchasesBySubscriptionRequest {
 }
 
 message ListPurchasesBySubscriptionResponse {
-  repeated Purchase purchases = 1;
+  repeated Purchase data = 1;
   common.PaginationMetadata pagination = 2;
 }
 
@@ -83,7 +84,7 @@ message ListPurchasesByUserRequest {
 }
 
 message ListPurchasesByUserResponse {
-  repeated Purchase purchases = 1;
+  repeated Purchase data = 1;
   common.PaginationMetadata pagination = 2;
 }
 

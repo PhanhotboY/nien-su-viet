@@ -389,8 +389,7 @@ func (r *rabbitMQConsumer) runHandlersWithRetry(
 		if len(r.pipelines) > 0 {
 			reversPipes := r.reversOrder(r.pipelines)
 			lastHandler = func(ctx context.Context) error {
-				handler := handler
-				return handler.Handle(ctx, messageConsumeContext)
+				return handler(ctx, messageConsumeContext)
 			}
 
 			aggregateResult := linq.From(reversPipes).
@@ -418,7 +417,7 @@ func (r *rabbitMQConsumer) runHandlersWithRetry(
 			}
 			return nil
 		} else {
-			err := handler.Handle(ctx, messageConsumeContext)
+			err := handler(ctx, messageConsumeContext)
 			if err != nil {
 				return err
 			}
