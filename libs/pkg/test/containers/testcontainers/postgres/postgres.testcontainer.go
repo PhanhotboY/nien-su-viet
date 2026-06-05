@@ -9,7 +9,8 @@ import (
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/go-connections/nat"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
@@ -20,12 +21,12 @@ import (
 type PostgresTestContainers struct {
 	container testcontainers.Container
 	logger    logger.Logger
-	cfg       settings.Config
+	cfg       coptions.PostgresqlOptions
 }
 
-func NewPostgresTestContainers(cfg settings.Config, l logger.Logger) *PostgresTestContainers {
+func NewPostgresTestContainers(c config.Config, l logger.Logger) *PostgresTestContainers {
 	return &PostgresTestContainers{
-		cfg:    cfg,
+		cfg:    c.GetPostgresqlOptions(),
 		logger: l,
 	}
 }
@@ -38,7 +39,7 @@ func NewPostgresTestContainers(cfg settings.Config, l logger.Logger) *PostgresTe
 // 	return nil
 // }
 
-func (g *PostgresTestContainers) Start(ctx context.Context, t *testing.T) (settings.PostgresqlConfig, error) {
+func (g *PostgresTestContainers) Start(ctx context.Context, t *testing.T) (coptions.PostgresqlOptions, error) {
 	g.logger.Info("Starting Postgres test container...")
 	containerReq := g.getRunOptions()
 	dbContainer, err := testcontainers.GenericContainer(
@@ -48,29 +49,29 @@ func (g *PostgresTestContainers) Start(ctx context.Context, t *testing.T) (setti
 			Started:          true,
 		})
 	if err != nil {
-		return g.cfg.Postgresql, err
+		return g.cfg, err
 	}
 
 	host, err := dbContainer.Host(ctx)
 	if err != nil {
-		return g.cfg.Postgresql, err
+		return g.cfg, err
 	}
-	port, err := dbContainer.MappedPort(ctx, nat.Port(strconv.Itoa(g.cfg.Postgresql.Port)))
+	port, err := dbContainer.MappedPort(ctx, nat.Port(strconv.Itoa(g.cfg.Port)))
 	if err != nil {
-		return g.cfg.Postgresql, err
+		return g.cfg, err
 	}
 
-	cfg := settings.PostgresqlConfig{
+	cfg := coptions.PostgresqlOptions{
 		Host:     host,
 		Port:     port.Int(),
-		Username: g.cfg.Postgresql.Username,
-		Password: g.cfg.Postgresql.Password,
-		Database: g.cfg.Postgresql.Database,
+		Username: g.cfg.Username,
+		Password: g.cfg.Password,
+		Database: g.cfg.Database,
 	}
 
 	isConnectable := isConnectable(ctx, g.logger, cfg)
 	if !isConnectable {
-		return g.cfg.Postgresql, fmt.Errorf("postgres container is not connectable on host: %s:%d", host, cfg.Port)
+		return g.cfg, fmt.Errorf("postgres container is not connectable on host: %s:%d", host, cfg.Port)
 	}
 
 	g.container = dbContainer
@@ -86,16 +87,16 @@ func (g *PostgresTestContainers) getRunOptions() testcontainers.ContainerRequest
 
 	containerReq := testcontainers.ContainerRequest{
 		Image:        "postgres:alpine",
-		ExposedPorts: []string{strconv.Itoa(g.cfg.Postgresql.Port)},
+		ExposedPorts: []string{strconv.Itoa(g.cfg.Port)},
 		WaitingFor:   wait.ForAll(strategies...).WithDeadline(deadline),
 		Cmd:          []string{"postgres", "-c", "fsync=off"},
 		HostConfigModifier: func(hostConfig *container.HostConfig) {
 			hostConfig.AutoRemove = true
 		},
 		Env: map[string]string{
-			"POSTGRES_DB":       g.cfg.Postgresql.Database,
-			"POSTGRES_PASSWORD": g.cfg.Postgresql.Password,
-			"POSTGRES_USER":     g.cfg.Postgresql.Username,
+			"POSTGRES_DB":       g.cfg.Database,
+			"POSTGRES_PASSWORD": g.cfg.Password,
+			"POSTGRES_USER":     g.cfg.Username,
 		},
 	}
 
@@ -105,7 +106,7 @@ func (g *PostgresTestContainers) getRunOptions() testcontainers.ContainerRequest
 func isConnectable(
 	ctx context.Context,
 	logger logger.Logger,
-	postgresOptions settings.PostgresqlConfig,
+	postgresOptions coptions.PostgresqlOptions,
 ) bool {
 	orm, err := gorm.Open(
 		postgres.Open(

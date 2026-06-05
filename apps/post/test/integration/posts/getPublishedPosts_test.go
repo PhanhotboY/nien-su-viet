@@ -21,14 +21,16 @@ import (
 )
 
 func TestGetPublishedPosts(t *testing.T) {
+	oneVal := uint32(1)
+	tenVal := uint32(10)
 	var (
 		getPostsHandler   queries.GetPublishedPostsHandler
 		createPostHandler createPostCmd.CreatePostHandler
 		updatePostHandler updatePostCmd.UpdatePostHandler
 		log               testlogger.TestLogger
-		page              uint32 = 1
-		limit             uint32 = 10
-		published         bool   = true
+		page              *uint32 = &oneVal
+		limit             *uint32 = &tenVal
+		published         bool    = true
 	)
 
 	testhelper.GetDIServices(t, &getPostsHandler, &createPostHandler, &updatePostHandler, &log)
@@ -83,8 +85,6 @@ func TestGetPublishedPosts(t *testing.T) {
 		}
 
 		// Get published posts - should be empty because posts are not published yet
-		page = 1
-		limit = 10
 		getCmd, err := queries.NewGetPublishedPostsQuery(&dto.GetPublicPostsQueryReq{
 			PostListQueryDto: sharedDto.PostListQueryDto{
 				Page:  page,
@@ -209,12 +209,11 @@ func TestGetPublishedPosts(t *testing.T) {
 			}
 		}
 
-		page = 1
-		limit = 2
+		twoVal := uint32(2)
 		getCmd, err := queries.NewGetPublishedPostsQuery(&dto.GetPublicPostsQueryReq{
 			PostListQueryDto: sharedDto.PostListQueryDto{
 				Page:  page,
-				Limit: limit,
+				Limit: &twoVal,
 			},
 		})
 		if err != nil {
@@ -240,12 +239,10 @@ func TestGetPublishedPosts(t *testing.T) {
 		}
 
 		// Get second page
-		limit = 2
-		page = 2
 		getCmd, err = queries.NewGetPublishedPostsQuery(&dto.GetPublicPostsQueryReq{
 			PostListQueryDto: sharedDto.PostListQueryDto{
-				Page:  page,
-				Limit: limit,
+				Page:  &twoVal,
+				Limit: &twoVal,
 			},
 		})
 		if err != nil {

@@ -5,7 +5,6 @@ import (
 
 	"go.uber.org/fx"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/rabbitmq/bus"
@@ -21,7 +20,6 @@ var ConsumerModule = fx.Module(
 )
 
 func NewPurchasesConsumer(
-	s settings.Config,
 	b bus.RabbitmqBus,
 	logger logger.Logger,
 

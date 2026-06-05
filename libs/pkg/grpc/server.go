@@ -9,7 +9,8 @@ import (
 	grpcMiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpcRecovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpcCtxTags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/handler/otel"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/interceptors"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
@@ -37,14 +38,14 @@ type GrpcServer interface {
 
 type grpcServer struct {
 	server         *googleGrpc.Server
-	config         *settings.GrpcConfig
+	config         coptions.GrpcOptions
 	log            logger.Logger
 	serviceName    string
 	serviceBuilder *GrpcServiceBuilder
 }
 
 func NewGrpcServer(
-	cfg settings.Config,
+	cfg config.Config,
 	logger logger.Logger,
 ) GrpcServer {
 	unaryServerInterceptors := []googleGrpc.UnaryServerInterceptor{
@@ -56,6 +57,7 @@ func NewGrpcServer(
 		interceptors.StreamServerErrorInterceptor(),
 	}
 
+	grpcOptions := cfg.GetGrpcOptions()
 	s := googleGrpc.NewServer(
 		// https://github.com/open-telemetry/opentelemetry-go-contrib/issues/2840
 		// https://github.com/open-telemetry/opentelemetry-go-contrib/pull/3002
@@ -63,8 +65,8 @@ func NewGrpcServer(
 		// https://github.com/open-telemetry/opentelemetry-go-contrib/blob/main/instrumentation/google.golang.org/grpc/otelgrpc/example/server/main.go#L143C3-L143C50
 		googleGrpc.StatsHandler(otelgrpc.NewServerHandler()),
 		googleGrpc.StatsHandler(otel.NewServerHandler(
-			otel.SetServiceName(cfg.Server.ServiceName),
-			otel.SetInstrumentationName(cfg.Metrics.InstrumentationName),
+			otel.SetServiceName(cfg.GetServerOptions().ServiceName),
+			otel.SetInstrumentationName(cfg.GetMetricsOptions().InstrumentationName),
 		)),
 
 		googleGrpc.KeepaliveParams(keepalive.ServerParameters{
@@ -85,15 +87,15 @@ func NewGrpcServer(
 	healthServer := health.NewServer()
 	grpc_health_v1.RegisterHealthServer(s, healthServer)
 	healthServer.SetServingStatus(
-		cfg.Grpc.Name,
+		grpcOptions.Name,
 		grpc_health_v1.HealthCheckResponse_SERVING,
 	)
 
 	return &grpcServer{
 		server:         s,
-		config:         &cfg.Grpc,
+		config:         grpcOptions,
 		log:            logger,
-		serviceName:    cfg.Grpc.Name,
+		serviceName:    grpcOptions.Name,
 		serviceBuilder: NewGrpcServiceBuilder(s),
 	}
 }

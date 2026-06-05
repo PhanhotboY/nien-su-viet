@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	producer3 "github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/otel/tracing/producer"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/producer"
 	types2 "github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/types"
@@ -23,7 +23,7 @@ import (
 
 type rabbitMQProducer struct {
 	logger                  logger.Logger
-	rabbitmqOptions         settings.RmqConfig
+	rabbitmqOptions         coptions.RmqOptions
 	connection              types.IConnection
 	messageSerializer       serializer.MessageSerializer
 	producersConfigurations map[string]*configurations.RabbitMQProducerConfiguration
@@ -31,7 +31,7 @@ type rabbitMQProducer struct {
 }
 
 func NewRabbitMQProducer(
-	cfg settings.RmqConfig,
+	cfg coptions.RmqOptions,
 	connection types.IConnection,
 	rabbitmqProducersConfiguration map[string]*configurations.RabbitMQProducerConfiguration,
 	logger logger.Logger,

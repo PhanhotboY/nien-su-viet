@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/fxapp/contracts"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 
@@ -19,7 +19,7 @@ type application struct {
 	options   []fx.Option
 	logger    logger.Logger
 	fxapp     *fx.App
-	settings  settings.Config
+	config    config.Config
 }
 
 func NewApplication(
@@ -27,14 +27,14 @@ func NewApplication(
 	decorates []interface{},
 	options []fx.Option,
 	logger logger.Logger,
-	settings settings.Config,
+	config config.Config,
 ) contracts.Application {
 	return &application{
 		provides:  providers,
 		decorates: decorates,
 		options:   options,
 		logger:    logger,
-		settings:  settings,
+		config:    config,
 	}
 }
 
@@ -111,6 +111,6 @@ func (a *application) Logger() logger.Logger {
 	return a.logger
 }
 
-func (a *application) Settings() settings.Config {
-	return a.settings
+func (a *application) Config() config.Config {
+	return a.config
 }

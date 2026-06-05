@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"go.uber.org/fx"
 	"gorm.io/driver/postgres"
@@ -33,8 +33,8 @@ type DBParams struct {
 }
 
 // NewDb func for connection to PostgreSQL database.
-func NewDb(s settings.Config, logger logger.Logger, params DBParams) (*gorm.DB, error) {
-	cfg := s.Postgresql
+func NewDb(c config.Config, logger logger.Logger, params DBParams) (*gorm.DB, error) {
+	cfg := c.GetPostgresqlOptions()
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", cfg.Host, cfg.Username, cfg.Password, cfg.Database, cfg.Port)
 
 	pg, err := gorm.Open(postgres.New(postgres.Config{

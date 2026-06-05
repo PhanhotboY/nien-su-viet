@@ -1,4 +1,4 @@
-package settings
+package coptions
 
 type TracingOptions struct {
 	Enabled             bool         `mapstructure:"enabled"`              // POST_TRACING_ENABLED

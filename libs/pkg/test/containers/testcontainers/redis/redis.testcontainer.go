@@ -8,7 +8,8 @@ import (
 	"time"
 
 	"github.com/docker/go-connections/nat"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"github.com/redis/go-redis/v9"
 	"github.com/testcontainers/testcontainers-go"
@@ -18,17 +19,17 @@ import (
 type RedisTestContainers struct {
 	container testcontainers.Container
 	logger    logger.Logger
-	cfg       settings.Config
+	cfg       coptions.RedisOptions
 }
 
-func NewRedisTestContainers(cfg settings.Config, l logger.Logger) *RedisTestContainers {
+func NewRedisTestContainers(c config.Config, l logger.Logger) *RedisTestContainers {
 	return &RedisTestContainers{
 		logger: l,
-		cfg:    cfg,
+		cfg:    c.GetRedisOptions(),
 	}
 }
 
-func (g *RedisTestContainers) Start(ctx context.Context, t *testing.T) (settings.RedisOptions, error) {
+func (g *RedisTestContainers) Start(ctx context.Context, t *testing.T) (coptions.RedisOptions, error) {
 	g.logger.Info("Starting Redis test container...")
 	containerReq := g.getRunOptions()
 	dbContainer, err := testcontainers.GenericContainer(
@@ -38,31 +39,31 @@ func (g *RedisTestContainers) Start(ctx context.Context, t *testing.T) (settings
 			Started:          true,
 		})
 	if err != nil {
-		return g.cfg.Redis, err
+		return g.cfg, err
 	}
 
 	host, err := dbContainer.Host(ctx)
 	if err != nil {
-		return g.cfg.Redis, err
+		return g.cfg, err
 	}
-	port, err := dbContainer.MappedPort(ctx, nat.Port(strconv.Itoa(g.cfg.Redis.Port)))
+	port, err := dbContainer.MappedPort(ctx, nat.Port(strconv.Itoa(g.cfg.Port)))
 	if err != nil {
-		return g.cfg.Redis, err
+		return g.cfg, err
 	}
 
-	cfg := settings.RedisOptions{
+	cfg := coptions.RedisOptions{
 		Host:          host,
 		Port:          port.Int(),
-		Username:      g.cfg.Redis.Username,
-		Password:      g.cfg.Redis.Password,
-		Database:      g.cfg.Redis.Database,
-		PoolSize:      g.cfg.Redis.PoolSize,
-		EnableTracing: g.cfg.Redis.EnableTracing,
+		Username:      g.cfg.Username,
+		Password:      g.cfg.Password,
+		Database:      g.cfg.Database,
+		PoolSize:      g.cfg.PoolSize,
+		EnableTracing: g.cfg.EnableTracing,
 	}
 
 	isConnectable := isConnectable(ctx, g.logger, cfg)
 	if !isConnectable {
-		return g.cfg.Redis, fmt.Errorf("redis container is not connectable on host: %s:%d", host, cfg.Port)
+		return g.cfg, fmt.Errorf("redis container is not connectable on host: %s:%d", host, cfg.Port)
 	}
 
 	g.container = dbContainer
@@ -73,10 +74,10 @@ func (g *RedisTestContainers) Start(ctx context.Context, t *testing.T) (settings
 func (g *RedisTestContainers) getRunOptions() testcontainers.ContainerRequest {
 	containerReq := testcontainers.ContainerRequest{
 		Image:        "redis:alpine",
-		ExposedPorts: []string{strconv.Itoa(g.cfg.Redis.Port)},
-		WaitingFor: wait.ForListeningPort(nat.Port(strconv.Itoa(g.cfg.Redis.Port))).
+		ExposedPorts: []string{strconv.Itoa(g.cfg.Port)},
+		WaitingFor: wait.ForListeningPort(nat.Port(strconv.Itoa(g.cfg.Port))).
 			WithPollInterval(2 * time.Second),
-		Hostname: g.cfg.Redis.Host,
+		Hostname: g.cfg.Host,
 		Env:      map[string]string{},
 	}
 
@@ -86,7 +87,7 @@ func (g *RedisTestContainers) getRunOptions() testcontainers.ContainerRequest {
 func isConnectable(
 	ctx context.Context,
 	logger logger.Logger,
-	options settings.RedisOptions,
+	options coptions.RedisOptions,
 ) bool {
 	redisClient := redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%s:%d", options.Host, options.Port),

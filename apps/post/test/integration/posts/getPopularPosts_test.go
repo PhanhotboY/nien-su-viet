@@ -25,14 +25,16 @@ import (
 )
 
 func TestGetPopularPosts(t *testing.T) {
+	tenVal := uint32(10)
+	oneVal := uint32(1)
 	var (
 		getPostsHandler           queries.GetPopularPostsHandler
 		createPostHandler         createPostCmd.CreatePostHandler
 		updatePostHandler         updatePostCmd.UpdatePostHandler
 		incrementPostLikesHandler incrementPostLikesCmd.IncrementPostLikesHandler
 		log                       testlogger.TestLogger
-		page                      uint32 = 1
-		limit                     uint32 = 10
+		page                      *uint32 = &oneVal
+		limit                     *uint32 = &tenVal
 	)
 
 	testhelper.GetDIServices(t, &getPostsHandler, &createPostHandler, &updatePostHandler, &incrementPostLikesHandler, &log)
@@ -135,8 +137,8 @@ func TestGetPopularPosts(t *testing.T) {
 		// Get popular posts - should be sorted by likes descending
 		getCmd, err := queries.NewGetPopularPostsQuery(&dto.GetPopularPostsQueryReq{
 			PostListQueryDto: sharedDto.PostListQueryDto{
-				Page:  1,
-				Limit: 10,
+				Page:  page,
+				Limit: limit,
 			},
 		})
 		if err != nil {
@@ -204,12 +206,11 @@ func TestGetPopularPosts(t *testing.T) {
 		}
 
 		// Get first page (limit 2)
-		page = 1
-		limit = 2
+		twoVal := uint32(2)
 		getCmd, err := queries.NewGetPopularPostsQuery(&dto.GetPopularPostsQueryReq{
 			PostListQueryDto: sharedDto.PostListQueryDto{
 				Page:  page,
-				Limit: limit,
+				Limit: &twoVal,
 			},
 		})
 		if err != nil {
@@ -230,11 +231,11 @@ func TestGetPopularPosts(t *testing.T) {
 		}
 
 		// Get second page (limit 2)
-		page = 2
+		twoVal = uint32(2)
 		getCmd, err = queries.NewGetPopularPostsQuery(&dto.GetPopularPostsQueryReq{
 			PostListQueryDto: sharedDto.PostListQueryDto{
 				Page:  page,
-				Limit: limit,
+				Limit: &twoVal,
 			},
 		})
 		if err != nil {
@@ -320,8 +321,8 @@ func TestGetPopularPosts(t *testing.T) {
 		// Get popular posts
 		getCmd, err := queries.NewGetPopularPostsQuery(&dto.GetPopularPostsQueryReq{
 			PostListQueryDto: sharedDto.PostListQueryDto{
-				Page:  1,
-				Limit: 10,
+				Page:  page,
+				Limit: limit,
 			},
 		})
 		if err != nil {

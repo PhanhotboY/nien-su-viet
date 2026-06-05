@@ -1,11 +1,11 @@
-package settings
+package coptions
 
 import (
 	"fmt"
 	"time"
 )
 
-type RmqConfig struct {
+type RmqOptions struct {
 	RmqHostOptions `mapstructure:",squash"`
 
 	ExchangeName string `mapstructure:"exchange_name"`

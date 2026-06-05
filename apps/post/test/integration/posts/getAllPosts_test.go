@@ -21,13 +21,15 @@ import (
 )
 
 func TestGetAllPosts(t *testing.T) {
+	tenVal := uint32(10)
+	oneVal := uint32(1)
 	var (
 		getAllPostsHandler queries.GetAllPostsHandler
 		createPostHandler  createPostCmd.CreatePostHandler
 		updatePostHandler  updatePostCmd.UpdatePostHandler
 		log                testlogger.TestLogger
-		limit              uint32 = 10
-		page               uint32 = 1
+		limit              *uint32 = &tenVal
+		page               *uint32 = &oneVal
 	)
 
 	testhelper.GetDIServices(t, &getAllPostsHandler, &createPostHandler, &updatePostHandler, &log)

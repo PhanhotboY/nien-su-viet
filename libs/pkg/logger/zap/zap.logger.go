@@ -4,8 +4,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
+	cenv "github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/constants"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 
@@ -17,7 +18,7 @@ import (
 type zapLogger struct {
 	sugarLogger *zap.SugaredLogger
 	logger      *zap.Logger
-	logOptions  settings.LoggerConfig
+	logOptions  coptions.LoggerOptions
 }
 
 type ZapLogger interface {
@@ -39,11 +40,9 @@ var loggerLevelMap = map[string]zapcore.Level{
 }
 
 // NewZapLogger create new zap logger
-func NewZapLogger(
-	cfg settings.Config,
-) ZapLogger {
-	zapLogger := &zapLogger{logOptions: cfg.Logger}
-	zapLogger.initLogger(cfg.Server.Env)
+func NewZapLogger(cfg config.Config) ZapLogger {
+	zapLogger := &zapLogger{logOptions: cfg.GetLoggerOptions()}
+	zapLogger.initLogger(cfg.GetEnv())
 
 	return zapLogger
 }
@@ -62,7 +61,7 @@ func (l *zapLogger) getLoggerLevel() zapcore.Level {
 }
 
 // InitLogger Init logger
-func (l *zapLogger) initLogger(env environment.Environment) {
+func (l *zapLogger) initLogger(env cenv.Environment) {
 	logLevel := l.getLoggerLevel()
 
 	logWriter := zapcore.AddSync(os.Stdout)

@@ -1,7 +1,8 @@
 package producer
 
 import (
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/producer"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/types"
 	serializer "github.com/phanhotboy/nien-su-viet/libs/pkg/core/serializer"
@@ -15,17 +16,17 @@ type producerFactory struct {
 	connection      types2.IConnection
 	logger          logger.Logger
 	eventSerializer serializer.MessageSerializer
-	rabbitmqOptions settings.RmqConfig
+	rabbitmqOptions coptions.RmqOptions
 }
 
 func NewProducerFactory(
-	s settings.Config,
+	c config.Config,
 	connection types2.IConnection,
 	eventSerializer serializer.MessageSerializer,
 	l logger.Logger,
 ) producercontracts.ProducerFactory {
 	return &producerFactory{
-		rabbitmqOptions: s.Rmq,
+		rabbitmqOptions: c.GetRmqOptions(),
 		logger:          l,
 		connection:      connection,
 		eventSerializer: eventSerializer,

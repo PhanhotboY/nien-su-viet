@@ -5,8 +5,9 @@ import (
 	"time"
 
 	"emperror.dev/errors"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
+	cenv "github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"github.com/samber/lo"
 	"go.opentelemetry.io/otel"
@@ -21,24 +22,25 @@ import (
 type OtelMetrics struct {
 	serviceName string
 	version     string
-	config      settings.MetricsOptions
+	config      coptions.MetricsOptions
 	logger      logger.Logger
 	appMetrics  AppMetrics
-	environment environment.Environment
+	environment cenv.Environment
 	provider    *metric.MeterProvider
 }
 
 // NewOtelMetrics adds otel metrics
 func NewOtelMetrics(
-	config settings.Config,
+	c config.Config,
 	logger logger.Logger,
 ) (*OtelMetrics, error) {
+	svrOptions := c.GetServerOptions()
 	otelMetrics := &OtelMetrics{
-		serviceName: config.Server.ServiceName,
-		version:     config.Server.Version,
-		config:      config.Metrics,
+		serviceName: svrOptions.ServiceName,
+		version:     svrOptions.Version,
+		config:      c.GetMetricsOptions(),
 		logger:      logger,
-		environment: config.Server.Env,
+		environment: svrOptions.Env,
 	}
 
 	resource, err := otelMetrics.newResource()

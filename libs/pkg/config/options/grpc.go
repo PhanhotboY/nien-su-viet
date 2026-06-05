@@ -1,6 +1,6 @@
-package settings
+package coptions
 
-type GrpcConfig struct {
+type GrpcOptions struct {
 	Port        string `mapstructure:"port"`
 	Host        string `mapstructure:"host"`
 	Development bool   `mapstructure:"development"`

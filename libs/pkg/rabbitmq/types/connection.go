@@ -2,10 +2,12 @@ package types
 
 import (
 	"fmt"
+	"reflect"
 
 	// "github.com/mehdihadeli/go-food-delivery-microservices/internal/pkg/rabbitmq/config"
 	// errorUtils "github.com/mehdihadeli/go-food-delivery-microservices/internal/pkg/utils/errorutils"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/defaultLogger"
 	errorUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/error"
 
@@ -14,7 +16,7 @@ import (
 )
 
 type internalConnection struct {
-	cfg settings.RmqConfig
+	cfg coptions.RmqOptions
 	*amqp091.Connection
 	isConnected       bool
 	errConnectionChan chan error
@@ -35,15 +37,15 @@ type IConnection interface {
 	ReconnectedChannel() chan struct{}
 }
 
-func NewRabbitMQConnection(s settings.Config) (IConnection, error) {
-	cfg := s.Rmq
+func NewRabbitMQConnection(cfg config.Config) (IConnection, error) {
+	rmqOptions := cfg.GetRmqOptions()
 	// https://levelup.gitconnected.com/connecting-a-service-in-golang-to-a-rabbitmq-server-835294d8c914
-	if cfg.RmqHostOptions == *new(settings.RmqHostOptions) {
+	if reflect.ValueOf(rmqOptions.RmqHostOptions).IsZero() {
 		return nil, errors.New("rabbitmq host options is not configured")
 	}
 
 	c := &internalConnection{
-		cfg:               cfg,
+		cfg:               rmqOptions,
 		errConnectionChan: make(chan error),
 		// errChannelChan:    make(chan error),
 		reconnectedChan: make(chan struct{}),
@@ -54,7 +56,7 @@ func NewRabbitMQConnection(s settings.Config) (IConnection, error) {
 		return nil, err
 	}
 
-	if cfg.Reconnecting {
+	if rmqOptions.Reconnecting {
 		go c.handleReconnecting()
 	}
 

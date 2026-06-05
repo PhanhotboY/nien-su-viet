@@ -16,12 +16,12 @@ build: clean
 .PHONY: test-integration
 test-integration:
 	@echo "Running tests for post service..."
-	@POST_SERVER_ENV=test go test -tags=integration -v ./... -cover -coverprofile=coverage.out -coverpkg=./internal/...
+	@POST_SERVER_ENV=test ENV_PREFIX=post go test -tags=integration -v ./... -cover -coverprofile=coverage.out -coverpkg=./internal/...
 	@make open-coverage
 
 test-%:
 	@echo "Running tests for post service with pattern: $*..."
-	@POST_SERVER_ENV=test go test -v -run $* ./... -coverprofile=coverage.out -coverpkg=./internal/...
+	@POST_SERVER_ENV=test ENV_PREFIX=post go test -v -run $* ./... -coverprofile=coverage.out -coverpkg=./internal/...
 	@make create-coverage
 
 .PHONY: create-coverage

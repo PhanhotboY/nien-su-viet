@@ -6,8 +6,9 @@ import (
 	"time"
 
 	"emperror.dev/errors"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
+	cenv "github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"github.com/samber/lo"
 	"go.opentelemetry.io/contrib/propagators/ot"
@@ -24,8 +25,8 @@ import (
 type TracingOpenTelemetry struct {
 	serviceName string
 	version     string
-	config      settings.TracingOptions
-	environment environment.Environment
+	config      coptions.TracingOptions
+	environment cenv.Environment
 	appTracer   AppTracer
 	provider    *tracesdk.TracerProvider
 }
@@ -34,14 +35,15 @@ type TracingOpenTelemetry struct {
 // NOTE: You only need a tracer if you are creating your own spans
 
 func NewOtelTracing(
-	cfg settings.Config,
+	c config.Config,
 	l logger.Logger,
 ) (*TracingOpenTelemetry, error) {
+	svrOptions := c.GetServerOptions()
 	otelTracing := &TracingOpenTelemetry{
-		serviceName: cfg.Server.ServiceName,
-		version:     cfg.Server.Version,
-		config:      cfg.Tracing,
-		environment: cfg.Server.Env,
+		serviceName: svrOptions.ServiceName,
+		version:     svrOptions.Version,
+		config:      c.GetTracingOptions(),
+		environment: svrOptions.Env,
 	}
 
 	resource, err := otelTracing.newResource()

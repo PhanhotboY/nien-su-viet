@@ -1,7 +1,9 @@
 package fxapp
 
 import (
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"reflect"
+
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/fxapp/contracts"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger/zap"
@@ -13,17 +15,17 @@ type applicationBuilder struct {
 	decorates []interface{}
 	options   []fx.Option
 	logger    logger.Logger
-	settings  settings.Config
+	config    config.Config
 }
 
-func NewApplicationBuilder() contracts.ApplicationBuilder {
-	cfg := settings.LoadConfig()
+func NewApplicationBuilder(cfgType reflect.Type) contracts.ApplicationBuilder {
+	cfg := config.LoadConfig(cfgType)
 
 	var logger logger.Logger
 
 	logger = zap.NewZapLogger(cfg)
 
-	return &applicationBuilder{logger: logger, settings: cfg}
+	return &applicationBuilder{logger: logger, config: cfg}
 }
 
 func (a *applicationBuilder) ProvideModule(module fx.Option) {
@@ -39,7 +41,7 @@ func (a *applicationBuilder) Decorate(constructors ...interface{}) {
 }
 
 func (a *applicationBuilder) Build() contracts.Application {
-	app := NewApplication(a.provides, a.decorates, a.options, a.logger, a.settings)
+	app := NewApplication(a.provides, a.decorates, a.options, a.logger, a.config)
 
 	return app
 }
@@ -60,6 +62,6 @@ func (a *applicationBuilder) Logger() logger.Logger {
 	return a.logger
 }
 
-func (a *applicationBuilder) Settings() settings.Config {
-	return a.settings
+func (a *applicationBuilder) Config() config.Config {
+	return a.config
 }

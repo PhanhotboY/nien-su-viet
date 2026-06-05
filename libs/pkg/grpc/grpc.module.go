@@ -3,7 +3,7 @@ package grpc
 import (
 	"context"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"go.uber.org/fx"
 )
@@ -43,8 +43,9 @@ func registerHooks(
 	grpcServer GrpcServer,
 	grpcClient GrpcClient,
 	logger logger.Logger,
-	cfg settings.Config,
+	c config.Config,
 ) {
+	cfg := c.GetGrpcOptions()
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			// https://github.com/uber-go/fx/blob/v1.20.0/app.go#L573
@@ -62,9 +63,9 @@ func registerHooks(
 			}()
 			logger.Infof(
 				"%s is listening on Host:{%s} Grpc PORT: {%s}",
-				cfg.Grpc.Name,
-				cfg.Grpc.Host,
-				cfg.Grpc.Port,
+				cfg.Name,
+				cfg.Host,
+				cfg.Port,
 			)
 
 			return nil

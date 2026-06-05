@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
 	"github.com/redis/go-redis/extra/redisotel/v9"
 	"github.com/redis/go-redis/v9"
 )
@@ -28,12 +28,13 @@ type RedisClientWithExpire struct {
 	*redis.Client
 }
 
-func NewRedisClient(s settings.Config) RedisClientWithExpire {
-	if s.Server.Env.IsDevelopment() {
+func NewRedisClient(c config.Config) RedisClientWithExpire {
+	if c.GetEnv().IsDevelopment() {
+		// No caching in development
 		defaultTTL = 0
 	}
 
-	cfg := s.Redis
+	cfg := c.GetRedisOptions()
 	universalClient := redis.NewClient(&redis.Options{
 		Addr:            fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		Username:        cfg.Username,

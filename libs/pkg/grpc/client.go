@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"emperror.dev/errors"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/handler/otel"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
@@ -24,11 +24,12 @@ type GrpcClient interface {
 	WaitForAvailableConnection() error
 }
 
-func NewGrpcClient(cfg settings.Config) (GrpcClient, error) {
+func NewGrpcClient(c config.Config) (GrpcClient, error) {
+	cfg := c.GetGrpcOptions()
 	// Grpc Client to call Grpc Server
 	// https://sahansera.dev/building-grpc-client-go/
 	// https://github.com/open-telemetry/opentelemetry-go-contrib/blob/df16f32df86b40077c9c90d06f33c4cdb6dd5afa/instrumentation/google.golang.org/grpc/otelgrpc/example_interceptor_test.go
-	conn, err := grpc.NewClient(fmt.Sprintf("%s%s", cfg.Grpc.Host, cfg.Grpc.Port),
+	conn, err := grpc.NewClient(fmt.Sprintf("%s%s", cfg.Host, cfg.Port),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		// https://github.com/open-telemetry/opentelemetry-go-contrib/blob/main/instrumentation/google.golang.org/grpc/otelgrpc/example/client/main.go#L47C3-L47C52
 		// https://github.com/open-telemetry/opentelemetry-go-contrib/blob/main/instrumentation/google.golang.org/grpc/otelgrpc/doc.go

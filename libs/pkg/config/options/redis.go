@@ -1,4 +1,4 @@
-package settings
+package coptions
 
 type RedisOptions struct {
 	Host          string `mapstructure:"host"`

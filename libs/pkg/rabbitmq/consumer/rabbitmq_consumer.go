@@ -6,7 +6,8 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/consumer"
 	consumertracing "github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/otel/tracing/consumer"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/pipeline"
@@ -47,7 +48,7 @@ type rabbitMQConsumer struct {
 	deliveryRoutines        chan struct{} // chan should init before using channel
 	messageSerializer       serializer.MessageSerializer
 	logger                  logger.Logger
-	rabbitmqOptions         settings.RmqConfig
+	rabbitmqOptions         coptions.RmqOptions
 	ErrChan                 chan error
 	handlers                []consumer.ConsumerHandler
 	pipelines               []pipeline.ConsumerPipeline
@@ -56,7 +57,7 @@ type rabbitMQConsumer struct {
 
 // NewRabbitMQConsumer create a new generic RabbitMQ consumer
 func NewRabbitMQConsumer(
-	rabbitmqOptions settings.RmqConfig,
+	c config.Config,
 	connection types.IConnection,
 	consumerConfiguration *configurations.RabbitMQConsumerConfiguration,
 	messageSerializer serializer.MessageSerializer,
@@ -79,7 +80,7 @@ func NewRabbitMQConsumer(
 	)
 	cons := &rabbitMQConsumer{
 		messageSerializer:       messageSerializer,
-		rabbitmqOptions:         rabbitmqOptions,
+		rabbitmqOptions:         c.GetRmqOptions(),
 		logger:                  logger,
 		rabbitmqConsumerOptions: consumerConfiguration,
 		deliveryRoutines:        deliveryRoutines,

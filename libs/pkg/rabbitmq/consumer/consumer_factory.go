@@ -1,7 +1,7 @@
 package consumer
 
 import (
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/consumer"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/types"
 	serializer "github.com/phanhotboy/nien-su-viet/libs/pkg/core/serializer"
@@ -15,17 +15,17 @@ type consumerFactory struct {
 	connection      types2.IConnection
 	eventSerializer serializer.MessageSerializer
 	logger          logger.Logger
-	rabbitmqOptions settings.RmqConfig
+	cfg             config.Config
 }
 
 func NewConsumerFactory(
-	s settings.Config,
+	c config.Config,
 	connection types2.IConnection,
 	eventSerializer serializer.MessageSerializer,
 	l logger.Logger,
 ) consumercontracts.ConsumerFactory {
 	return &consumerFactory{
-		rabbitmqOptions: s.Rmq,
+		cfg:             c,
 		logger:          l,
 		eventSerializer: eventSerializer,
 		connection:      connection,
@@ -37,7 +37,7 @@ func (c *consumerFactory) CreateConsumer(
 	isConsumedNotifications ...func(message types.IMessage),
 ) (consumer.Consumer, error) {
 	return NewRabbitMQConsumer(
-		c.rabbitmqOptions,
+		c.cfg,
 		c.connection,
 		consumerConfiguration,
 		c.eventSerializer,

@@ -1,64 +1,16 @@
-package settings
+package chelper
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"reflect"
 	"strings"
 
 	"emperror.dev/errors"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/environment"
 	"github.com/spf13/viper"
 )
 
-func searchForConfigFileDir(
-	rootDir string,
-	env environment.Environment,
-) (string, error) {
-	var result string
-
-	// Walk the directory tree starting from rootDir
-	err := filepath.Walk(
-		rootDir,
-		func(path string, info os.FileInfo, err error) error {
-			if err != nil {
-				return err
-			}
-
-			// Check if the file is named "config.%s.json" (replace %s with the env)
-			if !info.IsDir() &&
-				strings.EqualFold(
-					info.Name(),
-					fmt.Sprintf("config.%s.json", env),
-				) ||
-				strings.EqualFold(
-					info.Name(),
-					fmt.Sprintf("config.%s.yaml", env),
-				) ||
-				strings.EqualFold(
-					info.Name(),
-					fmt.Sprintf("config.%s.yml", env),
-				) {
-				// Get the directory name containing the config file
-				dir := filepath.Dir(path)
-				result = dir
-
-				return filepath.SkipDir // Skip further traversal
-			}
-
-			return nil
-		},
-	)
-
-	if result != "" {
-		return result, nil
-	}
-
-	return "", errors.WrapIf(err, "No directory with config file found")
-}
-
-func searchRootDirectory(
+func SearchRootDirectory(
 	dir string,
 ) (string, error) {
 	// List files and directories in the current directory
@@ -86,7 +38,7 @@ func searchRootDirectory(
 		return "", errors.WrapIf(err, "No go.mod file found")
 	}
 
-	return searchRootDirectory(parentDir)
+	return SearchRootDirectory(parentDir)
 }
 
 func BindEnvs(v *viper.Viper, iface interface{}, prefix string) {
@@ -135,4 +87,12 @@ func parseTag(tag string, fieldName string) (name string, squash bool) {
 	}
 
 	return
+}
+
+func GetEnvPrefix() string {
+	envPrefix := os.Getenv("ENV_PREFIX")
+	if envPrefix == "" {
+		panic("missing ENV_PREFIX environment variable")
+	}
+	return strings.ToUpper(envPrefix)
 }

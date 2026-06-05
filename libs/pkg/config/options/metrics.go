@@ -1,4 +1,4 @@
-package settings
+package coptions
 
 type OTLPProvider struct {
 	OTLPEndpoint string `mapstructure:"endpoint"` // POST_METRICS_OTEL_COLLECTOR_ENDPOINT

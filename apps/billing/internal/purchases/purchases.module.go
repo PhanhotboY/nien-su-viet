@@ -7,6 +7,7 @@ import (
 	crepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/cache"
 	prepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/persistence"
 	tgrpc "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/transport/grpc"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/zalopay"
 
 	createPurchaseCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/createPurchase/commands"
 	updatePurchaseStatusCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/updatePurchaseStatus/commands"
@@ -29,6 +30,7 @@ var Module = fx.Module(
 		// Outbound Infrastructure
 		prepo.NewPurchaseDbRepo,
 		crepo.NewPurchaseCacheRepo,
+		zalopay.New,
 
 		// Application Query
 		getPurchaseQuery.NewGetPurchaseHandler,

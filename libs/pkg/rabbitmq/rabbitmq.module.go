@@ -3,7 +3,7 @@ package rabbitmq
 import (
 	"context"
 
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
 	bus2 "github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/bus"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/producer"
 
@@ -53,11 +53,11 @@ var (
 func registerHooks(
 	lc fx.Lifecycle,
 	bus bus.RabbitmqBus,
-	s settings.Config,
+	c config.Config,
 	logger logger.Logger,
 ) {
-	rabbitmqOptions := s.Rmq
-	if !rabbitmqOptions.AutoStart {
+	cfg := c.GetRmqOptions()
+	if !cfg.AutoStart {
 		return
 	}
 

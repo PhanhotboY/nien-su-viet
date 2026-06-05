@@ -1,6 +1,6 @@
-package settings
+package coptions
 
-type PostgresqlConfig struct {
+type PostgresqlOptions struct {
 	Host     string `mapstructure:"host"`
 	Port     int    `mapstructure:"port"`
 	Username string `mapstructure:"username"`

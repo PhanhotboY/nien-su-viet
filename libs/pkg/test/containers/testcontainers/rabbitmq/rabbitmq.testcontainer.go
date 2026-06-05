@@ -9,7 +9,8 @@ import (
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/go-connections/nat"
-	"github.com/phanhotboy/nien-su-viet/libs/pkg/config/settings"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
+	coptions "github.com/phanhotboy/nien-su-viet/libs/pkg/config/options"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"github.com/rabbitmq/amqp091-go"
 	"github.com/testcontainers/testcontainers-go"
@@ -19,17 +20,17 @@ import (
 type RabbitMQTestContainers struct {
 	container testcontainers.Container
 	logger    logger.Logger
-	cfg       settings.Config
+	cfg       coptions.RmqOptions
 }
 
-func NewRabbitMQTestContainers(cfg settings.Config, l logger.Logger) *RabbitMQTestContainers {
+func NewRabbitMQTestContainers(c config.Config, l logger.Logger) *RabbitMQTestContainers {
 	return &RabbitMQTestContainers{
-		cfg:    cfg,
+		cfg:    c.GetRmqOptions(),
 		logger: l,
 	}
 }
 
-func (r *RabbitMQTestContainers) Start(ctx context.Context, t *testing.T) (settings.RmqConfig, error) {
+func (r *RabbitMQTestContainers) Start(ctx context.Context, t *testing.T) (coptions.RmqOptions, error) {
 	r.logger.Info("Starting RabbitMQ test container...")
 	containerReq := r.getRunOptions()
 	rabbitmqContainer, err := testcontainers.GenericContainer(
@@ -39,40 +40,40 @@ func (r *RabbitMQTestContainers) Start(ctx context.Context, t *testing.T) (setti
 			Started:          true,
 		})
 	if err != nil {
-		return r.cfg.Rmq, err
+		return r.cfg, err
 	}
 
 	r.container = rabbitmqContainer
 
 	host, err := rabbitmqContainer.Host(ctx)
 	if err != nil {
-		return r.cfg.Rmq, err
+		return r.cfg, err
 	}
 
-	port, err := rabbitmqContainer.MappedPort(ctx, nat.Port(strconv.Itoa(r.cfg.Rmq.Port)))
+	port, err := rabbitmqContainer.MappedPort(ctx, nat.Port(strconv.Itoa(r.cfg.Port)))
 	if err != nil {
-		return r.cfg.Rmq, err
+		return r.cfg, err
 	}
 
-	cfg := settings.RmqConfig{
-		ExchangeName: r.cfg.Rmq.ExchangeName,
-		DeliveryMode: r.cfg.Rmq.DeliveryMode,
-		Persisted:    r.cfg.Rmq.Persisted,
-		AppId:        r.cfg.Rmq.AppId,
-		AutoStart:    r.cfg.Rmq.AutoStart,
-		Reconnecting: r.cfg.Rmq.Reconnecting,
-		RmqHostOptions: settings.RmqHostOptions{
+	cfg := coptions.RmqOptions{
+		ExchangeName: r.cfg.ExchangeName,
+		DeliveryMode: r.cfg.DeliveryMode,
+		Persisted:    r.cfg.Persisted,
+		AppId:        r.cfg.AppId,
+		AutoStart:    r.cfg.AutoStart,
+		Reconnecting: r.cfg.Reconnecting,
+		RmqHostOptions: coptions.RmqHostOptions{
 			Host:       host,
 			Port:       port.Int(),
-			UserName:   r.cfg.Rmq.UserName,
-			Password:   r.cfg.Rmq.Password,
-			RetryDelay: r.cfg.Rmq.RetryDelay,
+			UserName:   r.cfg.UserName,
+			Password:   r.cfg.Password,
+			RetryDelay: r.cfg.RetryDelay,
 		},
 	}
 
 	isConnectable := IsConnectable(r.logger, cfg)
 	if !isConnectable {
-		return r.cfg.Rmq, fmt.Errorf("failed to connect to RabbitMQ container at amqp://%s@%s:%d", cfg.UserName, cfg.Host, cfg.Port)
+		return r.cfg, fmt.Errorf("failed to connect to RabbitMQ container at amqp://%s@%s:%d", cfg.UserName, cfg.Host, cfg.Port)
 	}
 
 	return cfg, nil
@@ -81,17 +82,17 @@ func (r *RabbitMQTestContainers) Start(ctx context.Context, t *testing.T) (setti
 func (r *RabbitMQTestContainers) getRunOptions() testcontainers.ContainerRequest {
 	containerReq := testcontainers.ContainerRequest{
 		Image:        "rabbitmq:4-management-alpine",
-		ExposedPorts: []string{strconv.Itoa(r.cfg.Rmq.Port)},
+		ExposedPorts: []string{strconv.Itoa(r.cfg.Port)},
 		WaitingFor: wait.ForListeningPort(
-			nat.Port(strconv.Itoa(r.cfg.Rmq.Port)),
+			nat.Port(strconv.Itoa(r.cfg.Port)),
 		).WithStartupTimeout(5 * time.Second),
 		HostConfigModifier: func(hostConfig *container.HostConfig) {
 			hostConfig.AutoRemove = true
 		},
-		Hostname: r.cfg.Rmq.Host,
+		Hostname: r.cfg.Host,
 		Env: map[string]string{
-			"RABBITMQ_DEFAULT_USER": r.cfg.Rmq.UserName,
-			"RABBITMQ_DEFAULT_PASS": r.cfg.Rmq.Password,
+			"RABBITMQ_DEFAULT_USER": r.cfg.UserName,
+			"RABBITMQ_DEFAULT_PASS": r.cfg.Password,
 		},
 	}
 
@@ -100,7 +101,7 @@ func (r *RabbitMQTestContainers) getRunOptions() testcontainers.ContainerRequest
 
 func IsConnectable(
 	logger logger.Logger,
-	options settings.RmqConfig,
+	options coptions.RmqOptions,
 ) bool {
 	conn, err := amqp091.Dial(options.AmqpEndPoint())
 	if err != nil {
