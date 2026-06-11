@@ -1,0 +1,52 @@
+package pthelper
+
+import (
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_transactions/domain/entity"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service"
+)
+
+func ToEntityTransactionType(t billing_service.PaymentTransactionType) entity.PaymentTransactionType {
+	switch t {
+	case billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_PAYMENT:
+		return entity.PAYMENT_TRANSACTION_TYPE_PAYMENT
+	case billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_AUTH:
+		return entity.PAYMENT_TRANSACTION_TYPE_AUTH
+	case billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_CAPTURE:
+		return entity.PAYMENT_TRANSACTION_TYPE_CAPTURE
+	case billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_REFUND:
+		return entity.PAYMENT_TRANSACTION_TYPE_REFUND
+	case billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_VOID:
+		return entity.PAYMENT_TRANSACTION_TYPE_VOID
+	case billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_CHARGEBACK:
+		return entity.PAYMENT_TRANSACTION_TYPE_CHARGEBACK
+	case billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_ADJUSTMENT:
+		return entity.PAYMENT_TRANSACTION_TYPE_ADJUSTMENT
+	case billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_FEE:
+		return entity.PAYMENT_TRANSACTION_TYPE_FEE
+	default:
+		return entity.PAYMENT_TRANSACTION_TYPE_VOID
+	}
+}
+
+func ToGrpcTransactionType(t entity.PaymentTransactionType) billing_service.PaymentTransactionType {
+	switch t {
+	case entity.PAYMENT_TRANSACTION_TYPE_PAYMENT:
+		return billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_PAYMENT
+	case entity.PAYMENT_TRANSACTION_TYPE_AUTH:
+		return billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_AUTH
+	case entity.PAYMENT_TRANSACTION_TYPE_CAPTURE:
+		return billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_CAPTURE
+	case entity.PAYMENT_TRANSACTION_TYPE_REFUND:
+		return billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_REFUND
+	case entity.PAYMENT_TRANSACTION_TYPE_VOID:
+		return billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_VOID
+	case entity.PAYMENT_TRANSACTION_TYPE_CHARGEBACK:
+		return billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_CHARGEBACK
+	case entity.PAYMENT_TRANSACTION_TYPE_ADJUSTMENT:
+		return billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_ADJUSTMENT
+	case entity.PAYMENT_TRANSACTION_TYPE_FEE:
+		return billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_FEE
+	default:
+		return billing_service.PaymentTransactionType_PAYMENT_TRANSACTION_TYPE_VOID
+	}
+}

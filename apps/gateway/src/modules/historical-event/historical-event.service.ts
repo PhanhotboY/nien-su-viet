@@ -1,24 +1,20 @@
-import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import type { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom, timeout, catchError, throwError } from 'rxjs';
 
 import { MicroserviceErrorHandler } from '@gateway/common/microservice-error.handler';
 import {
   HistoricalEventServiceClient,
-  EventDateType,
+  HISTORICAL_EVENT_SERVICE_NAME,
 } from '@phanhotboy/genproto/historical_event_service/historical_events';
 import {
   HistoricalEventBaseCreateDto,
-  HistoricalEventBaseDto,
   HistoricalEventBaseUpdateDto,
   HistoricalEventQueryDto,
 } from './dto';
 import { TimestampUtil } from '@phanhotboy/nsv-common/util/grpc.util';
-import { HISTORICAL_EVENT } from '@phanhotboy/constants';
-import {
-  toEventDateType,
-  toGrpcEventDateType,
-} from '@historical-event/helper/dateType.helper';
+import { toGrpcEventDateType } from '@historical-event/helper/dateType.helper';
+import { GRPC_SERVICE } from '@phanhotboy/constants';
 
 @Injectable()
 export class HistoricalEventService {
@@ -27,13 +23,13 @@ export class HistoricalEventService {
   private heventClient: HistoricalEventServiceClient;
 
   constructor(
-    @Inject('HISTORICAL_EVENT_SERVICE')
+    @Inject(GRPC_SERVICE.HISTORICAL_EVENT.NAME)
     private readonly client: ClientGrpc,
     private readonly logger: Logger,
   ) {
     this.microserviceErrorHandler = new MicroserviceErrorHandler(logger);
     this.heventClient = this.client.getService<HistoricalEventServiceClient>(
-      'HistoricalEventService',
+      HISTORICAL_EVENT_SERVICE_NAME,
     );
   }
 

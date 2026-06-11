@@ -1,12 +1,15 @@
 package postgres
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"time"
 
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
+	dbcontracts "github.com/phanhotboy/nien-su-viet/libs/pkg/postgresql/contracts"
+	dbhelper "github.com/phanhotboy/nien-su-viet/libs/pkg/postgresql/helper"
 	"go.uber.org/fx"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -32,8 +35,13 @@ type DBParams struct {
 	Models []any `group:"db_models"`
 }
 
+type txContextDb struct {
+	logger logger.Logger
+	db     *gorm.DB
+}
+
 // NewDb func for connection to PostgreSQL database.
-func NewDb(c config.Config, logger logger.Logger, params DBParams) (*gorm.DB, error) {
+func NewDb(c config.Config, logger logger.Logger, params DBParams) (dbcontracts.TxContextDb, error) {
 	cfg := c.GetPostgresqlOptions()
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", cfg.Host, cfg.Username, cfg.Password, cfg.Database, cfg.Port)
 
@@ -88,5 +96,68 @@ func NewDb(c config.Config, logger logger.Logger, params DBParams) (*gorm.DB, er
 	}
 
 	fmt.Println("Database connection established successfully!")
-	return pg, nil
+	return txContextDb{db: pg, logger: logger}, nil
+}
+
+func (t txContextDb) WithTx(ctx context.Context) (dbcontracts.TxContextDb, error) {
+	tx, err := dbhelper.GetTxFromContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return txContextDb{db: tx, logger: t.logger}, nil
+}
+
+func (t txContextDb) WithTxIfExists(ctx context.Context) dbcontracts.TxContextDb {
+	tx := dbhelper.GetTxFromContextIfExists(ctx)
+	if tx == nil {
+		return t
+	}
+
+	return txContextDb{db: tx, logger: t.logger}
+}
+
+func (t txContextDb) RunInTx(ctx context.Context, action dbcontracts.ActionFunc) error {
+	// https://gorm.io/docs/transactions.html#Transaction
+	tx := t.DB().WithContext(ctx).Begin()
+
+	t.logger.Info("beginning database transaction")
+
+	gormContext := dbhelper.SetTxToContext(ctx, tx)
+	ctx = gormContext
+
+	defer func() {
+		if r := recover(); r != nil {
+			tx.WithContext(ctx).Rollback()
+
+			if err, _ := r.(error); err != nil {
+				t.logger.Errorf(
+					"panic tn the transaction, rolling back transaction with panic err: %+v",
+					err,
+				)
+			} else {
+				t.logger.Errorf("panic tn the transaction, rolling back transaction with panic message: %+v", r)
+			}
+		}
+	}()
+
+	err := action(ctx, t)
+	if err != nil {
+		t.logger.Error("rolling back transaction")
+		tx.WithContext(ctx).Rollback()
+
+		return err
+	}
+
+	t.logger.Info("committing transaction")
+
+	if err = tx.WithContext(ctx).Commit().Error; err != nil {
+		t.logger.Errorf("transaction commit error: %+v", err)
+	}
+
+	return err
+}
+
+func (t txContextDb) DB() *gorm.DB {
+	return t.db
 }

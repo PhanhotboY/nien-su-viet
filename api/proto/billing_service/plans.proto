@@ -5,6 +5,7 @@ package billing_service;
 import "billing_service/billing.proto";
 import "common/pagination.proto";
 import "common/request.proto";
+import "common/response.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
@@ -24,7 +25,7 @@ enum BillingInterval {
   BILLING_INTERVAL_YEAR = 4;
 }
 
-message SubscriptionPlan {
+message Plan {
   string id = 1;
   string code = 2;
   string name = 3;
@@ -44,7 +45,7 @@ message ListPlansRequest {
 }
 
 message ListPlansResponse {
-  repeated SubscriptionPlan data = 1;
+  repeated Plan data = 1;
   common.PaginationMetadata pagination = 2;
 }
 
@@ -53,10 +54,37 @@ message GetPlanRequest {
 }
 
 message GetPlanResponse {
-  SubscriptionPlan data = 1;
+  Plan data = 1;
 }
 
-service SubscriptionPlanService {
+message CreatePlanRequest {
+  string code = 1;
+  string name = 2;
+  Money price = 3;
+  BillingInterval billing_interval = 4;
+  bool is_active = 5;
+}
+
+message CreatePlanResponse {
+  common.OperationMetadata data = 1;
+}
+
+message UpdatePlanRequest {
+  string id = 1;
+  optional string name = 2;
+  optional string code = 3;
+  optional Money price = 4;
+  optional BillingInterval billing_interval = 5;
+  optional bool is_active = 6;
+}
+
+message UpdatePlanResponse {
+  common.OperationMetadata data = 1;
+}
+
+service PlanService {
+  rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse);
+  rpc UpdatePlan(UpdatePlanRequest) returns (UpdatePlanResponse);
   rpc ListPlans(ListPlansRequest) returns (ListPlansResponse);
   rpc GetPlan(GetPlanRequest) returns (GetPlanResponse);
 }

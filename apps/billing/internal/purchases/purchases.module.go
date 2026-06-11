@@ -9,10 +9,10 @@ import (
 	tgrpc "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/transport/grpc"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/zalopay"
 
-	createPurchaseCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/createPurchase/commands"
-	updatePurchaseStatusCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/updatePurchaseStatus/commands"
+	createPurchaseCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/createPurchase"
+	updatePurchaseStatusCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/updatePurchaseStatus"
 
-	getPurchaseQuery "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/queries/getPurchase/queries"
+	getPurchaseQuery "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/queries/getPurchase"
 )
 
 var Module = fx.Module(

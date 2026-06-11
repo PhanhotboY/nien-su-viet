@@ -4,6 +4,11 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_transactions/domain/entity"
+	crepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_transactions/infrastructure/cache"
+	prepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_transactions/infrastructure/persistence"
+
+	createPT "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_transactions/application/commands/createPaymentTransaction"
+	listPTByAttempt "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_transactions/application/queries/listPaymentTransactionsByAttempt"
 )
 
 var Module = fx.Module(
@@ -18,11 +23,14 @@ var Module = fx.Module(
 	)),
 
 	fx.Provide(
+		// Outbound Infrastructure
+		prepo.NewPaymentTransactionDbRepo,
+		crepo.NewPaymentTransactionCacheRepo,
 
-	// Outbound Infrastructure
-
-	// Application Query
-	// Application Command
+		// Application Query
+		listPTByAttempt.NewListPaymentTransactionsByAttemptHandler,
+		// Application Command
+		createPT.NewCreatePaymentTransactionHandler,
 	),
 
 	// Inbound Infrastructure

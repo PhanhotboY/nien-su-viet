@@ -11,7 +11,7 @@ import (
 
 	event "github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/events"
 
-	updatePurchaseStatus "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/updatePurchaseStatus/commands"
+	updatePurchaseStatus "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/updatePurchaseStatus"
 )
 
 var ConsumerModule = fx.Module(

@@ -19,137 +19,213 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SubscriptionPlanService_ListPlans_FullMethodName = "/billing_service.SubscriptionPlanService/ListPlans"
-	SubscriptionPlanService_GetPlan_FullMethodName   = "/billing_service.SubscriptionPlanService/GetPlan"
+	PlanService_CreatePlan_FullMethodName = "/billing_service.PlanService/CreatePlan"
+	PlanService_UpdatePlan_FullMethodName = "/billing_service.PlanService/UpdatePlan"
+	PlanService_ListPlans_FullMethodName  = "/billing_service.PlanService/ListPlans"
+	PlanService_GetPlan_FullMethodName    = "/billing_service.PlanService/GetPlan"
 )
 
-// SubscriptionPlanServiceClient is the client API for SubscriptionPlanService service.
+// PlanServiceClient is the client API for PlanService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type SubscriptionPlanServiceClient interface {
+type PlanServiceClient interface {
+	CreatePlan(ctx context.Context, in *CreatePlanRequest, opts ...grpc.CallOption) (*CreatePlanResponse, error)
+	UpdatePlan(ctx context.Context, in *UpdatePlanRequest, opts ...grpc.CallOption) (*UpdatePlanResponse, error)
 	ListPlans(ctx context.Context, in *ListPlansRequest, opts ...grpc.CallOption) (*ListPlansResponse, error)
 	GetPlan(ctx context.Context, in *GetPlanRequest, opts ...grpc.CallOption) (*GetPlanResponse, error)
 }
 
-type subscriptionPlanServiceClient struct {
+type planServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewSubscriptionPlanServiceClient(cc grpc.ClientConnInterface) SubscriptionPlanServiceClient {
-	return &subscriptionPlanServiceClient{cc}
+func NewPlanServiceClient(cc grpc.ClientConnInterface) PlanServiceClient {
+	return &planServiceClient{cc}
 }
 
-func (c *subscriptionPlanServiceClient) ListPlans(ctx context.Context, in *ListPlansRequest, opts ...grpc.CallOption) (*ListPlansResponse, error) {
+func (c *planServiceClient) CreatePlan(ctx context.Context, in *CreatePlanRequest, opts ...grpc.CallOption) (*CreatePlanResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreatePlanResponse)
+	err := c.cc.Invoke(ctx, PlanService_CreatePlan_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *planServiceClient) UpdatePlan(ctx context.Context, in *UpdatePlanRequest, opts ...grpc.CallOption) (*UpdatePlanResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdatePlanResponse)
+	err := c.cc.Invoke(ctx, PlanService_UpdatePlan_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *planServiceClient) ListPlans(ctx context.Context, in *ListPlansRequest, opts ...grpc.CallOption) (*ListPlansResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListPlansResponse)
-	err := c.cc.Invoke(ctx, SubscriptionPlanService_ListPlans_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, PlanService_ListPlans_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *subscriptionPlanServiceClient) GetPlan(ctx context.Context, in *GetPlanRequest, opts ...grpc.CallOption) (*GetPlanResponse, error) {
+func (c *planServiceClient) GetPlan(ctx context.Context, in *GetPlanRequest, opts ...grpc.CallOption) (*GetPlanResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetPlanResponse)
-	err := c.cc.Invoke(ctx, SubscriptionPlanService_GetPlan_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, PlanService_GetPlan_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// SubscriptionPlanServiceServer is the server API for SubscriptionPlanService service.
-// All implementations should embed UnimplementedSubscriptionPlanServiceServer
+// PlanServiceServer is the server API for PlanService service.
+// All implementations should embed UnimplementedPlanServiceServer
 // for forward compatibility.
-type SubscriptionPlanServiceServer interface {
+type PlanServiceServer interface {
+	CreatePlan(context.Context, *CreatePlanRequest) (*CreatePlanResponse, error)
+	UpdatePlan(context.Context, *UpdatePlanRequest) (*UpdatePlanResponse, error)
 	ListPlans(context.Context, *ListPlansRequest) (*ListPlansResponse, error)
 	GetPlan(context.Context, *GetPlanRequest) (*GetPlanResponse, error)
 }
 
-// UnimplementedSubscriptionPlanServiceServer should be embedded to have
+// UnimplementedPlanServiceServer should be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedSubscriptionPlanServiceServer struct{}
+type UnimplementedPlanServiceServer struct{}
 
-func (UnimplementedSubscriptionPlanServiceServer) ListPlans(context.Context, *ListPlansRequest) (*ListPlansResponse, error) {
+func (UnimplementedPlanServiceServer) CreatePlan(context.Context, *CreatePlanRequest) (*CreatePlanResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreatePlan not implemented")
+}
+func (UnimplementedPlanServiceServer) UpdatePlan(context.Context, *UpdatePlanRequest) (*UpdatePlanResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdatePlan not implemented")
+}
+func (UnimplementedPlanServiceServer) ListPlans(context.Context, *ListPlansRequest) (*ListPlansResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListPlans not implemented")
 }
-func (UnimplementedSubscriptionPlanServiceServer) GetPlan(context.Context, *GetPlanRequest) (*GetPlanResponse, error) {
+func (UnimplementedPlanServiceServer) GetPlan(context.Context, *GetPlanRequest) (*GetPlanResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPlan not implemented")
 }
-func (UnimplementedSubscriptionPlanServiceServer) testEmbeddedByValue() {}
+func (UnimplementedPlanServiceServer) testEmbeddedByValue() {}
 
-// UnsafeSubscriptionPlanServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to SubscriptionPlanServiceServer will
+// UnsafePlanServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to PlanServiceServer will
 // result in compilation errors.
-type UnsafeSubscriptionPlanServiceServer interface {
-	mustEmbedUnimplementedSubscriptionPlanServiceServer()
+type UnsafePlanServiceServer interface {
+	mustEmbedUnimplementedPlanServiceServer()
 }
 
-func RegisterSubscriptionPlanServiceServer(s grpc.ServiceRegistrar, srv SubscriptionPlanServiceServer) {
-	// If the following call panics, it indicates UnimplementedSubscriptionPlanServiceServer was
+func RegisterPlanServiceServer(s grpc.ServiceRegistrar, srv PlanServiceServer) {
+	// If the following call panics, it indicates UnimplementedPlanServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&SubscriptionPlanService_ServiceDesc, srv)
+	s.RegisterService(&PlanService_ServiceDesc, srv)
 }
 
-func _SubscriptionPlanService_ListPlans_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PlanService_CreatePlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreatePlanRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlanServiceServer).CreatePlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlanService_CreatePlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlanServiceServer).CreatePlan(ctx, req.(*CreatePlanRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlanService_UpdatePlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePlanRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlanServiceServer).UpdatePlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlanService_UpdatePlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlanServiceServer).UpdatePlan(ctx, req.(*UpdatePlanRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PlanService_ListPlans_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ListPlansRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SubscriptionPlanServiceServer).ListPlans(ctx, in)
+		return srv.(PlanServiceServer).ListPlans(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: SubscriptionPlanService_ListPlans_FullMethodName,
+		FullMethod: PlanService_ListPlans_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SubscriptionPlanServiceServer).ListPlans(ctx, req.(*ListPlansRequest))
+		return srv.(PlanServiceServer).ListPlans(ctx, req.(*ListPlansRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _SubscriptionPlanService_GetPlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _PlanService_GetPlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetPlanRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SubscriptionPlanServiceServer).GetPlan(ctx, in)
+		return srv.(PlanServiceServer).GetPlan(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: SubscriptionPlanService_GetPlan_FullMethodName,
+		FullMethod: PlanService_GetPlan_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SubscriptionPlanServiceServer).GetPlan(ctx, req.(*GetPlanRequest))
+		return srv.(PlanServiceServer).GetPlan(ctx, req.(*GetPlanRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// SubscriptionPlanService_ServiceDesc is the grpc.ServiceDesc for SubscriptionPlanService service.
+// PlanService_ServiceDesc is the grpc.ServiceDesc for PlanService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var SubscriptionPlanService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "billing_service.SubscriptionPlanService",
-	HandlerType: (*SubscriptionPlanServiceServer)(nil),
+var PlanService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "billing_service.PlanService",
+	HandlerType: (*PlanServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "CreatePlan",
+			Handler:    _PlanService_CreatePlan_Handler,
+		},
+		{
+			MethodName: "UpdatePlan",
+			Handler:    _PlanService_UpdatePlan_Handler,
+		},
+		{
 			MethodName: "ListPlans",
-			Handler:    _SubscriptionPlanService_ListPlans_Handler,
+			Handler:    _PlanService_ListPlans_Handler,
 		},
 		{
 			MethodName: "GetPlan",
-			Handler:    _SubscriptionPlanService_GetPlan_Handler,
+			Handler:    _PlanService_GetPlan_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -5,7 +5,6 @@ package billing_service;
 import "billing_service/billing.proto";
 import "common/pagination.proto";
 import "common/request.proto";
-import "common/response.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
@@ -47,17 +46,22 @@ message Purchase {
 
 message CreatePurchaseRequest {
   string user_id = 1;
-  string subscription_id = 2;
   string plan_id = 3;
-
-  Money amount = 4;
 
   // Client-generated idempotency key to prevent duplicates.
   string idempotency_key = 5;
 }
 
 message CreatePurchaseResponse {
-  common.OperationMetadata data = 1;
+  string id = 1;
+  int32 return_code = 2;
+  string return_message = 3;
+  int32 sub_return_code = 4;
+  string sub_return_message = 5;
+  string order_url = 6;
+  string zptranstoken = 7;
+  string order_token = 8;
+  string qr_code = 9;
 }
 
 message GetPurchaseRequest {

@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type CreateOrderRequest struct {
-	AppID       string `json:"app_id"`
+	AppID       int    `json:"app_id"`
 	AppTransID  string `json:"app_trans_id"`
 	AppTime     int64  `json:"app_time"`
 	Amount      int64  `json:"amount"`
@@ -19,19 +18,23 @@ type CreateOrderRequest struct {
 	Description string `json:"description"`
 	BankCode    string `json:"bank_code,omitempty"`
 	Mac         string `json:"mac"`
+	CallbackURL string `json:"callback_url"`
+	Title       string `json:"json"`
 }
 
 type CreateOrderResponse struct {
-	ReturnCode    int    `json:"return_code"`
-	ReturnMessage string `json:"return_message"`
-	OrderURL      string `json:"order_url,omitempty"`
-	Zptranstoken  string `json:"zptranstoken,omitempty"`
-	AppTransID    string `json:"apptransid,omitempty"`
-	SubReturnCode int    `json:"sub_return_code,omitempty"`
+	ReturnCode       int    `json:"return_code"`
+	ReturnMessage    string `json:"return_message"`
+	SubReturnCode    int    `json:"sub_return_code"`
+	SubReturnMessage string `json:"sub_return_message"`
+	OrderURL         string `json:"order_url,omitempty"`
+	Zptranstoken     string `json:"zptranstoken,omitempty"`
+	OrderToken       string `json:"order_token,omitempty"`
+	QRCode           string `json:"qr_code,omitempty"`
 }
 
 type QueryOrderRequest struct {
-	AppID      string `json:"app_id"`
+	AppID      int    `json:"app_id"`
 	AppTransID string `json:"app_trans_id"`
 	Mac        string `json:"mac"`
 }
@@ -47,13 +50,15 @@ type QueryOrderResponse struct {
 	UserFeeAmount int64  `json:"user_fee_amount,omitempty"`
 }
 
+// https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_du-lieu-nhan-duoc-tu-callback
 type CallbackPayload struct {
 	Data string `json:"data"`
 	Mac  string `json:"mac"`
+	Type int    `json:"type"` // 1: Order, 2: Agreement
 }
 
 type CallbackData struct {
-	AppID      string `json:"app_id"`
+	AppID      int    `json:"app_id"`
 	AppTransID string `json:"app_trans_id"`
 	AppTime    int64  `json:"app_time"`
 	Amount     int64  `json:"amount"`
@@ -61,47 +66,57 @@ type CallbackData struct {
 	EmbedData  string `json:"embed_data"`
 	Item       string `json:"item"`
 	ZpTransID  string `json:"zp_trans_id"`
-	BankCode   string `json:"bank_code"`
-	Status     int    `json:"status"`
+	// https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_cac-kenh-thanh-toan-ho-tro
+	Channel        int   `json:"channel"`
+	UseFeeAmount   int64 `json:"use_fee_amount"`
+	DiscountAmount int64 `json:"discount_amount"`
+}
+
+// https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_thong-tin-appserver-tra-ve-cho-zalopayserver-khi-nhan-callback
+type CallbackResponse struct {
+	ReturnCode    int    `json:"return_code"` // -1: MAC not equal, 0: Internal Error, 1: Success, 2: Duplicated
+	ReturnMessage string `json:"return_message"`
 }
 
 func (r CreateOrderRequest) computeMac(key string) string {
+	// hmac_input: app_id +”|”+ app_trans_id +”|”+ app_user +”|”+ amount +"|"+ app_time +”|”+ embed_data +"|"+ item
 	raw := strings.Join([]string{
-		r.AppID,
+		strconv.Itoa(r.AppID),
 		r.AppTransID,
-		strconv.FormatInt(r.AppTime, 10),
-		strconv.FormatInt(r.Amount, 10),
 		r.AppUser,
-		r.Item,
+		strconv.FormatInt(r.Amount, 10),
+		strconv.FormatInt(r.AppTime, 10),
 		r.EmbedData,
+		r.Item,
 	}, "|")
 	return HMACSHA256Hex(raw, key)
 }
 
 func (r QueryOrderRequest) computeMac(key string) string {
 	raw := strings.Join([]string{
-		r.AppID,
+		strconv.Itoa(r.AppID),
 		r.AppTransID,
 	}, "|")
 	return HMACSHA256Hex(raw, key)
 }
 
-func ParseCallback(body []byte) (*CallbackData, error) {
-	var payload CallbackPayload
-	if err := json.Unmarshal(body, &payload); err != nil {
-		return nil, fmt.Errorf("zalopay: decode callback wrapper: %w", err)
-	}
-	if payload.Data == "" {
-		return nil, fmt.Errorf("zalopay: missing callback data")
-	}
-
-	var data CallbackData
-	if err := json.Unmarshal([]byte(payload.Data), &data); err != nil {
-		return nil, fmt.Errorf("zalopay: decode callback data: %w", err)
-	}
-	return &data, nil
+type Item struct {
+	ItemID    string `json:"itemid"`
+	ItemName  string `json:"itemname"`
+	ItemPrice int64  `json:"itemprice"`
 }
 
-func GenerateAppTransID(prefix string, t time.Time) string {
-	return fmt.Sprintf("%s%d", prefix, t.Unix())
+func (i Item) String() string {
+	itemJSON, _ := json.Marshal(i)
+	return fmt.Sprintf("[%s]", string(itemJSON))
+}
+
+type EmbedData struct {
+	PurchaseID  string `json:"purchaseid"`
+	RedirectURL string `json:"redirecturl"`
+}
+
+func (e EmbedData) String() string {
+	embedJSON, _ := json.Marshal(e)
+	return string(embedJSON)
 }

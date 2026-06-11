@@ -115,7 +115,7 @@ const (
 	// Transaction failed during processing
 	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_FAILED PaymentTransactionStatus = 3
 	// Transaction was canceled before completion
-	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_CANCELED PaymentTransactionStatus = 4
+	PaymentTransactionStatus_PAYMENT_TRANSACTION_STATUS_CANCELLED PaymentTransactionStatus = 4
 )
 
 // Enum value maps for PaymentTransactionStatus.
@@ -125,14 +125,14 @@ var (
 		1: "PAYMENT_TRANSACTION_STATUS_PENDING",
 		2: "PAYMENT_TRANSACTION_STATUS_SUCCEEDED",
 		3: "PAYMENT_TRANSACTION_STATUS_FAILED",
-		4: "PAYMENT_TRANSACTION_STATUS_CANCELED",
+		4: "PAYMENT_TRANSACTION_STATUS_CANCELLED",
 	}
 	PaymentTransactionStatus_value = map[string]int32{
 		"PAYMENT_TRANSACTION_STATUS_UNSPECIFIED": 0,
 		"PAYMENT_TRANSACTION_STATUS_PENDING":     1,
 		"PAYMENT_TRANSACTION_STATUS_SUCCEEDED":   2,
 		"PAYMENT_TRANSACTION_STATUS_FAILED":      3,
-		"PAYMENT_TRANSACTION_STATUS_CANCELED":    4,
+		"PAYMENT_TRANSACTION_STATUS_CANCELLED":   4,
 	}
 )
 
@@ -521,13 +521,13 @@ const file_billing_service_payment_transactions_proto_rawDesc = "" +
 	"\x1dPAYMENT_TRANSACTION_TYPE_VOID\x10\x05\x12'\n" +
 	"#PAYMENT_TRANSACTION_TYPE_CHARGEBACK\x10\x06\x12'\n" +
 	"#PAYMENT_TRANSACTION_TYPE_ADJUSTMENT\x10\a\x12 \n" +
-	"\x1cPAYMENT_TRANSACTION_TYPE_FEE\x10\b*\xe8\x01\n" +
+	"\x1cPAYMENT_TRANSACTION_TYPE_FEE\x10\b*\xe9\x01\n" +
 	"\x18PaymentTransactionStatus\x12*\n" +
 	"&PAYMENT_TRANSACTION_STATUS_UNSPECIFIED\x10\x00\x12&\n" +
 	"\"PAYMENT_TRANSACTION_STATUS_PENDING\x10\x01\x12(\n" +
 	"$PAYMENT_TRANSACTION_STATUS_SUCCEEDED\x10\x02\x12%\n" +
-	"!PAYMENT_TRANSACTION_STATUS_FAILED\x10\x03\x12'\n" +
-	"#PAYMENT_TRANSACTION_STATUS_CANCELED\x10\x042\xac\x02\n" +
+	"!PAYMENT_TRANSACTION_STATUS_FAILED\x10\x03\x12(\n" +
+	"$PAYMENT_TRANSACTION_STATUS_CANCELLED\x10\x042\xac\x02\n" +
 	"\x19PaymentTransactionService\x12\x87\x01\n" +
 	"\x0eListByPurchase\x129.billing_service.ListPaymentTransactionsByPurchaseRequest\x1a:.billing_service.ListPaymentTransactionsByPurchaseResponse\x12\x84\x01\n" +
 	"\rListByAttempt\x128.billing_service.ListPaymentTransactionsByAttemptRequest\x1a9.billing_service.ListPaymentTransactionsByAttemptResponseB[ZYgithub.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_serviceb\x06proto3"

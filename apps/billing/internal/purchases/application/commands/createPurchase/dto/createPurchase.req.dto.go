@@ -5,35 +5,33 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/domain/entity"
-	purhelper "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/helper"
 )
 
 type CreatePurchaseReqDto struct {
-	UserID         string `json:"user_id" validate:"required"`
-	SubscriptionID string `json:"subscription_id" validate:"required,uuid4"`
-	PlanID         string `json:"plan_id" validate:"required,uuid4"`
+	UserID string `json:"user_id" validate:"required"`
+	PlanID string `json:"plan_id" validate:"required,uuid4"`
 
-	Amount   int64  `json:"amount" validate:"required,gt=0"`
-	Currency string `json:"currency" validate:"required"`
-
-	Status *int32 `json:"status"`
 	// Idempotent purchase creation (critical)
-	IdempotencyKey string `json:"idempotency_key" validate:"required,len=128"`
+	IdempotencyKey string `json:"idempotency_key" validate:"required,uuid4"`
 
-	CreatedAt   time.Time  `json:"created_at" validate:"required"`
+	CreatedAt   *time.Time `json:"created_at"`
 	CompletedAt *time.Time `json:"completed_at" validate:"omitempty"`
 }
 
 func (dto *CreatePurchaseReqDto) MapToEntity() *entity.Purchase {
+	createdAt := time.Now()
+	if dto.CreatedAt != nil {
+		createdAt = *dto.CreatedAt
+	}
+
+	// Subscription is is not created yet, update later on payment succeeded
 	return &entity.Purchase{
-		UserID:         dto.UserID,
-		SubscriptionID: uuid.MustParse(dto.SubscriptionID),
-		PlanID:         uuid.MustParse(dto.PlanID),
-		Amount:         dto.Amount,
-		Currency:       dto.Currency,
-		Status:         purhelper.ToEntityStatus(dto.Status),
+		UserID: dto.UserID,
+		PlanID: uuid.MustParse(dto.PlanID),
+		// New Purchase must be PENDING
+		Status:         entity.PURCHASE_STATUS_PENDING,
 		IdempotencyKey: dto.IdempotencyKey,
-		CreatedAt:      dto.CreatedAt,
+		CreatedAt:      createdAt,
 		CompletedAt:    dto.CompletedAt,
 	}
 }

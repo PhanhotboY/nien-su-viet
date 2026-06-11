@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	PURCHASE_CACHE_PREFIX = "billing_service"
+	PURCHASE_CACHE_PREFIX = "billing_service.Purchase"
 )
 
 type purchaseCacheRepo struct {

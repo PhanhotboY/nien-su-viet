@@ -79,6 +79,23 @@ func (c RedisClientWithExpire) Set(ctx context.Context, key string, value interf
 	return c.Client.Set(ctx, key, serialized, duration).Err()
 }
 
+func (c RedisClientWithExpire) SetNX(ctx context.Context, key string, value interface{}, ttl ...time.Duration) error {
+	duration := defaultTTL
+	if len(ttl) > 0 && ttl[0] > 0 {
+		duration = ttl[0]
+	}
+
+	serialized, err := json.Marshal(value)
+	if err != nil {
+		return fmt.Errorf("failed to marshal value: %w", err)
+	}
+
+	return c.Client.SetArgs(ctx, key, serialized, redis.SetArgs{
+		Mode: "NX",
+		TTL:  duration,
+	}).Err()
+}
+
 // Get retrieves and deserializes a value
 func (c RedisClientWithExpire) Get(ctx context.Context, key string, dest interface{}) error {
 	val, err := c.Client.Get(ctx, key).Bytes()

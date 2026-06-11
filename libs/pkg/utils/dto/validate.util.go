@@ -38,7 +38,7 @@ func ValidateStruct[T any](input any, dto *T) error {
 	if err != nil {
 		var validateErrs validator.ValidationErrors
 		if errors.As(err, &validateErrs) {
-			return fmt.Errorf("error validating input: %s", validateErrs[0].Error())
+			return ParseValidationErrors(validateErrs)
 		}
 		return fmt.Errorf("error validating DTO '%T': %v", dto, err)
 	}

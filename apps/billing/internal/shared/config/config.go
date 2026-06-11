@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/config"
@@ -13,7 +14,7 @@ type BillingConfig interface {
 }
 
 type ZaloPayOptions struct {
-	AppID     string `mapstructure:"app_id"`     // BILLING_ZALOPAY_APP_ID
+	AppID     int    `mapstructure:"app_id"`     // BILLING_ZALOPAY_APP_ID
 	Key1      string `mapstructure:"key1"`       // BILLING_ZALOPAY_KEY1
 	Key2      string `mapstructure:"key2"`       // BILLING_ZALOPAY_KEY2
 	CreateURL string `mapstructure:"create_url"` // BILLING_ZALOPAY_CREATE_URL
@@ -27,4 +28,27 @@ type Config struct {
 
 func ConfigType() reflect.Type {
 	return reflect.TypeOf(Config{})
+}
+
+func (c ZaloPayOptions) Validate() error {
+	if c.AppID == 0 {
+		return fmt.Errorf("zalopay: missing AppID")
+	}
+	if c.Key1 == "" {
+		return fmt.Errorf("zalopay: missing Key1")
+	}
+	if c.Key2 == "" {
+		return fmt.Errorf("zalopay: missing Key2")
+	}
+	if c.CreateURL == "" {
+		return fmt.Errorf("zalopay: missing CreateURL")
+	}
+	if c.QueryURL == "" {
+		return fmt.Errorf("zalopay: missing QueryURL")
+	}
+	return nil
+}
+
+func (c Config) GetZaloPayOptions() ZaloPayOptions {
+	return c.ZaloPay
 }

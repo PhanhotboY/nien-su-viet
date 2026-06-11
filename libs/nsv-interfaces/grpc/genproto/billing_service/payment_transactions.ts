@@ -52,8 +52,8 @@ export enum PaymentTransactionStatus {
   PAYMENT_TRANSACTION_STATUS_SUCCEEDED = 2,
   /** PAYMENT_TRANSACTION_STATUS_FAILED - Transaction failed during processing */
   PAYMENT_TRANSACTION_STATUS_FAILED = 3,
-  /** PAYMENT_TRANSACTION_STATUS_CANCELED - Transaction was canceled before completion */
-  PAYMENT_TRANSACTION_STATUS_CANCELED = 4,
+  /** PAYMENT_TRANSACTION_STATUS_CANCELLED - Transaction was canceled before completion */
+  PAYMENT_TRANSACTION_STATUS_CANCELLED = 4,
   UNRECOGNIZED = -1,
 }
 

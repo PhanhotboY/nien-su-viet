@@ -31,35 +31,39 @@ type PaymentAttemptStatus int32
 const (
 	// Unspecified status; should not be used
 	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_UNSPECIFIED PaymentAttemptStatus = 0
+	// Payment attempt has been created but not yet sent to payment gateway
+	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_CREATED PaymentAttemptStatus = 1
 	// Payment attempt is in progress (e.g., awaiting user confirmation on payment gateway)
-	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_PENDING PaymentAttemptStatus = 1
+	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_PENDING PaymentAttemptStatus = 2
 	// Payment attempt succeeded and payment was captured
-	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_SUCCEEDED PaymentAttemptStatus = 2
+	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_SUCCEEDED PaymentAttemptStatus = 3
 	// Payment attempt failed; may be retried with same or different provider
-	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_FAILED PaymentAttemptStatus = 3
+	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_FAILED PaymentAttemptStatus = 4
 	// Payment attempt expired before completion (e.g., checkout link timed out)
-	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_EXPIRED PaymentAttemptStatus = 4
+	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_EXPIRED PaymentAttemptStatus = 5
 	// Payment attempt was canceled by user (switching payment method) or system
-	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_CANCELED PaymentAttemptStatus = 5
+	PaymentAttemptStatus_PAYMENT_ATTEMPT_STATUS_CANCELED PaymentAttemptStatus = 6
 )
 
 // Enum value maps for PaymentAttemptStatus.
 var (
 	PaymentAttemptStatus_name = map[int32]string{
 		0: "PAYMENT_ATTEMPT_STATUS_UNSPECIFIED",
-		1: "PAYMENT_ATTEMPT_STATUS_PENDING",
-		2: "PAYMENT_ATTEMPT_STATUS_SUCCEEDED",
-		3: "PAYMENT_ATTEMPT_STATUS_FAILED",
-		4: "PAYMENT_ATTEMPT_STATUS_EXPIRED",
-		5: "PAYMENT_ATTEMPT_STATUS_CANCELED",
+		1: "PAYMENT_ATTEMPT_STATUS_CREATED",
+		2: "PAYMENT_ATTEMPT_STATUS_PENDING",
+		3: "PAYMENT_ATTEMPT_STATUS_SUCCEEDED",
+		4: "PAYMENT_ATTEMPT_STATUS_FAILED",
+		5: "PAYMENT_ATTEMPT_STATUS_EXPIRED",
+		6: "PAYMENT_ATTEMPT_STATUS_CANCELED",
 	}
 	PaymentAttemptStatus_value = map[string]int32{
 		"PAYMENT_ATTEMPT_STATUS_UNSPECIFIED": 0,
-		"PAYMENT_ATTEMPT_STATUS_PENDING":     1,
-		"PAYMENT_ATTEMPT_STATUS_SUCCEEDED":   2,
-		"PAYMENT_ATTEMPT_STATUS_FAILED":      3,
-		"PAYMENT_ATTEMPT_STATUS_EXPIRED":     4,
-		"PAYMENT_ATTEMPT_STATUS_CANCELED":    5,
+		"PAYMENT_ATTEMPT_STATUS_CREATED":     1,
+		"PAYMENT_ATTEMPT_STATUS_PENDING":     2,
+		"PAYMENT_ATTEMPT_STATUS_SUCCEEDED":   3,
+		"PAYMENT_ATTEMPT_STATUS_FAILED":      4,
+		"PAYMENT_ATTEMPT_STATUS_EXPIRED":     5,
+		"PAYMENT_ATTEMPT_STATUS_CANCELED":    6,
 	}
 )
 
@@ -708,14 +712,15 @@ const file_billing_service_payment_attempts_proto_rawDesc = "" +
 	"\x0fidempotency_key\x18\x04 \x01(\tR\x0eidempotencyKey\x12\x1a\n" +
 	"\bprovider\x18\x05 \x01(\tR\bprovider\"Q\n" +
 	"\x16RefundPurchaseResponse\x127\n" +
-	"\x04data\x18\x01 \x03(\v2#.billing_service.PaymentTransactionR\x04data*\xf4\x01\n" +
+	"\x04data\x18\x01 \x03(\v2#.billing_service.PaymentTransactionR\x04data*\x98\x02\n" +
 	"\x14PaymentAttemptStatus\x12&\n" +
 	"\"PAYMENT_ATTEMPT_STATUS_UNSPECIFIED\x10\x00\x12\"\n" +
-	"\x1ePAYMENT_ATTEMPT_STATUS_PENDING\x10\x01\x12$\n" +
-	" PAYMENT_ATTEMPT_STATUS_SUCCEEDED\x10\x02\x12!\n" +
-	"\x1dPAYMENT_ATTEMPT_STATUS_FAILED\x10\x03\x12\"\n" +
-	"\x1ePAYMENT_ATTEMPT_STATUS_EXPIRED\x10\x04\x12#\n" +
-	"\x1fPAYMENT_ATTEMPT_STATUS_CANCELED\x10\x052\xe5\x03\n" +
+	"\x1ePAYMENT_ATTEMPT_STATUS_CREATED\x10\x01\x12\"\n" +
+	"\x1ePAYMENT_ATTEMPT_STATUS_PENDING\x10\x02\x12$\n" +
+	" PAYMENT_ATTEMPT_STATUS_SUCCEEDED\x10\x03\x12!\n" +
+	"\x1dPAYMENT_ATTEMPT_STATUS_FAILED\x10\x04\x12\"\n" +
+	"\x1ePAYMENT_ATTEMPT_STATUS_EXPIRED\x10\x05\x12#\n" +
+	"\x1fPAYMENT_ATTEMPT_STATUS_CANCELED\x10\x062\xe5\x03\n" +
 	"\x0ePaymentService\x12s\n" +
 	"\x14CreatePaymentAttempt\x12,.billing_service.CreatePaymentAttemptRequest\x1a-.billing_service.CreatePaymentAttemptResponse\x12j\n" +
 	"\x11GetPaymentAttempt\x12).billing_service.GetPaymentAttemptRequest\x1a*.billing_service.GetPaymentAttemptResponse\x12\x8e\x01\n" +

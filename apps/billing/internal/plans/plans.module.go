@@ -4,6 +4,13 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/domain/entity"
+	crepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/infrastructure/cache"
+	prepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/infrastructure/persistence"
+	tgrpc "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/infrastructure/transport/grpc"
+
+	createPlanCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/application/commands/createPlan"
+	getPlanByIdQuery "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/application/queries/getPlanById"
+	listPlansQuery "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/application/queries/listPlans"
 )
 
 var Module = fx.Module(
@@ -18,12 +25,17 @@ var Module = fx.Module(
 	)),
 
 	fx.Provide(
+		// Outbound Infrastructure
+		prepo.NewPlanDbRepo,
+		crepo.NewPlanCacheRepo,
 
-	// Outbound Infrastructure
-
-	// Application Query
-	// Application Command
+		// Application Query
+		listPlansQuery.NewListPlansHandler,
+		getPlanByIdQuery.NewGetPlanByIdHandler,
+		// Application Command
+		createPlanCmd.NewCreatePlanHandler,
 	),
 
 	// Inbound Infrastructure
+	tgrpc.Module,
 )

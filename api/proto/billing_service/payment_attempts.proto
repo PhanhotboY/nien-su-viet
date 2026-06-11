@@ -16,16 +16,18 @@ option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/b
 enum PaymentAttemptStatus {
   // Unspecified status; should not be used
   PAYMENT_ATTEMPT_STATUS_UNSPECIFIED = 0;
+  // Payment attempt has been created but not yet sent to payment gateway
+  PAYMENT_ATTEMPT_STATUS_CREATED = 1;
   // Payment attempt is in progress (e.g., awaiting user confirmation on payment gateway)
-  PAYMENT_ATTEMPT_STATUS_PENDING = 1;
+  PAYMENT_ATTEMPT_STATUS_PENDING = 2;
   // Payment attempt succeeded and payment was captured
-  PAYMENT_ATTEMPT_STATUS_SUCCEEDED = 2;
+  PAYMENT_ATTEMPT_STATUS_SUCCEEDED = 3;
   // Payment attempt failed; may be retried with same or different provider
-  PAYMENT_ATTEMPT_STATUS_FAILED = 3;
+  PAYMENT_ATTEMPT_STATUS_FAILED = 4;
   // Payment attempt expired before completion (e.g., checkout link timed out)
-  PAYMENT_ATTEMPT_STATUS_EXPIRED = 4;
+  PAYMENT_ATTEMPT_STATUS_EXPIRED = 5;
   // Payment attempt was canceled by user (switching payment method) or system
-  PAYMENT_ATTEMPT_STATUS_CANCELED = 5;
+  PAYMENT_ATTEMPT_STATUS_CANCELED = 6;
 }
 
 message PaymentAttempt {

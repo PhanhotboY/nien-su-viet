@@ -9,6 +9,7 @@ import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import { Observable } from "rxjs";
 import { PaginationMetadata } from "../common/pagination";
 import { ListQueryRequest } from "../common/request";
+import { OperationMetadata } from "../common/response";
 import { Timestamp } from "../google/protobuf/timestamp";
 import { Money } from "./billing";
 
@@ -32,7 +33,7 @@ export enum BillingInterval {
   UNRECOGNIZED = -1,
 }
 
-export interface SubscriptionPlan {
+export interface Plan {
   id: string;
   code: string;
   name: string;
@@ -48,7 +49,7 @@ export interface ListPlansRequest {
 }
 
 export interface ListPlansResponse {
-  data: SubscriptionPlan[];
+  data: Plan[];
   pagination: PaginationMetadata | undefined;
 }
 
@@ -57,36 +58,73 @@ export interface GetPlanRequest {
 }
 
 export interface GetPlanResponse {
-  data: SubscriptionPlan | undefined;
+  data: Plan | undefined;
+}
+
+export interface CreatePlanRequest {
+  code: string;
+  name: string;
+  price: Money | undefined;
+  billingInterval: BillingInterval;
+  isActive: boolean;
+}
+
+export interface CreatePlanResponse {
+  data: OperationMetadata | undefined;
+}
+
+export interface UpdatePlanRequest {
+  id: string;
+  name?: string | undefined;
+  code?: string | undefined;
+  price?: Money | undefined;
+  billingInterval?: BillingInterval | undefined;
+  isActive?: boolean | undefined;
+}
+
+export interface UpdatePlanResponse {
+  data: OperationMetadata | undefined;
 }
 
 export const BILLING_SERVICE_PACKAGE_NAME = "billing_service";
 
-export interface SubscriptionPlanServiceClient {
+export interface PlanServiceClient {
+  createPlan(request: CreatePlanRequest): Observable<CreatePlanResponse>;
+
+  updatePlan(request: UpdatePlanRequest): Observable<UpdatePlanResponse>;
+
   listPlans(request: ListPlansRequest): Observable<ListPlansResponse>;
 
   getPlan(request: GetPlanRequest): Observable<GetPlanResponse>;
 }
 
-export interface SubscriptionPlanServiceController {
+export interface PlanServiceController {
+  createPlan(
+    request: CreatePlanRequest,
+  ): Promise<CreatePlanResponse> | Observable<CreatePlanResponse> | CreatePlanResponse;
+
+  updatePlan(
+    request: UpdatePlanRequest,
+  ): Promise<UpdatePlanResponse> | Observable<UpdatePlanResponse> | UpdatePlanResponse;
+
   listPlans(request: ListPlansRequest): Promise<ListPlansResponse> | Observable<ListPlansResponse> | ListPlansResponse;
 
   getPlan(request: GetPlanRequest): Promise<GetPlanResponse> | Observable<GetPlanResponse> | GetPlanResponse;
 }
 
-export function SubscriptionPlanServiceControllerMethods() {
+export function PlanServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["listPlans", "getPlan"];
+    const grpcMethods: string[] = ["createPlan", "updatePlan", "listPlans", "getPlan"];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcMethod("SubscriptionPlanService", method)(constructor.prototype[method], method, descriptor);
+      GrpcMethod("PlanService", method)(constructor.prototype[method], method, descriptor);
     }
     const grpcStreamMethods: string[] = [];
     for (const method of grpcStreamMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
-      GrpcStreamMethod("SubscriptionPlanService", method)(constructor.prototype[method], method, descriptor);
+      GrpcStreamMethod("PlanService", method)(constructor.prototype[method], method, descriptor);
     }
   };
 }
 
-export const SUBSCRIPTION_PLAN_SERVICE_NAME = "SubscriptionPlanService";
+export const PLAN_SERVICE_NAME = "PlanService";

@@ -10,7 +10,7 @@ import (
 )
 
 type GetPurchaseHandler interface {
-	grpcTypes.GrpcHandler[*GetPurchaseQuery, *adto.GetPurchaseResDto]
+	grpcTypes.GrpcHandler[*GetPurchaseQuery, adto.GetPurchaseResDto]
 }
 
 type getPurchaseHandler struct {
@@ -23,7 +23,7 @@ func NewGetPurchaseHandler(l logger.Logger, c drepo.PurchaseCacheRepo, db drepo.
 	return getPurchaseHandler{l, c, db}
 }
 
-func (h getPurchaseHandler) Handle(ctx context.Context, query *GetPurchaseQuery) (*adto.GetPurchaseResDto, error) {
+func (h getPurchaseHandler) Handle(ctx context.Context, query *GetPurchaseQuery) (adto.GetPurchaseResDto, error) {
 	// Try to get purchase from cache first
 	purchase, err := h.cache.GetPurchase(ctx, query.PurchaseId)
 	if err == nil {
@@ -33,7 +33,7 @@ func (h getPurchaseHandler) Handle(ctx context.Context, query *GetPurchaseQuery)
 	h.logger.Infof("Cache miss for purchase ID %s: %v", query.PurchaseId, err)
 
 	// If cache miss, get purchase from database
-	purchase, err = h.db.GetPurchase(ctx, query.PurchaseId)
+	purchase, err = h.db.GetPurchaseById(ctx, query.PurchaseId)
 	if err != nil {
 		h.logger.Errorf("Failed to get purchase from database for ID %s: %v", query.PurchaseId, err)
 		return nil, err

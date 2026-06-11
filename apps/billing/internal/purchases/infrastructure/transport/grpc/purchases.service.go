@@ -4,13 +4,12 @@ import (
 	"context"
 
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service"
-	grpcUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/utils"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	createPurchaseCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/createPurchase/commands"
-	getPurchaseCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/queries/getPurchase/queries"
+	createPurchaseCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/createPurchase"
+	getPurchaseCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/queries/getPurchase"
 )
 
 type purchasesGrpcServiceServer struct {
@@ -42,7 +41,7 @@ func (s *purchasesGrpcServiceServer) CreatePurchase(ctx context.Context, req *bi
 		return nil, err
 	}
 
-	return grpcUtils.UnmarshalProtoMessage(res, &billing_service.CreatePurchaseResponse{}, s.logger)
+	return res.ToGrpcResponse(), nil
 }
 
 func (s *purchasesGrpcServiceServer) GetPurchase(ctx context.Context, req *billing_service.GetPurchaseRequest) (*billing_service.GetPurchaseResponse, error) {
@@ -55,7 +54,7 @@ func (s *purchasesGrpcServiceServer) GetPurchase(ctx context.Context, req *billi
 		return nil, err
 	}
 
-	return grpcUtils.UnmarshalProtoMessage(res, &billing_service.GetPurchaseResponse{}, s.logger)
+	return res.ToGrpcResponse(), nil
 }
 
 func (s *purchasesGrpcServiceServer) ListPurchasesBySubscription(context.Context, *billing_service.ListPurchasesBySubscriptionRequest) (*billing_service.ListPurchasesBySubscriptionResponse, error) {

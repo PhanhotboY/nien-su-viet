@@ -12,45 +12,12 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/config"
 )
-
-const (
-	SandboxCreateOrderURL = "https://sb-openapi.zalopay.vn/v2/create"
-	SandboxQueryOrderURL  = "https://sb-openapi.zalopay.vn/v2/query"
-	ProdCreateOrderURL    = "https://openapi.zalopay.vn/v2/create"
-	ProdQueryOrderURL     = "https://openapi.zalopay.vn/v2/query"
-)
-
-type Config struct {
-	AppID      string
-	Key1       string
-	Key2       string
-	CreateURL  string
-	QueryURL   string
-	HTTPClient *http.Client
-}
-
-func (c Config) validate() error {
-	if c.AppID == "" {
-		return fmt.Errorf("zalopay: missing AppID")
-	}
-	if c.Key1 == "" {
-		return fmt.Errorf("zalopay: missing Key1")
-	}
-	if c.Key2 == "" {
-		return fmt.Errorf("zalopay: missing Key2")
-	}
-	if c.CreateURL == "" {
-		return fmt.Errorf("zalopay: missing CreateURL")
-	}
-	if c.QueryURL == "" {
-		return fmt.Errorf("zalopay: missing QueryURL")
-	}
-	return nil
-}
 
 type Client struct {
-	appID      string
+	appID      int
 	key1       string
 	key2       string
 	createURL  string
@@ -58,21 +25,19 @@ type Client struct {
 	httpClient *http.Client
 }
 
-func New(cfg Config) (*Client, error) {
-	if err := cfg.validate(); err != nil {
+func New(cfg config.BillingConfig) (*Client, error) {
+	zpOptions := cfg.GetZaloPayOptions()
+	if err := zpOptions.Validate(); err != nil {
 		return nil, err
 	}
-	hc := cfg.HTTPClient
-	if hc == nil {
-		hc = &http.Client{Timeout: 15 * time.Second}
-	}
+
 	return &Client{
-		appID:      cfg.AppID,
-		key1:       cfg.Key1,
-		key2:       cfg.Key2,
-		createURL:  cfg.CreateURL,
-		queryURL:   cfg.QueryURL,
-		httpClient: hc,
+		appID:      zpOptions.AppID,
+		key1:       zpOptions.Key1,
+		key2:       zpOptions.Key2,
+		createURL:  zpOptions.CreateURL,
+		queryURL:   zpOptions.QueryURL,
+		httpClient: &http.Client{Timeout: 15 * time.Second},
 	}, nil
 }
 

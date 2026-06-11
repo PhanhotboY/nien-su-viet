@@ -3,6 +3,7 @@ package grpcUtils
 import (
 	"time"
 
+	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -32,4 +33,30 @@ func TimeToString(t time.Time) string {
 		return ""
 	}
 	return t.Format(time.RFC3339)
+}
+
+func JsonToStruct(jsonStr string) *structpb.Struct {
+	if jsonStr == "" {
+		return &structpb.Struct{}
+	}
+	s, err := structpb.NewStruct(map[string]any{})
+	if err != nil {
+		return &structpb.Struct{}
+	}
+	err = s.UnmarshalJSON([]byte(jsonStr))
+	if err != nil {
+		return &structpb.Struct{}
+	}
+	return s
+}
+
+func StructToJson(s *structpb.Struct) string {
+	if s == nil {
+		return "{}"
+	}
+	jsonBytes, err := s.MarshalJSON()
+	if err != nil {
+		return "{}"
+	}
+	return string(jsonBytes)
 }

@@ -1403,6 +1403,67 @@
           "Post"
         ]
       }
+    },
+    "/api/v1/billing/purchases": {
+      "post": {
+        "operationId": "PurchasesController_createPurchase",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Purchases"
+        ]
+      }
+    },
+    "/api/v1/billing/plans": {
+      "get": {
+        "operationId": "PlansController_listPlans",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Plans"
+        ]
+      },
+      "post": {
+        "operationId": "PlansController_createPlan",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Plans"
+        ]
+      }
     }
   },
   "info": {

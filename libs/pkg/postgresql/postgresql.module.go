@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
+	dbcontracts "github.com/phanhotboy/nien-su-viet/libs/pkg/postgresql/contracts"
 	"go.uber.org/fx"
 	"gorm.io/gorm"
 )
@@ -12,6 +13,9 @@ import (
 // https://uber-go.github.io/fx/modules.html
 var Module = fx.Module("postgresPgxModule",
 	fx.Provide(NewDb),
+	fx.Provide(func(db dbcontracts.TxContextDb) *gorm.DB {
+		return db.DB()
+	}),
 	fx.Invoke(registerHooks),
 )
 

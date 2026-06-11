@@ -85,7 +85,7 @@ func (BillingInterval) EnumDescriptor() ([]byte, []int) {
 	return file_billing_service_plans_proto_rawDescGZIP(), []int{0}
 }
 
-type SubscriptionPlan struct {
+type Plan struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Code            string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
@@ -98,20 +98,20 @@ type SubscriptionPlan struct {
 	sizeCache       protoimpl.SizeCache
 }
 
-func (x *SubscriptionPlan) Reset() {
-	*x = SubscriptionPlan{}
+func (x *Plan) Reset() {
+	*x = Plan{}
 	mi := &file_billing_service_plans_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SubscriptionPlan) String() string {
+func (x *Plan) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SubscriptionPlan) ProtoMessage() {}
+func (*Plan) ProtoMessage() {}
 
-func (x *SubscriptionPlan) ProtoReflect() protoreflect.Message {
+func (x *Plan) ProtoReflect() protoreflect.Message {
 	mi := &file_billing_service_plans_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -123,54 +123,54 @@ func (x *SubscriptionPlan) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SubscriptionPlan.ProtoReflect.Descriptor instead.
-func (*SubscriptionPlan) Descriptor() ([]byte, []int) {
+// Deprecated: Use Plan.ProtoReflect.Descriptor instead.
+func (*Plan) Descriptor() ([]byte, []int) {
 	return file_billing_service_plans_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SubscriptionPlan) GetId() string {
+func (x *Plan) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *SubscriptionPlan) GetCode() string {
+func (x *Plan) GetCode() string {
 	if x != nil {
 		return x.Code
 	}
 	return ""
 }
 
-func (x *SubscriptionPlan) GetName() string {
+func (x *Plan) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *SubscriptionPlan) GetPrice() *Money {
+func (x *Plan) GetPrice() *Money {
 	if x != nil {
 		return x.Price
 	}
 	return nil
 }
 
-func (x *SubscriptionPlan) GetBillingInterval() BillingInterval {
+func (x *Plan) GetBillingInterval() BillingInterval {
 	if x != nil {
 		return x.BillingInterval
 	}
 	return BillingInterval_BILLING_INTERVAL_UNSPECIFIED
 }
 
-func (x *SubscriptionPlan) GetIsActive() bool {
+func (x *Plan) GetIsActive() bool {
 	if x != nil {
 		return x.IsActive
 	}
 	return false
 }
 
-func (x *SubscriptionPlan) GetCreatedAt() *timestamppb.Timestamp {
+func (x *Plan) GetCreatedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
@@ -231,7 +231,7 @@ func (x *ListPlansRequest) GetQuery() *common.ListQueryRequest {
 
 type ListPlansResponse struct {
 	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Data          []*SubscriptionPlan        `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Data          []*Plan                    `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
 	Pagination    *common.PaginationMetadata `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -267,7 +267,7 @@ func (*ListPlansResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_plans_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *ListPlansResponse) GetData() []*SubscriptionPlan {
+func (x *ListPlansResponse) GetData() []*Plan {
 	if x != nil {
 		return x.Data
 	}
@@ -327,7 +327,7 @@ func (x *GetPlanRequest) GetId() string {
 
 type GetPlanResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Data          *SubscriptionPlan      `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	Data          *Plan                  `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -362,7 +362,255 @@ func (*GetPlanResponse) Descriptor() ([]byte, []int) {
 	return file_billing_service_plans_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GetPlanResponse) GetData() *SubscriptionPlan {
+func (x *GetPlanResponse) GetData() *Plan {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type CreatePlanRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Code            string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	Name            string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Price           *Money                 `protobuf:"bytes,3,opt,name=price,proto3" json:"price,omitempty"`
+	BillingInterval BillingInterval        `protobuf:"varint,4,opt,name=billing_interval,json=billingInterval,proto3,enum=billing_service.BillingInterval" json:"billing_interval,omitempty"`
+	IsActive        bool                   `protobuf:"varint,5,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *CreatePlanRequest) Reset() {
+	*x = CreatePlanRequest{}
+	mi := &file_billing_service_plans_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreatePlanRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreatePlanRequest) ProtoMessage() {}
+
+func (x *CreatePlanRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_billing_service_plans_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreatePlanRequest.ProtoReflect.Descriptor instead.
+func (*CreatePlanRequest) Descriptor() ([]byte, []int) {
+	return file_billing_service_plans_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *CreatePlanRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *CreatePlanRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CreatePlanRequest) GetPrice() *Money {
+	if x != nil {
+		return x.Price
+	}
+	return nil
+}
+
+func (x *CreatePlanRequest) GetBillingInterval() BillingInterval {
+	if x != nil {
+		return x.BillingInterval
+	}
+	return BillingInterval_BILLING_INTERVAL_UNSPECIFIED
+}
+
+func (x *CreatePlanRequest) GetIsActive() bool {
+	if x != nil {
+		return x.IsActive
+	}
+	return false
+}
+
+type CreatePlanResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreatePlanResponse) Reset() {
+	*x = CreatePlanResponse{}
+	mi := &file_billing_service_plans_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreatePlanResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreatePlanResponse) ProtoMessage() {}
+
+func (x *CreatePlanResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_billing_service_plans_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreatePlanResponse.ProtoReflect.Descriptor instead.
+func (*CreatePlanResponse) Descriptor() ([]byte, []int) {
+	return file_billing_service_plans_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CreatePlanResponse) GetData() *common.OperationMetadata {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type UpdatePlanRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name            *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Code            *string                `protobuf:"bytes,3,opt,name=code,proto3,oneof" json:"code,omitempty"`
+	Price           *Money                 `protobuf:"bytes,4,opt,name=price,proto3,oneof" json:"price,omitempty"`
+	BillingInterval *BillingInterval       `protobuf:"varint,5,opt,name=billing_interval,json=billingInterval,proto3,enum=billing_service.BillingInterval,oneof" json:"billing_interval,omitempty"`
+	IsActive        *bool                  `protobuf:"varint,6,opt,name=is_active,json=isActive,proto3,oneof" json:"is_active,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *UpdatePlanRequest) Reset() {
+	*x = UpdatePlanRequest{}
+	mi := &file_billing_service_plans_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdatePlanRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdatePlanRequest) ProtoMessage() {}
+
+func (x *UpdatePlanRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_billing_service_plans_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdatePlanRequest.ProtoReflect.Descriptor instead.
+func (*UpdatePlanRequest) Descriptor() ([]byte, []int) {
+	return file_billing_service_plans_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UpdatePlanRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *UpdatePlanRequest) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *UpdatePlanRequest) GetCode() string {
+	if x != nil && x.Code != nil {
+		return *x.Code
+	}
+	return ""
+}
+
+func (x *UpdatePlanRequest) GetPrice() *Money {
+	if x != nil {
+		return x.Price
+	}
+	return nil
+}
+
+func (x *UpdatePlanRequest) GetBillingInterval() BillingInterval {
+	if x != nil && x.BillingInterval != nil {
+		return *x.BillingInterval
+	}
+	return BillingInterval_BILLING_INTERVAL_UNSPECIFIED
+}
+
+func (x *UpdatePlanRequest) GetIsActive() bool {
+	if x != nil && x.IsActive != nil {
+		return *x.IsActive
+	}
+	return false
+}
+
+type UpdatePlanResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          *common.OperationMetadata `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdatePlanResponse) Reset() {
+	*x = UpdatePlanResponse{}
+	mi := &file_billing_service_plans_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdatePlanResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdatePlanResponse) ProtoMessage() {}
+
+func (x *UpdatePlanResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_billing_service_plans_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdatePlanResponse.ProtoReflect.Descriptor instead.
+func (*UpdatePlanResponse) Descriptor() ([]byte, []int) {
+	return file_billing_service_plans_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *UpdatePlanResponse) GetData() *common.OperationMetadata {
 	if x != nil {
 		return x.Data
 	}
@@ -373,8 +621,8 @@ var File_billing_service_plans_proto protoreflect.FileDescriptor
 
 const file_billing_service_plans_proto_rawDesc = "" +
 	"\n" +
-	"\x1bbilling_service/plans.proto\x12\x0fbilling_service\x1a\x1dbilling_service/billing.proto\x1a\x17common/pagination.proto\x1a\x14common/request.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9d\x02\n" +
-	"\x10SubscriptionPlan\x12\x0e\n" +
+	"\x1bbilling_service/plans.proto\x12\x0fbilling_service\x1a\x1dbilling_service/billing.proto\x1a\x17common/pagination.proto\x1a\x14common/request.proto\x1a\x15common/response.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x91\x02\n" +
+	"\x04Plan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12,\n" +
@@ -386,23 +634,50 @@ const file_billing_service_plans_proto_rawDesc = "" +
 	"\x10ListPlansRequest\x12\x1f\n" +
 	"\vonly_active\x18\x01 \x01(\bR\n" +
 	"onlyActive\x12.\n" +
-	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"\x86\x01\n" +
-	"\x11ListPlansResponse\x125\n" +
-	"\x04data\x18\x01 \x03(\v2!.billing_service.SubscriptionPlanR\x04data\x12:\n" +
+	"\x05query\x18\x02 \x01(\v2\x18.common.ListQueryRequestR\x05query\"z\n" +
+	"\x11ListPlansResponse\x12)\n" +
+	"\x04data\x18\x01 \x03(\v2\x15.billing_service.PlanR\x04data\x12:\n" +
 	"\n" +
 	"pagination\x18\x02 \x01(\v2\x1a.common.PaginationMetadataR\n" +
 	"pagination\" \n" +
 	"\x0eGetPlanRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"H\n" +
-	"\x0fGetPlanResponse\x125\n" +
-	"\x04data\x18\x01 \x01(\v2!.billing_service.SubscriptionPlanR\x04data*\x9f\x01\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"<\n" +
+	"\x0fGetPlanResponse\x12)\n" +
+	"\x04data\x18\x01 \x01(\v2\x15.billing_service.PlanR\x04data\"\xd3\x01\n" +
+	"\x11CreatePlanRequest\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12,\n" +
+	"\x05price\x18\x03 \x01(\v2\x16.billing_service.MoneyR\x05price\x12K\n" +
+	"\x10billing_interval\x18\x04 \x01(\x0e2 .billing_service.BillingIntervalR\x0fbillingInterval\x12\x1b\n" +
+	"\tis_active\x18\x05 \x01(\bR\bisActive\"C\n" +
+	"\x12CreatePlanResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data\"\xbb\x02\n" +
+	"\x11UpdatePlanRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
+	"\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x17\n" +
+	"\x04code\x18\x03 \x01(\tH\x01R\x04code\x88\x01\x01\x121\n" +
+	"\x05price\x18\x04 \x01(\v2\x16.billing_service.MoneyH\x02R\x05price\x88\x01\x01\x12P\n" +
+	"\x10billing_interval\x18\x05 \x01(\x0e2 .billing_service.BillingIntervalH\x03R\x0fbillingInterval\x88\x01\x01\x12 \n" +
+	"\tis_active\x18\x06 \x01(\bH\x04R\bisActive\x88\x01\x01B\a\n" +
+	"\x05_nameB\a\n" +
+	"\x05_codeB\b\n" +
+	"\x06_priceB\x13\n" +
+	"\x11_billing_intervalB\f\n" +
+	"\n" +
+	"_is_active\"C\n" +
+	"\x12UpdatePlanResponse\x12-\n" +
+	"\x04data\x18\x01 \x01(\v2\x19.common.OperationMetadataR\x04data*\x9f\x01\n" +
 	"\x0fBillingInterval\x12 \n" +
 	"\x1cBILLING_INTERVAL_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14BILLING_INTERVAL_DAY\x10\x01\x12\x19\n" +
 	"\x15BILLING_INTERVAL_WEEK\x10\x02\x12\x1a\n" +
 	"\x16BILLING_INTERVAL_MONTH\x10\x03\x12\x19\n" +
-	"\x15BILLING_INTERVAL_YEAR\x10\x042\xbb\x01\n" +
-	"\x17SubscriptionPlanService\x12R\n" +
+	"\x15BILLING_INTERVAL_YEAR\x10\x042\xdd\x02\n" +
+	"\vPlanService\x12U\n" +
+	"\n" +
+	"CreatePlan\x12\".billing_service.CreatePlanRequest\x1a#.billing_service.CreatePlanResponse\x12U\n" +
+	"\n" +
+	"UpdatePlan\x12\".billing_service.UpdatePlanRequest\x1a#.billing_service.UpdatePlanResponse\x12R\n" +
 	"\tListPlans\x12!.billing_service.ListPlansRequest\x1a\".billing_service.ListPlansResponse\x12L\n" +
 	"\aGetPlan\x12\x1f.billing_service.GetPlanRequest\x1a .billing_service.GetPlanResponseB[ZYgithub.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_serviceb\x06proto3"
 
@@ -419,36 +694,51 @@ func file_billing_service_plans_proto_rawDescGZIP() []byte {
 }
 
 var file_billing_service_plans_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_billing_service_plans_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_billing_service_plans_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_billing_service_plans_proto_goTypes = []any{
 	(BillingInterval)(0),              // 0: billing_service.BillingInterval
-	(*SubscriptionPlan)(nil),          // 1: billing_service.SubscriptionPlan
+	(*Plan)(nil),                      // 1: billing_service.Plan
 	(*ListPlansRequest)(nil),          // 2: billing_service.ListPlansRequest
 	(*ListPlansResponse)(nil),         // 3: billing_service.ListPlansResponse
 	(*GetPlanRequest)(nil),            // 4: billing_service.GetPlanRequest
 	(*GetPlanResponse)(nil),           // 5: billing_service.GetPlanResponse
-	(*Money)(nil),                     // 6: billing_service.Money
-	(*timestamppb.Timestamp)(nil),     // 7: google.protobuf.Timestamp
-	(*common.ListQueryRequest)(nil),   // 8: common.ListQueryRequest
-	(*common.PaginationMetadata)(nil), // 9: common.PaginationMetadata
+	(*CreatePlanRequest)(nil),         // 6: billing_service.CreatePlanRequest
+	(*CreatePlanResponse)(nil),        // 7: billing_service.CreatePlanResponse
+	(*UpdatePlanRequest)(nil),         // 8: billing_service.UpdatePlanRequest
+	(*UpdatePlanResponse)(nil),        // 9: billing_service.UpdatePlanResponse
+	(*Money)(nil),                     // 10: billing_service.Money
+	(*timestamppb.Timestamp)(nil),     // 11: google.protobuf.Timestamp
+	(*common.ListQueryRequest)(nil),   // 12: common.ListQueryRequest
+	(*common.PaginationMetadata)(nil), // 13: common.PaginationMetadata
+	(*common.OperationMetadata)(nil),  // 14: common.OperationMetadata
 }
 var file_billing_service_plans_proto_depIdxs = []int32{
-	6, // 0: billing_service.SubscriptionPlan.price:type_name -> billing_service.Money
-	0, // 1: billing_service.SubscriptionPlan.billing_interval:type_name -> billing_service.BillingInterval
-	7, // 2: billing_service.SubscriptionPlan.created_at:type_name -> google.protobuf.Timestamp
-	8, // 3: billing_service.ListPlansRequest.query:type_name -> common.ListQueryRequest
-	1, // 4: billing_service.ListPlansResponse.data:type_name -> billing_service.SubscriptionPlan
-	9, // 5: billing_service.ListPlansResponse.pagination:type_name -> common.PaginationMetadata
-	1, // 6: billing_service.GetPlanResponse.data:type_name -> billing_service.SubscriptionPlan
-	2, // 7: billing_service.SubscriptionPlanService.ListPlans:input_type -> billing_service.ListPlansRequest
-	4, // 8: billing_service.SubscriptionPlanService.GetPlan:input_type -> billing_service.GetPlanRequest
-	3, // 9: billing_service.SubscriptionPlanService.ListPlans:output_type -> billing_service.ListPlansResponse
-	5, // 10: billing_service.SubscriptionPlanService.GetPlan:output_type -> billing_service.GetPlanResponse
-	9, // [9:11] is the sub-list for method output_type
-	7, // [7:9] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	10, // 0: billing_service.Plan.price:type_name -> billing_service.Money
+	0,  // 1: billing_service.Plan.billing_interval:type_name -> billing_service.BillingInterval
+	11, // 2: billing_service.Plan.created_at:type_name -> google.protobuf.Timestamp
+	12, // 3: billing_service.ListPlansRequest.query:type_name -> common.ListQueryRequest
+	1,  // 4: billing_service.ListPlansResponse.data:type_name -> billing_service.Plan
+	13, // 5: billing_service.ListPlansResponse.pagination:type_name -> common.PaginationMetadata
+	1,  // 6: billing_service.GetPlanResponse.data:type_name -> billing_service.Plan
+	10, // 7: billing_service.CreatePlanRequest.price:type_name -> billing_service.Money
+	0,  // 8: billing_service.CreatePlanRequest.billing_interval:type_name -> billing_service.BillingInterval
+	14, // 9: billing_service.CreatePlanResponse.data:type_name -> common.OperationMetadata
+	10, // 10: billing_service.UpdatePlanRequest.price:type_name -> billing_service.Money
+	0,  // 11: billing_service.UpdatePlanRequest.billing_interval:type_name -> billing_service.BillingInterval
+	14, // 12: billing_service.UpdatePlanResponse.data:type_name -> common.OperationMetadata
+	6,  // 13: billing_service.PlanService.CreatePlan:input_type -> billing_service.CreatePlanRequest
+	8,  // 14: billing_service.PlanService.UpdatePlan:input_type -> billing_service.UpdatePlanRequest
+	2,  // 15: billing_service.PlanService.ListPlans:input_type -> billing_service.ListPlansRequest
+	4,  // 16: billing_service.PlanService.GetPlan:input_type -> billing_service.GetPlanRequest
+	7,  // 17: billing_service.PlanService.CreatePlan:output_type -> billing_service.CreatePlanResponse
+	9,  // 18: billing_service.PlanService.UpdatePlan:output_type -> billing_service.UpdatePlanResponse
+	3,  // 19: billing_service.PlanService.ListPlans:output_type -> billing_service.ListPlansResponse
+	5,  // 20: billing_service.PlanService.GetPlan:output_type -> billing_service.GetPlanResponse
+	17, // [17:21] is the sub-list for method output_type
+	13, // [13:17] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_billing_service_plans_proto_init() }
@@ -457,13 +747,14 @@ func file_billing_service_plans_proto_init() {
 		return
 	}
 	file_billing_service_billing_proto_init()
+	file_billing_service_plans_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_billing_service_plans_proto_rawDesc), len(file_billing_service_plans_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   5,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

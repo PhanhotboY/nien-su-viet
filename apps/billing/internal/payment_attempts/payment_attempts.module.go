@@ -4,6 +4,12 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/domain/entity"
+	crepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/infrastructure/cache"
+	prepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/infrastructure/persistence"
+	tgrpc "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/infrastructure/transport/grpc"
+
+	createPaymentAttemptCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/application/commands/createPaymentAttempt"
+	getPaymentAttemptQuery "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/application/queries/getPaymentAttempt"
 )
 
 var Module = fx.Module(
@@ -18,12 +24,16 @@ var Module = fx.Module(
 	)),
 
 	fx.Provide(
+		// Outbound Infrastructure
+		prepo.NewPaymentAttemptDbRepo,
+		crepo.NewPaymentAttemptCacheRepo,
 
-	// Outbound Infrastructure
-
-	// Application Query
-	// Application Command
+		// Application Query
+		getPaymentAttemptQuery.NewGetPaymentAttemptHandler,
+		// Application Command
+		createPaymentAttemptCmd.NewCreatePaymentAttemptHandler,
 	),
 
 	// Inbound Infrastructure
+	tgrpc.Module,
 )

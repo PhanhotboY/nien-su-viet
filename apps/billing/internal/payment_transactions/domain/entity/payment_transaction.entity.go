@@ -26,7 +26,7 @@ const (
 	PAYMENT_TRANSACTION_STATUS_PENDING   PaymentTransactionStatus = "pending"
 	PAYMENT_TRANSACTION_STATUS_SUCCEEDED PaymentTransactionStatus = "succeeded"
 	PAYMENT_TRANSACTION_STATUS_FAILED    PaymentTransactionStatus = "failed"
-	PAYMENT_TRANSACTION_STATUS_CANCELED  PaymentTransactionStatus = "canceled"
+	PAYMENT_TRANSACTION_STATUS_CANCELLED PaymentTransactionStatus = "canceled"
 )
 
 type PaymentTransaction struct {

@@ -12,6 +12,7 @@ import { SerializeResponseInterceptor } from './common/interceptors';
 import { CatchEverythingFilter, HttpExceptionsFilter } from './common/filters';
 import { BetterAuthGuard, RolesGuard } from './common/guards';
 import { MicroserviceExceptionFilter } from '@phanhotboy/nsv-common/filters/rpc-exception.filter';
+import { BillingModule } from './modules/billing/billing.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { MicroserviceExceptionFilter } from '@phanhotboy/nsv-common/filters/rpc-
     AuthModule,
     HistoricalEventModule,
     PostModule,
+    BillingModule,
   ],
   providers: [
     // Global guards

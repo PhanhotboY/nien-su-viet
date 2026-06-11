@@ -24,8 +24,8 @@ type Purchase struct {
 
 	UserID string `gorm:"type:varchar(124);not null;index:idx_purchases_user_id"`
 
-	SubscriptionID uuid.UUID                       `gorm:"type:uuid;not null;index:idx_purchases_subscription_id"`
-	Subscription   subscriptionEntity.Subscription `gorm:"foreignKey:SubscriptionID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
+	SubscriptionID *uuid.UUID                       `gorm:"type:uuid;index:idx_purchases_subscription_id,where:subscription_id IS NOT NULL"`
+	Subscription   *subscriptionEntity.Subscription `gorm:"foreignKey:SubscriptionID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
 
 	PlanID uuid.UUID       `gorm:"type:uuid;not null;index:idx_purchases_plan_id"`
 	Plan   planEntity.Plan `gorm:"foreignKey:PlanID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`
