@@ -22,6 +22,20 @@ type CreateOrderRequest struct {
 	Title       string `json:"json"`
 }
 
+func (r CreateOrderRequest) computeMac(key string) string {
+	// hmac_input: app_id +”|”+ app_trans_id +”|”+ app_user +”|”+ amount +"|"+ app_time +”|”+ embed_data +"|"+ item
+	raw := strings.Join([]string{
+		strconv.Itoa(r.AppID),
+		r.AppTransID,
+		r.AppUser,
+		strconv.FormatInt(r.Amount, 10),
+		strconv.FormatInt(r.AppTime, 10),
+		r.EmbedData,
+		r.Item,
+	}, "|")
+	return HMACSHA256Hex(raw, key)
+}
+
 type CreateOrderResponse struct {
 	ReturnCode       int    `json:"return_code"`
 	ReturnMessage    string `json:"return_message"`
@@ -39,6 +53,14 @@ type QueryOrderRequest struct {
 	Mac        string `json:"mac"`
 }
 
+func (r QueryOrderRequest) computeMac(key string) string {
+	raw := strings.Join([]string{
+		strconv.Itoa(r.AppID),
+		r.AppTransID,
+	}, "|")
+	return HMACSHA256Hex(raw, key)
+}
+
 type QueryOrderResponse struct {
 	ReturnCode    int    `json:"return_code"`
 	ReturnMessage string `json:"return_message"`
@@ -48,56 +70,6 @@ type QueryOrderResponse struct {
 	Status        int    `json:"status,omitempty"`
 	AppTransID    string `json:"apptransid,omitempty"`
 	UserFeeAmount int64  `json:"user_fee_amount,omitempty"`
-}
-
-// https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_du-lieu-nhan-duoc-tu-callback
-type CallbackPayload struct {
-	Data string `json:"data"`
-	Mac  string `json:"mac"`
-	Type int    `json:"type"` // 1: Order, 2: Agreement
-}
-
-type CallbackData struct {
-	AppID      int    `json:"app_id"`
-	AppTransID string `json:"app_trans_id"`
-	AppTime    int64  `json:"app_time"`
-	Amount     int64  `json:"amount"`
-	AppUser    string `json:"app_user"`
-	EmbedData  string `json:"embed_data"`
-	Item       string `json:"item"`
-	ZpTransID  string `json:"zp_trans_id"`
-	// https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_cac-kenh-thanh-toan-ho-tro
-	Channel        int   `json:"channel"`
-	UseFeeAmount   int64 `json:"use_fee_amount"`
-	DiscountAmount int64 `json:"discount_amount"`
-}
-
-// https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_thong-tin-appserver-tra-ve-cho-zalopayserver-khi-nhan-callback
-type CallbackResponse struct {
-	ReturnCode    int    `json:"return_code"` // -1: MAC not equal, 0: Internal Error, 1: Success, 2: Duplicated
-	ReturnMessage string `json:"return_message"`
-}
-
-func (r CreateOrderRequest) computeMac(key string) string {
-	// hmac_input: app_id +”|”+ app_trans_id +”|”+ app_user +”|”+ amount +"|"+ app_time +”|”+ embed_data +"|"+ item
-	raw := strings.Join([]string{
-		strconv.Itoa(r.AppID),
-		r.AppTransID,
-		r.AppUser,
-		strconv.FormatInt(r.Amount, 10),
-		strconv.FormatInt(r.AppTime, 10),
-		r.EmbedData,
-		r.Item,
-	}, "|")
-	return HMACSHA256Hex(raw, key)
-}
-
-func (r QueryOrderRequest) computeMac(key string) string {
-	raw := strings.Join([]string{
-		strconv.Itoa(r.AppID),
-		r.AppTransID,
-	}, "|")
-	return HMACSHA256Hex(raw, key)
 }
 
 type Item struct {

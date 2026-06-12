@@ -21,6 +21,7 @@ export const GRPC_SERVICE = {
       './api/proto/billing_service/outbox_events.proto',
       './api/proto/billing_service/processed_events.proto',
       './api/proto/billing_service/purchases.proto',
+      './api/proto/billing_service/webhook.proto',
     ] as string[],
   },
 } as const;

@@ -7,7 +7,8 @@ import (
 
 	adto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/createPurchase/dto"
 	drepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/domain/repository"
-	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/zalopay"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/config"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/infrastructure/zalopay"
 	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	grpcTypes "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
@@ -32,6 +33,7 @@ type createPurchaseHandler struct {
 	zpClient *zalopay.Client
 	redis    redis.RedisClientWithExpire
 	db       dbcontracts.TxContextDb
+	cfg      config.BillingConfig
 
 	createPaymentAttemptHandler createPaymentAttempt.CreatePaymentAttemptHandler
 	getPlanByIdHandler          getPlanById.GetPlanByIdHandler
@@ -44,6 +46,8 @@ func NewCreatePurchaseHandler(
 	purDb drepo.PurchaseDBRepo,
 	zpClient *zalopay.Client,
 	r redis.RedisClientWithExpire,
+	cfg config.BillingConfig,
+
 	createPaymentAttemptHandler createPaymentAttempt.CreatePaymentAttemptHandler,
 	getPlanByIdHandler getPlanById.GetPlanByIdHandler,
 ) CreatePurchaseHandler {
@@ -54,6 +58,7 @@ func NewCreatePurchaseHandler(
 		zpClient: zpClient,
 		redis:    r,
 		db:       db,
+		cfg:      cfg,
 
 		createPaymentAttemptHandler: createPaymentAttemptHandler,
 		getPlanByIdHandler:          getPlanByIdHandler,
@@ -103,7 +108,7 @@ func (h *createPurchaseHandler) Handle(ctx context.Context, command *CreatePurch
 			return err
 		}
 
-		appTransID := fmt.Sprintf("%s_%s", time.Now().Format("060102"), time.Now().Format("20060102150405"))
+		appTransID := zalopay.GenerateAppTransID()
 		paymentRes, err = h.zpClient.CreateOrder(ctx, zalopay.CreateOrderRequest{
 			AppTime:    time.Now().UnixMilli(),
 			AppTransID: appTransID,
@@ -122,8 +127,10 @@ func (h *createPurchaseHandler) Handle(ctx context.Context, command *CreatePurch
 			Description: fmt.Sprintf("Thanh toan goi thanh vien %s", plan.Name),
 			// Temporary no data
 			EmbedData: zalopay.EmbedData{
-				PurchaseID: purchaseId,
+				PurchaseID:  purchaseId,
+				RedirectURL: h.cfg.GetZaloPayOptions().RedirectURL,
 			}.String(),
+			CallbackURL: h.cfg.GetZaloPayOptions().CallbackURL,
 		})
 		if err != nil {
 			h.logger.Errorf("Failed to create order with ZaloPay: %v", err)

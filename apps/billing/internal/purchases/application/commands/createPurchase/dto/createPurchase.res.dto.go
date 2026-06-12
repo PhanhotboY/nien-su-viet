@@ -1,7 +1,7 @@
 package adto
 
 import (
-	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/zalopay"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/infrastructure/zalopay"
 	cdto "github.com/phanhotboy/nien-su-viet/libs/pkg/core/application/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service"
 )

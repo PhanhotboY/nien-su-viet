@@ -1464,6 +1464,30 @@
           "Plans"
         ]
       }
+    },
+    "/api/v1/billing/zalopay/callback": {
+      "post": {
+        "operationId": "WebhookController_handleCallback",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Webhook"
+        ]
+      }
     }
   },
   "info": {
@@ -2164,6 +2188,25 @@
             "type": "boolean"
           }
         }
+      },
+      "WebhookRequestDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string"
+          },
+          "mac": {
+            "type": "string"
+          },
+          "type": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "data",
+          "mac",
+          "type"
+        ]
       },
       "EventCategoryBriefResponseDto": {
         "type": "object",

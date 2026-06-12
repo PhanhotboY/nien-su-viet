@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package billing_service;
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
+
+// https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_du-lieu-nhan-duoc-tu-callback
+message CallbackPayload {
+  string data = 1;
+  string mac = 2;
+
+  // 1: Order, 2: Agreement
+  int32 type = 3;
+}
+
+message CallbackData {
+  int32 app_id = 1;
+  string app_trans_id = 2;
+  int64 app_time = 3;
+  int64 amount = 4;
+  string app_user = 5;
+  string embed_data = 6;
+  string item = 7;
+  string zp_trans_id = 8;
+
+  // https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_cac-kenh-thanh-toan-ho-tro
+  int32 channel = 9;
+
+  int64 use_fee_amount = 10;
+  int64 discount_amount = 11;
+}
+
+// https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_thong-tin-appserver-tra-ve-cho-zalopayserver-khi-nhan-callback
+message CallbackResponse {
+  // -1: MAC not equal
+  // 0: Internal Error
+  // 1: Success
+  // 2: Duplicated
+  int32 return_code = 1;
+
+  string return_message = 2;
+}
+
+service ZaloPayWebhookService {
+  rpc HandleCallback(CallbackPayload) returns (CallbackResponse);
+}

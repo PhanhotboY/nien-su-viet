@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package billing_service;
+
+import "common/pagination.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service;billing_service";
+
+// InboxEventStatus represents the lifecycle state of an event in the inbox pattern.
+enum InboxEventStatus {
+  INBOX_EVENT_STATUS_UNSPECIFIED = 0;
+  INBOX_EVENT_STATUS_PENDING = 1;
+  INBOX_EVENT_STATUS_PUBLISHED = 2;
+  INBOX_EVENT_STATUS_FAILED = 3;
+  INBOX_EVENT_STATUS_RETRYING = 4;
+  INBOX_EVENT_STATUS_DEAD = 5;
+}
+
+message InboxEvent {
+  string id = 1;
+  string event_type = 2;
+  string provider = 3;
+  string external_event_id = 4;
+  google.protobuf.Struct payload = 5;
+  string signature = 6;
+  InboxEventStatus status = 7;
+  int32 retry_count = 8;
+  google.protobuf.Timestamp next_retry_at = 9;
+  google.protobuf.Timestamp published_at = 10;
+  google.protobuf.Timestamp created_at = 11;
+}
+
+message GetInboxEventRequest {
+  string id = 1;
+}
+
+message GetInboxEventResponse {
+  InboxEvent data = 1;
+}
+
+message ListInboxEventsRequest {
+  InboxEventStatus status = 1;
+  int32 page_size = 2;
+  string page_token = 3;
+}
+
+message ListInboxEventsResponse {
+  repeated InboxEvent data = 1;
+  common.PaginationMetadata pagination = 2;
+}
+
+service InboxService {
+  rpc GetInboxEvent(GetInboxEventRequest) returns (GetInboxEventResponse);
+  rpc ListInboxEvents(ListInboxEventsRequest) returns (ListInboxEventsResponse);
+}

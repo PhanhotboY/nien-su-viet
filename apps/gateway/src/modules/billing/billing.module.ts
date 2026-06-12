@@ -9,6 +9,8 @@ import { PurchasesController } from './purchases.controller';
 import { PurchasesService } from './purchases.service';
 import { PlansController } from './plans.controller';
 import { PlansService } from './plans.service';
+import { WebhookService } from './webhook.service';
+import { WebhookController } from './webhook.controller';
 
 @Module({
   imports: [
@@ -35,8 +37,8 @@ import { PlansService } from './plans.service';
       },
     ]),
   ],
-  controllers: [PurchasesController, PlansController],
-  providers: [PurchasesService, PlansService],
+  controllers: [PurchasesController, PlansController, WebhookController],
+  providers: [PurchasesService, PlansService, WebhookService],
   exports: [ClientsModule],
 })
 export class BillingModule {}

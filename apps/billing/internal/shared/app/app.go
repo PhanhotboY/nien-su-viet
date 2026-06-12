@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/outbox_events"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_transactions"
@@ -11,6 +12,7 @@ import (
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/infrastructure"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/subscription_events"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/subscriptions"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/webhook"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/fxapp"
 )
 
@@ -33,8 +35,10 @@ func (a *App) Run() {
 	appBuilder.ProvideModule(payment_attempts.Module)
 	appBuilder.ProvideModule(payment_transactions.Module)
 	appBuilder.ProvideModule(outbox_events.Module)
+	appBuilder.ProvideModule(inbox_events.Module)
 	appBuilder.ProvideModule(processed_events.Module)
 	appBuilder.ProvideModule(plans.Module)
+	appBuilder.ProvideModule(webhook.Module)
 
 	app := appBuilder.Build()
 

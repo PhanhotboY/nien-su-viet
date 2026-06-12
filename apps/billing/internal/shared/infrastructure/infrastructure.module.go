@@ -14,6 +14,7 @@ import (
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/redis"
 
 	billingConfig "github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/config"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/infrastructure/zalopay"
 )
 
 // https://pmihaylov.com/shared-components-go-microservices/
@@ -39,5 +40,8 @@ var Module = fx.Module(
 	tracing.Module,
 
 	// Other provides
-	fx.Provide(validator.New),
+	fx.Provide(
+		validator.New,
+		zalopay.New,
+	),
 )
