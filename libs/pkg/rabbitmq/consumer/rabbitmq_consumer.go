@@ -451,7 +451,7 @@ func (r *rabbitMQConsumer) deserializeData(
 	contentType string,
 	body []byte,
 ) messagingTypes.IMessage {
-	message := messagingTypes.Message{}
+	message := &messagingTypes.Message{}
 	if contentType == "" {
 		contentType = "application/json"
 	}

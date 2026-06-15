@@ -3,7 +3,7 @@ package acmd
 import (
 	"context"
 
-	adto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands/dto"
+	adto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands/createInboxEvent/dto"
 	drepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/domain/repository"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/types"
 )

@@ -1,7 +1,7 @@
 package acmd // application command
 
 import (
-	adto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands/dto"
+	adto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands/createInboxEvent/dto"
 	grpcerrors "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/grpcErrors"
 	dtoUtil "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/dto"
 )

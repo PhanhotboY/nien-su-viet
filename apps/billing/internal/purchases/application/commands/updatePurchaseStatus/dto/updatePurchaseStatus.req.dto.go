@@ -12,7 +12,7 @@ type UpdatePurchaseStatusReqDto struct {
 
 func (dto *UpdatePurchaseStatusReqDto) MapToEntity() map[string]interface{} {
 	return map[string]interface{}{
-		"ID":     uuid.MustParse(dto.ID),
-		"Status": purhelper.ToEntityStatus(&dto.Status),
+		"id":     uuid.MustParse(dto.ID),
+		"status": purhelper.ToEntityStatus(&dto.Status),
 	}
 }

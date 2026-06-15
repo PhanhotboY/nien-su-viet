@@ -5,14 +5,16 @@ import (
 
 	"go.uber.org/fx"
 
+	event "github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/events"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/infrastructure/zalopay"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/utils"
 	grpcServer "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
 	googleGrpc "google.golang.org/grpc"
 
-	createInboxEvent "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands"
-	createInboxEventDto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands/dto"
+	createInboxEvent "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands/createInboxEvent"
+	createInboxEventDto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands/createInboxEvent/dto"
 )
 
 var Module = fx.Module(
@@ -62,7 +64,7 @@ func (s *zalopayGrpcServiceServer) HandleCallback(
 
 	// TODO: insert inbox event
 	createInboxEventCmd, err := createInboxEvent.NewCreateInboxEventCmd(createInboxEventDto.CreateInboxEventReqDto{
-		EventType:       "zalopay_payment_success",
+		EventType:       utils.GetMessageName(event.NewPaymentSucceededEvent(nil)),
 		Provider:        "zalopay",
 		ExternalEventID: payload.GetData().AppTransID,
 		Payload:         payload.Data,

@@ -21,7 +21,7 @@ const (
 type Subscription struct {
 	ID uuid.UUID `gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
 
-	UserID uuid.UUID `gorm:"type:uuid;not null;index:idx_subscriptions_user_id"`
+	UserID string `gorm:"type:uuid;not null;index:idx_subscriptions_user_id"`
 
 	PlanID uuid.UUID       `gorm:"type:uuid;not null;index:idx_subscriptions_plan_id"`
 	Plan   planEntity.Plan `gorm:"foreignKey:PlanID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:RESTRICT"`

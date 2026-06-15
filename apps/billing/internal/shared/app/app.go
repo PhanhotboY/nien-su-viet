@@ -10,7 +10,6 @@ import (
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/config"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/infrastructure"
-	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/subscription_events"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/subscriptions"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/webhook"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/fxapp"
@@ -30,7 +29,6 @@ func (a *App) Run() {
 	appBuilder.ProvideModule(infrastructure.Module)
 
 	appBuilder.ProvideModule(subscriptions.Module)
-	appBuilder.ProvideModule(subscription_events.Module)
 	appBuilder.ProvideModule(purchases.Module)
 	appBuilder.ProvideModule(payment_attempts.Module)
 	appBuilder.ProvideModule(payment_transactions.Module)

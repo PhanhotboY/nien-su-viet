@@ -22,8 +22,8 @@ type InboxEvent struct {
 
 	EventType string `gorm:"type:varchar(128);not null;index:idx_inbox_events_event_type"`
 
-	Provider        string `gorm:"type:varchar(64);not null;unique:idx_inbox_provider_event"`
-	ExternalEventID string `gorm:"type:varchar(128);unique:idx_inbox_provider_event"`
+	Provider        string `gorm:"type:varchar(64);not null;uniqueIndex:idx_inbox_provider_event"`
+	ExternalEventID string `gorm:"type:varchar(128);uniqueIndex:idx_inbox_provider_event"`
 
 	// EventEnvelope stored as JSON in DB (from events.EventEnvelope proto)
 	Payload   datatypes.JSON `gorm:"type:jsonb;not null"`

@@ -3,7 +3,7 @@ package inbox_events
 import (
 	"go.uber.org/fx"
 
-	createInboxEvent "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands"
+	createInboxEvent "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands/createInboxEvent"
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/domain/entity"
 	prepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/infrastructure/persistence"
 )

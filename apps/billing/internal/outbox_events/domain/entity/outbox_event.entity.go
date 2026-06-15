@@ -34,6 +34,7 @@ type OutboxEvent struct {
 	RetryCount int32             `gorm:"type:int;not null;default:0"`
 
 	NextRetryAt *time.Time `gorm:"type:timestamp;"`
+	LastError   *string    `gorm:"type:text"`
 
 	PublishedAt *time.Time `gorm:"type:timestamp;"`
 	CreatedAt   time.Time  `gorm:"type:timestamp;not null;autoCreateTime;"`

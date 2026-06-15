@@ -21,7 +21,7 @@ type CreatePaymentTransactionReqDto struct {
 	// A unique identifier from the payment provider (e.g., Stripe, PayPal) for this transaction.
 	ProviderReference string `json:"provider_reference" validate:"required"`
 
-	Metadata map[string]any `json:"metadata,omitempty"`
+	Metadata string `json:"metadata,omitempty"`
 
 	ProcessedAt *time.Time `json:"processed_at,omitempty"`
 	CreatedAt   time.Time  `json:"created_at"`
@@ -29,11 +29,14 @@ type CreatePaymentTransactionReqDto struct {
 
 func (r *CreatePaymentTransactionReqDto) MapToEntity() *entity.PaymentTransaction {
 	return &entity.PaymentTransaction{
-		PaymentAttemptID: uuid.MustParse(r.PaymentAttemptID),
-		Type:             pthelper.ToEntityTransactionType(billing_service.PaymentTransactionType(r.Type)),
-		Status:           pthelper.ToEntityTransactionStatus(billing_service.PaymentTransactionStatus(r.Status)),
-		Amount:           r.Price.Amount,
-		Currency:         r.Price.Currency,
-		CreatedAt:        time.Now(),
+		PaymentAttemptID:  uuid.MustParse(r.PaymentAttemptID),
+		Type:              pthelper.ToEntityTransactionType(billing_service.PaymentTransactionType(r.Type)),
+		Status:            pthelper.ToEntityTransactionStatus(billing_service.PaymentTransactionStatus(r.Status)),
+		Amount:            r.Price.Amount,
+		Currency:          r.Price.Currency,
+		ProviderReference: r.ProviderReference,
+		ProcessedAt:       r.ProcessedAt,
+		Metadata:          []byte(r.Metadata),
+		CreatedAt:         time.Now(),
 	}
 }

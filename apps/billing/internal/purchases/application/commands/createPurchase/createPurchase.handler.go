@@ -128,6 +128,7 @@ func (h *createPurchaseHandler) Handle(ctx context.Context, command *CreatePurch
 			// Temporary no data
 			EmbedData: zalopay.EmbedData{
 				PurchaseID:  purchaseId,
+				PlanID:      plan.Id.String(),
 				RedirectURL: h.cfg.GetZaloPayOptions().RedirectURL,
 			}.String(),
 			CallbackURL: h.cfg.GetZaloPayOptions().CallbackURL,

@@ -11,6 +11,10 @@ type IMessage interface {
 	GetData() json.RawMessage
 }
 
+type IMessageParser[T any] interface {
+	ParseData() (T, error)
+}
+
 type Message struct {
 	MessageId string    `json:"messageId,omitempty"`
 	Created   time.Time `json:"created"`
@@ -18,18 +22,18 @@ type Message struct {
 	Data      json.RawMessage `json:"data,omitempty"`
 }
 
-func NewMessage(data json.RawMessage) *Message {
-	return &Message{Created: time.Now(), Data: data}
+func NewMessage(id string, data json.RawMessage) IMessage {
+	return &Message{MessageId: id, Created: time.Now(), Data: data}
 }
 
-func (m Message) GetMessageId() string {
+func (m *Message) GetMessageId() string {
 	return m.MessageId
 }
 
-func (m Message) GetCreated() time.Time {
+func (m *Message) GetCreated() time.Time {
 	return m.Created
 }
 
-func (m Message) GetData() json.RawMessage {
+func (m *Message) GetData() json.RawMessage {
 	return m.Data
 }

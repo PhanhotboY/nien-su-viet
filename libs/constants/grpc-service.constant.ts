@@ -15,7 +15,6 @@ export const GRPC_SERVICE = {
       './api/proto/billing_service/billing.proto',
       './api/proto/billing_service/plans.proto',
       './api/proto/billing_service/subscriptions.proto',
-      './api/proto/billing_service/subscription_events.proto',
       './api/proto/billing_service/payment_attempts.proto',
       './api/proto/billing_service/payment_transactions.proto',
       './api/proto/billing_service/outbox_events.proto',

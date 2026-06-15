@@ -85,6 +85,7 @@ func (i Item) String() string {
 
 type EmbedData struct {
 	PurchaseID  string `json:"purchaseid"`
+	PlanID      string `json:"planid"`
 	RedirectURL string `json:"redirecturl"`
 }
 
