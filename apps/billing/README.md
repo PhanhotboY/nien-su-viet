@@ -122,73 +122,73 @@ make generate-proto
 ### Purchase module
 
   - [x] Define purchase domain entity
-  - [ ] Define purchase DTOs
-  - [ ] Create purchase command and handler
-  - [ ] Create purchase query and handler
+  - [x] Define purchase DTOs
+  - [x] Create purchase command and handler
+  - [x] Create purchase query and handler
   - [ ] Consume/produce events
-  - [ ] Wire gRPC handlers
+  - [x] Wire gRPC handlers
 
 ### Payment Attempt module
 
   - [x] Define payment attempt domain entity
-  - [ ] Create payment attempt command and handler
-  - [ ] Create payment attempt query and handler
+  - [x] Create payment attempt command and handler
+  - [x] Create payment attempt query and handler
   - [ ] Consume/produce events
-  - [ ] Wire gRPC handlers
+  - [x] Wire gRPC handlers
   
 ### Payment Transaction module
 
   - [x] Define payment transaction domain entity
-  - [ ] Define payment transaction DTOs
-  - [ ] Create payment transaction command and handler
-  - [ ] Create payment transaction query and handler
+  - [x] Define payment transaction DTOs
+  - [x] Create payment transaction command and handler
+  - [x] Create payment transaction query and handler
   - [ ] Consume/produce events
-  - [ ] Wire gRPC handlers
+  - [x] Wire gRPC handlers
   
 ### Outbox Event module
 
   - [x] Define outbox event domain entity
-  - [ ] Define outbox event DTOs
-  - [ ] Create outbox event command and handler
-  - [ ] Create outbox event query and handler
+  - [x] Define outbox event DTOs
+  - [x] Create outbox event command and handler
+  - [x] Create outbox event query and handler
   - [ ] Consume/produce events
-  - [ ] Wire gRPC handlers
+  - [x] Wire gRPC handlers
   
 ### Processed Event module
 
   - [x] Define processed event domain entity
-  - [ ] Define processed event DTOs
-  - [ ] Create processed event command and handler
-  - [ ] Create processed event query and handler
+  - [x] Define processed event DTOs
+  - [x] Create processed event command and handler
+  - [x] Create processed event query and handler
   - [ ] Consume/produce events
-  - [ ] Wire gRPC handlers
+  - [x] Wire gRPC handlers
   
 ### Subscription Event module
 
   - [x] Define subscription event domain entity
-  - [ ] Define subscription event DTOs
-  - [ ] Create subscription event command and handler
-  - [ ] Create subscription event query and handler
+  - [x] Define subscription event DTOs
+  - [x] Create subscription event command and handler
+  - [x] Create subscription event query and handler
   - [ ] Consume/produce events
-  - [ ] Wire gRPC handlers
+  - [x] Wire gRPC handlers
   
 ### Plan module
 
   - [x] Define plan domain entity
-  - [ ] Define plan DTOs
-  - [ ] Create plan command and handler
-  - [ ] Create plan query and handler
+  - [x] Define plan DTOs
+  - [x] Create plan command and handler
+  - [x] Create plan query and handler
   - [ ] Consume/produce events
-  - [ ] Wire gRPC handlers
+  - [x] Wire gRPC handlers
   
 ### Subscription module
 
   - [x] Define subscription domain entity
-  - [ ] Define subscription DTOs
-  - [ ] Create subscription command and handler
-  - [ ] Create subscription query and handler
+  - [x] Define subscription DTOs
+  - [x] Create subscription command and handler
+  - [x] Create subscription query and handler
   - [ ] Consume/produce events
-  - [ ] Wire gRPC handlers
+  - [x] Wire gRPC handlers
 
 ---
 
