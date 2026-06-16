@@ -16,12 +16,12 @@ build: clean
 .PHONY: test-integration
 test-integration:
 	@echo "Running tests for billing service..."
-	@BILLING_SERVER_ENV=test go test -tags=integration -v ./... -cover -coverprofile=coverage.out -coverpkg=./internal/...
+	@ENV_PREFIX=billing BILLING_SERVER_ENV=test go test -tags=integration -v ./... -cover -coverprofile=coverage.out -coverpkg=./internal/...
 	@make open-coverage
 
 test-%:
 	@echo "Running tests for billing service with pattern: $*..."
-	@BILLING_SERVER_ENV=test go test -v -run $* ./... -coverprofile=coverage.out -coverpkg=./internal/...
+	@ENV_PREFIX=billing BILLING_SERVER_ENV=test go test -v -run $* ./... -coverprofile=coverage.out -coverpkg=./internal/...
 	@make create-coverage
 
 .PHONY: create-coverage

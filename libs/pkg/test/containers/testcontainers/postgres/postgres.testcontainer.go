@@ -71,7 +71,7 @@ func (g *PostgresTestContainers) Start(ctx context.Context, t *testing.T) (copti
 
 	isConnectable := isConnectable(ctx, g.logger, cfg)
 	if !isConnectable {
-		return g.cfg, fmt.Errorf("postgres container is not connectable on host: %s:%d", host, cfg.Port)
+		return g.cfg, fmt.Errorf("postgres container is not connectable on host: %s:%d/%s", host, cfg.Port, cfg.Database)
 	}
 
 	g.container = dbContainer
@@ -111,11 +111,12 @@ func isConnectable(
 	orm, err := gorm.Open(
 		postgres.Open(
 			fmt.Sprintf(
-				"postgres://%s:%s@%s:%d/postgres?sslmode=disable",
+				"postgres://%s:%s@%s:%d/%s?sslmode=disable",
 				postgresOptions.Username,
 				postgresOptions.Password,
 				postgresOptions.Host,
 				postgresOptions.Port,
+				postgresOptions.Database,
 			),
 		),
 		&gorm.Config{

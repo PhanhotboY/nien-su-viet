@@ -35,7 +35,7 @@ func (r paymentAttemptCacheRepo) PutPaymentAttempt(ctx context.Context, key stri
 
 func (r paymentAttemptCacheRepo) GetPaymentAttempt(ctx context.Context, key string) (*entity.PaymentAttempt, error) {
 	r.logger.Debug("Getting payment attempt from cache", "key", key)
-	var res = new(entity.PaymentAttempt)
+	var res *entity.PaymentAttempt
 	if err := r.redis.HGet(ctx, PAYMENT_ATTEMPT_CACHE_PREFIX, key, res); err != nil {
 		return nil, err
 	}

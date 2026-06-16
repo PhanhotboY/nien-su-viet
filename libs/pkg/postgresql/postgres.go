@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 
@@ -32,7 +33,7 @@ const (
 type DBParams struct {
 	fx.In
 
-	Models []any `group:"db_models"`
+	Models []dbcontracts.DbModelParam `group:"db_models"`
 }
 
 type txContextDb struct {
@@ -77,9 +78,14 @@ func NewDb(c config.Config, logger logger.Logger, params DBParams) (dbcontracts.
 	sqlDB.SetConnMaxIdleTime(maxConnIdleTime)
 
 	// Safe auto migration - will only modify schema if needed
-	if err := pg.AutoMigrate(
-		params.Models...,
-	); err != nil {
+	sort.Slice(params.Models, func(i, j int) bool {
+		return params.Models[i].Order < params.Models[j].Order
+	})
+	entities := make([]any, len(params.Models))
+	for i, modelParam := range params.Models {
+		entities[i] = modelParam.Model
+	}
+	if err := pg.AutoMigrate(entities...); err != nil {
 		// Check if error is about existing relations
 		if strings.Contains(err.Error(), "already exists") {
 			fmt.Println("Database tables already exist, skipping migration")

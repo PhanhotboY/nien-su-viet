@@ -28,7 +28,7 @@ func (dto *CreatePaymentAttemptReqDto) MapToEntity() *entity.PaymentAttempt {
 		Provider:              dto.Provider,
 		Amount:                dto.Amount.Amount,
 		Currency:              dto.Amount.Currency,
-		Status:                entity.PAYMENT_ATTEMPT_STATUS_CREATED,
+		Status:                entity.PAYMENT_ATTEMPT_STATUS_PENDING,
 		ProviderTransactionID: dto.ProviderTransactionID,
 		CheckoutURL:           dto.CheckoutURL,
 		ProviderMetadata:      []byte(dto.ProviderMetadata),

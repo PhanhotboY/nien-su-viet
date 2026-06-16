@@ -26,11 +26,12 @@ func NewGetPurchaseHandler(l logger.Logger, c drepo.PurchaseCacheRepo, db drepo.
 func (h getPurchaseHandler) Handle(ctx context.Context, query *GetPurchaseQuery) (adto.GetPurchaseResDto, error) {
 	// Try to get purchase from cache first
 	purchase, err := h.cache.GetPurchase(ctx, query.PurchaseId)
-	if err == nil {
+	if err != nil {
+		h.logger.Warnf("failed to get cached purchase for ID %s: %v", query.PurchaseId, err)
+	} else if purchase != nil {
 		h.logger.Infof("Cache hit for purchase ID %s", query.PurchaseId)
 		return adto.NewGetPurchaseResDto(*purchase), nil
 	}
-	h.logger.Infof("Cache miss for purchase ID %s: %v", query.PurchaseId, err)
 
 	// If cache miss, get purchase from database
 	purchase, err = h.db.GetPurchaseById(ctx, query.PurchaseId)

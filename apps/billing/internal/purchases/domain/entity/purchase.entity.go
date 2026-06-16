@@ -41,7 +41,7 @@ type Purchase struct {
 	CreatedAt   time.Time  `gorm:"type:timestamp;not null;autoCreateTime;index:idx_purchases_created_at"`
 	CompletedAt *time.Time `gorm:"type:timestamp;index:idx_purchases_completed_at"`
 
-	PaymentAttempts []paymentAttemptEntity.PaymentAttempt `gorm:"foreignKey:PurchaseID"`
+	PaymentAttempts []paymentAttemptEntity.PaymentAttempt `gorm:"foreignKey:PurchaseID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 func (Purchase) TableName() string { return "purchases" }

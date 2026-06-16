@@ -20,6 +20,9 @@ import (
 
 	getPlanById "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/application/queries/getPlanById"
 	getPlanByIdDto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/application/queries/getPlanById/dto"
+
+	getPAQuery "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/application/queries/getPaymentAttempt"
+	getPADto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/application/queries/getPaymentAttempt/dto"
 )
 
 type CreatePurchaseHandler interface {
@@ -37,6 +40,7 @@ type createPurchaseHandler struct {
 
 	createPaymentAttemptHandler createPaymentAttempt.CreatePaymentAttemptHandler
 	getPlanByIdHandler          getPlanById.GetPlanByIdHandler
+	getPAHandler                getPAQuery.GetPaymentAttemptHandler
 }
 
 func NewCreatePurchaseHandler(
@@ -50,6 +54,7 @@ func NewCreatePurchaseHandler(
 
 	createPaymentAttemptHandler createPaymentAttempt.CreatePaymentAttemptHandler,
 	getPlanByIdHandler getPlanById.GetPlanByIdHandler,
+	getPAHandler getPAQuery.GetPaymentAttemptHandler,
 ) CreatePurchaseHandler {
 	return &createPurchaseHandler{
 		logger:   l,
@@ -62,6 +67,7 @@ func NewCreatePurchaseHandler(
 
 		createPaymentAttemptHandler: createPaymentAttemptHandler,
 		getPlanByIdHandler:          getPlanByIdHandler,
+		getPAHandler:                getPAHandler,
 	}
 }
 
@@ -87,6 +93,7 @@ func (h *createPurchaseHandler) Handle(ctx context.Context, command *CreatePurch
 	// TODO: Start transaction
 	var purchaseId string
 	var paymentRes *zalopay.CreateOrderResponse
+	var paymentAttemptRes getPADto.GetPaymentAttemptResDto
 	err = h.db.RunInTx(ctx, func(ctx context.Context, tx dbcontracts.TxContextDb) error {
 		// TODO: fetch plan details
 		getPlanByIdQuery, _ := getPlanById.NewGetPlanByIdQuery(&getPlanByIdDto.GetPlanByIdReqDto{
@@ -156,8 +163,21 @@ func (h *createPurchaseHandler) Handle(ctx context.Context, command *CreatePurch
 			h.logger.Errorf("Failed to create CreatePaymentAttemptCommand: %v", err)
 			return err
 		}
-		_, err = h.createPaymentAttemptHandler.Handle(ctx, createPaymentAttemptCmd)
+		createPARes, err := h.createPaymentAttemptHandler.Handle(ctx, createPaymentAttemptCmd)
 		if err != nil {
+			return err
+		}
+		getPAByPurchaseIDQuery, err := getPAQuery.NewGetPaymentAttemptQuery(
+			&getPADto.GetPaymentAttemptReqDto{
+				PaymentAttemptId: createPARes.GetData().ID,
+			})
+		if err != nil {
+			h.logger.Errorf("Failed to create GetPaymentAttemptByPurchaseIDQuery: %v", err)
+			return err
+		}
+		paymentAttemptRes, err = h.getPAHandler.Handle(ctx, getPAByPurchaseIDQuery)
+		if err != nil {
+			h.logger.Errorf("Failed to get payment attempt after creation: %v", err)
 			return err
 		}
 
@@ -175,5 +195,5 @@ func (h *createPurchaseHandler) Handle(ctx context.Context, command *CreatePurch
 		return nil, grpcerrors.NewInternalServerGrpcError("Failed to process purchase: 4 "+err.Error(), "NewCreatePurchaseHandler")
 	}
 
-	return adto.NewCreatePurchaseResDto(purchaseId, paymentRes), nil
+	return adto.NewCreatePurchaseResDto(purchaseId, paymentRes, paymentAttemptRes), nil
 }

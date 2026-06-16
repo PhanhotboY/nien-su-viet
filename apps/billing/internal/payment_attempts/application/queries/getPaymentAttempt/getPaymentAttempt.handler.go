@@ -26,7 +26,9 @@ func NewGetPaymentAttemptHandler(l logger.Logger, c drepo.PaymentAttemptCacheRep
 func (h getPaymentAttemptHandler) Handle(ctx context.Context, query *GetPaymentAttemptQuery) (adto.GetPaymentAttemptResDto, error) {
 	// Try to get payment attempt from cache first
 	paymentAttempt, err := h.cache.GetPaymentAttempt(ctx, query.PaymentAttemptId)
-	if err == nil {
+	if err != nil {
+		h.logger.Warnf("failed to get payment attempt from cache for ID %s: %v", query.PaymentAttemptId, err)
+	} else if paymentAttempt != nil {
 		h.logger.Infof("Cache hit for payment attempt ID %s", query.PaymentAttemptId)
 		return adto.NewGetPaymentAttemptResDto(*paymentAttempt), nil
 	}

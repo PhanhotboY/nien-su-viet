@@ -39,10 +39,15 @@ type getPurchaseResDto struct {
 }
 
 func NewGetPurchaseResDto(entity entity.Purchase) GetPurchaseResDto {
+	subscriptionId := ""
+	if entity.SubscriptionID != nil {
+		subscriptionId = entity.SubscriptionID.String()
+	}
+
 	purchase := PurchaseDto{
 		ID:             entity.ID.String(),
 		UserID:         entity.UserID,
-		SubscriptionID: entity.SubscriptionID.String(),
+		SubscriptionID: subscriptionId,
 		PlanID:         entity.PlanID.String(),
 
 		Amount:   entity.Amount,

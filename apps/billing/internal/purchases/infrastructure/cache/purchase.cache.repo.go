@@ -35,7 +35,7 @@ func (r purchaseCacheRepo) PutPurchase(ctx context.Context, key string, Purchase
 
 func (r purchaseCacheRepo) GetPurchase(ctx context.Context, key string) (*entity.Purchase, error) {
 	r.logger.Debug("Getting purchase from cache", "key", key)
-	var res = new(entity.Purchase)
+	var res *entity.Purchase
 	if err := r.redis.HGet(ctx, PURCHASE_CACHE_PREFIX, key, res); err != nil {
 		return nil, err
 	}

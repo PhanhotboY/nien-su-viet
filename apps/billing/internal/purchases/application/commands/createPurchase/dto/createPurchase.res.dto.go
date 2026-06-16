@@ -4,6 +4,8 @@ import (
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/shared/infrastructure/zalopay"
 	cdto "github.com/phanhotboy/nien-su-viet/libs/pkg/core/application/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service"
+
+	getPADto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/application/queries/getPaymentAttempt/dto"
 )
 
 type CreatePurchaseResDto interface {
@@ -20,13 +22,11 @@ type CreatePurchaseResData struct {
 	ReturnMessage    string `json:"return_message"`
 	SubReturnCode    int    `json:"sub_return_code"`
 	SubReturnMessage string `json:"sub_return_message"`
-	OrderUrl         string `json:"order_url"`
-	Zptranstoken     string `json:"zptranstoken"`
-	OrderToken       string `json:"order_token"`
-	QrCode           string `json:"qr_code"`
+
+	PaymentAttempt getPADto.PaymentAttemptData `json:"payment_attempt"`
 }
 
-func NewCreatePurchaseResDto(id string, res *zalopay.CreateOrderResponse) CreatePurchaseResDto {
+func NewCreatePurchaseResDto(id string, res *zalopay.CreateOrderResponse, pa getPADto.GetPaymentAttemptResDto) CreatePurchaseResDto {
 	return createPurchaseResDto{
 		Data: CreatePurchaseResData{
 			Id:               id,
@@ -34,10 +34,7 @@ func NewCreatePurchaseResDto(id string, res *zalopay.CreateOrderResponse) Create
 			ReturnMessage:    res.ReturnMessage,
 			SubReturnCode:    res.SubReturnCode,
 			SubReturnMessage: res.SubReturnMessage,
-			OrderUrl:         res.OrderURL,
-			Zptranstoken:     res.Zptranstoken,
-			OrderToken:       res.OrderToken,
-			QrCode:           res.QRCode,
+			PaymentAttempt:   pa.GetData(),
 		},
 	}
 }
@@ -53,9 +50,5 @@ func (r createPurchaseResDto) ToGrpcResponse() *billing_service.CreatePurchaseRe
 		ReturnMessage:    r.Data.ReturnMessage,
 		SubReturnCode:    int32(r.Data.SubReturnCode),
 		SubReturnMessage: r.Data.SubReturnMessage,
-		OrderUrl:         r.Data.OrderUrl,
-		Zptranstoken:     r.Data.Zptranstoken,
-		OrderToken:       r.Data.OrderToken,
-		QrCode:           r.Data.QrCode,
 	}
 }

@@ -43,7 +43,7 @@ type PaymentAttempt struct {
 	CreatedAt time.Time `gorm:"type:timestamp;not null;autoCreateTime;"`
 	UpdatedAt time.Time `gorm:"type:timestamp;not null;autoUpdateTime;"`
 
-	Transactions []paymentTransactionEntity.PaymentTransaction `gorm:"foreignKey:PaymentAttemptID"`
+	Transactions []paymentTransactionEntity.PaymentTransaction `gorm:"foreignKey:PaymentAttemptID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 }
 
 func (PaymentAttempt) TableName() string { return "payment_attempts" }

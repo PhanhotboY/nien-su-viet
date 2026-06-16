@@ -7,6 +7,7 @@ import (
 	crepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/cache"
 	prepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/persistence"
 	tgrpc "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/infrastructure/transport/grpc"
+	dbcontracts "github.com/phanhotboy/nien-su-viet/libs/pkg/postgresql/contracts"
 
 	createPurchaseCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/createPurchase"
 	updatePurchaseStatusCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/purchases/application/commands/updatePurchaseStatus"
@@ -19,8 +20,11 @@ var Module = fx.Module(
 
 	// Provide models for DB migration
 	fx.Provide(fx.Annotate(
-		func() any {
-			return &entity.Purchase{}
+		func() dbcontracts.DbModelParam {
+			return dbcontracts.DbModelParam{
+				Order: 10, // Ensure purchases are migrated after subscriptions and plans
+				Model: &entity.Purchase{},
+			}
 		},
 		fx.ResultTags(`group:"db_models"`),
 	)),

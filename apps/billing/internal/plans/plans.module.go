@@ -7,6 +7,7 @@ import (
 	crepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/infrastructure/cache"
 	prepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/infrastructure/persistence"
 	tgrpc "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/infrastructure/transport/grpc"
+	dbcontracts "github.com/phanhotboy/nien-su-viet/libs/pkg/postgresql/contracts"
 
 	createPlanCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/application/commands/createPlan"
 	getPlanByIdQuery "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/application/queries/getPlanById"
@@ -18,8 +19,11 @@ var Module = fx.Module(
 
 	// Provide models for DB migration
 	fx.Provide(fx.Annotate(
-		func() any {
-			return &entity.Plan{}
+		func() dbcontracts.DbModelParam {
+			return dbcontracts.DbModelParam{
+				Order: 0,
+				Model: &entity.Plan{},
+			}
 		},
 		fx.ResultTags(`group:"db_models"`),
 	)),

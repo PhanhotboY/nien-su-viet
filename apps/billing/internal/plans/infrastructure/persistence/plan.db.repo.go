@@ -2,6 +2,7 @@ package prepo
 
 import (
 	"context"
+	"slices"
 
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/domain/entity"
 	drepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/domain/repository"
@@ -79,10 +80,20 @@ func (r *planDbRepo) GetPlans(ctx context.Context, filter map[string]any) ([]*en
 	var plans []*entity.Plan
 	query := r.db.WithTxIfExists(ctx).DB().Model(&entity.Plan{})
 	for key, value := range filter {
-		query = query.Where(key+" = ?", value)
+		if !slices.Contains([]string{"limit", "page"}, key) {
+			query = query.Where(key+" = ?", value)
+		}
+	}
+	query = query.Find(&plans)
+	if limit, ok := filter["limit"].(int); ok {
+		query = query.Limit(limit)
+	}
+	if page, ok := filter["page"].(int); ok && page > 0 {
+		offset := (page - 1) * filter["limit"].(int)
+		query = query.Offset(offset)
 	}
 
-	if err := query.Find(&plans).Error; err != nil {
+	if err := query.Error; err != nil {
 		r.logger.Error("Failed to get plans with filter", "filter", filter, "error", err)
 		return nil, err
 	}

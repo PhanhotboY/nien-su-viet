@@ -29,7 +29,7 @@ type Config struct {
 }
 
 func ConfigType() reflect.Type {
-	return reflect.TypeOf(Config{})
+	return reflect.TypeFor[Config]()
 }
 
 func (c ZaloPayOptions) Validate() error {
