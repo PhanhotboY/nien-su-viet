@@ -13,15 +13,7 @@ var Module = fx.Module(
 	"inboxEventsModule",
 
 	// Provide models for DB migration
-	fx.Provide(fx.Annotate(
-		func() dbcontracts.DbModelParam {
-			return dbcontracts.DbModelParam{
-				Order: 0,
-				Model: &entity.InboxEvent{},
-			}
-		},
-		fx.ResultTags(`group:"db_models"`),
-	)),
+	fx.Provide(dbcontracts.NewDbModelParam(0, &entity.InboxEvent{})),
 
 	fx.Provide(
 		// Outbound Infrastructure

@@ -11,15 +11,7 @@ var Module = fx.Module(
 	"processedEventsModule",
 
 	// Provide models for DB migration
-	fx.Provide(fx.Annotate(
-		func() dbcontracts.DbModelParam {
-			return dbcontracts.DbModelParam{
-				Order: 0,
-				Model: &entity.ProcessedEvent{},
-			}
-		},
-		fx.ResultTags(`group:"db_models"`),
-	)),
+	fx.Provide(dbcontracts.NewDbModelParam(0, &entity.ProcessedEvent{})),
 
 	fx.Provide(
 

@@ -18,15 +18,7 @@ var Module = fx.Module(
 	"plansModule",
 
 	// Provide models for DB migration
-	fx.Provide(fx.Annotate(
-		func() dbcontracts.DbModelParam {
-			return dbcontracts.DbModelParam{
-				Order: 0,
-				Model: &entity.Plan{},
-			}
-		},
-		fx.ResultTags(`group:"db_models"`),
-	)),
+	fx.Provide(dbcontracts.NewDbModelParam(0, &entity.Plan{})),
 
 	fx.Provide(
 		// Outbound Infrastructure

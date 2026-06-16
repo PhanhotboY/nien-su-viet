@@ -17,15 +17,8 @@ var Module = fx.Module(
 	"paymentAttemptsModule",
 
 	// Provide models for DB migration
-	fx.Provide(fx.Annotate(
-		func() dbcontracts.DbModelParam {
-			return dbcontracts.DbModelParam{
-				Order: 20, // Ensure payment attempts are migrated after subscriptions and purchases
-				Model: &entity.PaymentAttempt{},
-			}
-		},
-		fx.ResultTags(`group:"db_models"`),
-	)),
+	// Ensure payment attempts are migrated after purchases
+	fx.Provide(dbcontracts.NewDbModelParam(20, &entity.PaymentAttempt{})),
 
 	fx.Provide(
 		// Outbound Infrastructure

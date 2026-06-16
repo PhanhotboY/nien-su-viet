@@ -11,6 +11,7 @@ import (
 	publishPostCommand "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/publishPost/v1/commands"
 	unpublishPostCommand "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/unpublishPost/v1/commands"
 	updatePostCommand "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/command/updatePost/v1/commands"
+	dbcontracts "github.com/phanhotboy/nien-su-viet/libs/pkg/postgresql/contracts"
 
 	getAllPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getAllPosts/v1/queries"
 	getPopularPostsQuery "github.com/phanhotboy/nien-su-viet/apps/post/internal/posts/application/query/getPopularPosts/v1/queries"
@@ -30,12 +31,7 @@ var Module = fx.Module(
 	"postsModule",
 
 	// Provide models for DB migration
-	fx.Provide(fx.Annotate(
-		func() any {
-			return &entity.Post{}
-		},
-		fx.ResultTags(`group:"db_models"`),
-	)),
+	fx.Provide(dbcontracts.NewDbModelParam(0, &entity.Post{})),
 
 	fx.Provide(
 		configPostsMetrics,
