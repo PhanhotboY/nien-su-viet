@@ -96,6 +96,7 @@ apps/billing/
 │   ├── subscription_events   # Subscription event module
 │   └── shared
 │       ├── app               # Wire dependencies
+│       ├── config            # Service configuration
 │       ├── grpc/genproto     # Generated protobuf files
 │       └── infrastructure    # Provide infrastructure modules
 ├── Makefile                  # Script shortcuts
@@ -144,6 +145,15 @@ make generate-proto
   - [x] Create payment transaction query and handler
   - [ ] Consume/produce events
   - [x] Wire gRPC handlers
+
+### Inbox Event module
+
+  - [x] Define inbox event domain entity
+  - [x] Define inbox event DTOs
+  - [x] Create inbox event command and handler
+  - [x] Create inbox event query and handler
+  - [ ] Consume/produce events
+  - [x] Wire gRPC handlers
   
 ### Outbox Event module
 
@@ -160,15 +170,6 @@ make generate-proto
   - [x] Define processed event DTOs
   - [x] Create processed event command and handler
   - [x] Create processed event query and handler
-  - [ ] Consume/produce events
-  - [x] Wire gRPC handlers
-  
-### Subscription Event module
-
-  - [x] Define subscription event domain entity
-  - [x] Define subscription event DTOs
-  - [x] Create subscription event command and handler
-  - [x] Create subscription event query and handler
   - [ ] Consume/produce events
   - [x] Wire gRPC handlers
   
@@ -189,6 +190,30 @@ make generate-proto
   - [x] Create subscription query and handler
   - [ ] Consume/produce events
   - [x] Wire gRPC handlers
+
+  ### Payment webhook module
+  - [x] Handle payment callback
+
+  ### Worker
+  - [ ] Implement worker to process outbox events
+  - [x] Implement worker to process inbox events
+
+  ### Testing
+  - [ ] Integration test purchase (in progress)
+  - [ ] Unit test purchase
+  - [ ] Integration test payment attempt
+  - [ ] Unit test payment attempt
+  - [ ] Integration test payment transaction
+  - [ ] Unit test payment transaction
+  - [ ] Integration test outbox event
+  - [ ] Unit test outbox event
+  - [ ] Integration test processed event
+  - [ ] Unit test processed event
+  - [ ] Integration test plan
+  - [ ] Unit test plan
+  - [ ] Integration test subscription
+  - [ ] Unit test subscription
+  - [ ] Test payment webhook
 
 ---
 
