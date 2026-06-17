@@ -261,10 +261,7 @@ type CreatePurchaseResponse struct {
 	ReturnMessage    string                 `protobuf:"bytes,3,opt,name=return_message,json=returnMessage,proto3" json:"return_message,omitempty"`
 	SubReturnCode    int32                  `protobuf:"varint,4,opt,name=sub_return_code,json=subReturnCode,proto3" json:"sub_return_code,omitempty"`
 	SubReturnMessage string                 `protobuf:"bytes,5,opt,name=sub_return_message,json=subReturnMessage,proto3" json:"sub_return_message,omitempty"`
-	OrderUrl         string                 `protobuf:"bytes,6,opt,name=order_url,json=orderUrl,proto3" json:"order_url,omitempty"`
-	Zptranstoken     string                 `protobuf:"bytes,7,opt,name=zptranstoken,proto3" json:"zptranstoken,omitempty"`
-	OrderToken       string                 `protobuf:"bytes,8,opt,name=order_token,json=orderToken,proto3" json:"order_token,omitempty"`
-	QrCode           string                 `protobuf:"bytes,9,opt,name=qr_code,json=qrCode,proto3" json:"qr_code,omitempty"`
+	PaymentAttempt   *PaymentAttempt        `protobuf:"bytes,6,opt,name=payment_attempt,json=paymentAttempt,proto3" json:"payment_attempt,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -334,32 +331,11 @@ func (x *CreatePurchaseResponse) GetSubReturnMessage() string {
 	return ""
 }
 
-func (x *CreatePurchaseResponse) GetOrderUrl() string {
+func (x *CreatePurchaseResponse) GetPaymentAttempt() *PaymentAttempt {
 	if x != nil {
-		return x.OrderUrl
+		return x.PaymentAttempt
 	}
-	return ""
-}
-
-func (x *CreatePurchaseResponse) GetZptranstoken() string {
-	if x != nil {
-		return x.Zptranstoken
-	}
-	return ""
-}
-
-func (x *CreatePurchaseResponse) GetOrderToken() string {
-	if x != nil {
-		return x.OrderToken
-	}
-	return ""
-}
-
-func (x *CreatePurchaseResponse) GetQrCode() string {
-	if x != nil {
-		return x.QrCode
-	}
-	return ""
+	return nil
 }
 
 type GetPurchaseRequest struct {
@@ -662,7 +638,7 @@ var File_billing_service_purchases_proto protoreflect.FileDescriptor
 
 const file_billing_service_purchases_proto_rawDesc = "" +
 	"\n" +
-	"\x1fbilling_service/purchases.proto\x12\x0fbilling_service\x1a\x1dbilling_service/billing.proto\x1a\x17common/pagination.proto\x1a\x14common/request.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x81\x03\n" +
+	"\x1fbilling_service/purchases.proto\x12\x0fbilling_service\x1a\x1dbilling_service/billing.proto\x1a&billing_service/payment_attempts.proto\x1a\x17common/pagination.proto\x1a\x14common/request.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x81\x03\n" +
 	"\bPurchase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12'\n" +
@@ -677,19 +653,15 @@ const file_billing_service_purchases_proto_rawDesc = "" +
 	"\x15CreatePurchaseRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x17\n" +
 	"\aplan_id\x18\x03 \x01(\tR\x06planId\x12'\n" +
-	"\x0fidempotency_key\x18\x05 \x01(\tR\x0eidempotencyKey\"\xc1\x02\n" +
+	"\x0fidempotency_key\x18\x05 \x01(\tR\x0eidempotencyKey\"\x90\x02\n" +
 	"\x16CreatePurchaseResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1f\n" +
 	"\vreturn_code\x18\x02 \x01(\x05R\n" +
 	"returnCode\x12%\n" +
 	"\x0ereturn_message\x18\x03 \x01(\tR\rreturnMessage\x12&\n" +
 	"\x0fsub_return_code\x18\x04 \x01(\x05R\rsubReturnCode\x12,\n" +
-	"\x12sub_return_message\x18\x05 \x01(\tR\x10subReturnMessage\x12\x1b\n" +
-	"\torder_url\x18\x06 \x01(\tR\borderUrl\x12\"\n" +
-	"\fzptranstoken\x18\a \x01(\tR\fzptranstoken\x12\x1f\n" +
-	"\vorder_token\x18\b \x01(\tR\n" +
-	"orderToken\x12\x17\n" +
-	"\aqr_code\x18\t \x01(\tR\x06qrCode\"$\n" +
+	"\x12sub_return_message\x18\x05 \x01(\tR\x10subReturnMessage\x12H\n" +
+	"\x0fpayment_attempt\x18\x06 \x01(\v2\x1f.billing_service.PaymentAttemptR\x0epaymentAttempt\"$\n" +
 	"\x12GetPurchaseRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"D\n" +
 	"\x13GetPurchaseResponse\x12-\n" +
@@ -749,34 +721,36 @@ var file_billing_service_purchases_proto_goTypes = []any{
 	(*ListPurchasesByUserResponse)(nil),         // 9: billing_service.ListPurchasesByUserResponse
 	(*Money)(nil),                               // 10: billing_service.Money
 	(*timestamppb.Timestamp)(nil),               // 11: google.protobuf.Timestamp
-	(*common.ListQueryRequest)(nil),             // 12: common.ListQueryRequest
-	(*common.PaginationMetadata)(nil),           // 13: common.PaginationMetadata
+	(*PaymentAttempt)(nil),                      // 12: billing_service.PaymentAttempt
+	(*common.ListQueryRequest)(nil),             // 13: common.ListQueryRequest
+	(*common.PaginationMetadata)(nil),           // 14: common.PaginationMetadata
 }
 var file_billing_service_purchases_proto_depIdxs = []int32{
 	10, // 0: billing_service.Purchase.amount:type_name -> billing_service.Money
 	0,  // 1: billing_service.Purchase.status:type_name -> billing_service.PurchaseStatus
 	11, // 2: billing_service.Purchase.created_at:type_name -> google.protobuf.Timestamp
 	11, // 3: billing_service.Purchase.completed_at:type_name -> google.protobuf.Timestamp
-	1,  // 4: billing_service.GetPurchaseResponse.data:type_name -> billing_service.Purchase
-	12, // 5: billing_service.ListPurchasesBySubscriptionRequest.query:type_name -> common.ListQueryRequest
-	1,  // 6: billing_service.ListPurchasesBySubscriptionResponse.data:type_name -> billing_service.Purchase
-	13, // 7: billing_service.ListPurchasesBySubscriptionResponse.pagination:type_name -> common.PaginationMetadata
-	12, // 8: billing_service.ListPurchasesByUserRequest.query:type_name -> common.ListQueryRequest
-	1,  // 9: billing_service.ListPurchasesByUserResponse.data:type_name -> billing_service.Purchase
-	13, // 10: billing_service.ListPurchasesByUserResponse.pagination:type_name -> common.PaginationMetadata
-	2,  // 11: billing_service.PurchaseService.CreatePurchase:input_type -> billing_service.CreatePurchaseRequest
-	4,  // 12: billing_service.PurchaseService.GetPurchase:input_type -> billing_service.GetPurchaseRequest
-	6,  // 13: billing_service.PurchaseService.ListPurchasesBySubscription:input_type -> billing_service.ListPurchasesBySubscriptionRequest
-	8,  // 14: billing_service.PurchaseService.ListPurchasesByUser:input_type -> billing_service.ListPurchasesByUserRequest
-	3,  // 15: billing_service.PurchaseService.CreatePurchase:output_type -> billing_service.CreatePurchaseResponse
-	5,  // 16: billing_service.PurchaseService.GetPurchase:output_type -> billing_service.GetPurchaseResponse
-	7,  // 17: billing_service.PurchaseService.ListPurchasesBySubscription:output_type -> billing_service.ListPurchasesBySubscriptionResponse
-	9,  // 18: billing_service.PurchaseService.ListPurchasesByUser:output_type -> billing_service.ListPurchasesByUserResponse
-	15, // [15:19] is the sub-list for method output_type
-	11, // [11:15] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	12, // 4: billing_service.CreatePurchaseResponse.payment_attempt:type_name -> billing_service.PaymentAttempt
+	1,  // 5: billing_service.GetPurchaseResponse.data:type_name -> billing_service.Purchase
+	13, // 6: billing_service.ListPurchasesBySubscriptionRequest.query:type_name -> common.ListQueryRequest
+	1,  // 7: billing_service.ListPurchasesBySubscriptionResponse.data:type_name -> billing_service.Purchase
+	14, // 8: billing_service.ListPurchasesBySubscriptionResponse.pagination:type_name -> common.PaginationMetadata
+	13, // 9: billing_service.ListPurchasesByUserRequest.query:type_name -> common.ListQueryRequest
+	1,  // 10: billing_service.ListPurchasesByUserResponse.data:type_name -> billing_service.Purchase
+	14, // 11: billing_service.ListPurchasesByUserResponse.pagination:type_name -> common.PaginationMetadata
+	2,  // 12: billing_service.PurchaseService.CreatePurchase:input_type -> billing_service.CreatePurchaseRequest
+	4,  // 13: billing_service.PurchaseService.GetPurchase:input_type -> billing_service.GetPurchaseRequest
+	6,  // 14: billing_service.PurchaseService.ListPurchasesBySubscription:input_type -> billing_service.ListPurchasesBySubscriptionRequest
+	8,  // 15: billing_service.PurchaseService.ListPurchasesByUser:input_type -> billing_service.ListPurchasesByUserRequest
+	3,  // 16: billing_service.PurchaseService.CreatePurchase:output_type -> billing_service.CreatePurchaseResponse
+	5,  // 17: billing_service.PurchaseService.GetPurchase:output_type -> billing_service.GetPurchaseResponse
+	7,  // 18: billing_service.PurchaseService.ListPurchasesBySubscription:output_type -> billing_service.ListPurchasesBySubscriptionResponse
+	9,  // 19: billing_service.PurchaseService.ListPurchasesByUser:output_type -> billing_service.ListPurchasesByUserResponse
+	16, // [16:20] is the sub-list for method output_type
+	12, // [12:16] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_billing_service_purchases_proto_init() }
@@ -785,6 +759,7 @@ func file_billing_service_purchases_proto_init() {
 		return
 	}
 	file_billing_service_billing_proto_init()
+	file_billing_service_payment_attempts_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

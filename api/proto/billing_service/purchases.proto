@@ -3,6 +3,7 @@ syntax = "proto3";
 package billing_service;
 
 import "billing_service/billing.proto";
+import "billing_service/payment_attempts.proto";
 import "common/pagination.proto";
 import "common/request.proto";
 import "google/protobuf/timestamp.proto";
@@ -58,10 +59,8 @@ message CreatePurchaseResponse {
   string return_message = 3;
   int32 sub_return_code = 4;
   string sub_return_message = 5;
-  string order_url = 6;
-  string zptranstoken = 7;
-  string order_token = 8;
-  string qr_code = 9;
+
+  PaymentAttempt payment_attempt = 6;
 }
 
 message GetPurchaseRequest {

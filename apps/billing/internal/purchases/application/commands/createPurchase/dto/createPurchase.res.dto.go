@@ -23,7 +23,7 @@ type CreatePurchaseResData struct {
 	SubReturnCode    int    `json:"sub_return_code"`
 	SubReturnMessage string `json:"sub_return_message"`
 
-	PaymentAttempt getPADto.PaymentAttemptData `json:"payment_attempt"`
+	PaymentAttempt getPADto.GetPaymentAttemptResDto `json:"payment_attempt"`
 }
 
 func NewCreatePurchaseResDto(id string, res *zalopay.CreateOrderResponse, pa getPADto.GetPaymentAttemptResDto) CreatePurchaseResDto {
@@ -34,7 +34,7 @@ func NewCreatePurchaseResDto(id string, res *zalopay.CreateOrderResponse, pa get
 			ReturnMessage:    res.ReturnMessage,
 			SubReturnCode:    res.SubReturnCode,
 			SubReturnMessage: res.SubReturnMessage,
-			PaymentAttempt:   pa.GetData(),
+			PaymentAttempt:   pa,
 		},
 	}
 }
@@ -50,5 +50,7 @@ func (r createPurchaseResDto) ToGrpcResponse() *billing_service.CreatePurchaseRe
 		ReturnMessage:    r.Data.ReturnMessage,
 		SubReturnCode:    int32(r.Data.SubReturnCode),
 		SubReturnMessage: r.Data.SubReturnMessage,
+
+		PaymentAttempt: r.Data.PaymentAttempt.ToGrpcResponse().Data,
 	}
 }

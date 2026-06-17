@@ -100,7 +100,7 @@ func TestCreatePurchase(t *testing.T) {
 			log.TestErrorf("Expected purchase id to be uuid, but got: %s", getRes.GetData().ID)
 		}
 
-		paymentAttempt := res.GetData().PaymentAttempt
+		paymentAttempt := res.GetData().PaymentAttempt.GetData()
 		if paymentAttempt.Status != PAEntity.PAYMENT_ATTEMPT_STATUS_PENDING {
 			log.TestErrorf("Expected payment attempt status to be '%s', but got: %s", PAEntity.PAYMENT_ATTEMPT_STATUS_PENDING, paymentAttempt.Status)
 		}

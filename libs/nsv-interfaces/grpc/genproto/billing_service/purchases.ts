@@ -11,6 +11,7 @@ import { PaginationMetadata } from "../common/pagination";
 import { ListQueryRequest } from "../common/request";
 import { Timestamp } from "../google/protobuf/timestamp";
 import { Money } from "./billing";
+import { PaymentAttempt } from "./payment_attempts";
 
 export const protobufPackage = "billing_service";
 
@@ -57,10 +58,7 @@ export interface CreatePurchaseResponse {
   returnMessage: string;
   subReturnCode: number;
   subReturnMessage: string;
-  orderUrl: string;
-  zptranstoken: string;
-  orderToken: string;
-  qrCode: string;
+  paymentAttempt: PaymentAttempt | undefined;
 }
 
 export interface GetPurchaseRequest {
