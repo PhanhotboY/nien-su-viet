@@ -19,12 +19,24 @@ func NewInBoxEventDbRepo(db dbcontracts.TxContextDb) drepo.InBoxEventDbRepo {
 	return &inBoxEventDbRepo{db: db}
 }
 
-func (r *inBoxEventDbRepo) Insert(ctx context.Context, event *entity.InboxEvent) error {
-	return r.db.WithTxIfExists(ctx).DB().Create(event).Error
+func (r *inBoxEventDbRepo) Insert(ctx context.Context, event *entity.InboxEvent) (string, error) {
+	err := r.db.WithTxIfExists(ctx).DB().Create(event).Error
+	if err != nil {
+		return "", err
+	}
+	return event.ID.String(), nil
 }
 
 func (r *inBoxEventDbRepo) UpdateStatus(ctx context.Context, id string, status entity.InboxEventStatus) error {
 	return r.db.WithTxIfExists(ctx).DB().Model(&entity.InboxEvent{}).Where("id = ?", id).Update("status", status).Error
+}
+
+func (r *inBoxEventDbRepo) FindByEventType(ctx context.Context, eventType string) ([]*entity.InboxEvent, error) {
+	var event []*entity.InboxEvent
+	if err := r.db.WithTxIfExists(ctx).DB().Model(&entity.InboxEvent{}).Where("event_type = ?", eventType).Find(&event).Error; err != nil {
+		return nil, err
+	}
+	return event, nil
 }
 
 func (r *inBoxEventDbRepo) FindByID(ctx context.Context, id string) (*entity.InboxEvent, error) {

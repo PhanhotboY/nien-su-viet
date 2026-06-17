@@ -124,7 +124,7 @@ func (h *createPurchaseHandler) Handle(ctx context.Context, command *CreatePurch
 			BankCode: "",
 
 			// TODO: fetch plan and update fields
-			Amount: 100000,
+			Amount: plan.Price.Amount,
 			Title:  fmt.Sprintf("Thanh toán gói thành viên: %s", plan.Name),
 			Item: zalopay.Item{
 				ItemID:    plan.Id.String(),

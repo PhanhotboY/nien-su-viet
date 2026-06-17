@@ -17,11 +17,32 @@ import (
 	createInboxEventDto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands/createInboxEvent/dto"
 )
 
+type ZalopayGrpcServiceServer interface {
+	HandleCallback(ctx context.Context, req *billing_service.CallbackPayload) (*billing_service.CallbackResponse, error)
+}
+
 var Module = fx.Module(
 	"zalopayWebhook",
 
+	fx.Provide(NewZalopayGrpcServiceServer),
+
 	fx.Invoke(
-		NewZalopayGrpcServiceServer,
+		func(
+			zalopayGrpcServer grpcServer.GrpcServer,
+			logger logger.Logger,
+			zpClient *zalopay.Client,
+
+			zalopayGrpcServiceServer ZalopayGrpcServiceServer,
+
+			createInboxEvent createInboxEvent.CreateInboxEventCmdHandler,
+		) error {
+			zalopayGrpcServer.GrpcServiceBuilder().RegisterRoutes(func(server *googleGrpc.Server) {
+				billing_service.RegisterZaloPayWebhookServiceServer(server,
+					zalopayGrpcServiceServer,
+				)
+			})
+			return nil
+		},
 	))
 
 type zalopayGrpcServiceServer struct {
@@ -32,25 +53,19 @@ type zalopayGrpcServiceServer struct {
 }
 
 func NewZalopayGrpcServiceServer(
-	zalopayGrpcServer grpcServer.GrpcServer,
 	logger logger.Logger,
 	zpClient *zalopay.Client,
 
 	createInboxEvent createInboxEvent.CreateInboxEventCmdHandler,
-) error {
-	zalopayGrpcServer.GrpcServiceBuilder().RegisterRoutes(func(server *googleGrpc.Server) {
-		billing_service.RegisterZaloPayWebhookServiceServer(server,
-			&zalopayGrpcServiceServer{
-				logger:           logger,
-				zalopayClient:    zpClient,
-				createInboxEvent: createInboxEvent,
-			},
-		)
-	})
-	return nil
+) ZalopayGrpcServiceServer {
+	return zalopayGrpcServiceServer{
+		logger:           logger,
+		zalopayClient:    zpClient,
+		createInboxEvent: createInboxEvent,
+	}
 }
 
-func (s *zalopayGrpcServiceServer) HandleCallback(
+func (s zalopayGrpcServiceServer) HandleCallback(
 	ctx context.Context,
 	req *billing_service.CallbackPayload,
 ) (*billing_service.CallbackResponse, error) {

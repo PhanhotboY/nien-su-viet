@@ -2,6 +2,7 @@ package zalopay
 
 import (
 	"encoding/json"
+	"fmt"
 
 	cdto "github.com/phanhotboy/nien-su-viet/libs/pkg/core/application/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service"
@@ -15,11 +16,14 @@ type CallbackData struct {
 	AppUser    string `json:"app_user"`
 	EmbedData  string `json:"embed_data"`
 	Item       string `json:"item"`
-	ZpTransID  string `json:"zp_trans_id"`
+	ZpTransID  int64  `json:"zp_trans_id"`
 	// https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_cac-kenh-thanh-toan-ho-tro
 	Channel        int   `json:"channel"`
 	UseFeeAmount   int64 `json:"use_fee_amount"`
 	DiscountAmount int64 `json:"discount_amount"`
+
+	ServerTime     int64  `json:"server_time"`
+	MerchantUserID string `json:"merchant_user_id"`
 }
 
 // https://developers.zalopay.vn/v2/general/overview.html#callback_dac-ta-api_du-lieu-nhan-duoc-tu-callback
@@ -40,6 +44,7 @@ func NewCallbackPayload(req *billing_service.CallbackPayload) CallbackPayload {
 func (p CallbackPayload) GetData() CallbackData {
 	var data CallbackData
 	if err := json.Unmarshal([]byte(p.Data), &data); err != nil {
+		fmt.Println("Failed to unmarshal callback Data: ", err)
 		return CallbackData{}
 	}
 	return data

@@ -13,15 +13,9 @@ build: clean
 	@echo "Building billing service..."
 	@go build -o bin/server cmd/server/main.go
 
-.PHONY: test-integration
-test-integration:
-	@echo "Running tests for billing service..."
-	@ENV_PREFIX=billing BILLING_SERVER_ENV=test go test -tags=integration -v ./... -cover -coverprofile=coverage.out -coverpkg=./internal/...
-	@make open-coverage
-
 test-%:
 	@echo "Running tests for billing service with pattern: $*..."
-	@ENV_PREFIX=billing BILLING_SERVER_ENV=test go test -v -run $* ./... -coverprofile=coverage.out -coverpkg=./internal/...
+	@ENV_PREFIX=billing BILLING_SERVER_ENV=test go test -tags=$* -v ./... -cover -coverprofile=coverage.out -coverpkg=./internal/...
 	@make create-coverage
 
 .PHONY: create-coverage

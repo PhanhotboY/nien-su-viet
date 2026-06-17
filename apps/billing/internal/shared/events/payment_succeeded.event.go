@@ -53,8 +53,13 @@ type paymentSucceededEvent struct {
 }
 
 func NewPaymentSucceededEvent(msg types.IMessage) PaymentSucceededEvent {
+	var message *types.Message
+	if m, ok := msg.(*types.Message); ok {
+		message = m
+	}
+
 	return &paymentSucceededEvent{
-		Message: msg.(*types.Message),
+		Message: message,
 	}
 }
 
