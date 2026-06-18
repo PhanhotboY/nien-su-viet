@@ -7,11 +7,11 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
-func TimeToTimestamp(t time.Time) *timestamppb.Timestamp {
-	if t.IsZero() {
+func TimeToTimestamp(t *time.Time) *timestamppb.Timestamp {
+	if t == nil || t.IsZero() {
 		return nil
 	}
-	return timestamppb.New(t)
+	return timestamppb.New(*t)
 }
 
 func TimestampToTime(ts *timestamppb.Timestamp) time.Time {

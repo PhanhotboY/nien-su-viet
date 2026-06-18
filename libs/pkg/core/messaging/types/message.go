@@ -11,7 +11,9 @@ type IMessage interface {
 	GetData() json.RawMessage
 }
 
-type IMessageParser[T any] interface {
+type IMessageParser[E any, T any] interface {
+	SetRawData(string) error
+	SetData(E) error
 	ParseData() (T, error)
 }
 

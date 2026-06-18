@@ -63,7 +63,7 @@ func (dto listPlansResDto) ToGrpcResponse() *billing_service.ListPlansResponse {
 			Price:           plan.Price.ToGrpcMoney(),
 			BillingInterval: planhelper.ToGrpcInterval(plan.BillingInterval),
 			IsActive:        plan.IsActive,
-			CreatedAt:       grpcUtils.TimeToTimestamp(plan.CreatedAt),
+			CreatedAt:       grpcUtils.TimeToTimestamp(&plan.CreatedAt),
 		}
 	}
 	return &billing_service.ListPlansResponse{Data: res}

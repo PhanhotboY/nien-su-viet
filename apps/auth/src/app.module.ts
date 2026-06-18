@@ -4,6 +4,7 @@ import { CommonModule } from '@phanhotboy/nsv-common';
 import { configuration } from './config/configuration';
 import { AuthModule } from './auth';
 import { PrismaModule } from './database';
+import { SubscriptionConsumer } from './infrastructure/messaging/subscription.consumer';
 
 @Module({
   imports: [
@@ -15,5 +16,6 @@ import { PrismaModule } from './database';
     PrismaModule.forRoot(),
     AuthModule,
   ],
+  providers: [SubscriptionConsumer],
 })
 export class AppModule {}

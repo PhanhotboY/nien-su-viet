@@ -45,7 +45,7 @@ type PaymentSucceededEventDataInput struct {
 }
 
 type PaymentSucceededEvent interface {
-	MessageEvent[*PaymentSucceededEventData]
+	MessageEvent[*PaymentSucceededEventData, *PaymentSucceededEventData]
 }
 
 type paymentSucceededEvent struct {
@@ -63,11 +63,20 @@ func NewPaymentSucceededEvent(msg types.IMessage) PaymentSucceededEvent {
 	}
 }
 
-func (e *paymentSucceededEvent) SetData(data string) error {
+func (e *paymentSucceededEvent) SetRawData(data string) error {
 	if err := dtoUtil.ValidateStruct(data, &PaymentSucceededEventDataInput{}); err != nil {
 		return err
 	}
 	e.Data = json.RawMessage(data)
+	return nil
+}
+
+func (e *paymentSucceededEvent) SetData(data *PaymentSucceededEventData) error {
+	jsonData, err := jsonUtils.MarshalToJsonString(data)
+	if err != nil {
+		return err
+	}
+	e.Data = json.RawMessage(jsonData)
 	return nil
 }
 

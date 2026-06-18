@@ -34,11 +34,6 @@ type listPaymentTransactionsByAttemptResDto struct {
 func NewListPaymentTransactionsByAttemptResDto(transactions []*entity.PaymentTransaction) ListPaymentTransactionsByAttemptResDto {
 	var data = make([]PaymentTransaction, len(transactions))
 	for i, t := range transactions {
-
-		var processedAt *timestamppb.Timestamp
-		if t.ProcessedAt != nil {
-			processedAt = grpcUtils.TimeToTimestamp(*t.ProcessedAt)
-		}
 		data[i] = PaymentTransaction{
 			Id:                t.ID.String(),
 			PaymentAttemptId:  t.PaymentAttemptID.String(),
@@ -47,8 +42,8 @@ func NewListPaymentTransactionsByAttemptResDto(transactions []*entity.PaymentTra
 			Amount:            sdto.NewMoneyDto(t.Amount, t.Currency),
 			ProviderReference: t.ProviderReference,
 			Metadata:          t.Metadata.String(),
-			ProcessedAt:       processedAt,
-			CreatedAt:         grpcUtils.TimeToTimestamp(t.CreatedAt),
+			ProcessedAt:       grpcUtils.TimeToTimestamp(t.ProcessedAt),
+			CreatedAt:         grpcUtils.TimeToTimestamp(&t.CreatedAt),
 		}
 	}
 	return listPaymentTransactionsByAttemptResDto{Data: data}

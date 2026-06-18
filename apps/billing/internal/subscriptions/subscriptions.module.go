@@ -4,7 +4,10 @@ import (
 	"go.uber.org/fx"
 
 	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/subscriptions/domain/entity"
+	prepo "github.com/phanhotboy/nien-su-viet/apps/billing/internal/subscriptions/infrastructure/persistence"
 	dbcontracts "github.com/phanhotboy/nien-su-viet/libs/pkg/postgresql/contracts"
+
+	createSubscription "github.com/phanhotboy/nien-su-viet/apps/billing/internal/subscriptions/application/commands/createSubscription"
 )
 
 var Module = fx.Module(
@@ -14,11 +17,13 @@ var Module = fx.Module(
 	fx.Provide(dbcontracts.NewDbModelParam(0, &entity.Subscription{})),
 
 	fx.Provide(
+		// Outbound Infrastructure
+		prepo.NewSubscriptionDbRepo,
 
-	// Outbound Infrastructure
+		// Application Query
 
-	// Application Query
-	// Application Command
+		// Application Command
+		createSubscription.NewCreateSubscriptionHandler,
 	),
 
 	// Inbound Infrastructure

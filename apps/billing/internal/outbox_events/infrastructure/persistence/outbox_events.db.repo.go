@@ -74,6 +74,14 @@ func (r outboxEventDbRepo) GetOutboxEventsByStatus(ctx context.Context, status e
 	return events, nil
 }
 
+func (r outboxEventDbRepo) FindByEventType(ctx context.Context, eventType string) ([]*entity.OutboxEvent, error) {
+	var event []*entity.OutboxEvent
+	if err := r.db.WithTxIfExists(ctx).DB().Model(&entity.OutboxEvent{}).Where("event_type = ?", eventType).Find(&event).Error; err != nil {
+		return nil, err
+	}
+	return event, nil
+}
+
 func (r outboxEventDbRepo) FetchPending(ctx context.Context, limit int) ([]*entity.OutboxEvent, error) {
 	r.logger.Info("Fetching pending outbox events", "limit", limit)
 

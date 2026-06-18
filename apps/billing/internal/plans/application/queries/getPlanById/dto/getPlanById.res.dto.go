@@ -55,7 +55,7 @@ func (dto getPlanByIdResDto) ToGrpcResponse() *pb.GetPlanResponse {
 			Price:           dto.Data.Price.ToGrpcMoney(),
 			BillingInterval: planhelper.ToGrpcInterval(dto.Data.BillingInterval),
 			IsActive:        dto.Data.IsActive,
-			CreatedAt:       grpcUtils.TimeToTimestamp(dto.Data.CreatedAt),
+			CreatedAt:       grpcUtils.TimeToTimestamp(&dto.Data.CreatedAt),
 		},
 	}
 }

@@ -47,12 +47,26 @@ func (h *createSubscriptionHandler) Handle(ctx context.Context, command *CreateS
 			h.logger.Errorf("Failed to create subscription: %v", err)
 			return grpcerrors.NewInternalServerGrpcError("Failed to create subscription", "CreateSubscriptionHandler")
 		}
-		subscriptionId = id
 
-		createOutboxEventCmd, err := createOutboxEvent.NewCreateOutboxEventCommand(&createOutboxEventDto.CreateOutboxEventReqDto{
-			EventType: utils.GetMessageName(event.NewSubscriptionCreatedEvent(nil)),
-			Payload:   id,
-		})
+		subscription, err := h.subscriptionRepo.GetSubscriptionByID(ctx, id)
+		if err != nil {
+			h.logger.Errorf("Failed to retrieve created subscription: %v", err)
+			return grpcerrors.NewInternalServerGrpcError("Failed to retrieve created subscription", "CreateSubscriptionHandler")
+		}
+
+		subscriptionCreatedEvent := event.NewSubscriptionCreatedEvent(nil)
+		err = subscriptionCreatedEvent.SetData(*subscription)
+		if err != nil {
+			h.logger.Errorf("Failed to set data for SubscriptionCreatedEvent: %v", err)
+			return grpcerrors.NewInternalServerGrpcError("Failed to create subscription created event", "CreateSubscriptionHandler")
+		}
+		createOutboxEventCmd, err := createOutboxEvent.NewCreateOutboxEventCommand(
+			createOutboxEventDto.CreateOutboxEventReqDto{
+				EventType:     utils.GetMessageName(subscriptionCreatedEvent),
+				Payload:       string(subscriptionCreatedEvent.GetData()),
+				AggregateType: "subscription",
+				AggregateID:   id,
+			})
 		if err != nil {
 			h.logger.Errorf("Failed to create CreateOutboxEventCommand: %v", err)
 			return grpcerrors.NewInternalServerGrpcError("Failed to create outbox event command", "CreateSubscriptionHandler")
@@ -63,9 +77,10 @@ func (h *createSubscriptionHandler) Handle(ctx context.Context, command *CreateS
 			return grpcerrors.NewInternalServerGrpcError("Failed to create outbox event", "CreateSubscriptionHandler")
 		}
 
+		subscriptionId = id
 		return nil
 	})
-	if err != nil {
+	if (err != nil) || (subscriptionId == "") {
 		h.logger.Errorf("Transaction failed: %v", err)
 		return nil, err
 	}

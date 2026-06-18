@@ -9,7 +9,6 @@ import (
 	cdto "github.com/phanhotboy/nien-su-viet/libs/pkg/core/application/types"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service"
 	grpcUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/utils"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type GetPurchaseResDto interface {
@@ -71,10 +70,6 @@ func (r getPurchaseResDto) GetData() PurchaseDto {
 }
 
 func (r getPurchaseResDto) ToGrpcResponse() *billing_service.GetPurchaseResponse {
-	var completedAt *timestamppb.Timestamp
-	if r.Data.CompletedAt != nil {
-		completedAt = grpcUtils.TimeToTimestamp(*r.Data.CompletedAt)
-	}
 	return &billing_service.GetPurchaseResponse{
 		Data: &billing_service.Purchase{
 			Id:             r.Data.ID,
@@ -87,8 +82,8 @@ func (r getPurchaseResDto) ToGrpcResponse() *billing_service.GetPurchaseResponse
 
 			IdempotencyKey: r.Data.IdempotencyKey,
 
-			CreatedAt:   grpcUtils.TimeToTimestamp(r.Data.CreatedAt),
-			CompletedAt: completedAt,
+			CreatedAt:   grpcUtils.TimeToTimestamp(&r.Data.CreatedAt),
+			CompletedAt: grpcUtils.TimeToTimestamp(r.Data.CompletedAt),
 		},
 	}
 }

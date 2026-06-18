@@ -33,6 +33,7 @@ Root Directory: `apps/client`
 ./cli/dbuild.sh auth auth:v1
 ./cli/dbuild.sh historical-event hevent:v1
 ./cli/dbuild.sh post post:v1
+./cli/dbuild.sh billing billing:v1
 
 # Login to image registry
 docker login
@@ -42,4 +43,5 @@ docker login
 ./cli/dpush.sh auth:v1
 ./cli/dpush.sh hevent:v1
 ./cli/dpush.sh post:v1
+./cli/dpush.sh billing:v1
 ```

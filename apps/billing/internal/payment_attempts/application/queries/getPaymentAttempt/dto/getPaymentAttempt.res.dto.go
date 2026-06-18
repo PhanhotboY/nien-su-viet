@@ -66,9 +66,9 @@ func (dto *getPaymentAttemptResDto) ToGrpcResponse() *billing_service.GetPayment
 			ProviderTransactionId: dto.Data.ProviderTransactionID,
 			CheckoutUrl:           dto.Data.CheckoutURL,
 			ProviderMetadata:      grpcUtils.JsonToStruct(dto.Data.ProviderMetadata),
-			ExpiresAt:             grpcUtils.TimeToTimestamp(*dto.Data.ExpiresAt),
-			CreatedAt:             grpcUtils.TimeToTimestamp(dto.Data.CreatedAt),
-			UpdatedAt:             grpcUtils.TimeToTimestamp(dto.Data.UpdatedAt),
+			ExpiresAt:             grpcUtils.TimeToTimestamp(dto.Data.ExpiresAt),
+			CreatedAt:             grpcUtils.TimeToTimestamp(&dto.Data.CreatedAt),
+			UpdatedAt:             grpcUtils.TimeToTimestamp(&dto.Data.UpdatedAt),
 		},
 	}
 }

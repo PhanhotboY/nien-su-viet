@@ -9,8 +9,6 @@ import (
 )
 
 type CreateOutboxEventReqDto struct {
-	ID string `json:"id"`
-
 	// Which domain aggregate/entity emitted this event
 	AggregateType string `json:"aggregate_type"`
 	// ID of the aggregate/entity that emitted this event
@@ -37,7 +35,6 @@ func (d CreateOutboxEventReqDto) MapToEntity() *entity.OutboxEvent {
 	}
 
 	return &entity.OutboxEvent{
-		ID:            uuid.MustParse(d.ID),
 		AggregateType: d.AggregateType,
 		AggregateID:   uuid.MustParse(d.AggregateID),
 		EventType:     d.EventType,

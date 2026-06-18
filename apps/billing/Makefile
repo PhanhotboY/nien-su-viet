@@ -13,6 +13,7 @@ build: clean
 	@echo "Building billing service..."
 	@go build -o bin/server cmd/server/main.go
 
+.PHONY: test-
 test-%:
 	@echo "Running tests for billing service with pattern: $*..."
 	@ENV_PREFIX=billing BILLING_SERVER_ENV=test go test -tags=$* -v ./... -cover -coverprofile=coverage.out -coverpkg=./internal/...
