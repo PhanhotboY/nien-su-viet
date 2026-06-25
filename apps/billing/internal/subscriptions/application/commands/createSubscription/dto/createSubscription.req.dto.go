@@ -14,7 +14,6 @@ type CreateSubscriptionReqDto struct {
 
 	Status int32 `json:"status" validate:"required"`
 
-	// Very common query: find the current subscription that covers now
 	CurrentPeriodStart time.Time `json:"current_period_start" validate:"required"`
 	CurrentPeriodEnd   time.Time `json:"current_period_end" validate:"required,gtfield=CurrentPeriodStart"`
 

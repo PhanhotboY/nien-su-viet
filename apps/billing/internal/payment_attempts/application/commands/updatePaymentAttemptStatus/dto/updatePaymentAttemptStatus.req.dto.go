@@ -5,7 +5,8 @@ import (
 )
 
 type UpdatePaymentAttemptStatusReqDto struct {
-	PurchaseID string `json:"purchase_id" validate:"required,uuid4&"`
+	ID         string `json:"id" validate:"required,uuid"`
+	PurchaseID string `json:"purchase_id" validate:"required,uuid"`
 	Status     int32  `json:"status"`
 }
 

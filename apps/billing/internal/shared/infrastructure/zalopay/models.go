@@ -2,7 +2,6 @@ package zalopay
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -72,15 +71,17 @@ type QueryOrderResponse struct {
 	UserFeeAmount int64  `json:"user_fee_amount,omitempty"`
 }
 
-type Item struct {
+type item struct {
 	ItemID    string `json:"itemid"`
 	ItemName  string `json:"itemname"`
 	ItemPrice int64  `json:"itemprice"`
 }
 
-func (i Item) String() string {
+type Items []item
+
+func (i Items) String() string {
 	itemJSON, _ := json.Marshal(i)
-	return fmt.Sprintf("[%s]", string(itemJSON))
+	return string(itemJSON)
 }
 
 type EmbedData struct {

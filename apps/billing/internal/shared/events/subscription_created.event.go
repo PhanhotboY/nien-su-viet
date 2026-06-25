@@ -2,9 +2,11 @@ package event
 
 import (
 	"encoding/json"
-	"time"
+	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/types"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/utils"
 	eventspb "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/events"
 	grpcUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/utils"
 	dtoUtil "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/dto"
@@ -14,30 +16,8 @@ import (
 	subscriptionhelper "github.com/phanhotboy/nien-su-viet/apps/billing/internal/subscriptions/helper"
 )
 
-type SubscriptionCreatedEventData struct {
-	ID string `json:"id"`
-
-	UserID string `json:"user_id"`
-
-	PlanID string `json:"plan_id"`
-
-	Status int32 `json:"status"`
-
-	// Very common query: find the current subscription that covers now
-	CurrentPeriodStart time.Time `json:"current_period_start"`
-	CurrentPeriodEnd   time.Time `json:"current_period_end"`
-
-	CancelAtPeriodEnd bool `json:"cancel_at_period_end"`
-
-	CanceledAt *time.Time `json:"canceled_at,omitempty"`
-	ExpiredAt  *time.Time `json:"expired_at,omitempty"`
-
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
 type SubscriptionCreatedEvent interface {
-	MessageEvent[subscriptionEntity.Subscription, *eventspb.EventEnvelope_SubscriptionCreated]
+	MessageEvent[subscriptionEntity.Subscription, *eventspb.SubscriptionCreated]
 }
 
 type subscriptionCreatedEvent struct {
@@ -45,18 +25,21 @@ type subscriptionCreatedEvent struct {
 }
 
 func NewSubscriptionCreatedEvent(msg types.IMessage) SubscriptionCreatedEvent {
-	message := new(types.Message)
-	if m, ok := msg.(*types.Message); ok {
-		message = m
+	if msg == nil {
+		msg = types.NewMessage(uuid.NewString(), []byte("{}"))
+	}
+	if m, ok := msg.(*subscriptionCreatedEvent); ok {
+		msg = m.Message
 	}
 
+	msg.SetPattern(utils.GetMessageName(subscriptionCreatedEvent{}))
 	return &subscriptionCreatedEvent{
-		Message: message,
+		Message: msg.(*types.Message),
 	}
 }
 
 func (e *subscriptionCreatedEvent) SetRawData(data string) error {
-	if err := dtoUtil.ValidateStruct(data, &eventspb.EventEnvelope_SubscriptionCreated{}); err != nil {
+	if err := dtoUtil.ValidateStruct(data, &eventspb.SubscriptionCreated{}); err != nil {
 		return err
 	}
 	e.Data = json.RawMessage(data)
@@ -64,25 +47,22 @@ func (e *subscriptionCreatedEvent) SetRawData(data string) error {
 }
 
 func (e *subscriptionCreatedEvent) SetData(data subscriptionEntity.Subscription) error {
-	eventData := &eventspb.EventEnvelope_SubscriptionCreated{
-		SubscriptionCreated: &eventspb.SubscriptionCreated{
-			Subscription: &eventspb.SubscriptionSnapshot{
-				SubscriptionId:     data.ID.String(),
-				UserId:             data.UserID,
-				PlanId:             data.PlanID.String(),
-				Status:             subscriptionhelper.ToGrpcStatus(data.Status),
-				CurrentPeriodStart: grpcUtils.TimeToTimestamp(&data.CurrentPeriodStart),
-				CurrentPeriodEnd:   grpcUtils.TimeToTimestamp(&data.CurrentPeriodEnd),
-				CancelAtPeriodEnd:  data.CancelAtPeriodEnd,
-				CanceledAt:         grpcUtils.TimeToTimestamp(data.CanceledAt),
-				ExpiredAt:          grpcUtils.TimeToTimestamp(data.ExpiredAt),
-				CreatedAt:          grpcUtils.TimeToTimestamp(&data.CreatedAt),
-				UpdatedAt:          grpcUtils.TimeToTimestamp(&data.UpdatedAt),
-			},
-		},
+	eventData := &eventspb.SubscriptionCreated{
+		SubscriptionId:     data.ID.String(),
+		UserId:             data.UserID,
+		PlanId:             data.PlanID.String(),
+		Status:             subscriptionhelper.ToGrpcStatus(data.Status),
+		CurrentPeriodStart: grpcUtils.TimeToTimestamp(&data.CurrentPeriodStart),
+		CurrentPeriodEnd:   grpcUtils.TimeToTimestamp(&data.CurrentPeriodEnd),
+		CancelAtPeriodEnd:  data.CancelAtPeriodEnd,
+		CanceledAt:         grpcUtils.TimeToTimestamp(data.CanceledAt),
+		ExpiredAt:          grpcUtils.TimeToTimestamp(data.ExpiredAt),
+		CreatedAt:          grpcUtils.TimeToTimestamp(&data.CreatedAt),
+		UpdatedAt:          grpcUtils.TimeToTimestamp(&data.UpdatedAt),
 	}
 
 	jsonData, err := jsonUtils.MarshalToJsonString(eventData)
+	fmt.Println("SubscriptionCreatedEvent SetData jsonData:", jsonData)
 	if err != nil {
 		return err
 	}
@@ -90,8 +70,8 @@ func (e *subscriptionCreatedEvent) SetData(data subscriptionEntity.Subscription)
 	return nil
 }
 
-func (e *subscriptionCreatedEvent) ParseData() (*eventspb.EventEnvelope_SubscriptionCreated, error) {
-	data := new(eventspb.EventEnvelope_SubscriptionCreated)
+func (e *subscriptionCreatedEvent) ParseData() (*eventspb.SubscriptionCreated, error) {
+	data := new(eventspb.SubscriptionCreated)
 	if err := jsonUtils.UnmarshalJson(string(e.Data), data); err != nil {
 		return nil, err
 	}

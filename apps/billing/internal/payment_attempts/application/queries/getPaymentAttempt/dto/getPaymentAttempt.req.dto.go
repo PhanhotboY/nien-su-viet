@@ -1,5 +1,5 @@
 package adto
 
 type GetPaymentAttemptReqDto struct {
-	PaymentAttemptId string `json:"id" validate:"required,uuid4"`
+	PaymentAttemptId string `json:"id" validate:"required,uuid"`
 }

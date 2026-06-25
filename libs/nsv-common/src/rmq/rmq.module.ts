@@ -1,7 +1,8 @@
-import { DynamicModule, Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { DynamicModule, Inject, Module, OnModuleInit } from '@nestjs/common';
+import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigService } from '../providers';
 import { RmqService } from './rmq.service';
+import { RMQ } from '@phanhotboy/constants';
 
 export interface RmqModuleOptions {
   name: string;
@@ -11,14 +12,14 @@ export interface RmqModuleOptions {
   providers: [RmqService],
   exports: [RmqService],
 })
-export class RmqModule {
-  static register({ name }: RmqModuleOptions): DynamicModule {
+export class RmqModule implements OnModuleInit {
+  static register(): DynamicModule {
     return {
       module: RmqModule,
       imports: [
         ClientsModule.registerAsync([
           {
-            name,
+            name: RMQ.TOPIC_EVENTS_EXCHANGE,
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => {
               const rmqUrl = configService.get('RABBITMQ_URL');
@@ -39,7 +40,15 @@ export class RmqModule {
           },
         ]),
       ],
-      exports: [ClientsModule],
+      providers: [RmqService],
+      exports: [ClientsModule, RmqService],
     };
+  }
+
+  constructor(
+    @Inject(RMQ.TOPIC_EVENTS_EXCHANGE) private readonly rmq: ClientProxy,
+  ) {}
+  onModuleInit() {
+    this.rmq.connect();
   }
 }

@@ -26,13 +26,13 @@ type PaymentAttempt struct {
 	PurchaseID uuid.UUID `gorm:"type:uuid;not null;index:idx_payment_attempts_purchase_id"`
 
 	// e.g. "stripe", "paypal", "momo", etc.
-	Provider string               `gorm:"type:varchar(32);not null;index:idx_payment_attempts_provider"`
+	Provider string               `gorm:"type:varchar(32);not null;index:idx_payment_attempts_provider;unique:idx_payment_attempts_provider_transaction_id"`
 	Status   PaymentAttemptStatus `gorm:"type:varchar(16);not null;index:idx_payment_attempts_status"`
 
 	Amount   int64  `gorm:"type:bigint;not null"`
 	Currency string `gorm:"type:varchar(16);not null;"`
 
-	ProviderTransactionID string `gorm:"type:varchar(128);not null;index:idx_payment_attempts_provider_transaction_id"`
+	ProviderTransactionID string `gorm:"type:varchar(128);not null;index:idx_payment_attempts_provider_transaction_id;unique:idx_payment_attempts_provider_transaction_id"`
 
 	CheckoutURL string `gorm:"type:text"`
 

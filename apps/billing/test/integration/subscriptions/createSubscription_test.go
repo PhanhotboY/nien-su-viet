@@ -24,6 +24,7 @@ import (
 
 	createPlanCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/application/commands/createPlan"
 	createPlanDto "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/application/commands/createPlan/dto"
+	"github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/domain/entity"
 	planhelper "github.com/phanhotboy/nien-su-viet/apps/billing/internal/plans/helper"
 
 	testhelper "github.com/phanhotboy/nien-su-viet/apps/billing/test/integration/shared/helper"
@@ -74,7 +75,7 @@ func TestCreateSubscription(t *testing.T) {
 			PlanID:             planId,
 			Status:             int32(billing_service.SubscriptionStatus_SUBSCRIPTION_STATUS_ACTIVE),
 			CurrentPeriodStart: periodStart,
-			CurrentPeriodEnd:   subscriptionhelper.CalculateSubscriptionEndDate(periodStart, planhelper.ToEntityInterval(&billingInterval)),
+			CurrentPeriodEnd:   subscriptionhelper.CalculateSubscriptionEndDate(periodStart, planhelper.ToEntityInterval(&billingInterval, entity.BILLING_INTERVAL_MONTH)),
 			CancelAtPeriodEnd:  false,
 		})
 		if err != nil {
@@ -167,7 +168,7 @@ func TestCreateSubscription(t *testing.T) {
 			PlanID:             uuid.New().String(),
 			Status:             int32(billing_service.SubscriptionStatus_SUBSCRIPTION_STATUS_ACTIVE),
 			CurrentPeriodStart: periodStart,
-			CurrentPeriodEnd:   subscriptionhelper.CalculateSubscriptionEndDate(periodStart, planhelper.ToEntityInterval(&billingInterval)),
+			CurrentPeriodEnd:   subscriptionhelper.CalculateSubscriptionEndDate(periodStart, planhelper.ToEntityInterval(&billingInterval, entity.BILLING_INTERVAL_MONTH)),
 			CancelAtPeriodEnd:  false,
 		})
 		if err != nil {

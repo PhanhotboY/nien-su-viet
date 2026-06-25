@@ -14,7 +14,7 @@ type UpdatePurchaseReqDto struct {
 	PlanID *uuid.UUID `json:"plan_id,omitempty" validate:"omitempty,uuid4"`
 
 	Amount   *int64  `json:"amount,omitempty" validate:"omitempty,gt=0"`
-	Currency *string `json:"currency,omitempty" validate:"omitempty,iso4217"`
+	Currency *string `json:"currency,omitempty" validate:"omitempty,len=3"`
 }
 
 func (dto *UpdatePurchaseReqDto) MapToEntity() map[string]interface{} {

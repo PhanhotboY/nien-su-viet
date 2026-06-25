@@ -13,11 +13,7 @@ import { toNodeHandler } from 'better-auth/node';
 
 import { AuthService } from './auth.service';
 import { PaginatedResponseDto, Serialize } from '@phanhotboy/nsv-common';
-import {
-  MemberBaseDto,
-  MemberBriefResponseDto,
-  UserBriefResponseDto,
-} from './dto';
+import { MemberBriefResponseDto, UserBriefResponseDto } from './dto';
 
 @Controller('auth')
 export class AuthController {

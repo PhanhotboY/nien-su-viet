@@ -1,14 +1,29 @@
 import { NestFactory } from '@nestjs/core';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { AppModule } from './app.module';
-import { RmqService } from '@phanhotboy/nsv-common';
-import { AuthService } from './auth';
+import { RmqService, getDLQName } from '@phanhotboy/nsv-common';
+import { AuthService } from './modules/auth';
+import { SubscriptionCreatedEvent } from './events/subscriptionCreated.event';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bodyParser: false });
   const rmqService = app.get(RmqService);
   const auth = app.get(AuthService);
-  app.connectMicroservice(rmqService.getOptions('auth_queue'));
+
+  [SubscriptionCreatedEvent].forEach((event) => {
+    const rmqOptions = rmqService.getOptions(event.name);
+    app.connectMicroservice(rmqOptions);
+    // Declare the dead letter exchange and queue for the event
+    rmqService.declareQueue({
+      ...rmqOptions.options,
+      exchange: rmqOptions.options?.queueOptions?.deadLetterExchange!,
+      queue: getDLQName(rmqOptions.options?.queue!),
+      routingKey: rmqOptions.options?.queueOptions?.deadLetterRoutingKey!,
+      queueOptions: {
+        durable: true,
+      },
+    });
+  });
 
   // Generate Better Auth OpenAPI schema (contains all auth routes)
   const document = await auth.api.generateOpenAPISchema();

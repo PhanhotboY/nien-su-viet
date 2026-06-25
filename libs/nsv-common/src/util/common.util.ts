@@ -44,12 +44,78 @@ const toSnakeCase = (str: string) => {
   );
 };
 
-const getRoutingKey = function (event: Function) {
-  return toSnakeCase(event.name);
+function toCamelCase(str: string): string {
+  return str
+    .toLowerCase()
+    .replace(/[-_\s]+(.)?/g, (_, char) => (char ? char.toUpperCase() : ''));
+}
+
+function keysToCamelCase(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map(keysToCamelCase);
+  }
+
+  if (obj && typeof obj === 'object') {
+    return Object.fromEntries(
+      Object.entries(obj).map(([key, value]) => [
+        toCamelCase(key),
+        keysToCamelCase(value),
+      ]),
+    );
+  }
+
+  return obj;
+}
+
+function keysToSnakeCase(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map(keysToSnakeCase);
+  }
+
+  if (obj && typeof obj === 'object') {
+    return Object.fromEntries(
+      Object.entries(obj).map(([key, value]) => [
+        toSnakeCase(key),
+        keysToSnakeCase(value),
+      ]),
+    );
+  }
+
+  return obj;
+}
+
+/**
+ *
+ * @description Calculate retry delay using exponential backoff with optional jitter.
+ * @returns Delay in milliseconds.
+ */
+const calculateRetryDelay = function ({
+  retryCount,
+  baseDelay = 1000,
+  maxDelay = 30000,
+  jitter,
+}: {
+  retryCount: number;
+  baseDelay?: number;
+  maxDelay?: number;
+  jitter?: boolean;
+}) {
+  // Calculate exponential delay: 2^retryCount * baseDelay
+  let delay = Math.min(maxDelay, Math.pow(2, retryCount) * baseDelay);
+
+  // Add jitter to prevent thundering herd problem
+  if (jitter) {
+    delay = delay * (0.5 + Math.random());
+  }
+
+  return delay;
 };
 
-const getQueueName = function (event: Function) {
-  return `${toSnakeCase(event.name)}_queue`;
+export {
+  genConfiguration,
+  toSnakeCase,
+  toCamelCase,
+  keysToCamelCase,
+  keysToSnakeCase,
+  calculateRetryDelay,
 };
-
-export const commonUtils = { genConfiguration, getRoutingKey, getQueueName };

@@ -154,3 +154,13 @@ model OutboxEvent {
   publishedAt   DateTime?
   createdAt     DateTime          @default(now())
 }
+
+model ProcessedEvent {
+  id           String   @id @default(uuid()) @db.Uuid
+  messageId    String
+  consumerName String
+  processedAt  DateTime @default(now())
+
+  @@unique([messageId, consumerName])
+  @@map("processed_event")
+}

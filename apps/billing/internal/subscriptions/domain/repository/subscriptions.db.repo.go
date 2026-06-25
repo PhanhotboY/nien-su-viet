@@ -9,7 +9,7 @@ import (
 
 type SubscriptionDbRepo interface {
 	CreateSubscription(ctx context.Context, subscription *entity.Subscription) (string, error)
-	UpdateSubscription(ctx context.Context, subscription *entity.Subscription) (string, error)
+	UpdateSubscription(ctx context.Context, id string, updates map[string]any) (string, error)
 	GetSubscriptionByID(ctx context.Context, id string) (*entity.Subscription, error)
 	GetSubscriptionsByUserID(ctx context.Context, userID string) ([]*entity.Subscription, error)
 	ListSubscriptions(ctx context.Context, filter *sdto.ListQueryRequest) ([]*entity.Subscription, error)

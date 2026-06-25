@@ -2,6 +2,7 @@ package webhook
 
 import (
 	"context"
+	"strings"
 
 	"go.uber.org/fx"
 
@@ -11,6 +12,7 @@ import (
 	grpcServer "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/logger"
+	jsonUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/json"
 	googleGrpc "google.golang.org/grpc"
 
 	createInboxEvent "github.com/phanhotboy/nien-su-viet/apps/billing/internal/inbox_events/application/commands/createInboxEvent"
@@ -77,12 +79,38 @@ func (s zalopayGrpcServiceServer) HandleCallback(
 		return zalopay.NewCallbackResponse(-1, "MAC not equal").ToGrpcResponse(), nil
 	}
 
+	var embedData event.EmbedData
+	var itemData []event.Item
+	if err := jsonUtils.UnmarshalJson(payload.GetData().EmbedData, &embedData); err != nil {
+		s.logger.Error("failed to unmarshal embed data: ", err)
+		return zalopay.NewCallbackResponse(0, "internal error").ToGrpcResponse(), nil
+	}
+	if err := jsonUtils.UnmarshalJson(payload.GetData().Item, &itemData); err != nil {
+		s.logger.Error("failed to unmarshal item data: ", err)
+		return zalopay.NewCallbackResponse(0, "internal error").ToGrpcResponse(), nil
+	}
+	paymentSucceededEvent := event.NewPaymentSucceededEvent(nil)
+	if err := paymentSucceededEvent.SetData(&event.PaymentSucceededEventData{
+		Provider:       "zalopay",
+		AppID:          payload.GetData().AppID,
+		AppTransID:     payload.GetData().AppTransID,
+		AppTime:        payload.GetData().AppTime,
+		Amount:         payload.GetData().Amount,
+		AppUser:        payload.GetData().AppUser,
+		EmbedData:      embedData,
+		Item:           itemData,
+		UseFeeAmount:   payload.GetData().UseFeeAmount,
+		DiscountAmount: payload.GetData().DiscountAmount,
+	}); err != nil {
+		s.logger.Error("failed to set raw data for paymentSucceededEvent: ", err)
+		return zalopay.NewCallbackResponse(0, "internal error").ToGrpcResponse(), nil
+	}
 	// TODO: insert inbox event
 	createInboxEventCmd, err := createInboxEvent.NewCreateInboxEventCmd(createInboxEventDto.CreateInboxEventReqDto{
 		EventType:       utils.GetMessageName(event.NewPaymentSucceededEvent(nil)),
 		Provider:        "zalopay",
 		ExternalEventID: payload.GetData().AppTransID,
-		Payload:         payload.Data,
+		Payload:         string(paymentSucceededEvent.GetData()),
 		Signature:       payload.Mac,
 	})
 	if err != nil {
@@ -91,6 +119,11 @@ func (s zalopayGrpcServiceServer) HandleCallback(
 	}
 	if _, err := s.createInboxEvent.Handle(ctx, *createInboxEventCmd); err != nil {
 		s.logger.Error("failed to handle createInboxEventCmd: ", err)
+		// duplicate key means the event has been processed before, we can return success response to ZaloPay server
+		if strings.Contains(err.Error(), "duplicate key") && strings.Contains(err.Error(), "idx_inbox_provider_event") {
+			return zalopay.NewCallbackResponse(1, "success").ToGrpcResponse(), nil
+		}
+
 		return zalopay.NewCallbackResponse(0, "internal error").ToGrpcResponse(), nil
 	}
 

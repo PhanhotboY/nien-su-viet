@@ -2,8 +2,11 @@ package event
 
 import (
 	"encoding/json"
+	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/types"
+	"github.com/phanhotboy/nien-su-viet/libs/pkg/core/messaging/utils"
 	dtoUtil "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/dto"
 	jsonUtils "github.com/phanhotboy/nien-su-viet/libs/pkg/utils/json"
 )
@@ -20,28 +23,25 @@ type EmbedData struct {
 	RedirectURL string `json:"redirecturl"`
 }
 
-type PaymentSucceededEventData struct {
-	AppID          int       `json:"app_id"`
-	AppTransID     string    `json:"app_trans_id"`
-	AppTime        int64     `json:"app_time"`
-	Amount         int64     `json:"amount"`
-	AppUser        string    `json:"app_user"`
-	EmbedData      EmbedData `json:"embed_data"`
-	Item           Item      `json:"item"`
-	UseFeeAmount   int64     `json:"use_fee_amount"`
-	DiscountAmount int64     `json:"discount_amount"`
+func (e *EmbedData) String() string {
+	jsonData, err := jsonUtils.MarshalToJsonString(e)
+	if err != nil {
+		return "{}"
+	}
+	return jsonData
 }
 
-type PaymentSucceededEventDataInput struct {
-	AppID          int    `json:"app_id"`
-	AppTransID     string `json:"app_trans_id"`
-	AppTime        int64  `json:"app_time"`
-	Amount         int64  `json:"amount"`
-	AppUser        string `json:"app_user"`
-	EmbedData      string `json:"embed_data"`
-	Item           string `json:"item"`
-	UseFeeAmount   int64  `json:"use_fee_amount"`
-	DiscountAmount int64  `json:"discount_amount"`
+type PaymentSucceededEventData struct {
+	Provider       string    `json:"provider" validate:"required"`
+	AppID          int       `json:"app_id" validate:"required"`
+	AppTransID     string    `json:"app_trans_id" validate:"required"`
+	AppTime        int64     `json:"app_time" validate:"required"`
+	Amount         int64     `json:"amount" validate:"required"`
+	AppUser        string    `json:"app_user" validate:"required"`
+	EmbedData      EmbedData `json:"embed_data" validate:"required"`
+	Item           []Item    `json:"item" validate:"required"`
+	UseFeeAmount   int64     `json:"use_fee_amount"`
+	DiscountAmount int64     `json:"discount_amount"`
 }
 
 type PaymentSucceededEvent interface {
@@ -53,18 +53,21 @@ type paymentSucceededEvent struct {
 }
 
 func NewPaymentSucceededEvent(msg types.IMessage) PaymentSucceededEvent {
-	var message *types.Message
-	if m, ok := msg.(*types.Message); ok {
-		message = m
+	if msg == nil {
+		msg = types.NewMessage(uuid.NewString(), []byte("{}"))
+	}
+	if m, ok := msg.(*paymentSucceededEvent); ok {
+		msg = m.Message
 	}
 
+	msg.SetPattern(utils.GetMessageName(subscriptionCreatedEvent{}))
 	return &paymentSucceededEvent{
-		Message: message,
+		Message: msg.(*types.Message),
 	}
 }
 
 func (e *paymentSucceededEvent) SetRawData(data string) error {
-	if err := dtoUtil.ValidateStruct(data, &PaymentSucceededEventDataInput{}); err != nil {
+	if err := dtoUtil.ValidateStruct(data, &PaymentSucceededEventData{}); err != nil {
 		return err
 	}
 	e.Data = json.RawMessage(data)
@@ -81,6 +84,9 @@ func (e *paymentSucceededEvent) SetData(data *PaymentSucceededEventData) error {
 }
 
 func (e *paymentSucceededEvent) ParseData() (*PaymentSucceededEventData, error) {
+	if e.Data == nil {
+		return nil, fmt.Errorf("No data")
+	}
 	data := new(PaymentSucceededEventData)
 	if err := jsonUtils.UnmarshalJson(string(e.Data), data); err != nil {
 		return nil, err

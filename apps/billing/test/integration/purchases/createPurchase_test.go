@@ -36,36 +36,37 @@ func TestCreatePurchase(t *testing.T) {
 
 	testhelper.GetDIServices(t, &createPurchaseHandler, &getPurchaseHandler, &createPlanHandler, &log)
 
+	ctx := context.Background()
+	trueValue := true
+
+	createPlanCmd, err := createPlanCmd.NewCreatePlanCommand(createPlanDto.CreatePlanReqDto{
+		Code: "premium",
+		Name: "Premium Membership",
+		Price: sdto.MoneyDto{
+			Amount:   100_000,
+			Currency: "VND",
+		},
+		BillingInterval: int32(billing_service.BillingInterval_BILLING_INTERVAL_MONTH),
+		IsActive:        &trueValue,
+	})
+	if err != nil {
+		log.TestFatalf("Failed to create create plan command: %v", err)
+	}
+
+	createPlanRes, err := createPlanHandler.Handle(ctx, createPlanCmd)
+	if err != nil {
+		log.TestFatalf("Failed to create plan: ", err)
+	}
+
+	planId := createPlanRes.GetData().ID
+	idempotencyKey := uuid.NewString()
+
 	t.Run("Create purchase with all required fields", func(t *testing.T) {
-		ctx := context.Background()
-		trueValue := true
-
-		createPlanCmd, err := createPlanCmd.NewCreatePlanCommand(createPlanDto.CreatePlanReqDto{
-			Code: "premium",
-			Name: "Premium Membership",
-			Price: sdto.MoneyDto{
-				Amount:   100_000,
-				Currency: "VND",
-			},
-			BillingInterval: int32(billing_service.BillingInterval_BILLING_INTERVAL_MONTH),
-			IsActive:        &trueValue,
-		})
-		if err != nil {
-			log.TestFatalf("Failed to create create plan command: %v", err)
-		}
-
-		createPlanRes, err := createPlanHandler.Handle(ctx, createPlanCmd)
-		if err != nil {
-			log.TestFatalf("Failed to create plan: ", err)
-		}
-
-		planId := createPlanRes.GetData().ID
-
 		cmd, err := acmd.NewCreatePurchaseCommand(
 			&adto.CreatePurchaseReqDto{
 				UserID:         "user-123",
 				PlanID:         planId,
-				IdempotencyKey: uuid.NewString(),
+				IdempotencyKey: idempotencyKey,
 			},
 		)
 		if err != nil {
@@ -110,6 +111,24 @@ func TestCreatePurchase(t *testing.T) {
 
 		if paymentAttempt.CheckoutURL == "" {
 			log.TestErrorf("Expected payment attempt to have a checkout URL, but got empty string")
+		}
+	})
+
+	t.Run("Create purchase with duplicated idempotency key", func(t *testing.T) {
+		cmd, err := acmd.NewCreatePurchaseCommand(
+			&adto.CreatePurchaseReqDto{
+				UserID:         "user-123",
+				PlanID:         planId,
+				IdempotencyKey: idempotencyKey,
+			},
+		)
+		if err != nil {
+			log.TestFatalf("Failed to create purchase command: %v", err)
+		}
+
+		_, err = createPurchaseHandler.Handle(ctx, cmd)
+		if err == nil {
+			log.TestFatalf("Expected failed to create purchase due to duplicated idempotency key, but got no error")
 		}
 	})
 }

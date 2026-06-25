@@ -10,7 +10,9 @@ import (
 	dbcontracts "github.com/phanhotboy/nien-su-viet/libs/pkg/postgresql/contracts"
 
 	createPaymentAttemptCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/application/commands/createPaymentAttempt"
+	updatePaymentAttemptStatusCmd "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/application/commands/updatePaymentAttemptStatus"
 	getPaymentAttemptQuery "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/application/queries/getPaymentAttempt"
+	getPaymentAttemptByProviderQuery "github.com/phanhotboy/nien-su-viet/apps/billing/internal/payment_attempts/application/queries/getPaymentAttemptByProvider"
 )
 
 var Module = fx.Module(
@@ -27,8 +29,10 @@ var Module = fx.Module(
 
 		// Application Query
 		getPaymentAttemptQuery.NewGetPaymentAttemptHandler,
+		getPaymentAttemptByProviderQuery.NewGetPaymentAttemptByProviderHandler,
 		// Application Command
 		createPaymentAttemptCmd.NewCreatePaymentAttemptHandler,
+		updatePaymentAttemptStatusCmd.NewUpdatePaymentAttemptStatusHandler,
 	),
 
 	// Inbound Infrastructure

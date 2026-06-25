@@ -1,3 +1,5 @@
+import { Transform } from 'class-transformer';
+
 export const TimestampUtil = {
   toTimestamp(date: Date | string | number) {
     if (!date) return undefined;
@@ -16,3 +18,15 @@ export const TimestampUtil = {
     return new Date(ts.seconds * 1000 + ts.nanos / 1e6);
   },
 };
+
+export function ToTimestamp() {
+  return Transform(({ value }) => TimestampUtil.toTimestamp(value), {
+    toClassOnly: true,
+  });
+}
+
+export function ToDate() {
+  return Transform(({ value }) => TimestampUtil.toDate(value), {
+    toClassOnly: true,
+  });
+}

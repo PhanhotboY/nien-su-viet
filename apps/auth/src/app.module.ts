@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { CommonModule } from '@phanhotboy/nsv-common';
+import { ScheduleModule } from '@nestjs/schedule';
 
+import { CommonModule } from '@phanhotboy/nsv-common';
 import { configuration } from './config/configuration';
-import { AuthModule } from './auth';
+import { AuthModule } from './modules/auth';
 import { PrismaModule } from './database';
-import { SubscriptionConsumer } from './infrastructure/messaging/subscription.consumer';
+import { SubscriptionModule } from './modules/subscriptions/subscription.module';
+import { OutboxEventModule } from './modules/outboxEvents/outboxEvent.module';
 
 @Module({
   imports: [
@@ -14,8 +16,10 @@ import { SubscriptionConsumer } from './infrastructure/messaging/subscription.co
       global: true,
     }),
     PrismaModule.forRoot(),
+    ScheduleModule.forRoot(),
     AuthModule,
+    SubscriptionModule,
+    OutboxEventModule,
   ],
-  providers: [SubscriptionConsumer],
 })
 export class AppModule {}

@@ -1,4 +1,10 @@
-import { DynamicModule, Global, Module, ValidationPipe } from '@nestjs/common';
+import {
+  DynamicModule,
+  Global,
+  Logger,
+  Module,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 
 import * as providers from './providers';
@@ -13,6 +19,8 @@ import { createKeyv, RedisClientOptions } from '@keyv/redis';
 import { LoggerModule } from './logger';
 import { MeterModule } from './otel';
 import { MetricsInterceptor, TracingInterceptor } from './interceptors';
+import { RetrySystem } from './util/retry.util';
+import { RmqModule } from './rmq';
 
 const { ...prvds } = providers;
 const services = Object.values(prvds);
@@ -65,8 +73,33 @@ export class CommonModule extends ConfigurableModuleClass {
           provide: APP_INTERCEPTOR,
           useClass: TracingInterceptor,
         },
+        {
+          provide: RetrySystem,
+          useFactory: (logger: Logger) => {
+            return new RetrySystem({
+              logger,
+              retry: {
+                maxDelay: 30000,
+                maxRetries: 5,
+                baseDelay: 1000,
+                jitter: true,
+              },
+              circuitBreaker: {
+                failureThreshold: 5,
+                resetTimeout: 60000, // 1 minute
+              },
+            });
+          },
+          inject: [Logger],
+        },
       ],
-      exports: [...services, ConfigModule, LoggerModule, MeterModule],
+      exports: [
+        ...services,
+        ConfigModule,
+        LoggerModule,
+        MeterModule,
+        RetrySystem,
+      ],
     };
   }
 }

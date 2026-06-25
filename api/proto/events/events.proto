@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package events;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/events;events";
+
+/// ============================================================================
+// Event envelope
+// ============================================================================
+//
+// In both Nest.js and Go, ctx.getMessage() MUST return an object that implements the EventEnvelope interface.
+//
+// Notes:
+// - event_id should be globally unique.
+// - aggregate_type/aggregate_id in OUTBOX_EVENTS should match these fields.
+// - attributes can store trace_id, correlation_id, actor_id, request_id, etc.
+//
+message EventEnvelope {
+  string event_id = 1;
+  string pattern = 2;
+  string aggregate_type = 3;
+  string aggregate_id = 4;
+  google.protobuf.Timestamp occurred_at = 5;
+  google.protobuf.Struct attributes = 6;
+
+  // The actual event data, which can be any of the event types defined in this events proto.
+  google.protobuf.Struct data = 7;
+}

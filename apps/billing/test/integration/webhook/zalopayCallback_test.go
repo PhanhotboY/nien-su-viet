@@ -74,6 +74,27 @@ func TestZaloPayCallback(t *testing.T) {
 		}
 	})
 
+	t.Run("Handle Duplicate ZaloPay callback", func(t *testing.T) {
+		ctx := context.Background()
+
+		res, err := zalopayGrpcServiceServer.HandleCallback(ctx, &billing_service.CallbackPayload{
+			Data: data,
+			Mac:  mac,
+			Type: paymentType,
+		})
+		if err != nil {
+			logger.TestFatalf("Failed to handle ZaloPay callback: ", err)
+		}
+
+		if res == nil {
+			logger.TestFatalf("Expected non-nil response, got nil")
+		}
+
+		if res.ReturnCode != 1 {
+			logger.TestFatalf("Expected return code 1 for duplicate callback, got %d", res.ReturnCode)
+		}
+	})
+
 	t.Run("Handle Invalid signature ZaloPay callback", func(t *testing.T) {
 		ctx := context.Background()
 		invalidMac := mac + "invalid"

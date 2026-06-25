@@ -78,6 +78,22 @@ export class AuthService {
     return org;
   }
 
+  async getOrganizationBySlug(slug: string) {
+    const org = await this.prisma.organization.findFirst({
+      where: { slug },
+      select: {
+        id: true,
+        name: true,
+        members: { select: { id: true } },
+        slug: true,
+        createdAt: true,
+        logo: true,
+      },
+    });
+
+    return org;
+  }
+
   async getAllOrganizationMembers(orgId: string) {
     const org = await this.prisma.organization.findUnique({
       where: { id: orgId },

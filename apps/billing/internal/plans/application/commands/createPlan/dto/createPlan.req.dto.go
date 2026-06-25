@@ -14,7 +14,7 @@ type CreatePlanReqDto struct {
 
 	Price sdto.MoneyDto `json:"price" validate:"required"`
 
-	BillingInterval int32 `json:"billing_interval" validate:"required,min=0"`
+	BillingInterval int32 `json:"billing_interval"`
 
 	IsActive *bool `json:"is_active" validate:""`
 }
@@ -28,7 +28,7 @@ func (dto *CreatePlanReqDto) MapToEntity() *entity.Plan {
 		Code:            dto.Code,
 		Name:            dto.Name,
 		Price:           dto.Price.Amount,
-		BillingInterval: planhelper.ToEntityInterval(&dto.BillingInterval),
+		BillingInterval: planhelper.ToEntityInterval(&dto.BillingInterval, entity.BILLING_INTERVAL_MONTH),
 		IsActive:        isActive,
 		Currency:        "VND",
 		CreatedAt:       time.Now(),

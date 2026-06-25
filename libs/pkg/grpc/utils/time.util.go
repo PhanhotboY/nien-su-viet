@@ -1,6 +1,7 @@
 package grpcUtils
 
 import (
+	"encoding/json"
 	"time"
 
 	"google.golang.org/protobuf/types/known/structpb"
@@ -59,4 +60,15 @@ func StructToJson(s *structpb.Struct) string {
 		return "{}"
 	}
 	return string(jsonBytes)
+}
+
+func TypeToStruct(data any) *structpb.Struct {
+	s, err := structpb.NewStruct(map[string]any{})
+	if err == nil {
+		inputBytes, err := json.Marshal(data)
+		if err == nil {
+			s.UnmarshalJSON(inputBytes)
+		}
+	}
+	return s
 }

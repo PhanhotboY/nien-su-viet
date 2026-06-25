@@ -35,20 +35,20 @@ func (r purchaseDbRepo) CreatePurchase(ctx context.Context, purchase *entity.Pur
 }
 
 func (r purchaseDbRepo) UpdatePurchase(ctx context.Context, purchaseId string, updates map[string]any) (string, error) {
-	r.logger.Info("Updating purchase", "purchaseId", purchaseId, "updates", updates)
+	r.logger.Infof("Updating purchase: %s", purchaseId)
 
 	var existingPurchase entity.Purchase
 	if err := r.db.WithTxIfExists(ctx).DB().First(&existingPurchase, "id = ?", purchaseId).Error; err != nil {
-		r.logger.Error("Failed to find purchase for update", "purchaseId", purchaseId, "error", err)
+		r.logger.Errorf("Failed to find purchase for update: %s, error: %v", purchaseId, err)
 		return "", err
 	}
 
 	if err := r.db.WithTxIfExists(ctx).DB().Model(&existingPurchase).Updates(updates).Error; err != nil {
-		r.logger.Error("Failed to update purchase", "purchaseId", purchaseId, "error", err)
+		r.logger.Errorf("Failed to update purchase: %s, error: %v", purchaseId, err)
 		return "", err
 	}
 
-	r.logger.Info("Purchase updated successfully", "purchaseId", purchaseId)
+	r.logger.Infof("Purchase updated successfully: %s", purchaseId)
 	return purchaseId, nil
 }
 

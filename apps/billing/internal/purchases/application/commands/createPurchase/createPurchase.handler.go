@@ -126,10 +126,12 @@ func (h *createPurchaseHandler) Handle(ctx context.Context, command *CreatePurch
 			// TODO: fetch plan and update fields
 			Amount: plan.Price.Amount,
 			Title:  fmt.Sprintf("Thanh toán gói thành viên: %s", plan.Name),
-			Item: zalopay.Item{
-				ItemID:    plan.Id.String(),
-				ItemName:  plan.Name,
-				ItemPrice: plan.Price.Amount,
+			Item: zalopay.Items{
+				{
+					ItemID:    plan.Id.String(),
+					ItemName:  plan.Name,
+					ItemPrice: plan.Price.Amount,
+				},
 			}.String(),
 			Description: fmt.Sprintf("Thanh toan goi thanh vien %s", plan.Name),
 			// Temporary no data

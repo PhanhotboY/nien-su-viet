@@ -5,9 +5,9 @@ import (
 	"github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/billing_service"
 )
 
-func ToEntityInterval(interval *int32) entity.BillingInterval {
+func ToEntityInterval(interval *int32, defaultInterval entity.BillingInterval) entity.BillingInterval {
 	if interval == nil {
-		return entity.BILLING_INTERVAL_MONTH
+		return defaultInterval
 	}
 	billingInterval := billing_service.BillingInterval(*interval)
 	switch billingInterval {
@@ -20,7 +20,7 @@ func ToEntityInterval(interval *int32) entity.BillingInterval {
 	case billing_service.BillingInterval_BILLING_INTERVAL_YEAR:
 		return entity.BILLING_INTERVAL_YEAR
 	default:
-		return entity.BILLING_INTERVAL_MONTH
+		return defaultInterval
 	}
 }
 

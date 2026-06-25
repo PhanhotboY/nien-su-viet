@@ -34,16 +34,22 @@ func (r subscriptionDbRepo) CreateSubscription(ctx context.Context, subscription
 	return subscription.ID.String(), nil
 }
 
-func (r subscriptionDbRepo) UpdateSubscription(ctx context.Context, subscription *entity.Subscription) (string, error) {
-	r.logger.Info("Updating subscription", "id", subscription.ID)
+func (r subscriptionDbRepo) UpdateSubscription(ctx context.Context, id string, updates map[string]any) (string, error) {
+	r.logger.Infof("Updating subscription: %s", id)
 
-	if err := r.db.WithTxIfExists(ctx).DB().Save(subscription).Error; err != nil {
-		r.logger.Error("Failed to update subscription", "id", subscription.ID, "error", err)
+	var existingSubscription entity.Subscription
+	if err := r.db.WithTxIfExists(ctx).DB().First(&existingSubscription, "id = ?", id).Error; err != nil {
+		r.logger.Errorf("Failed to find Subscription for update: %s, error: %v", id, err)
 		return "", err
 	}
 
-	r.logger.Info("Subscription updated successfully", "id", subscription.ID)
-	return subscription.ID.String(), nil
+	if err := r.db.WithTxIfExists(ctx).DB().Model(&existingSubscription).Updates(updates).Error; err != nil {
+		r.logger.Errorf("Failed to update Subscription: %s, error: %v", id, err)
+		return "", err
+	}
+
+	r.logger.Infof("Subscription updated successfully: %s", id)
+	return id, nil
 }
 
 func (r subscriptionDbRepo) GetSubscriptionByID(ctx context.Context, id string) (*entity.Subscription, error) {

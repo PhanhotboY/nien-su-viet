@@ -24,403 +24,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// / ============================================================================
-// Event envelope
-// ============================================================================
-//
-// Store these in OUTBOX_EVENTS.payload.
-//
-// Notes:
-// - event_id should be globally unique.
-// - aggregate_type/aggregate_id in OUTBOX_EVENTS should match these fields.
-// - attributes can store trace_id, correlation_id, actor_id, request_id, etc.
-type EventEnvelope struct {
-	state      protoimpl.MessageState `protogen:"open.v1"`
-	OccurredAt *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`
-	// Optional metadata for routing/tracing
-	Attributes map[string]string `protobuf:"bytes,2,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	// Types that are valid to be assigned to Data:
-	//
-	//	*EventEnvelope_SubscriptionCreated
-	//	*EventEnvelope_SubscriptionUpdated
-	//	*EventEnvelope_SubscriptionCanceled
-	//	*EventEnvelope_SubscriptionExpired
-	//	*EventEnvelope_PurchaseCreated
-	//	*EventEnvelope_PurchaseCompleted
-	//	*EventEnvelope_PurchaseFailed
-	//	*EventEnvelope_PurchaseCanceled
-	//	*EventEnvelope_PaymentAttemptCreated
-	//	*EventEnvelope_PaymentAttemptUpdated
-	//	*EventEnvelope_PaymentAttemptSucceeded
-	//	*EventEnvelope_PaymentAttemptFailed
-	//	*EventEnvelope_PaymentAttemptExpired
-	//	*EventEnvelope_PaymentTransactionRecorded
-	//	*EventEnvelope_RefundRequested
-	//	*EventEnvelope_RefundSucceeded
-	//	*EventEnvelope_RefundFailed
-	//	*EventEnvelope_WebhookEventReceived
-	//	*EventEnvelope_WebhookEventProcessed
-	//	*EventEnvelope_WebhookEventProcessingFailed
-	Data          isEventEnvelope_Data `protobuf_oneof:"data"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *EventEnvelope) Reset() {
-	*x = EventEnvelope{}
-	mi := &file_events_billing_event_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *EventEnvelope) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EventEnvelope) ProtoMessage() {}
-
-func (x *EventEnvelope) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EventEnvelope.ProtoReflect.Descriptor instead.
-func (*EventEnvelope) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *EventEnvelope) GetOccurredAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.OccurredAt
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetAttributes() map[string]string {
-	if x != nil {
-		return x.Attributes
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetData() isEventEnvelope_Data {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetSubscriptionCreated() *SubscriptionCreated {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_SubscriptionCreated); ok {
-			return x.SubscriptionCreated
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetSubscriptionUpdated() *SubscriptionUpdated {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_SubscriptionUpdated); ok {
-			return x.SubscriptionUpdated
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetSubscriptionCanceled() *SubscriptionCanceled {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_SubscriptionCanceled); ok {
-			return x.SubscriptionCanceled
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetSubscriptionExpired() *SubscriptionExpired {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_SubscriptionExpired); ok {
-			return x.SubscriptionExpired
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetPurchaseCreated() *PurchaseCreated {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_PurchaseCreated); ok {
-			return x.PurchaseCreated
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetPurchaseCompleted() *PurchaseCompleted {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_PurchaseCompleted); ok {
-			return x.PurchaseCompleted
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetPurchaseFailed() *PurchaseFailed {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_PurchaseFailed); ok {
-			return x.PurchaseFailed
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetPurchaseCanceled() *PurchaseCanceled {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_PurchaseCanceled); ok {
-			return x.PurchaseCanceled
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetPaymentAttemptCreated() *PaymentAttemptCreated {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_PaymentAttemptCreated); ok {
-			return x.PaymentAttemptCreated
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetPaymentAttemptUpdated() *PaymentAttemptUpdated {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_PaymentAttemptUpdated); ok {
-			return x.PaymentAttemptUpdated
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetPaymentAttemptSucceeded() *PaymentAttemptSucceeded {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_PaymentAttemptSucceeded); ok {
-			return x.PaymentAttemptSucceeded
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetPaymentAttemptFailed() *PaymentAttemptFailed {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_PaymentAttemptFailed); ok {
-			return x.PaymentAttemptFailed
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetPaymentAttemptExpired() *PaymentAttemptExpired {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_PaymentAttemptExpired); ok {
-			return x.PaymentAttemptExpired
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetPaymentTransactionRecorded() *PaymentTransactionRecorded {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_PaymentTransactionRecorded); ok {
-			return x.PaymentTransactionRecorded
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetRefundRequested() *RefundRequested {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_RefundRequested); ok {
-			return x.RefundRequested
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetRefundSucceeded() *RefundSucceeded {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_RefundSucceeded); ok {
-			return x.RefundSucceeded
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetRefundFailed() *RefundFailed {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_RefundFailed); ok {
-			return x.RefundFailed
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetWebhookEventReceived() *WebhookEventReceived {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_WebhookEventReceived); ok {
-			return x.WebhookEventReceived
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetWebhookEventProcessed() *WebhookEventProcessed {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_WebhookEventProcessed); ok {
-			return x.WebhookEventProcessed
-		}
-	}
-	return nil
-}
-
-func (x *EventEnvelope) GetWebhookEventProcessingFailed() *WebhookEventProcessingFailed {
-	if x != nil {
-		if x, ok := x.Data.(*EventEnvelope_WebhookEventProcessingFailed); ok {
-			return x.WebhookEventProcessingFailed
-		}
-	}
-	return nil
-}
-
-type isEventEnvelope_Data interface {
-	isEventEnvelope_Data()
-}
-
-type EventEnvelope_SubscriptionCreated struct {
-	SubscriptionCreated *SubscriptionCreated `protobuf:"bytes,100,opt,name=subscription_created,json=subscriptionCreated,proto3,oneof"`
-}
-
-type EventEnvelope_SubscriptionUpdated struct {
-	SubscriptionUpdated *SubscriptionUpdated `protobuf:"bytes,101,opt,name=subscription_updated,json=subscriptionUpdated,proto3,oneof"`
-}
-
-type EventEnvelope_SubscriptionCanceled struct {
-	SubscriptionCanceled *SubscriptionCanceled `protobuf:"bytes,102,opt,name=subscription_canceled,json=subscriptionCanceled,proto3,oneof"`
-}
-
-type EventEnvelope_SubscriptionExpired struct {
-	SubscriptionExpired *SubscriptionExpired `protobuf:"bytes,103,opt,name=subscription_expired,json=subscriptionExpired,proto3,oneof"`
-}
-
-type EventEnvelope_PurchaseCreated struct {
-	PurchaseCreated *PurchaseCreated `protobuf:"bytes,200,opt,name=purchase_created,json=purchaseCreated,proto3,oneof"`
-}
-
-type EventEnvelope_PurchaseCompleted struct {
-	PurchaseCompleted *PurchaseCompleted `protobuf:"bytes,201,opt,name=purchase_completed,json=purchaseCompleted,proto3,oneof"`
-}
-
-type EventEnvelope_PurchaseFailed struct {
-	PurchaseFailed *PurchaseFailed `protobuf:"bytes,202,opt,name=purchase_failed,json=purchaseFailed,proto3,oneof"`
-}
-
-type EventEnvelope_PurchaseCanceled struct {
-	PurchaseCanceled *PurchaseCanceled `protobuf:"bytes,203,opt,name=purchase_canceled,json=purchaseCanceled,proto3,oneof"`
-}
-
-type EventEnvelope_PaymentAttemptCreated struct {
-	PaymentAttemptCreated *PaymentAttemptCreated `protobuf:"bytes,300,opt,name=payment_attempt_created,json=paymentAttemptCreated,proto3,oneof"`
-}
-
-type EventEnvelope_PaymentAttemptUpdated struct {
-	PaymentAttemptUpdated *PaymentAttemptUpdated `protobuf:"bytes,301,opt,name=payment_attempt_updated,json=paymentAttemptUpdated,proto3,oneof"`
-}
-
-type EventEnvelope_PaymentAttemptSucceeded struct {
-	PaymentAttemptSucceeded *PaymentAttemptSucceeded `protobuf:"bytes,302,opt,name=payment_attempt_succeeded,json=paymentAttemptSucceeded,proto3,oneof"`
-}
-
-type EventEnvelope_PaymentAttemptFailed struct {
-	PaymentAttemptFailed *PaymentAttemptFailed `protobuf:"bytes,303,opt,name=payment_attempt_failed,json=paymentAttemptFailed,proto3,oneof"`
-}
-
-type EventEnvelope_PaymentAttemptExpired struct {
-	PaymentAttemptExpired *PaymentAttemptExpired `protobuf:"bytes,304,opt,name=payment_attempt_expired,json=paymentAttemptExpired,proto3,oneof"`
-}
-
-type EventEnvelope_PaymentTransactionRecorded struct {
-	PaymentTransactionRecorded *PaymentTransactionRecorded `protobuf:"bytes,400,opt,name=payment_transaction_recorded,json=paymentTransactionRecorded,proto3,oneof"`
-}
-
-type EventEnvelope_RefundRequested struct {
-	RefundRequested *RefundRequested `protobuf:"bytes,500,opt,name=refund_requested,json=refundRequested,proto3,oneof"`
-}
-
-type EventEnvelope_RefundSucceeded struct {
-	RefundSucceeded *RefundSucceeded `protobuf:"bytes,501,opt,name=refund_succeeded,json=refundSucceeded,proto3,oneof"`
-}
-
-type EventEnvelope_RefundFailed struct {
-	RefundFailed *RefundFailed `protobuf:"bytes,502,opt,name=refund_failed,json=refundFailed,proto3,oneof"`
-}
-
-type EventEnvelope_WebhookEventReceived struct {
-	WebhookEventReceived *WebhookEventReceived `protobuf:"bytes,600,opt,name=webhook_event_received,json=webhookEventReceived,proto3,oneof"`
-}
-
-type EventEnvelope_WebhookEventProcessed struct {
-	WebhookEventProcessed *WebhookEventProcessed `protobuf:"bytes,601,opt,name=webhook_event_processed,json=webhookEventProcessed,proto3,oneof"`
-}
-
-type EventEnvelope_WebhookEventProcessingFailed struct {
-	WebhookEventProcessingFailed *WebhookEventProcessingFailed `protobuf:"bytes,602,opt,name=webhook_event_processing_failed,json=webhookEventProcessingFailed,proto3,oneof"`
-}
-
-func (*EventEnvelope_SubscriptionCreated) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_SubscriptionUpdated) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_SubscriptionCanceled) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_SubscriptionExpired) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_PurchaseCreated) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_PurchaseCompleted) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_PurchaseFailed) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_PurchaseCanceled) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_PaymentAttemptCreated) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_PaymentAttemptUpdated) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_PaymentAttemptSucceeded) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_PaymentAttemptFailed) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_PaymentAttemptExpired) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_PaymentTransactionRecorded) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_RefundRequested) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_RefundSucceeded) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_RefundFailed) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_WebhookEventReceived) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_WebhookEventProcessed) isEventEnvelope_Data() {}
-
-func (*EventEnvelope_WebhookEventProcessingFailed) isEventEnvelope_Data() {}
-
 type SubscriptionSnapshot struct {
 	state              protoimpl.MessageState             `protogen:"open.v1"`
 	SubscriptionId     string                             `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
@@ -440,7 +43,7 @@ type SubscriptionSnapshot struct {
 
 func (x *SubscriptionSnapshot) Reset() {
 	*x = SubscriptionSnapshot{}
-	mi := &file_events_billing_event_proto_msgTypes[1]
+	mi := &file_events_billing_event_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -452,7 +55,7 @@ func (x *SubscriptionSnapshot) String() string {
 func (*SubscriptionSnapshot) ProtoMessage() {}
 
 func (x *SubscriptionSnapshot) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[1]
+	mi := &file_events_billing_event_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -465,7 +68,7 @@ func (x *SubscriptionSnapshot) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscriptionSnapshot.ProtoReflect.Descriptor instead.
 func (*SubscriptionSnapshot) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{1}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *SubscriptionSnapshot) GetSubscriptionId() string {
@@ -546,15 +149,25 @@ func (x *SubscriptionSnapshot) GetUpdatedAt() *timestamppb.Timestamp {
 }
 
 type SubscriptionCreated struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Subscription  *SubscriptionSnapshot  `protobuf:"bytes,1,opt,name=subscription,proto3" json:"subscription,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state              protoimpl.MessageState             `protogen:"open.v1"`
+	SubscriptionId     string                             `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	UserId             string                             `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	PlanId             string                             `protobuf:"bytes,3,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	Status             billing_service.SubscriptionStatus `protobuf:"varint,4,opt,name=status,proto3,enum=billing_service.SubscriptionStatus" json:"status,omitempty"`
+	CurrentPeriodStart *timestamppb.Timestamp             `protobuf:"bytes,5,opt,name=current_period_start,json=currentPeriodStart,proto3" json:"current_period_start,omitempty"`
+	CurrentPeriodEnd   *timestamppb.Timestamp             `protobuf:"bytes,6,opt,name=current_period_end,json=currentPeriodEnd,proto3" json:"current_period_end,omitempty"`
+	CancelAtPeriodEnd  bool                               `protobuf:"varint,7,opt,name=cancel_at_period_end,json=cancelAtPeriodEnd,proto3" json:"cancel_at_period_end,omitempty"`
+	CanceledAt         *timestamppb.Timestamp             `protobuf:"bytes,8,opt,name=canceled_at,json=canceledAt,proto3" json:"canceled_at,omitempty"`
+	ExpiredAt          *timestamppb.Timestamp             `protobuf:"bytes,9,opt,name=expired_at,json=expiredAt,proto3" json:"expired_at,omitempty"`
+	CreatedAt          *timestamppb.Timestamp             `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt          *timestamppb.Timestamp             `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *SubscriptionCreated) Reset() {
 	*x = SubscriptionCreated{}
-	mi := &file_events_billing_event_proto_msgTypes[2]
+	mi := &file_events_billing_event_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -566,7 +179,7 @@ func (x *SubscriptionCreated) String() string {
 func (*SubscriptionCreated) ProtoMessage() {}
 
 func (x *SubscriptionCreated) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[2]
+	mi := &file_events_billing_event_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -579,12 +192,82 @@ func (x *SubscriptionCreated) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscriptionCreated.ProtoReflect.Descriptor instead.
 func (*SubscriptionCreated) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{2}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *SubscriptionCreated) GetSubscription() *SubscriptionSnapshot {
+func (x *SubscriptionCreated) GetSubscriptionId() string {
 	if x != nil {
-		return x.Subscription
+		return x.SubscriptionId
+	}
+	return ""
+}
+
+func (x *SubscriptionCreated) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *SubscriptionCreated) GetPlanId() string {
+	if x != nil {
+		return x.PlanId
+	}
+	return ""
+}
+
+func (x *SubscriptionCreated) GetStatus() billing_service.SubscriptionStatus {
+	if x != nil {
+		return x.Status
+	}
+	return billing_service.SubscriptionStatus(0)
+}
+
+func (x *SubscriptionCreated) GetCurrentPeriodStart() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CurrentPeriodStart
+	}
+	return nil
+}
+
+func (x *SubscriptionCreated) GetCurrentPeriodEnd() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CurrentPeriodEnd
+	}
+	return nil
+}
+
+func (x *SubscriptionCreated) GetCancelAtPeriodEnd() bool {
+	if x != nil {
+		return x.CancelAtPeriodEnd
+	}
+	return false
+}
+
+func (x *SubscriptionCreated) GetCanceledAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CanceledAt
+	}
+	return nil
+}
+
+func (x *SubscriptionCreated) GetExpiredAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpiredAt
+	}
+	return nil
+}
+
+func (x *SubscriptionCreated) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *SubscriptionCreated) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
 	}
 	return nil
 }
@@ -601,7 +284,7 @@ type SubscriptionUpdated struct {
 
 func (x *SubscriptionUpdated) Reset() {
 	*x = SubscriptionUpdated{}
-	mi := &file_events_billing_event_proto_msgTypes[3]
+	mi := &file_events_billing_event_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -613,7 +296,7 @@ func (x *SubscriptionUpdated) String() string {
 func (*SubscriptionUpdated) ProtoMessage() {}
 
 func (x *SubscriptionUpdated) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[3]
+	mi := &file_events_billing_event_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -626,7 +309,7 @@ func (x *SubscriptionUpdated) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscriptionUpdated.ProtoReflect.Descriptor instead.
 func (*SubscriptionUpdated) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{3}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SubscriptionUpdated) GetBefore() *SubscriptionSnapshot {
@@ -663,7 +346,7 @@ type SubscriptionCanceled struct {
 
 func (x *SubscriptionCanceled) Reset() {
 	*x = SubscriptionCanceled{}
-	mi := &file_events_billing_event_proto_msgTypes[4]
+	mi := &file_events_billing_event_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -675,7 +358,7 @@ func (x *SubscriptionCanceled) String() string {
 func (*SubscriptionCanceled) ProtoMessage() {}
 
 func (x *SubscriptionCanceled) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[4]
+	mi := &file_events_billing_event_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -688,7 +371,7 @@ func (x *SubscriptionCanceled) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscriptionCanceled.ProtoReflect.Descriptor instead.
 func (*SubscriptionCanceled) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{4}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SubscriptionCanceled) GetSubscriptionId() string {
@@ -738,7 +421,7 @@ type SubscriptionExpired struct {
 
 func (x *SubscriptionExpired) Reset() {
 	*x = SubscriptionExpired{}
-	mi := &file_events_billing_event_proto_msgTypes[5]
+	mi := &file_events_billing_event_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -750,7 +433,7 @@ func (x *SubscriptionExpired) String() string {
 func (*SubscriptionExpired) ProtoMessage() {}
 
 func (x *SubscriptionExpired) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[5]
+	mi := &file_events_billing_event_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -763,7 +446,7 @@ func (x *SubscriptionExpired) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubscriptionExpired.ProtoReflect.Descriptor instead.
 func (*SubscriptionExpired) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{5}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SubscriptionExpired) GetSubscriptionId() string {
@@ -811,7 +494,7 @@ type PurchaseSnapshot struct {
 
 func (x *PurchaseSnapshot) Reset() {
 	*x = PurchaseSnapshot{}
-	mi := &file_events_billing_event_proto_msgTypes[6]
+	mi := &file_events_billing_event_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -823,7 +506,7 @@ func (x *PurchaseSnapshot) String() string {
 func (*PurchaseSnapshot) ProtoMessage() {}
 
 func (x *PurchaseSnapshot) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[6]
+	mi := &file_events_billing_event_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -836,7 +519,7 @@ func (x *PurchaseSnapshot) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PurchaseSnapshot.ProtoReflect.Descriptor instead.
 func (*PurchaseSnapshot) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{6}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *PurchaseSnapshot) GetPurchaseId() string {
@@ -911,7 +594,7 @@ type PurchaseCreated struct {
 
 func (x *PurchaseCreated) Reset() {
 	*x = PurchaseCreated{}
-	mi := &file_events_billing_event_proto_msgTypes[7]
+	mi := &file_events_billing_event_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -923,7 +606,7 @@ func (x *PurchaseCreated) String() string {
 func (*PurchaseCreated) ProtoMessage() {}
 
 func (x *PurchaseCreated) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[7]
+	mi := &file_events_billing_event_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -936,7 +619,7 @@ func (x *PurchaseCreated) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PurchaseCreated.ProtoReflect.Descriptor instead.
 func (*PurchaseCreated) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{7}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *PurchaseCreated) GetPurchase() *PurchaseSnapshot {
@@ -960,7 +643,7 @@ type PurchaseCompleted struct {
 
 func (x *PurchaseCompleted) Reset() {
 	*x = PurchaseCompleted{}
-	mi := &file_events_billing_event_proto_msgTypes[8]
+	mi := &file_events_billing_event_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -972,7 +655,7 @@ func (x *PurchaseCompleted) String() string {
 func (*PurchaseCompleted) ProtoMessage() {}
 
 func (x *PurchaseCompleted) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[8]
+	mi := &file_events_billing_event_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -985,7 +668,7 @@ func (x *PurchaseCompleted) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PurchaseCompleted.ProtoReflect.Descriptor instead.
 func (*PurchaseCompleted) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{8}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *PurchaseCompleted) GetPurchase() *PurchaseSnapshot {
@@ -1036,7 +719,7 @@ type PurchaseFailed struct {
 
 func (x *PurchaseFailed) Reset() {
 	*x = PurchaseFailed{}
-	mi := &file_events_billing_event_proto_msgTypes[9]
+	mi := &file_events_billing_event_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1048,7 +731,7 @@ func (x *PurchaseFailed) String() string {
 func (*PurchaseFailed) ProtoMessage() {}
 
 func (x *PurchaseFailed) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[9]
+	mi := &file_events_billing_event_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1061,7 +744,7 @@ func (x *PurchaseFailed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PurchaseFailed.ProtoReflect.Descriptor instead.
 func (*PurchaseFailed) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{9}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *PurchaseFailed) GetPurchase() *PurchaseSnapshot {
@@ -1102,7 +785,7 @@ type PurchaseCanceled struct {
 
 func (x *PurchaseCanceled) Reset() {
 	*x = PurchaseCanceled{}
-	mi := &file_events_billing_event_proto_msgTypes[10]
+	mi := &file_events_billing_event_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1114,7 +797,7 @@ func (x *PurchaseCanceled) String() string {
 func (*PurchaseCanceled) ProtoMessage() {}
 
 func (x *PurchaseCanceled) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[10]
+	mi := &file_events_billing_event_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1127,7 +810,7 @@ func (x *PurchaseCanceled) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PurchaseCanceled.ProtoReflect.Descriptor instead.
 func (*PurchaseCanceled) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{10}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *PurchaseCanceled) GetPurchase() *PurchaseSnapshot {
@@ -1162,7 +845,7 @@ type PaymentAttemptSnapshot struct {
 
 func (x *PaymentAttemptSnapshot) Reset() {
 	*x = PaymentAttemptSnapshot{}
-	mi := &file_events_billing_event_proto_msgTypes[11]
+	mi := &file_events_billing_event_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1174,7 +857,7 @@ func (x *PaymentAttemptSnapshot) String() string {
 func (*PaymentAttemptSnapshot) ProtoMessage() {}
 
 func (x *PaymentAttemptSnapshot) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[11]
+	mi := &file_events_billing_event_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1187,7 +870,7 @@ func (x *PaymentAttemptSnapshot) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaymentAttemptSnapshot.ProtoReflect.Descriptor instead.
 func (*PaymentAttemptSnapshot) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{11}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *PaymentAttemptSnapshot) GetPaymentAttemptId() string {
@@ -1269,7 +952,7 @@ type PaymentAttemptCreated struct {
 
 func (x *PaymentAttemptCreated) Reset() {
 	*x = PaymentAttemptCreated{}
-	mi := &file_events_billing_event_proto_msgTypes[12]
+	mi := &file_events_billing_event_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1281,7 +964,7 @@ func (x *PaymentAttemptCreated) String() string {
 func (*PaymentAttemptCreated) ProtoMessage() {}
 
 func (x *PaymentAttemptCreated) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[12]
+	mi := &file_events_billing_event_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1294,7 +977,7 @@ func (x *PaymentAttemptCreated) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaymentAttemptCreated.ProtoReflect.Descriptor instead.
 func (*PaymentAttemptCreated) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{12}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *PaymentAttemptCreated) GetPaymentAttempt() *PaymentAttemptSnapshot {
@@ -1314,7 +997,7 @@ type PaymentAttemptUpdated struct {
 
 func (x *PaymentAttemptUpdated) Reset() {
 	*x = PaymentAttemptUpdated{}
-	mi := &file_events_billing_event_proto_msgTypes[13]
+	mi := &file_events_billing_event_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1326,7 +1009,7 @@ func (x *PaymentAttemptUpdated) String() string {
 func (*PaymentAttemptUpdated) ProtoMessage() {}
 
 func (x *PaymentAttemptUpdated) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[13]
+	mi := &file_events_billing_event_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1339,7 +1022,7 @@ func (x *PaymentAttemptUpdated) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaymentAttemptUpdated.ProtoReflect.Descriptor instead.
 func (*PaymentAttemptUpdated) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{13}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *PaymentAttemptUpdated) GetBefore() *PaymentAttemptSnapshot {
@@ -1368,7 +1051,7 @@ type PaymentAttemptSucceeded struct {
 
 func (x *PaymentAttemptSucceeded) Reset() {
 	*x = PaymentAttemptSucceeded{}
-	mi := &file_events_billing_event_proto_msgTypes[14]
+	mi := &file_events_billing_event_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1380,7 +1063,7 @@ func (x *PaymentAttemptSucceeded) String() string {
 func (*PaymentAttemptSucceeded) ProtoMessage() {}
 
 func (x *PaymentAttemptSucceeded) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[14]
+	mi := &file_events_billing_event_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1393,7 +1076,7 @@ func (x *PaymentAttemptSucceeded) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaymentAttemptSucceeded.ProtoReflect.Descriptor instead.
 func (*PaymentAttemptSucceeded) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{14}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *PaymentAttemptSucceeded) GetPaymentAttempt() *PaymentAttemptSnapshot {
@@ -1428,7 +1111,7 @@ type PaymentAttemptFailed struct {
 
 func (x *PaymentAttemptFailed) Reset() {
 	*x = PaymentAttemptFailed{}
-	mi := &file_events_billing_event_proto_msgTypes[15]
+	mi := &file_events_billing_event_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1440,7 +1123,7 @@ func (x *PaymentAttemptFailed) String() string {
 func (*PaymentAttemptFailed) ProtoMessage() {}
 
 func (x *PaymentAttemptFailed) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[15]
+	mi := &file_events_billing_event_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1453,7 +1136,7 @@ func (x *PaymentAttemptFailed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaymentAttemptFailed.ProtoReflect.Descriptor instead.
 func (*PaymentAttemptFailed) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{15}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *PaymentAttemptFailed) GetPaymentAttempt() *PaymentAttemptSnapshot {
@@ -1486,7 +1169,7 @@ type PaymentAttemptExpired struct {
 
 func (x *PaymentAttemptExpired) Reset() {
 	*x = PaymentAttemptExpired{}
-	mi := &file_events_billing_event_proto_msgTypes[16]
+	mi := &file_events_billing_event_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1498,7 +1181,7 @@ func (x *PaymentAttemptExpired) String() string {
 func (*PaymentAttemptExpired) ProtoMessage() {}
 
 func (x *PaymentAttemptExpired) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[16]
+	mi := &file_events_billing_event_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1511,7 +1194,7 @@ func (x *PaymentAttemptExpired) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaymentAttemptExpired.ProtoReflect.Descriptor instead.
 func (*PaymentAttemptExpired) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{16}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *PaymentAttemptExpired) GetPaymentAttempt() *PaymentAttemptSnapshot {
@@ -1539,7 +1222,7 @@ type PaymentTransactionSnapshot struct {
 
 func (x *PaymentTransactionSnapshot) Reset() {
 	*x = PaymentTransactionSnapshot{}
-	mi := &file_events_billing_event_proto_msgTypes[17]
+	mi := &file_events_billing_event_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1551,7 +1234,7 @@ func (x *PaymentTransactionSnapshot) String() string {
 func (*PaymentTransactionSnapshot) ProtoMessage() {}
 
 func (x *PaymentTransactionSnapshot) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[17]
+	mi := &file_events_billing_event_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1564,7 +1247,7 @@ func (x *PaymentTransactionSnapshot) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaymentTransactionSnapshot.ProtoReflect.Descriptor instead.
 func (*PaymentTransactionSnapshot) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{17}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *PaymentTransactionSnapshot) GetTransactionId() string {
@@ -1641,7 +1324,7 @@ type PaymentTransactionRecorded struct {
 
 func (x *PaymentTransactionRecorded) Reset() {
 	*x = PaymentTransactionRecorded{}
-	mi := &file_events_billing_event_proto_msgTypes[18]
+	mi := &file_events_billing_event_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1653,7 +1336,7 @@ func (x *PaymentTransactionRecorded) String() string {
 func (*PaymentTransactionRecorded) ProtoMessage() {}
 
 func (x *PaymentTransactionRecorded) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[18]
+	mi := &file_events_billing_event_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1666,7 +1349,7 @@ func (x *PaymentTransactionRecorded) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaymentTransactionRecorded.ProtoReflect.Descriptor instead.
 func (*PaymentTransactionRecorded) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{18}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *PaymentTransactionRecorded) GetTransaction() *PaymentTransactionSnapshot {
@@ -1702,7 +1385,7 @@ type RefundRequested struct {
 
 func (x *RefundRequested) Reset() {
 	*x = RefundRequested{}
-	mi := &file_events_billing_event_proto_msgTypes[19]
+	mi := &file_events_billing_event_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1714,7 +1397,7 @@ func (x *RefundRequested) String() string {
 func (*RefundRequested) ProtoMessage() {}
 
 func (x *RefundRequested) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[19]
+	mi := &file_events_billing_event_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1727,7 +1410,7 @@ func (x *RefundRequested) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefundRequested.ProtoReflect.Descriptor instead.
 func (*RefundRequested) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{19}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *RefundRequested) GetRefundRequestId() string {
@@ -1809,7 +1492,7 @@ type RefundSucceeded struct {
 
 func (x *RefundSucceeded) Reset() {
 	*x = RefundSucceeded{}
-	mi := &file_events_billing_event_proto_msgTypes[20]
+	mi := &file_events_billing_event_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1821,7 +1504,7 @@ func (x *RefundSucceeded) String() string {
 func (*RefundSucceeded) ProtoMessage() {}
 
 func (x *RefundSucceeded) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[20]
+	mi := &file_events_billing_event_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1834,7 +1517,7 @@ func (x *RefundSucceeded) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefundSucceeded.ProtoReflect.Descriptor instead.
 func (*RefundSucceeded) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{20}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *RefundSucceeded) GetPurchaseId() string {
@@ -1908,7 +1591,7 @@ type RefundFailed struct {
 
 func (x *RefundFailed) Reset() {
 	*x = RefundFailed{}
-	mi := &file_events_billing_event_proto_msgTypes[21]
+	mi := &file_events_billing_event_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1920,7 +1603,7 @@ func (x *RefundFailed) String() string {
 func (*RefundFailed) ProtoMessage() {}
 
 func (x *RefundFailed) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[21]
+	mi := &file_events_billing_event_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1933,7 +1616,7 @@ func (x *RefundFailed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefundFailed.ProtoReflect.Descriptor instead.
 func (*RefundFailed) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{21}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *RefundFailed) GetPurchaseId() string {
@@ -1997,7 +1680,7 @@ type WebhookEventReceived struct {
 
 func (x *WebhookEventReceived) Reset() {
 	*x = WebhookEventReceived{}
-	mi := &file_events_billing_event_proto_msgTypes[22]
+	mi := &file_events_billing_event_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2009,7 +1692,7 @@ func (x *WebhookEventReceived) String() string {
 func (*WebhookEventReceived) ProtoMessage() {}
 
 func (x *WebhookEventReceived) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[22]
+	mi := &file_events_billing_event_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2022,7 +1705,7 @@ func (x *WebhookEventReceived) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WebhookEventReceived.ProtoReflect.Descriptor instead.
 func (*WebhookEventReceived) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{22}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *WebhookEventReceived) GetProvider() string {
@@ -2067,7 +1750,7 @@ type WebhookEventProcessed struct {
 
 func (x *WebhookEventProcessed) Reset() {
 	*x = WebhookEventProcessed{}
-	mi := &file_events_billing_event_proto_msgTypes[23]
+	mi := &file_events_billing_event_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2079,7 +1762,7 @@ func (x *WebhookEventProcessed) String() string {
 func (*WebhookEventProcessed) ProtoMessage() {}
 
 func (x *WebhookEventProcessed) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[23]
+	mi := &file_events_billing_event_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2092,7 +1775,7 @@ func (x *WebhookEventProcessed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WebhookEventProcessed.ProtoReflect.Descriptor instead.
 func (*WebhookEventProcessed) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{23}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *WebhookEventProcessed) GetProvider() string {
@@ -2143,7 +1826,7 @@ type WebhookEventProcessingFailed struct {
 
 func (x *WebhookEventProcessingFailed) Reset() {
 	*x = WebhookEventProcessingFailed{}
-	mi := &file_events_billing_event_proto_msgTypes[24]
+	mi := &file_events_billing_event_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2155,7 +1838,7 @@ func (x *WebhookEventProcessingFailed) String() string {
 func (*WebhookEventProcessingFailed) ProtoMessage() {}
 
 func (x *WebhookEventProcessingFailed) ProtoReflect() protoreflect.Message {
-	mi := &file_events_billing_event_proto_msgTypes[24]
+	mi := &file_events_billing_event_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2168,7 +1851,7 @@ func (x *WebhookEventProcessingFailed) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WebhookEventProcessingFailed.ProtoReflect.Descriptor instead.
 func (*WebhookEventProcessingFailed) Descriptor() ([]byte, []int) {
-	return file_events_billing_event_proto_rawDescGZIP(), []int{24}
+	return file_events_billing_event_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *WebhookEventProcessingFailed) GetProvider() string {
@@ -2210,37 +1893,7 @@ var File_events_billing_event_proto protoreflect.FileDescriptor
 
 const file_events_billing_event_proto_rawDesc = "" +
 	"\n" +
-	"\x1aevents/billing_event.proto\x12\rbilling_event\x1a\x1dbilling_service/billing.proto\x1a&billing_service/payment_attempts.proto\x1a*billing_service/payment_transactions.proto\x1a\x1fbilling_service/purchases.proto\x1a#billing_service/subscriptions.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xf5\x0f\n" +
-	"\rEventEnvelope\x12;\n" +
-	"\voccurred_at\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"occurredAt\x12L\n" +
-	"\n" +
-	"attributes\x18\x02 \x03(\v2,.billing_event.EventEnvelope.AttributesEntryR\n" +
-	"attributes\x12W\n" +
-	"\x14subscription_created\x18d \x01(\v2\".billing_event.SubscriptionCreatedH\x00R\x13subscriptionCreated\x12W\n" +
-	"\x14subscription_updated\x18e \x01(\v2\".billing_event.SubscriptionUpdatedH\x00R\x13subscriptionUpdated\x12Z\n" +
-	"\x15subscription_canceled\x18f \x01(\v2#.billing_event.SubscriptionCanceledH\x00R\x14subscriptionCanceled\x12W\n" +
-	"\x14subscription_expired\x18g \x01(\v2\".billing_event.SubscriptionExpiredH\x00R\x13subscriptionExpired\x12L\n" +
-	"\x10purchase_created\x18\xc8\x01 \x01(\v2\x1e.billing_event.PurchaseCreatedH\x00R\x0fpurchaseCreated\x12R\n" +
-	"\x12purchase_completed\x18\xc9\x01 \x01(\v2 .billing_event.PurchaseCompletedH\x00R\x11purchaseCompleted\x12I\n" +
-	"\x0fpurchase_failed\x18\xca\x01 \x01(\v2\x1d.billing_event.PurchaseFailedH\x00R\x0epurchaseFailed\x12O\n" +
-	"\x11purchase_canceled\x18\xcb\x01 \x01(\v2\x1f.billing_event.PurchaseCanceledH\x00R\x10purchaseCanceled\x12_\n" +
-	"\x17payment_attempt_created\x18\xac\x02 \x01(\v2$.billing_event.PaymentAttemptCreatedH\x00R\x15paymentAttemptCreated\x12_\n" +
-	"\x17payment_attempt_updated\x18\xad\x02 \x01(\v2$.billing_event.PaymentAttemptUpdatedH\x00R\x15paymentAttemptUpdated\x12e\n" +
-	"\x19payment_attempt_succeeded\x18\xae\x02 \x01(\v2&.billing_event.PaymentAttemptSucceededH\x00R\x17paymentAttemptSucceeded\x12\\\n" +
-	"\x16payment_attempt_failed\x18\xaf\x02 \x01(\v2#.billing_event.PaymentAttemptFailedH\x00R\x14paymentAttemptFailed\x12_\n" +
-	"\x17payment_attempt_expired\x18\xb0\x02 \x01(\v2$.billing_event.PaymentAttemptExpiredH\x00R\x15paymentAttemptExpired\x12n\n" +
-	"\x1cpayment_transaction_recorded\x18\x90\x03 \x01(\v2).billing_event.PaymentTransactionRecordedH\x00R\x1apaymentTransactionRecorded\x12L\n" +
-	"\x10refund_requested\x18\xf4\x03 \x01(\v2\x1e.billing_event.RefundRequestedH\x00R\x0frefundRequested\x12L\n" +
-	"\x10refund_succeeded\x18\xf5\x03 \x01(\v2\x1e.billing_event.RefundSucceededH\x00R\x0frefundSucceeded\x12C\n" +
-	"\rrefund_failed\x18\xf6\x03 \x01(\v2\x1b.billing_event.RefundFailedH\x00R\frefundFailed\x12\\\n" +
-	"\x16webhook_event_received\x18\xd8\x04 \x01(\v2#.billing_event.WebhookEventReceivedH\x00R\x14webhookEventReceived\x12_\n" +
-	"\x17webhook_event_processed\x18\xd9\x04 \x01(\v2$.billing_event.WebhookEventProcessedH\x00R\x15webhookEventProcessed\x12u\n" +
-	"\x1fwebhook_event_processing_failed\x18\xda\x04 \x01(\v2+.billing_event.WebhookEventProcessingFailedH\x00R\x1cwebhookEventProcessingFailed\x1a=\n" +
-	"\x0fAttributesEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B\x06\n" +
-	"\x04data\"\xe5\x04\n" +
+	"\x1aevents/billing_event.proto\x12\x06events\x1a\x1dbilling_service/billing.proto\x1a&billing_service/payment_attempts.proto\x1a*billing_service/payment_transactions.proto\x1a\x1fbilling_service/purchases.proto\x1a#billing_service/subscriptions.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xe5\x04\n" +
 	"\x14SubscriptionSnapshot\x12'\n" +
 	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x17\n" +
@@ -2257,12 +1910,27 @@ const file_events_billing_event_proto_rawDesc = "" +
 	"created_at\x18\n" +
 	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"^\n" +
-	"\x13SubscriptionCreated\x12G\n" +
-	"\fsubscription\x18\x01 \x01(\v2#.billing_event.SubscriptionSnapshotR\fsubscription\"\xa3\x01\n" +
-	"\x13SubscriptionUpdated\x12;\n" +
-	"\x06before\x18\x01 \x01(\v2#.billing_event.SubscriptionSnapshotR\x06before\x129\n" +
-	"\x05after\x18\x02 \x01(\v2#.billing_event.SubscriptionSnapshotR\x05after\x12\x14\n" +
+	"updated_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xe4\x04\n" +
+	"\x13SubscriptionCreated\x12'\n" +
+	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x17\n" +
+	"\aplan_id\x18\x03 \x01(\tR\x06planId\x12;\n" +
+	"\x06status\x18\x04 \x01(\x0e2#.billing_service.SubscriptionStatusR\x06status\x12L\n" +
+	"\x14current_period_start\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\x12currentPeriodStart\x12H\n" +
+	"\x12current_period_end\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x10currentPeriodEnd\x12/\n" +
+	"\x14cancel_at_period_end\x18\a \x01(\bR\x11cancelAtPeriodEnd\x12;\n" +
+	"\vcanceled_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"canceledAt\x129\n" +
+	"\n" +
+	"expired_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\texpiredAt\x129\n" +
+	"\n" +
+	"created_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x95\x01\n" +
+	"\x13SubscriptionUpdated\x124\n" +
+	"\x06before\x18\x01 \x01(\v2\x1c.events.SubscriptionSnapshotR\x06before\x122\n" +
+	"\x05after\x18\x02 \x01(\v2\x1c.events.SubscriptionSnapshotR\x05after\x12\x14\n" +
 	"\x05cause\x18\x03 \x01(\tR\x05cause\"\xcf\x01\n" +
 	"\x14SubscriptionCanceled\x12'\n" +
 	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12\x17\n" +
@@ -2288,22 +1956,22 @@ const file_events_billing_event_proto_rawDesc = "" +
 	"\x0fidempotency_key\x18\a \x01(\tR\x0eidempotencyKey\x129\n" +
 	"\n" +
 	"created_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12=\n" +
-	"\fcompleted_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\vcompletedAt\"N\n" +
-	"\x0fPurchaseCreated\x12;\n" +
-	"\bpurchase\x18\x01 \x01(\v2\x1f.billing_event.PurchaseSnapshotR\bpurchase\"\x94\x02\n" +
-	"\x11PurchaseCompleted\x12;\n" +
-	"\bpurchase\x18\x01 \x01(\v2\x1f.billing_event.PurchaseSnapshotR\bpurchase\x12A\n" +
+	"\fcompleted_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\vcompletedAt\"G\n" +
+	"\x0fPurchaseCreated\x124\n" +
+	"\bpurchase\x18\x01 \x01(\v2\x18.events.PurchaseSnapshotR\bpurchase\"\x8d\x02\n" +
+	"\x11PurchaseCompleted\x124\n" +
+	"\bpurchase\x18\x01 \x01(\v2\x18.events.PurchaseSnapshotR\bpurchase\x12A\n" +
 	"\x1dsuccessful_payment_attempt_id\x18\x02 \x01(\tR\x1asuccessfulPaymentAttemptId\x124\n" +
 	"\x16capture_transaction_id\x18\x03 \x01(\tR\x14captureTransactionId\x12\x1a\n" +
 	"\bprovider\x18\x04 \x01(\tR\bprovider\x12-\n" +
-	"\x12provider_reference\x18\x05 \x01(\tR\x11providerReference\"\xbf\x01\n" +
-	"\x0ePurchaseFailed\x12;\n" +
-	"\bpurchase\x18\x01 \x01(\v2\x1f.billing_event.PurchaseSnapshotR\bpurchase\x12\x1a\n" +
+	"\x12provider_reference\x18\x05 \x01(\tR\x11providerReference\"\xb8\x01\n" +
+	"\x0ePurchaseFailed\x124\n" +
+	"\bpurchase\x18\x01 \x01(\v2\x18.events.PurchaseSnapshotR\bpurchase\x12\x1a\n" +
 	"\bprovider\x18\x02 \x01(\tR\bprovider\x12-\n" +
 	"\x12provider_reference\x18\x03 \x01(\tR\x11providerReference\x12%\n" +
-	"\x0efailure_reason\x18\x04 \x01(\tR\rfailureReason\"e\n" +
-	"\x10PurchaseCanceled\x12;\n" +
-	"\bpurchase\x18\x01 \x01(\v2\x1f.billing_event.PurchaseSnapshotR\bpurchase\x12\x14\n" +
+	"\x0efailure_reason\x18\x04 \x01(\tR\rfailureReason\"^\n" +
+	"\x10PurchaseCanceled\x124\n" +
+	"\bpurchase\x18\x01 \x01(\v2\x18.events.PurchaseSnapshotR\bpurchase\x12\x14\n" +
 	"\x05cause\x18\x02 \x01(\tR\x05cause\"\xfe\x03\n" +
 	"\x16PaymentAttemptSnapshot\x12,\n" +
 	"\x12payment_attempt_id\x18\x01 \x01(\tR\x10paymentAttemptId\x12\x1f\n" +
@@ -2320,22 +1988,22 @@ const file_events_billing_event_proto_rawDesc = "" +
 	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"g\n" +
-	"\x15PaymentAttemptCreated\x12N\n" +
-	"\x0fpayment_attempt\x18\x01 \x01(\v2%.billing_event.PaymentAttemptSnapshotR\x0epaymentAttempt\"\x93\x01\n" +
-	"\x15PaymentAttemptUpdated\x12=\n" +
-	"\x06before\x18\x01 \x01(\v2%.billing_event.PaymentAttemptSnapshotR\x06before\x12;\n" +
-	"\x05after\x18\x02 \x01(\v2%.billing_event.PaymentAttemptSnapshotR\x05after\"\xbf\x01\n" +
-	"\x17PaymentAttemptSucceeded\x12N\n" +
-	"\x0fpayment_attempt\x18\x01 \x01(\v2%.billing_event.PaymentAttemptSnapshotR\x0epaymentAttempt\x12%\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"`\n" +
+	"\x15PaymentAttemptCreated\x12G\n" +
+	"\x0fpayment_attempt\x18\x01 \x01(\v2\x1e.events.PaymentAttemptSnapshotR\x0epaymentAttempt\"\x85\x01\n" +
+	"\x15PaymentAttemptUpdated\x126\n" +
+	"\x06before\x18\x01 \x01(\v2\x1e.events.PaymentAttemptSnapshotR\x06before\x124\n" +
+	"\x05after\x18\x02 \x01(\v2\x1e.events.PaymentAttemptSnapshotR\x05after\"\xb8\x01\n" +
+	"\x17PaymentAttemptSucceeded\x12G\n" +
+	"\x0fpayment_attempt\x18\x01 \x01(\v2\x1e.events.PaymentAttemptSnapshotR\x0epaymentAttempt\x12%\n" +
 	"\x0etransaction_id\x18\x02 \x01(\tR\rtransactionId\x12-\n" +
-	"\x12provider_reference\x18\x03 \x01(\tR\x11providerReference\"\xcd\x01\n" +
-	"\x14PaymentAttemptFailed\x12N\n" +
-	"\x0fpayment_attempt\x18\x01 \x01(\v2%.billing_event.PaymentAttemptSnapshotR\x0epaymentAttempt\x12%\n" +
+	"\x12provider_reference\x18\x03 \x01(\tR\x11providerReference\"\xc6\x01\n" +
+	"\x14PaymentAttemptFailed\x12G\n" +
+	"\x0fpayment_attempt\x18\x01 \x01(\v2\x1e.events.PaymentAttemptSnapshotR\x0epaymentAttempt\x12%\n" +
 	"\x0efailure_reason\x18\x02 \x01(\tR\rfailureReason\x12>\n" +
-	"\x0eprovider_error\x18\x03 \x01(\v2\x17.google.protobuf.StructR\rproviderError\"g\n" +
-	"\x15PaymentAttemptExpired\x12N\n" +
-	"\x0fpayment_attempt\x18\x01 \x01(\v2%.billing_event.PaymentAttemptSnapshotR\x0epaymentAttempt\"\xff\x03\n" +
+	"\x0eprovider_error\x18\x03 \x01(\v2\x17.google.protobuf.StructR\rproviderError\"`\n" +
+	"\x15PaymentAttemptExpired\x12G\n" +
+	"\x0fpayment_attempt\x18\x01 \x01(\v2\x1e.events.PaymentAttemptSnapshotR\x0epaymentAttempt\"\xff\x03\n" +
 	"\x1aPaymentTransactionSnapshot\x12%\n" +
 	"\x0etransaction_id\x18\x01 \x01(\tR\rtransactionId\x12,\n" +
 	"\x12payment_attempt_id\x18\x02 \x01(\tR\x10paymentAttemptId\x12;\n" +
@@ -2346,9 +2014,9 @@ const file_events_billing_event_proto_rawDesc = "" +
 	"\fprocessed_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\vprocessedAt\x129\n" +
 	"\n" +
 	"created_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x123\n" +
-	"\bmetadata\x18\t \x01(\v2\x17.google.protobuf.StructR\bmetadata\"\x9f\x01\n" +
-	"\x1aPaymentTransactionRecorded\x12K\n" +
-	"\vtransaction\x18\x01 \x01(\v2).billing_event.PaymentTransactionSnapshotR\vtransaction\x124\n" +
+	"\bmetadata\x18\t \x01(\v2\x17.google.protobuf.StructR\bmetadata\"\x98\x01\n" +
+	"\x1aPaymentTransactionRecorded\x12D\n" +
+	"\vtransaction\x18\x01 \x01(\v2\".events.PaymentTransactionSnapshotR\vtransaction\x124\n" +
 	"\x16related_transaction_id\x18\x02 \x01(\tR\x14relatedTransactionId\"\x8e\x03\n" +
 	"\x0fRefundRequested\x12*\n" +
 	"\x11refund_request_id\x18\x01 \x01(\tR\x0frefundRequestId\x12\x1f\n" +
@@ -2414,120 +2082,102 @@ func file_events_billing_event_proto_rawDescGZIP() []byte {
 	return file_events_billing_event_proto_rawDescData
 }
 
-var file_events_billing_event_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_events_billing_event_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_events_billing_event_proto_goTypes = []any{
-	(*EventEnvelope)(nil),                         // 0: billing_event.EventEnvelope
-	(*SubscriptionSnapshot)(nil),                  // 1: billing_event.SubscriptionSnapshot
-	(*SubscriptionCreated)(nil),                   // 2: billing_event.SubscriptionCreated
-	(*SubscriptionUpdated)(nil),                   // 3: billing_event.SubscriptionUpdated
-	(*SubscriptionCanceled)(nil),                  // 4: billing_event.SubscriptionCanceled
-	(*SubscriptionExpired)(nil),                   // 5: billing_event.SubscriptionExpired
-	(*PurchaseSnapshot)(nil),                      // 6: billing_event.PurchaseSnapshot
-	(*PurchaseCreated)(nil),                       // 7: billing_event.PurchaseCreated
-	(*PurchaseCompleted)(nil),                     // 8: billing_event.PurchaseCompleted
-	(*PurchaseFailed)(nil),                        // 9: billing_event.PurchaseFailed
-	(*PurchaseCanceled)(nil),                      // 10: billing_event.PurchaseCanceled
-	(*PaymentAttemptSnapshot)(nil),                // 11: billing_event.PaymentAttemptSnapshot
-	(*PaymentAttemptCreated)(nil),                 // 12: billing_event.PaymentAttemptCreated
-	(*PaymentAttemptUpdated)(nil),                 // 13: billing_event.PaymentAttemptUpdated
-	(*PaymentAttemptSucceeded)(nil),               // 14: billing_event.PaymentAttemptSucceeded
-	(*PaymentAttemptFailed)(nil),                  // 15: billing_event.PaymentAttemptFailed
-	(*PaymentAttemptExpired)(nil),                 // 16: billing_event.PaymentAttemptExpired
-	(*PaymentTransactionSnapshot)(nil),            // 17: billing_event.PaymentTransactionSnapshot
-	(*PaymentTransactionRecorded)(nil),            // 18: billing_event.PaymentTransactionRecorded
-	(*RefundRequested)(nil),                       // 19: billing_event.RefundRequested
-	(*RefundSucceeded)(nil),                       // 20: billing_event.RefundSucceeded
-	(*RefundFailed)(nil),                          // 21: billing_event.RefundFailed
-	(*WebhookEventReceived)(nil),                  // 22: billing_event.WebhookEventReceived
-	(*WebhookEventProcessed)(nil),                 // 23: billing_event.WebhookEventProcessed
-	(*WebhookEventProcessingFailed)(nil),          // 24: billing_event.WebhookEventProcessingFailed
-	nil,                                           // 25: billing_event.EventEnvelope.AttributesEntry
-	(*timestamppb.Timestamp)(nil),                 // 26: google.protobuf.Timestamp
-	(billing_service.SubscriptionStatus)(0),       // 27: billing_service.SubscriptionStatus
-	(*billing_service.Money)(nil),                 // 28: billing_service.Money
-	(billing_service.PurchaseStatus)(0),           // 29: billing_service.PurchaseStatus
-	(billing_service.PaymentAttemptStatus)(0),     // 30: billing_service.PaymentAttemptStatus
-	(*structpb.Struct)(nil),                       // 31: google.protobuf.Struct
-	(billing_service.PaymentTransactionType)(0),   // 32: billing_service.PaymentTransactionType
-	(billing_service.PaymentTransactionStatus)(0), // 33: billing_service.PaymentTransactionStatus
+	(*SubscriptionSnapshot)(nil),                  // 0: events.SubscriptionSnapshot
+	(*SubscriptionCreated)(nil),                   // 1: events.SubscriptionCreated
+	(*SubscriptionUpdated)(nil),                   // 2: events.SubscriptionUpdated
+	(*SubscriptionCanceled)(nil),                  // 3: events.SubscriptionCanceled
+	(*SubscriptionExpired)(nil),                   // 4: events.SubscriptionExpired
+	(*PurchaseSnapshot)(nil),                      // 5: events.PurchaseSnapshot
+	(*PurchaseCreated)(nil),                       // 6: events.PurchaseCreated
+	(*PurchaseCompleted)(nil),                     // 7: events.PurchaseCompleted
+	(*PurchaseFailed)(nil),                        // 8: events.PurchaseFailed
+	(*PurchaseCanceled)(nil),                      // 9: events.PurchaseCanceled
+	(*PaymentAttemptSnapshot)(nil),                // 10: events.PaymentAttemptSnapshot
+	(*PaymentAttemptCreated)(nil),                 // 11: events.PaymentAttemptCreated
+	(*PaymentAttemptUpdated)(nil),                 // 12: events.PaymentAttemptUpdated
+	(*PaymentAttemptSucceeded)(nil),               // 13: events.PaymentAttemptSucceeded
+	(*PaymentAttemptFailed)(nil),                  // 14: events.PaymentAttemptFailed
+	(*PaymentAttemptExpired)(nil),                 // 15: events.PaymentAttemptExpired
+	(*PaymentTransactionSnapshot)(nil),            // 16: events.PaymentTransactionSnapshot
+	(*PaymentTransactionRecorded)(nil),            // 17: events.PaymentTransactionRecorded
+	(*RefundRequested)(nil),                       // 18: events.RefundRequested
+	(*RefundSucceeded)(nil),                       // 19: events.RefundSucceeded
+	(*RefundFailed)(nil),                          // 20: events.RefundFailed
+	(*WebhookEventReceived)(nil),                  // 21: events.WebhookEventReceived
+	(*WebhookEventProcessed)(nil),                 // 22: events.WebhookEventProcessed
+	(*WebhookEventProcessingFailed)(nil),          // 23: events.WebhookEventProcessingFailed
+	(billing_service.SubscriptionStatus)(0),       // 24: billing_service.SubscriptionStatus
+	(*timestamppb.Timestamp)(nil),                 // 25: google.protobuf.Timestamp
+	(*billing_service.Money)(nil),                 // 26: billing_service.Money
+	(billing_service.PurchaseStatus)(0),           // 27: billing_service.PurchaseStatus
+	(billing_service.PaymentAttemptStatus)(0),     // 28: billing_service.PaymentAttemptStatus
+	(*structpb.Struct)(nil),                       // 29: google.protobuf.Struct
+	(billing_service.PaymentTransactionType)(0),   // 30: billing_service.PaymentTransactionType
+	(billing_service.PaymentTransactionStatus)(0), // 31: billing_service.PaymentTransactionStatus
 }
 var file_events_billing_event_proto_depIdxs = []int32{
-	26, // 0: billing_event.EventEnvelope.occurred_at:type_name -> google.protobuf.Timestamp
-	25, // 1: billing_event.EventEnvelope.attributes:type_name -> billing_event.EventEnvelope.AttributesEntry
-	2,  // 2: billing_event.EventEnvelope.subscription_created:type_name -> billing_event.SubscriptionCreated
-	3,  // 3: billing_event.EventEnvelope.subscription_updated:type_name -> billing_event.SubscriptionUpdated
-	4,  // 4: billing_event.EventEnvelope.subscription_canceled:type_name -> billing_event.SubscriptionCanceled
-	5,  // 5: billing_event.EventEnvelope.subscription_expired:type_name -> billing_event.SubscriptionExpired
-	7,  // 6: billing_event.EventEnvelope.purchase_created:type_name -> billing_event.PurchaseCreated
-	8,  // 7: billing_event.EventEnvelope.purchase_completed:type_name -> billing_event.PurchaseCompleted
-	9,  // 8: billing_event.EventEnvelope.purchase_failed:type_name -> billing_event.PurchaseFailed
-	10, // 9: billing_event.EventEnvelope.purchase_canceled:type_name -> billing_event.PurchaseCanceled
-	12, // 10: billing_event.EventEnvelope.payment_attempt_created:type_name -> billing_event.PaymentAttemptCreated
-	13, // 11: billing_event.EventEnvelope.payment_attempt_updated:type_name -> billing_event.PaymentAttemptUpdated
-	14, // 12: billing_event.EventEnvelope.payment_attempt_succeeded:type_name -> billing_event.PaymentAttemptSucceeded
-	15, // 13: billing_event.EventEnvelope.payment_attempt_failed:type_name -> billing_event.PaymentAttemptFailed
-	16, // 14: billing_event.EventEnvelope.payment_attempt_expired:type_name -> billing_event.PaymentAttemptExpired
-	18, // 15: billing_event.EventEnvelope.payment_transaction_recorded:type_name -> billing_event.PaymentTransactionRecorded
-	19, // 16: billing_event.EventEnvelope.refund_requested:type_name -> billing_event.RefundRequested
-	20, // 17: billing_event.EventEnvelope.refund_succeeded:type_name -> billing_event.RefundSucceeded
-	21, // 18: billing_event.EventEnvelope.refund_failed:type_name -> billing_event.RefundFailed
-	22, // 19: billing_event.EventEnvelope.webhook_event_received:type_name -> billing_event.WebhookEventReceived
-	23, // 20: billing_event.EventEnvelope.webhook_event_processed:type_name -> billing_event.WebhookEventProcessed
-	24, // 21: billing_event.EventEnvelope.webhook_event_processing_failed:type_name -> billing_event.WebhookEventProcessingFailed
-	27, // 22: billing_event.SubscriptionSnapshot.status:type_name -> billing_service.SubscriptionStatus
-	26, // 23: billing_event.SubscriptionSnapshot.current_period_start:type_name -> google.protobuf.Timestamp
-	26, // 24: billing_event.SubscriptionSnapshot.current_period_end:type_name -> google.protobuf.Timestamp
-	26, // 25: billing_event.SubscriptionSnapshot.canceled_at:type_name -> google.protobuf.Timestamp
-	26, // 26: billing_event.SubscriptionSnapshot.expired_at:type_name -> google.protobuf.Timestamp
-	26, // 27: billing_event.SubscriptionSnapshot.created_at:type_name -> google.protobuf.Timestamp
-	26, // 28: billing_event.SubscriptionSnapshot.updated_at:type_name -> google.protobuf.Timestamp
-	1,  // 29: billing_event.SubscriptionCreated.subscription:type_name -> billing_event.SubscriptionSnapshot
-	1,  // 30: billing_event.SubscriptionUpdated.before:type_name -> billing_event.SubscriptionSnapshot
-	1,  // 31: billing_event.SubscriptionUpdated.after:type_name -> billing_event.SubscriptionSnapshot
-	26, // 32: billing_event.SubscriptionCanceled.canceled_at:type_name -> google.protobuf.Timestamp
-	26, // 33: billing_event.SubscriptionExpired.expired_at:type_name -> google.protobuf.Timestamp
-	28, // 34: billing_event.PurchaseSnapshot.amount:type_name -> billing_service.Money
-	29, // 35: billing_event.PurchaseSnapshot.status:type_name -> billing_service.PurchaseStatus
-	26, // 36: billing_event.PurchaseSnapshot.created_at:type_name -> google.protobuf.Timestamp
-	26, // 37: billing_event.PurchaseSnapshot.completed_at:type_name -> google.protobuf.Timestamp
-	6,  // 38: billing_event.PurchaseCreated.purchase:type_name -> billing_event.PurchaseSnapshot
-	6,  // 39: billing_event.PurchaseCompleted.purchase:type_name -> billing_event.PurchaseSnapshot
-	6,  // 40: billing_event.PurchaseFailed.purchase:type_name -> billing_event.PurchaseSnapshot
-	6,  // 41: billing_event.PurchaseCanceled.purchase:type_name -> billing_event.PurchaseSnapshot
-	30, // 42: billing_event.PaymentAttemptSnapshot.status:type_name -> billing_service.PaymentAttemptStatus
-	28, // 43: billing_event.PaymentAttemptSnapshot.amount:type_name -> billing_service.Money
-	26, // 44: billing_event.PaymentAttemptSnapshot.expires_at:type_name -> google.protobuf.Timestamp
-	26, // 45: billing_event.PaymentAttemptSnapshot.created_at:type_name -> google.protobuf.Timestamp
-	26, // 46: billing_event.PaymentAttemptSnapshot.updated_at:type_name -> google.protobuf.Timestamp
-	11, // 47: billing_event.PaymentAttemptCreated.payment_attempt:type_name -> billing_event.PaymentAttemptSnapshot
-	11, // 48: billing_event.PaymentAttemptUpdated.before:type_name -> billing_event.PaymentAttemptSnapshot
-	11, // 49: billing_event.PaymentAttemptUpdated.after:type_name -> billing_event.PaymentAttemptSnapshot
-	11, // 50: billing_event.PaymentAttemptSucceeded.payment_attempt:type_name -> billing_event.PaymentAttemptSnapshot
-	11, // 51: billing_event.PaymentAttemptFailed.payment_attempt:type_name -> billing_event.PaymentAttemptSnapshot
-	31, // 52: billing_event.PaymentAttemptFailed.provider_error:type_name -> google.protobuf.Struct
-	11, // 53: billing_event.PaymentAttemptExpired.payment_attempt:type_name -> billing_event.PaymentAttemptSnapshot
-	32, // 54: billing_event.PaymentTransactionSnapshot.type:type_name -> billing_service.PaymentTransactionType
-	33, // 55: billing_event.PaymentTransactionSnapshot.status:type_name -> billing_service.PaymentTransactionStatus
-	28, // 56: billing_event.PaymentTransactionSnapshot.amount:type_name -> billing_service.Money
-	26, // 57: billing_event.PaymentTransactionSnapshot.processed_at:type_name -> google.protobuf.Timestamp
-	26, // 58: billing_event.PaymentTransactionSnapshot.created_at:type_name -> google.protobuf.Timestamp
-	31, // 59: billing_event.PaymentTransactionSnapshot.metadata:type_name -> google.protobuf.Struct
-	17, // 60: billing_event.PaymentTransactionRecorded.transaction:type_name -> billing_event.PaymentTransactionSnapshot
-	28, // 61: billing_event.RefundRequested.amount:type_name -> billing_service.Money
-	26, // 62: billing_event.RefundRequested.requested_at:type_name -> google.protobuf.Timestamp
-	28, // 63: billing_event.RefundSucceeded.amount:type_name -> billing_service.Money
-	26, // 64: billing_event.RefundSucceeded.succeeded_at:type_name -> google.protobuf.Timestamp
-	28, // 65: billing_event.RefundFailed.amount:type_name -> billing_service.Money
-	31, // 66: billing_event.RefundFailed.provider_error:type_name -> google.protobuf.Struct
-	26, // 67: billing_event.RefundFailed.failed_at:type_name -> google.protobuf.Timestamp
-	26, // 68: billing_event.WebhookEventReceived.received_at:type_name -> google.protobuf.Timestamp
-	26, // 69: billing_event.WebhookEventProcessed.processed_at:type_name -> google.protobuf.Timestamp
-	26, // 70: billing_event.WebhookEventProcessingFailed.failed_at:type_name -> google.protobuf.Timestamp
-	71, // [71:71] is the sub-list for method output_type
-	71, // [71:71] is the sub-list for method input_type
-	71, // [71:71] is the sub-list for extension type_name
-	71, // [71:71] is the sub-list for extension extendee
-	0,  // [0:71] is the sub-list for field type_name
+	24, // 0: events.SubscriptionSnapshot.status:type_name -> billing_service.SubscriptionStatus
+	25, // 1: events.SubscriptionSnapshot.current_period_start:type_name -> google.protobuf.Timestamp
+	25, // 2: events.SubscriptionSnapshot.current_period_end:type_name -> google.protobuf.Timestamp
+	25, // 3: events.SubscriptionSnapshot.canceled_at:type_name -> google.protobuf.Timestamp
+	25, // 4: events.SubscriptionSnapshot.expired_at:type_name -> google.protobuf.Timestamp
+	25, // 5: events.SubscriptionSnapshot.created_at:type_name -> google.protobuf.Timestamp
+	25, // 6: events.SubscriptionSnapshot.updated_at:type_name -> google.protobuf.Timestamp
+	24, // 7: events.SubscriptionCreated.status:type_name -> billing_service.SubscriptionStatus
+	25, // 8: events.SubscriptionCreated.current_period_start:type_name -> google.protobuf.Timestamp
+	25, // 9: events.SubscriptionCreated.current_period_end:type_name -> google.protobuf.Timestamp
+	25, // 10: events.SubscriptionCreated.canceled_at:type_name -> google.protobuf.Timestamp
+	25, // 11: events.SubscriptionCreated.expired_at:type_name -> google.protobuf.Timestamp
+	25, // 12: events.SubscriptionCreated.created_at:type_name -> google.protobuf.Timestamp
+	25, // 13: events.SubscriptionCreated.updated_at:type_name -> google.protobuf.Timestamp
+	0,  // 14: events.SubscriptionUpdated.before:type_name -> events.SubscriptionSnapshot
+	0,  // 15: events.SubscriptionUpdated.after:type_name -> events.SubscriptionSnapshot
+	25, // 16: events.SubscriptionCanceled.canceled_at:type_name -> google.protobuf.Timestamp
+	25, // 17: events.SubscriptionExpired.expired_at:type_name -> google.protobuf.Timestamp
+	26, // 18: events.PurchaseSnapshot.amount:type_name -> billing_service.Money
+	27, // 19: events.PurchaseSnapshot.status:type_name -> billing_service.PurchaseStatus
+	25, // 20: events.PurchaseSnapshot.created_at:type_name -> google.protobuf.Timestamp
+	25, // 21: events.PurchaseSnapshot.completed_at:type_name -> google.protobuf.Timestamp
+	5,  // 22: events.PurchaseCreated.purchase:type_name -> events.PurchaseSnapshot
+	5,  // 23: events.PurchaseCompleted.purchase:type_name -> events.PurchaseSnapshot
+	5,  // 24: events.PurchaseFailed.purchase:type_name -> events.PurchaseSnapshot
+	5,  // 25: events.PurchaseCanceled.purchase:type_name -> events.PurchaseSnapshot
+	28, // 26: events.PaymentAttemptSnapshot.status:type_name -> billing_service.PaymentAttemptStatus
+	26, // 27: events.PaymentAttemptSnapshot.amount:type_name -> billing_service.Money
+	25, // 28: events.PaymentAttemptSnapshot.expires_at:type_name -> google.protobuf.Timestamp
+	25, // 29: events.PaymentAttemptSnapshot.created_at:type_name -> google.protobuf.Timestamp
+	25, // 30: events.PaymentAttemptSnapshot.updated_at:type_name -> google.protobuf.Timestamp
+	10, // 31: events.PaymentAttemptCreated.payment_attempt:type_name -> events.PaymentAttemptSnapshot
+	10, // 32: events.PaymentAttemptUpdated.before:type_name -> events.PaymentAttemptSnapshot
+	10, // 33: events.PaymentAttemptUpdated.after:type_name -> events.PaymentAttemptSnapshot
+	10, // 34: events.PaymentAttemptSucceeded.payment_attempt:type_name -> events.PaymentAttemptSnapshot
+	10, // 35: events.PaymentAttemptFailed.payment_attempt:type_name -> events.PaymentAttemptSnapshot
+	29, // 36: events.PaymentAttemptFailed.provider_error:type_name -> google.protobuf.Struct
+	10, // 37: events.PaymentAttemptExpired.payment_attempt:type_name -> events.PaymentAttemptSnapshot
+	30, // 38: events.PaymentTransactionSnapshot.type:type_name -> billing_service.PaymentTransactionType
+	31, // 39: events.PaymentTransactionSnapshot.status:type_name -> billing_service.PaymentTransactionStatus
+	26, // 40: events.PaymentTransactionSnapshot.amount:type_name -> billing_service.Money
+	25, // 41: events.PaymentTransactionSnapshot.processed_at:type_name -> google.protobuf.Timestamp
+	25, // 42: events.PaymentTransactionSnapshot.created_at:type_name -> google.protobuf.Timestamp
+	29, // 43: events.PaymentTransactionSnapshot.metadata:type_name -> google.protobuf.Struct
+	16, // 44: events.PaymentTransactionRecorded.transaction:type_name -> events.PaymentTransactionSnapshot
+	26, // 45: events.RefundRequested.amount:type_name -> billing_service.Money
+	25, // 46: events.RefundRequested.requested_at:type_name -> google.protobuf.Timestamp
+	26, // 47: events.RefundSucceeded.amount:type_name -> billing_service.Money
+	25, // 48: events.RefundSucceeded.succeeded_at:type_name -> google.protobuf.Timestamp
+	26, // 49: events.RefundFailed.amount:type_name -> billing_service.Money
+	29, // 50: events.RefundFailed.provider_error:type_name -> google.protobuf.Struct
+	25, // 51: events.RefundFailed.failed_at:type_name -> google.protobuf.Timestamp
+	25, // 52: events.WebhookEventReceived.received_at:type_name -> google.protobuf.Timestamp
+	25, // 53: events.WebhookEventProcessed.processed_at:type_name -> google.protobuf.Timestamp
+	25, // 54: events.WebhookEventProcessingFailed.failed_at:type_name -> google.protobuf.Timestamp
+	55, // [55:55] is the sub-list for method output_type
+	55, // [55:55] is the sub-list for method input_type
+	55, // [55:55] is the sub-list for extension type_name
+	55, // [55:55] is the sub-list for extension extendee
+	0,  // [0:55] is the sub-list for field type_name
 }
 
 func init() { file_events_billing_event_proto_init() }
@@ -2535,35 +2185,13 @@ func file_events_billing_event_proto_init() {
 	if File_events_billing_event_proto != nil {
 		return
 	}
-	file_events_billing_event_proto_msgTypes[0].OneofWrappers = []any{
-		(*EventEnvelope_SubscriptionCreated)(nil),
-		(*EventEnvelope_SubscriptionUpdated)(nil),
-		(*EventEnvelope_SubscriptionCanceled)(nil),
-		(*EventEnvelope_SubscriptionExpired)(nil),
-		(*EventEnvelope_PurchaseCreated)(nil),
-		(*EventEnvelope_PurchaseCompleted)(nil),
-		(*EventEnvelope_PurchaseFailed)(nil),
-		(*EventEnvelope_PurchaseCanceled)(nil),
-		(*EventEnvelope_PaymentAttemptCreated)(nil),
-		(*EventEnvelope_PaymentAttemptUpdated)(nil),
-		(*EventEnvelope_PaymentAttemptSucceeded)(nil),
-		(*EventEnvelope_PaymentAttemptFailed)(nil),
-		(*EventEnvelope_PaymentAttemptExpired)(nil),
-		(*EventEnvelope_PaymentTransactionRecorded)(nil),
-		(*EventEnvelope_RefundRequested)(nil),
-		(*EventEnvelope_RefundSucceeded)(nil),
-		(*EventEnvelope_RefundFailed)(nil),
-		(*EventEnvelope_WebhookEventReceived)(nil),
-		(*EventEnvelope_WebhookEventProcessed)(nil),
-		(*EventEnvelope_WebhookEventProcessingFailed)(nil),
-	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_events_billing_event_proto_rawDesc), len(file_events_billing_event_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   26,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

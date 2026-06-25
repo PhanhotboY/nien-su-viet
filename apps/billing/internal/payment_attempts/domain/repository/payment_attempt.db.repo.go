@@ -11,5 +11,5 @@ type PaymentAttemptDBRepo interface {
 	UpdatePaymentAttempt(ctx context.Context, paymentAttemptId string, updates map[string]any) (string, error)
 	DeletePaymentAttempt(ctx context.Context, paymentAttemptId string) (string, error)
 	GetPaymentAttemptById(ctx context.Context, paymentAttemptId string) (*entity.PaymentAttempt, error)
-	GetPaymentAttemptByProviderTransactionID(ctx context.Context, providerTransactionID string) (*entity.PaymentAttempt, error)
+	GetPaymentAttemptByProviderTransactionID(ctx context.Context, provider string, providerTransactionID string) (*entity.PaymentAttempt, error)
 }

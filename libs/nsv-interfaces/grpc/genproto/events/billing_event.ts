@@ -14,52 +14,7 @@ import { SubscriptionStatus } from "../billing_service/subscriptions";
 import { Struct } from "../google/protobuf/struct";
 import { Timestamp } from "../google/protobuf/timestamp";
 
-export const protobufPackage = "billing_event";
-
-/**
- * / ============================================================================
- * Event envelope
- * ============================================================================
- *
- * Store these in OUTBOX_EVENTS.payload.
- *
- * Notes:
- * - event_id should be globally unique.
- * - aggregate_type/aggregate_id in OUTBOX_EVENTS should match these fields.
- * - attributes can store trace_id, correlation_id, actor_id, request_id, etc.
- */
-export interface EventEnvelope {
-  occurredAt:
-    | Timestamp
-    | undefined;
-  /** Optional metadata for routing/tracing */
-  attributes: { [key: string]: string };
-  subscriptionCreated?: SubscriptionCreated | undefined;
-  subscriptionUpdated?: SubscriptionUpdated | undefined;
-  subscriptionCanceled?: SubscriptionCanceled | undefined;
-  subscriptionExpired?: SubscriptionExpired | undefined;
-  purchaseCreated?: PurchaseCreated | undefined;
-  purchaseCompleted?: PurchaseCompleted | undefined;
-  purchaseFailed?: PurchaseFailed | undefined;
-  purchaseCanceled?: PurchaseCanceled | undefined;
-  paymentAttemptCreated?: PaymentAttemptCreated | undefined;
-  paymentAttemptUpdated?: PaymentAttemptUpdated | undefined;
-  paymentAttemptSucceeded?: PaymentAttemptSucceeded | undefined;
-  paymentAttemptFailed?: PaymentAttemptFailed | undefined;
-  paymentAttemptExpired?: PaymentAttemptExpired | undefined;
-  paymentTransactionRecorded?: PaymentTransactionRecorded | undefined;
-  refundRequested?: RefundRequested | undefined;
-  refundSucceeded?: RefundSucceeded | undefined;
-  refundFailed?: RefundFailed | undefined;
-  webhookEventReceived?: WebhookEventReceived | undefined;
-  webhookEventProcessed?: WebhookEventProcessed | undefined;
-  webhookEventProcessingFailed?: WebhookEventProcessingFailed | undefined;
-}
-
-export interface EventEnvelope_AttributesEntry {
-  key: string;
-  value: string;
-}
+export const protobufPackage = "events";
 
 export interface SubscriptionSnapshot {
   subscriptionId: string;
@@ -76,7 +31,17 @@ export interface SubscriptionSnapshot {
 }
 
 export interface SubscriptionCreated {
-  subscription: SubscriptionSnapshot | undefined;
+  subscriptionId: string;
+  userId: string;
+  planId: string;
+  status: SubscriptionStatus;
+  currentPeriodStart: Timestamp | undefined;
+  currentPeriodEnd: Timestamp | undefined;
+  cancelAtPeriodEnd: boolean;
+  canceledAt: Timestamp | undefined;
+  expiredAt: Timestamp | undefined;
+  createdAt: Timestamp | undefined;
+  updatedAt: Timestamp | undefined;
 }
 
 export interface SubscriptionUpdated {
@@ -278,6 +243,6 @@ export interface WebhookEventProcessingFailed {
   failedAt: Timestamp | undefined;
 }
 
-export const BILLING_EVENT_PACKAGE_NAME = "billing_event";
+export const EVENTS_PACKAGE_NAME = "events";
 
 wrappers[".google.protobuf.Struct"] = { fromObject: Struct.wrap, toObject: Struct.unwrap } as any;

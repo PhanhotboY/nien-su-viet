@@ -30,7 +30,7 @@ func NewUpdatePaymentAttemptStatusHandler(
 
 func (h *updatePaymentAttemptStatusHandler) Handle(ctx context.Context, command *UpdatePaymentAttemptStatusCommand) (adto.UpdatePaymentAttemptStatusResDto, error) {
 	// Update payment AttemptStatus in database
-	paymentAttemptId, err := h.db.UpdatePaymentAttempt(ctx, command.PurchaseID, command.MapToEntity())
+	paymentAttemptId, err := h.db.UpdatePaymentAttempt(ctx, command.ID, command.MapToEntity())
 	if err != nil {
 		h.logger.Errorf("Failed to update payment AttemptStatus: %v", err)
 		return nil, grpcerrors.NewInternalServerGrpcError("Failed to update payment AttemptStatus", "NewUpdatePaymentAttemptStatusHandler")

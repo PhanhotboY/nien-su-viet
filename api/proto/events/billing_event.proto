@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package billing_event;
+package events;
 
 import "billing_service/billing.proto";
 import "billing_service/payment_attempts.proto";
@@ -11,52 +11,6 @@ import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/events;events";
-
-/// ============================================================================
-// Event envelope
-// ============================================================================
-//
-// Store these in OUTBOX_EVENTS.payload.
-//
-// Notes:
-// - event_id should be globally unique.
-// - aggregate_type/aggregate_id in OUTBOX_EVENTS should match these fields.
-// - attributes can store trace_id, correlation_id, actor_id, request_id, etc.
-//
-message EventEnvelope {
-  google.protobuf.Timestamp occurred_at = 1;
-
-  // Optional metadata for routing/tracing
-  map<string, string> attributes = 2;
-
-  oneof data {
-    SubscriptionCreated subscription_created = 100;
-    SubscriptionUpdated subscription_updated = 101;
-    SubscriptionCanceled subscription_canceled = 102;
-    SubscriptionExpired subscription_expired = 103;
-
-    PurchaseCreated purchase_created = 200;
-    PurchaseCompleted purchase_completed = 201;
-    PurchaseFailed purchase_failed = 202;
-    PurchaseCanceled purchase_canceled = 203;
-
-    PaymentAttemptCreated payment_attempt_created = 300;
-    PaymentAttemptUpdated payment_attempt_updated = 301;
-    PaymentAttemptSucceeded payment_attempt_succeeded = 302;
-    PaymentAttemptFailed payment_attempt_failed = 303;
-    PaymentAttemptExpired payment_attempt_expired = 304;
-
-    PaymentTransactionRecorded payment_transaction_recorded = 400;
-
-    RefundRequested refund_requested = 500;
-    RefundSucceeded refund_succeeded = 501;
-    RefundFailed refund_failed = 502;
-
-    WebhookEventReceived webhook_event_received = 600;
-    WebhookEventProcessed webhook_event_processed = 601;
-    WebhookEventProcessingFailed webhook_event_processing_failed = 602;
-  }
-}
 
 // ============================================================================
 // Subscription events
@@ -82,7 +36,22 @@ message SubscriptionSnapshot {
 }
 
 message SubscriptionCreated {
-  SubscriptionSnapshot subscription = 1;
+  string subscription_id = 1;
+  string user_id = 2;
+  string plan_id = 3;
+
+  billing_service.SubscriptionStatus status = 4;
+
+  google.protobuf.Timestamp current_period_start = 5;
+  google.protobuf.Timestamp current_period_end = 6;
+
+  bool cancel_at_period_end = 7;
+
+  google.protobuf.Timestamp canceled_at = 8;
+  google.protobuf.Timestamp expired_at = 9;
+
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
 }
 
 message SubscriptionUpdated {

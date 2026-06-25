@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package events;
+
+option go_package = "github.com/phanhotboy/nien-su-viet/libs/pkg/grpc/genproto/events;events";
+
+message UserAddedToOrganization {
+  string user_id = 1;
+  string organization_id = 2;
+  bool is_premium = 3;
+}

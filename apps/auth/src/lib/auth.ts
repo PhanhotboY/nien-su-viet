@@ -9,7 +9,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { plainToInstance } from 'class-transformer';
 
 import { type Config } from '../config';
-import { UserBaseDto, UserDeleteDto } from '@auth/auth/dto';
+import { UserBaseDto, UserDeleteDto } from '@auth/modules/auth/dto';
 import { ac, roles } from '@phanhotboy/nsv-common/lib';
 import { PrismaService } from '@auth/database';
 import { ConfigService, RedisServiceType } from '@phanhotboy/nsv-common';
