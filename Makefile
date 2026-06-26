@@ -2,10 +2,10 @@ exec-%:
 	docker compose exec -it $* bash
 
 migrate-%:
-	bun --cwd apps/$* prisma migrate dev
+	pnpm -C apps/$* exec prisma migrate dev
 
 generate-%:
-		bun --cwd apps/$* prisma generate
+	pnpm -C apps/$* exec prisma generate
 
 setup-%:
 	bun --cwd apps/$* setup/index.ts

@@ -1,0 +1,5 @@
+Datasource "db": PostgreSQL database "testdb", schema "public" at "localhost:32885"
+
+3 migrations found in prisma/migrations
+
+Database schema is up to date!

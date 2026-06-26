@@ -1,4 +1,4 @@
-import { post } from 'axios';
+import { ORGANIZATION } from '@phanhotboy/constants/organization.constant';
 import { createAccessControl } from 'better-auth/plugins/access';
 import {
   defaultStatements,
@@ -70,5 +70,15 @@ const user = ac.newRole({
 
 const resources = Object.keys(statements) as (keyof typeof statements)[];
 const roles = { admin, user, editor } as const;
+const ROLES = {
+  ADMIN: 'admin',
+  USER: 'user',
+  EDITOR: 'editor',
+  ORGANIZATION: {
+    OWNER: 'owner',
+    ADMIN: 'admin',
+    MEMBER: 'member',
+  },
+} as const;
 
-export { admin, editor, user, ac, roles, resources, statements };
+export { admin, editor, user, ac, roles, resources, statements, ROLES };

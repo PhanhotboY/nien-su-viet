@@ -5,7 +5,7 @@ import { RmqModule } from '@phanhotboy/nsv-common';
 import { RMQ } from '@phanhotboy/constants';
 
 @Module({
-  imports: [RmqModule.register({ name: RMQ.TOPIC_EVENTS_EXCHANGE })],
+  imports: [RmqModule.register()],
   controllers: [UserConsumer],
   providers: [UserService],
   exports: [UserService],

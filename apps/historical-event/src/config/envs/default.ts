@@ -1,7 +1,6 @@
 export const config = {
   db: {
-    // entities: [`${__dirname}/../../entity/**/*.{js,ts}`],
-    // subscribers: [`${__dirname}/../../subscriber/**/*.{js,ts}`],
-    // migrations: [`${__dirname}/../../migration/**/*.{js,ts}`],
+    url: process.env.DATABASE_URL || '',
+    directUrl: process.env.DIRECT_DATABASE_URL || '',
   },
 };

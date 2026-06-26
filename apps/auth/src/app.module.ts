@@ -11,7 +11,7 @@ import { OutboxEventModule } from './modules/outboxEvents/outboxEvent.module';
 @Module({
   imports: [
     CommonModule.forRoot({
-      configuration,
+      configuration: configuration(),
       cachePrefix: 'auth-service',
       global: true,
     }),

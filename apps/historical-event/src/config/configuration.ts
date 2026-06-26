@@ -1,16 +1,17 @@
-require('dotenv').config({ path: 'apps/historical-event/.env' });
 import { genConfiguration } from '@phanhotboy/nsv-common';
 import type { Default, Production } from './config.interface';
-import { config as defaultConfig } from './envs/default';
-import { config as developmentConfig } from './envs/development';
-import { config as productionConfig } from './envs/production';
-import { config as testConfig } from './envs/test';
 
-export const configuration = genConfiguration<Default, Production>(
-  defaultConfig,
-  {
-    development: developmentConfig as Production,
-    production: productionConfig,
-    test: testConfig as Production,
-  },
-);
+export const configuration = (
+  envPath: string = './apps/historical-event/.env',
+) => {
+  require('dotenv').config({ path: envPath });
+
+  const defaultConfig = require('./envs/default').config;
+  const envConfigs: Record<string, Production & Default> = {
+    development: require('./envs/development').config,
+    production: require('./envs/production').config,
+    test: require('./envs/test').config,
+  };
+
+  return genConfiguration<Default, Production>(defaultConfig, envConfigs);
+};

@@ -9,7 +9,7 @@ import { UserModule } from './modules/user';
   imports: [
     CommonModule.forRoot({
       cachePrefix: 'historical-event-service',
-      configuration,
+      configuration: configuration(),
       global: true,
     }),
     PrismaModule.forRoot(),

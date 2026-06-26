@@ -18,7 +18,7 @@ import { BillingModule } from './modules/billing/billing.module';
   imports: [
     CommonModule.forRoot({
       cachePrefix: 'gateway',
-      configuration,
+      configuration: configuration(),
     }),
     ThrottlerModule.forRoot(Object.values(RATE_LIMIT.DEFAULT)),
     AuthModule,

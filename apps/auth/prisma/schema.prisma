@@ -153,6 +153,8 @@ model OutboxEvent {
   lastError     String?
   publishedAt   DateTime?
   createdAt     DateTime          @default(now())
+
+  @@map("outbox_event")
 }
 
 model ProcessedEvent {

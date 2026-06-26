@@ -1,4 +1,4 @@
-export const config = {
+export const config = () => ({
   db: {
     url: process.env.DATABASE_URL || '',
     directUrl: process.env.DIRECT_DATABASE_URL || '',
@@ -56,4 +56,4 @@ export const config = {
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
   },
   trustedOrigins: process.env.ALLOWED_ORIGINS?.split(',') || [],
-};
+});

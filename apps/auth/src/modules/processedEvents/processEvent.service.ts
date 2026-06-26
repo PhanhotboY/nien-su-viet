@@ -5,16 +5,36 @@ import { Injectable } from '@nestjs/common';
 export class ProcessedEventService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async addProcessedEvent(eventId: string) {
-    // Logic to add the processed event to the database
+  async addProcessedEvent(eventId: string, consumerName: string) {
+    return this.prisma.processedEvent.create({
+      data: {
+        messageId: eventId,
+        processedAt: new Date(),
+        consumerName: consumerName,
+      },
+    });
   }
 
   async markEventAsProcessed(eventId: string) {
-    // Logic to mark the event as processed in the database
+    return this.prisma.processedEvent.update({
+      where: {
+        id: eventId,
+      },
+      data: {
+        processedAt: new Date(),
+      },
+    });
   }
 
   async isEventProcessed(eventId: string): Promise<boolean> {
-    // Logic to check if the event has already been processed
-    return false; // Placeholder return value
+    const event = await this.prisma.processedEvent.findFirst({
+      where: {
+        messageId: eventId,
+        processedAt: {
+          lte: new Date(),
+        },
+      },
+    });
+    return event !== null;
   }
 }

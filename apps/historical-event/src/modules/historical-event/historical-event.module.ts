@@ -6,12 +6,9 @@ import { RMQ } from '@phanhotboy/constants';
 import { UserModule } from '../user';
 
 @Module({
-  imports: [
-    RmqModule.register({ name: RMQ.TOPIC_EVENTS_EXCHANGE }),
-    UserModule,
-  ],
+  imports: [RmqModule.register(), UserModule],
   controllers: [HistoricalEventController],
   providers: [HistoricalEventService],
   exports: [HistoricalEventService],
 })
-export class HistoricalEventModule { }
+export class HistoricalEventModule {}
