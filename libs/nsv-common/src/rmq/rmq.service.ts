@@ -26,7 +26,7 @@ export class RmqService {
   ) {}
 
   private getRabbitMQUri(): string {
-    const rmqUrl = this.config.get('RABBITMQ_URL');
+    const rmqUrl = this.config.get('rabbitmq');
     if (!rmqUrl) {
       throw new Error('Missing RabbitMQ configuration in .env file.');
     }

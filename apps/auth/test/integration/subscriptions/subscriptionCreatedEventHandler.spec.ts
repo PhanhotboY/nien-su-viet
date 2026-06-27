@@ -1,163 +1,49 @@
 import { describe, it, expect, beforeEach, beforeAll, afterAll } from 'vitest';
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
 import { randomUUID } from 'node:crypto';
-import { GenericContainer, StartedTestContainer } from 'testcontainers';
-import { execSync } from 'node:child_process';
 
-import { AuthModule, AuthService } from '@auth/modules/auth';
-import {
-  CommonModule,
-  ConfigService,
-  getDLQName,
-  getRoutingKey,
-  RmqService,
-} from '@phanhotboy/nsv-common';
-import { PrismaModule } from '@auth/database';
-import { SubscriptionModule } from '@auth/modules/subscriptions/subscription.module';
+import { AuthService } from '@auth/modules/auth';
+import { getRoutingKey } from '@phanhotboy/nsv-common';
 import { SubscriptionCreatedEvent } from '@auth/events/subscriptionCreated.event';
-import { configuration } from '@auth/config/configuration';
 import { SubscriptionStatus } from '@phanhotboy/genproto/billing_service/subscriptions';
 import { SubscriptionHandler } from '@auth/modules/subscriptions/subscription.handler';
-import { Config } from '@auth/config';
 import { AuthHelper } from '../helper/auth.helper';
 import { OutboxEventService } from '@auth/modules/outboxEvents/outboxEvent.service';
-import { Client } from 'pg';
 import { ROLES } from '@phanhotboy/nsv-common/lib';
 import { ProcessedEventService } from '@auth/modules/processedEvents/processEvent.service';
 import { OutboxEventStatus } from '@auth-prisma';
-import { ProcessedEventModule } from '@auth/modules/processedEvents/processedEvent.module';
+import { InfrastructureHelper } from '../helper/infrastructure.helper';
+import { createTestingAppModule } from '../helper/app.helper';
+import { UserWithRole } from 'better-auth/plugins';
 
 describe('SubscriptionCreatedEventHandler', () => {
   let app: INestApplication;
-  let redisContainer: StartedTestContainer | undefined;
-  let rmqContainer: StartedTestContainer | undefined;
-  let pgContainer: StartedTestContainer | undefined;
+  let infraHelper: InfrastructureHelper;
+  let user: UserWithRole;
+  const adminCredentials = {
+    email: 'admin@example.com',
+    password: 'adminpassword',
+    role: ROLES.ADMIN,
+  };
+  const credentials = {
+    email: 'test@example.com',
+    password: 'password123',
+    role: ROLES.USER,
+  };
 
   beforeAll(async () => {
-    redisContainer = await new GenericContainer('redis:alpine')
-      .withExposedPorts(6379)
-      .start();
+    infraHelper = new InfrastructureHelper();
+    await infraHelper.startInfrastructure();
 
-    rmqContainer = await new GenericContainer('rabbitmq:4-management-alpine')
-      .withExposedPorts(5672, 15672)
-      .start();
-
-    pgContainer = await new GenericContainer('postgres:alpine')
-      .withEnvironment({
-        POSTGRES_USER: 'testuser',
-        POSTGRES_PASSWORD: 'testpassword',
-        POSTGRES_DB: 'testdb',
-      })
-      .withExposedPorts(5432)
-      .start();
-
-    const dbUrl = `postgresql://testuser:testpassword@${pgContainer?.getHost()}:${pgContainer?.getMappedPort(5432)}/testdb`;
-    execSync('pnpm prisma migrate deploy', {
-      stdio: 'inherit',
-      env: {
-        ...process.env,
-        DATABASE_URL: dbUrl,
-      },
-    });
-
-    const client = new Client({ connectionString: dbUrl });
-    await client.connect();
-    const result = await client.query(`
-      SELECT tablename, schemaname FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema');
-    `);
-    console.log('Created tables: ', result.rows);
-    await client.end();
-
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        CommonModule.forRoot({
-          configuration: () =>
-            ({
-              ...configuration('apps/auth/.env.test')(),
-              db: {
-                directUrl: dbUrl,
-                url: dbUrl,
-              },
-              redis: {
-                url: `redis://${redisContainer?.getHost()}:${redisContainer?.getMappedPort(6379)}`,
-              },
-              rmq: {
-                urls: [
-                  `amqp://guest:guest@${rmqContainer?.getHost()}:${rmqContainer?.getMappedPort(
-                    5672,
-                  )}`,
-                ],
-              },
-            }) as ReturnType<ReturnType<typeof configuration>>,
-          cachePrefix: 'auth-service',
-          global: true,
-        }),
-        PrismaModule.forRoot(),
-        ScheduleModule.forRoot(),
-        AuthModule,
-        SubscriptionModule,
-        ProcessedEventModule,
-      ],
-      providers: [AuthHelper, OutboxEventService],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-
-    const rmqService = app.get(RmqService);
-    [SubscriptionCreatedEvent].forEach((event) => {
-      const rmqOptions = rmqService.getOptions(event.name);
-      app.connectMicroservice(rmqOptions);
-      // Declare the dead letter exchange and queue for the event
-      rmqService.declareQueue({
-        ...rmqOptions.options,
-        exchange: rmqOptions.options?.queueOptions?.deadLetterExchange!,
-        queue: getDLQName(rmqOptions.options?.queue!),
-        routingKey: rmqOptions.options?.queueOptions?.deadLetterRoutingKey!,
-        queueOptions: {
-          durable: true,
-        },
-      });
-    });
-    app.setGlobalPrefix('/api/v1');
-
-    const port = process.env.NODE_PORT || 3000;
-
-    app.enableShutdownHooks();
-    await app.startAllMicroservices();
-    await app.listen(port);
-  }, 30000); // Increase timeout for container startup
-
-  afterAll(async () => {
-    await Promise.all([
-      redisContainer?.stop(),
-      rmqContainer?.stop(),
-      pgContainer?.stop(),
-    ]);
-  });
-
-  it('should successfully handle SubscriptionCreatedEvent', async () => {
-    const authService = app.get(AuthService);
-    const outboxService = app.get(OutboxEventService);
-    const processedEventsService = app.get(ProcessedEventService);
+    app = await createTestingAppModule(infraHelper);
 
     const authHelper = app.get(AuthHelper);
-    const adminCredentials = {
-      email: 'admin@example.com',
-      password: 'adminpassword',
-      role: ROLES.ADMIN,
-    };
-    const credentials = {
-      email: 'test@example.com',
-      password: 'password123',
-      role: ROLES.USER,
-    };
 
-    const { user: admin } = await authHelper.registerUser(adminCredentials);
-    const { user } = await authHelper.registerUser(credentials);
+    await authHelper.registerUser(adminCredentials);
+    user = (await authHelper.registerUser(credentials)).user;
     const authHeaders = await authHelper.getAuthHeaders(adminCredentials);
 
+    const authService = app.get(AuthService);
     await Promise.all([
       authService.api.createOrganization({
         body: {
@@ -174,6 +60,18 @@ describe('SubscriptionCreatedEventHandler', () => {
         headers: authHeaders,
       }),
     ]);
+  }, 30000); // Increase timeout for container startup
+
+  afterAll(async () => {
+    await infraHelper.stopInfrastructure();
+  });
+
+  it('should successfully handle SubscriptionCreatedEvent', async () => {
+    const authHelper = app.get(AuthHelper);
+    const authService = app.get(AuthService);
+    const outboxService = app.get(OutboxEventService);
+    const processedEventsService = app.get(ProcessedEventService);
+    const authHeaders = await authHelper.getAuthHeaders(adminCredentials);
 
     const subscriptionCreatedEvent = new SubscriptionCreatedEvent({
       eventId: randomUUID(),

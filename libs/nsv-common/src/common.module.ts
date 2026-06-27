@@ -39,7 +39,7 @@ export class CommonModule extends ConfigurableModuleClass {
         }),
         CacheModule.registerAsync({
           useFactory: async (config: providers.ConfigService) => ({
-            stores: [new KeyvRedis(config.get('REDIS_URL'))],
+            stores: [new KeyvRedis(config.get('redis.url'))],
             ttl: config.get('NODE_ENV') === 'development' ? -1 : 30 * 1000, // 30 secs, short caching time for gateway route auto caching
             max: 100, // Maximum number of items in cache
           }),

@@ -1,4 +1,10 @@
-import { DynamicModule, Inject, Module, OnModuleInit } from '@nestjs/common';
+import {
+  DynamicModule,
+  Inject,
+  Logger,
+  Module,
+  OnModuleInit,
+} from '@nestjs/common';
 import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigService } from '../providers';
 import { RmqService } from './rmq.service';
@@ -22,7 +28,7 @@ export class RmqModule implements OnModuleInit {
             name: RMQ.TOPIC_EVENTS_EXCHANGE,
             inject: [ConfigService],
             useFactory: (configService: ConfigService) => {
-              const rmqUrl = configService.get('RABBITMQ_URL');
+              const rmqUrl = configService.get('rabbitmq');
               if (!rmqUrl) {
                 throw new Error('Missing RabbitMQ configuration in .env file.');
               }
@@ -47,8 +53,11 @@ export class RmqModule implements OnModuleInit {
 
   constructor(
     @Inject(RMQ.TOPIC_EVENTS_EXCHANGE) private readonly rmq: ClientProxy,
+    private readonly logger: Logger,
   ) {}
   onModuleInit() {
-    this.rmq.connect();
+    this.rmq.connect().then(() => {
+      this.logger.log('Connected to RabbitMQ');
+    });
   }
 }
