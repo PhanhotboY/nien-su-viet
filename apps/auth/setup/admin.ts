@@ -1,29 +1,27 @@
-// Load environment variables BEFORE any imports
-require('dotenv').config({ path: 'apps/auth/.env' });
+import path from 'node:path';
+require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
 
-import { ConfigService } from '@nestjs/config';
 import { createBetterAuthInstance } from '../src/lib/auth';
-import { configuration } from '@auth/config';
 import { PrismaService } from '@auth/database';
-import { ClientRMQ } from '@nestjs/microservices';
-import { RmqUrl } from '@nestjs/microservices/external/rmq-url.interface';
-import { RedisService, RedisServiceType } from '@phanhotboy/nsv-common';
-import { createKeyv } from '@keyv/redis';
-import { createCache } from 'cache-manager';
+import {
+  RedisService,
+  RedisServiceType,
+  ConfigService,
+  RmqService,
+} from '@phanhotboy/nsv-common';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from '@auth/app.module';
+import { Config } from '@auth/config';
+import { RMQ } from '@phanhotboy/constants';
+import { ClientProxy } from '@nestjs/microservices';
 
 export async function setupAdmin() {
-  const config = new ConfigService(configuration());
-  const prisma = new PrismaService(config);
-  const rmq = new ClientRMQ({
-    urls: [config.get('RABBITMQ_URL') as RmqUrl],
-    wildcards: true,
-    exchange: 'events',
-    exchangeType: 'topic',
-  });
-  const keyvRedis = createKeyv({
-    url: config.get('REDIS_URL'),
-  });
-  const redis = new RedisService(createCache({ stores: [keyvRedis] }));
+  const app = await NestFactory.create(AppModule, { bodyParser: false });
+  const config = app.get(ConfigService<Config>);
+  const prisma = app.get(PrismaService);
+  const rmq = app.get(RMQ.TOPIC_EVENTS_EXCHANGE) as ClientProxy;
+  const redis = app.get(RedisService);
+
   const auth = createBetterAuthInstance(
     config,
     prisma,

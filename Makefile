@@ -8,7 +8,7 @@ generate-%:
 	pnpm -C apps/$* exec prisma generate
 
 setup-%:
-	bun --cwd apps/$* setup/index.ts
+	pnpm -C apps/$* run setup
 
 .PHONY: dev-%
 dev-%:
