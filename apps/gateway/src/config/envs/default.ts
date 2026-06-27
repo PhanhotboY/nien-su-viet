@@ -11,4 +11,7 @@ export const config = {
     cookieDomain: process.env.COOKIE_DOMAIN || 'localhost',
     cookiePrefix: process.env.AUTH_COOKIE_PREFIX || 'nsv-auth',
   },
+  redis: {
+    url: process.env.REDIS_URL,
+  },
 };
